@@ -1,0 +1,6 @@
+# Requirements for local use with the Ollama backend.
+# torch / transformers are NOT needed.
+# Assumes Ollama is already installed and running (https://ollama.com).
+openai>=1.0
+pandas
+matplotlib
