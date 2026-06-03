@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "LLM-Blink"
+version = "0.1.0"
+description = "Attentional Blink for LLMs — experiment package"
+requires-python = ">=3.9"
+dependencies = [
+    "transformers",
+    "pandas",
+    "matplotlib",
+]
+
+[project.optional-dependencies]
+local = ["openai>=1.0"]
+
+[tool.setuptools]
+# The repo root IS the LLM_Blink package (files live flat here, not in a subfolder)
+package-dir = {"LLM_Blink" = "."}
+packages = ["LLM_Blink"]
