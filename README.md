@@ -102,7 +102,7 @@ Run `python LLM_Blink/run_experiment.py --help` for all options.
 ### 3. Inspect one trial (sanity check)
 
 ```python
-tr = build_trial(TrialConfig(lag=2, t1_load="hard", regime="cot", seed=0))
+tr = build_trial(TrialConfig(lag=2, t1_load="semantic_3", regime="cot", seed=0))
 print(tr.user_prefix)
 print("\nT2 to detect:", tr.t2_phrase, "| T1 answer:", tr.t1_answer)
 ```
@@ -116,7 +116,9 @@ print("\nT2 to detect:", tr.t2_phrase, "| T1 answer:", tr.t1_answer)
 df = run_sweep(
     model, tok,
     lags=(0, 1, 2, 3, 5, 8),
-    loads=("none", "easy", "hard"),
+    # T1 load: none (baseline) + five semantic levels + five math levels.
+    # Start with a subset; use all 11 for the full difficulty sweep.
+    loads=("none", "semantic_0", "semantic_2", "semantic_4"),
     regimes=("cot",),       # try ("direct",) for the encoding regime
     n_seeds=10,
     do_generation=True,
@@ -136,7 +138,7 @@ if "report_correct" in df.columns:
 plt.tight_layout(); plt.show()
 ```
 
-**What to look for:** `T1=hard` dips at lag 2–3 and recovers by lag 6–8; `T1=none` stays flat (positional baseline). All flat → informative null.
+**What to look for:** Higher semantic levels should deepen and/or widen the dip at lag 2–3 if a blink-like effect exists; `T1=none` stays flat (positional baseline). All flat → informative null.
 
 ### 6. Sanity check — was T1 load actually performed?
 
@@ -161,6 +163,7 @@ LLM_Blink/
 
 ## Next steps
 
+- Run a difficulty sweep: `loads=("none","semantic_0","semantic_1","semantic_2","semantic_3","semantic_4")` to check that T1 accuracy decreases monotonically (sanity) and that the blink amplitude grows with level.
 - Re-run with `regimes=("direct",)` and compare (encoding vs generation-dynamics blink).
 - Add a second model family (e.g. `gemma2:2b` via Ollama or `gemma-2-2b-it` via HF).
 - Titrate toward ~50% report rate via T2 length / mask / distractor similarity (see `../PROMPTS.md` P2).
