@@ -212,11 +212,15 @@ def _build_prompt_ids(tok, system: str, user: str,
     msgs.append({"role": "user", "content": user})
     out = tok.apply_chat_template(
         msgs, add_generation_prompt=add_generation_prompt,
-        return_tensors="pt"
+        return_tensors="pt", return_dict=True,
     )
-    # Newer transformers return a BatchEncoding (dict-like) instead of a
-    # raw tensor; normalise to the input_ids tensor either way.
-    if hasattr(out, "input_ids"):
+    # apply_chat_template may return a raw tensor, a BatchEncoding, or a plain
+    # dict depending on the transformers version (e.g. v5 returns a dict-like
+    # object whose .input_ids attribute is not always exposed). Normalise to
+    # the input_ids tensor in every case.
+    if isinstance(out, dict):           # dict or BatchEncoding (dict subclass)
+        out = out["input_ids"]
+    elif hasattr(out, "input_ids"):
         out = out.input_ids
     return out
 
