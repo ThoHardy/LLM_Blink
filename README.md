@@ -11,7 +11,48 @@ See [`../LITERATURE.md`](../LITERATURE.md) for the design rationale and feasibil
 
 ## Quickstart — Google Colab (free T4 GPU)
 
-Open `attentional_blink_colab.ipynb` in Colab: **Runtime → Change runtime type → T4 GPU**.
+First set the runtime: **Runtime → Change runtime type → T4 GPU**.
+
+### Fastest path — clone the repo and run one command
+
+The same CLI used for Ollama also drives the HuggingFace backend: any `--model`
+containing a `/` is auto-detected as a HuggingFace Hub ID. So a whole sweep is a
+single cell. In a fresh Colab notebook:
+
+```python
+# 0. Get the code and dependencies
+!git clone https://github.com/ThoHardy/LLM_Blink.git
+!pip -q install "transformers>=4.44" accelerate
+# !pip -q install bitsandbytes        # only for 7B 4-bit
+
+# 1. Run a sweep (CSV is written next to the notebook)
+!python LLM_Blink/run_experiment.py --model Qwen/Qwen2.5-3B-Instruct --n-seeds 10
+# 7B in 4-bit:  !python LLM_Blink/run_experiment.py --model Qwen/Qwen2.5-7B-Instruct --load-in-4bit
+```
+
+`run_experiment.py --help` lists every option (`--lags`, `--loads`, `--regimes`,
+`--n-seeds`, `--no-generation`, `--output`). Results land in
+`ab_results_<model_slug>.csv`.
+
+To plot, read that CSV back in a notebook cell rather than passing `--plot`
+(a `!python` subprocess can't render inline figures):
+
+```python
+import pandas as pd
+from LLM_Blink import plot_ab          # repo is on sys.path after the clone
+import matplotlib.pyplot as plt
+df = pd.read_csv("ab_results_Qwen_Qwen2.5-3B-Instruct.csv")
+fig, axes = plt.subplots(1, 2, figsize=(12, 4))
+plot_ab(df, "t2_mean_logprob", ax=axes[0])
+if "report_correct" in df.columns:
+    plot_ab(df, "report_correct", ax=axes[1])
+plt.tight_layout(); plt.show()
+```
+
+### Notebook path — `attentional_blink_colab.ipynb`
+
+For interactive, cell-by-cell control, open `attentional_blink_colab.ipynb`
+(inside the cloned repo) instead and follow the cells. The manual setup is below.
 
 ### 0. Install dependencies
 
