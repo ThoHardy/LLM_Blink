@@ -10,6 +10,12 @@ import re
 import itertools
 import pandas as pd
 
+try:
+    from tqdm.auto import tqdm
+except ImportError:  # keep package dependency-light
+    def tqdm(iterable, **kwargs):
+        return iterable
+
 from .stimuli import TrialConfig, build_trial
 from .model import report_generate, sequence_logprob
 
@@ -63,10 +69,11 @@ def run_sweep(model, tok, lags=(0, 1, 2, 3, 5, 8), loads=("none", "easy", "hard"
     """Full factorial sweep. n_seeds trials per cell (each with a fresh random T2)."""
     rows = []
     cells = list(itertools.product(lags, loads, regimes, masks, range(n_seeds)))
-    for k, (lag, load, regime, mask, seed) in enumerate(cells):
+    pbar = tqdm(enumerate(cells), total=len(cells), disable=not verbose)
+    for k, (lag, load, regime, mask, seed) in pbar:
         cfg = TrialConfig(lag=lag, t1_load=load, regime=regime, mask=mask,
                           seed=1000 * seed + lag + 7 * len(load))
         rows.append(run_trial(model, tok, cfg, do_generation=do_generation))
-        if verbose and (k + 1) % 25 == 0:
-            print(f"  {k+1}/{len(cells)} trials done")
+        if hasattr(pbar, "set_postfix"):
+            pbar.set_postfix(lag=lag, load=load)
     return pd.DataFrame(rows)
