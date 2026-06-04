@@ -210,10 +210,15 @@ def _build_prompt_ids(tok, system: str, user: str,
     if system:
         msgs.append({"role": "system", "content": system})
     msgs.append({"role": "user", "content": user})
-    return tok.apply_chat_template(
+    out = tok.apply_chat_template(
         msgs, add_generation_prompt=add_generation_prompt,
         return_tensors="pt"
     )
+    # Newer transformers return a BatchEncoding (dict-like) instead of a
+    # raw tensor; normalise to the input_ids tensor either way.
+    if hasattr(out, "input_ids"):
+        out = out.input_ids
+    return out
 
 
 # backward-compat alias (was public in the original)
