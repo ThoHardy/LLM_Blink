@@ -223,11 +223,49 @@ T1_MATH_BANKS = {
 
 from . import _t1_generators as _gen
 
-T1_MATH_BANKS[0].extend(_gen.gen_math_l0(n=95, seed=100))
-T1_MATH_BANKS[1].extend(_gen.gen_math_l1(n=95, seed=101))
-T1_MATH_BANKS[2].extend(_gen.gen_math_l2(n=95, seed=102))
-T1_MATH_BANKS[3].extend(_gen.gen_math_l3(n=95, seed=103))
-T1_MATH_BANKS[4].extend(_gen.gen_math_l4(n=95, seed=104))
+
+def _extend_to_100(pool: list, generator, *, target: int = 100, seed: int,
+                   max_attempts: int = 5) -> None:
+    """Extend `pool` with items from `generator(n, seed)` until len(pool) == target.
+
+    Generated questions that collide with already-present questions are dropped.
+    If the first call doesn't supply enough unique items, retry with bumped seeds.
+    """
+    have = {q for q, _ in pool}
+    attempt = 0
+    while len(pool) < target and attempt < max_attempts:
+        needed = target - len(pool)
+        # First attempt: ask for exactly `needed` so the generator preserves
+        # the bucket balance designed in (5,4,3-template etc).
+        # On retry, ask for extras to overcome the few collisions.
+        ask = needed if attempt == 0 else needed + 8
+        candidates = generator(n=ask, seed=seed + attempt * 1000)
+        for q, a in candidates:
+            if q in have:
+                continue
+            have.add(q)
+            pool.append((q, a))
+            if len(pool) >= target:
+                break
+        attempt += 1
+    if len(pool) < target:
+        raise RuntimeError(
+            f"Could not fill pool to {target} items (got {len(pool)}); "
+            f"generator may need a wider template space."
+        )
+
+
+_extend_to_100(T1_MATH_BANKS[0], _gen.gen_math_l0, seed=100)
+_extend_to_100(T1_MATH_BANKS[1], _gen.gen_math_l1, seed=101)
+_extend_to_100(T1_MATH_BANKS[2], _gen.gen_math_l2, seed=102)
+_extend_to_100(T1_MATH_BANKS[3], _gen.gen_math_l3, seed=103)
+_extend_to_100(T1_MATH_BANKS[4], _gen.gen_math_l4, seed=104)
+
+_extend_to_100(T1_SEMANTIC_BANKS[0], _gen.gen_semantic_l0, seed=200)
+_extend_to_100(T1_SEMANTIC_BANKS[1], _gen.gen_semantic_l1, seed=201)
+_extend_to_100(T1_SEMANTIC_BANKS[2], _gen.gen_semantic_l2, seed=202)
+_extend_to_100(T1_SEMANTIC_BANKS[3], _gen.gen_semantic_l3, seed=203)
+_extend_to_100(T1_SEMANTIC_BANKS[4], _gen.gen_semantic_l4, seed=204)
 
 # Legacy dict kept for backward compatibility
 T1_MATH = {

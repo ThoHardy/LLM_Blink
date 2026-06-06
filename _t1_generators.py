@@ -583,11 +583,11 @@ def _syllogism_some_some(rng: random.Random) -> Item:
     return q, "INVALID"
 
 
-def _transitive_3(rng: random.Random) -> Item:
+def _transitive_3(rng: random.Random, force_no: bool = False) -> Item:
     """A REL B, B REL C, is A REL C? YES (or NO if question uses opposite rel)."""
     a, b, c = _pick_names(rng, 3)
     rel_word, q_rel, opp_rel = rng.choice(REL_PAIRS)
-    use_opposite = rng.random() < 0.5
+    use_opposite = force_no
     if use_opposite:
         q = (f"{a} is {rel_word} than {b}. {b} is {rel_word} than {c}. "
              f"Is {a} {opp_rel} than {c}? Answer YES or NO.")
@@ -603,30 +603,28 @@ def gen_semantic_l1(n: int = 95, seed: int = 201) -> List[Item]:
     rng = random.Random(seed)
     out: List[Item] = []
     seen: set = set()
-    # Target ~equal counts across 3 templates; balance VALID/INVALID, YES/NO.
-    # We aim for ~32 each; loop with constraints.
+    # 3 templates: Barbara VALID, some-some INVALID, 3-elt transitive (alternated YES/NO).
     attempts = 0
     target_each = [n // 3 + (1 if i < n % 3 else 0) for i in range(3)]
     counts = [0, 0, 0]
+    yes_no_flip = 0  # alternated to balance transitive YES/NO
     while sum(counts) < n and attempts < n * 100:
         attempts += 1
-        # Pick the under-represented bucket
-        slot = min(range(3), key=lambda i: counts[i] - target_each[i] * 100)
-        # but prefer the one most under target
         under = [i for i in range(3) if counts[i] < target_each[i]]
-        if under:
-            slot = rng.choice(under)
+        slot = rng.choice(under) if under else rng.randint(0, 2)
         if slot == 0:
             q, ans = _syllogism_barbara(rng)
         elif slot == 1:
             q, ans = _syllogism_some_some(rng)
         else:
-            q, ans = _transitive_3(rng)
+            q, ans = _transitive_3(rng, force_no=(yes_no_flip % 2 == 1))
         if q in seen:
             continue
         seen.add(q)
         out.append((q, ans))
         counts[slot] += 1
+        if slot == 2:
+            yes_no_flip += 1
     return out
 
 
@@ -658,12 +656,20 @@ def _ferio_trap(rng: random.Random) -> Item:
     return q, "INVALID"
 
 
-def _transitive_4(rng: random.Random) -> Item:
+def _undistributed_middle(rng: random.Random) -> Item:
+    """All X are M. All Y are M. -> Some X are Y?  INVALID (undistributed middle)."""
+    x, m, y = _pick_nonces(rng, 3)
+    q = (f"All {x} are {m}. All {y} are {m}. "
+         f"Does it follow that some {x} are {y}? Answer VALID or INVALID.")
+    return q, "INVALID"
+
+
+def _transitive_4(rng: random.Random, force_no: bool = False) -> Item:
     """A>B>C>D via REL. Question on a non-adjacent pair, e.g. is A REL D?"""
     a, b, c, d = _pick_names(rng, 4)
     rel_word, q_rel, opp_rel = rng.choice(REL_PAIRS)
     # ordering A>B>C>D under "REL"
-    use_opposite = rng.random() < 0.5
+    use_opposite = force_no
     # pick a non-adjacent pair: (a,c), (a,d), (b,d)
     pair = rng.choice([(a, c), (a, d), (b, d)])
     p1, p2 = pair
@@ -685,19 +691,30 @@ def gen_semantic_l2(n: int = 95, seed: int = 202) -> List[Item]:
     out: List[Item] = []
     seen: set = set()
     attempts = 0
-    target_each = [n // 4 + (1 if i < n % 4 else 0) for i in range(4)]
-    counts = [0, 0, 0, 0]
-    gens = [_celarent, _darii, _ferio_trap, _transitive_4]
+    # 5 templates: Celarent VALID, Darii VALID, Ferio trap INVALID,
+    # Undistributed middle INVALID, 4-elt transitive (alternated YES/NO).
+    gens = [_celarent, _darii, _ferio_trap, _undistributed_middle, _transitive_4]
+    target_each = [n // len(gens) + (1 if i < n % len(gens) else 0)
+                   for i in range(len(gens))]
+    counts = [0] * len(gens)
+    # L2 heads contribute 2 extra YES, so start the flip at 1 to lead with NO.
+    yes_no_flip = 1
+    transitive_slot = 4
     while sum(counts) < n and attempts < n * 100:
         attempts += 1
-        under = [i for i in range(4) if counts[i] < target_each[i]]
-        slot = rng.choice(under) if under else rng.randint(0, 3)
-        q, ans = gens[slot](rng)
+        under = [i for i in range(len(gens)) if counts[i] < target_each[i]]
+        slot = rng.choice(under) if under else rng.randint(0, len(gens) - 1)
+        if slot == transitive_slot:
+            q, ans = gens[slot](rng, force_no=(yes_no_flip % 2 == 1))
+        else:
+            q, ans = gens[slot](rng)
         if q in seen:
             continue
         seen.add(q)
         out.append((q, ans))
         counts[slot] += 1
+        if slot == transitive_slot:
+            yes_no_flip += 1
     return out
 
 
@@ -705,11 +722,11 @@ def gen_semantic_l2(n: int = 95, seed: int = 202) -> List[Item]:
 # SEMANTIC LEVEL 3 — 4-step transitive (5 entities) or 3-premise chains with distractor
 # ---------------------------------------------------------------------------
 
-def _transitive_5(rng: random.Random) -> Item:
+def _transitive_5(rng: random.Random, force_no: bool = False) -> Item:
     """5-entity chain, question on non-adjacent pair (often extremes)."""
     e = _pick_names(rng, 5)
     rel_word, q_rel, opp_rel = rng.choice(REL_PAIRS)
-    use_opposite = rng.random() < 0.5
+    use_opposite = force_no
     # Pick a non-adjacent pair (gap >= 2 in 0..4)
     options = [(i, j) for i in range(5) for j in range(i + 2, 5)]
     i, j = rng.choice(options)
@@ -748,24 +765,45 @@ def _chain_some_all_no_valid(rng: random.Random) -> Item:
     return q, "VALID"
 
 
+def _chain_three_some_invalid(rng: random.Random) -> Item:
+    """All A are B. Some B are C. Some C are D. -> Some A are D?  INVALID.
+
+    Chained existentials over an undistributed middle do not transitively
+    propagate to the subject term A.
+    """
+    a, b, c, d = _pick_nonces(rng, 4)
+    q = (f"All {a} are {b}. Some {b} are {c}. Some {c} are {d}. "
+         f"Does it follow that some {a} are {d}? Answer VALID or INVALID.")
+    return q, "INVALID"
+
+
 def gen_semantic_l3(n: int = 95, seed: int = 203) -> List[Item]:
     rng = random.Random(seed)
     out: List[Item] = []
     seen: set = set()
     attempts = 0
-    target_each = [n // 4 + (1 if i < n % 4 else 0) for i in range(4)]
-    counts = [0, 0, 0, 0]
-    gens = [_transitive_5, _chain_all_all_no, _chain_some_invalid, _chain_some_all_no_valid]
+    gens = [_transitive_5, _chain_all_all_no, _chain_some_invalid,
+            _chain_some_all_no_valid, _chain_three_some_invalid]
+    target_each = [n // len(gens) + (1 if i < n % len(gens) else 0)
+                   for i in range(len(gens))]
+    counts = [0] * len(gens)
+    yes_no_flip = 0
+    transitive_slot = 0
     while sum(counts) < n and attempts < n * 100:
         attempts += 1
-        under = [i for i in range(4) if counts[i] < target_each[i]]
-        slot = rng.choice(under) if under else rng.randint(0, 3)
-        q, ans = gens[slot](rng)
+        under = [i for i in range(len(gens)) if counts[i] < target_each[i]]
+        slot = rng.choice(under) if under else rng.randint(0, len(gens) - 1)
+        if slot == transitive_slot:
+            q, ans = gens[slot](rng, force_no=(yes_no_flip % 2 == 1))
+        else:
+            q, ans = gens[slot](rng)
         if q in seen:
             continue
         seen.add(q)
         out.append((q, ans))
         counts[slot] += 1
+        if slot == transitive_slot:
+            yes_no_flip += 1
     return out
 
 
@@ -774,11 +812,11 @@ def gen_semantic_l3(n: int = 95, seed: int = 203) -> List[Item]:
 # constraint-based ordering with 5 entities
 # ---------------------------------------------------------------------------
 
-def _transitive_6(rng: random.Random) -> Item:
+def _transitive_6(rng: random.Random, force_no: bool = False) -> Item:
     """6-entity chain, question on non-adjacent pair."""
     e = _pick_names(rng, 6)
     rel_word, q_rel, opp_rel = rng.choice(REL_PAIRS)
-    use_opposite = rng.random() < 0.5
+    use_opposite = force_no
     options = [(i, j) for i in range(6) for j in range(i + 2, 6)]
     i, j = rng.choice(options)
     p1, p2 = e[i], e[j]
@@ -928,14 +966,21 @@ def gen_semantic_l4(n: int = 95, seed: int = 204) -> List[Item]:
     target_each = [n // len(gens) + (1 if i < n % len(gens) else 0)
                    for i in range(len(gens))]
     counts = [0] * len(gens)
+    yes_no_flip = 0
+    transitive_slot = 0  # _transitive_6
     while sum(counts) < n and attempts < n * 100:
         attempts += 1
         under = [i for i in range(len(gens)) if counts[i] < target_each[i]]
         slot = rng.choice(under) if under else rng.randint(0, len(gens) - 1)
-        q, ans = gens[slot](rng)
+        if slot == transitive_slot:
+            q, ans = gens[slot](rng, force_no=(yes_no_flip % 2 == 1))
+        else:
+            q, ans = gens[slot](rng)
         if q in seen:
             continue
         seen.add(q)
         out.append((q, ans))
         counts[slot] += 1
+        if slot == transitive_slot:
+            yes_no_flip += 1
     return out
