@@ -422,3 +422,112 @@ def build_trial(cfg: TrialConfig) -> Trial:
         template_prefix_after_prompt=assistant_prefix,
         config=cfg,
     )
+
+
+# ---------------------------------------------------------------------------
+# Optional validation: run only when LLM_BLINK_VALIDATE=1 or when this module
+# is executed as a script. Never runs on a normal import.
+# ---------------------------------------------------------------------------
+
+def _validate_t1_pools(verbose: bool = False) -> None:
+    """Assert pool size / type / balance / regeneration invariants.
+
+    Checks:
+      1. Each of the 10 pools has exactly 100 items.
+      2. No duplicate instruction strings within a pool.
+      3. All items are (str, str) tuples.
+      4. Semantic pools: VALID/INVALID and YES/NO label balance within +/-10%
+         (relative to the smaller count). L0's category-name answers are
+         exempt from this since their answer space is intrinsically wide.
+      5. Math pools: re-run each generator with the same seed and assert the
+         tail (items past index 5) matches exactly. This ensures answers are
+         deterministically derivable and not drifted.
+    """
+    from collections import Counter
+    from . import _t1_generators as _gen_check
+
+    expected_size = 100
+    head_size = 5
+
+    pool_specs = [
+        ("semantic_0", T1_SEMANTIC_BANKS[0], _gen_check.gen_semantic_l0, 200),
+        ("semantic_1", T1_SEMANTIC_BANKS[1], _gen_check.gen_semantic_l1, 201),
+        ("semantic_2", T1_SEMANTIC_BANKS[2], _gen_check.gen_semantic_l2, 202),
+        ("semantic_3", T1_SEMANTIC_BANKS[3], _gen_check.gen_semantic_l3, 203),
+        ("semantic_4", T1_SEMANTIC_BANKS[4], _gen_check.gen_semantic_l4, 204),
+        ("math_0", T1_MATH_BANKS[0], _gen_check.gen_math_l0, 100),
+        ("math_1", T1_MATH_BANKS[1], _gen_check.gen_math_l1, 101),
+        ("math_2", T1_MATH_BANKS[2], _gen_check.gen_math_l2, 102),
+        ("math_3", T1_MATH_BANKS[3], _gen_check.gen_math_l3, 103),
+        ("math_4", T1_MATH_BANKS[4], _gen_check.gen_math_l4, 104),
+    ]
+
+    for name, pool, gen_fn, seed in pool_specs:
+        # (1) size
+        assert len(pool) == expected_size, (
+            f"{name}: expected {expected_size} items, got {len(pool)}"
+        )
+        # (2) no duplicate instructions
+        qs = [q for q, _ in pool]
+        if len(set(qs)) != len(qs):
+            dups = [q for q, c in Counter(qs).items() if c > 1]
+            raise AssertionError(f"{name}: duplicate instructions: {dups[:3]}...")
+        # (3) every item is (str, str)
+        for i, item in enumerate(pool):
+            if not (isinstance(item, tuple) and len(item) == 2
+                    and isinstance(item[0], str) and isinstance(item[1], str)):
+                raise AssertionError(f"{name}[{i}] is not a (str, str) tuple: {item!r}")
+
+        # (4) label balance (semantic pools, levels 1+).
+        # Allow |a-b| <= max(2, 10% * larger). Small absolute slack matters
+        # because some labels (YES/NO in the 5-premise puzzle level) come from
+        # only ~17 items, where one stray flip changes the relative ratio a lot.
+        if name.startswith("semantic_") and not name.endswith("_0"):
+            answers = [a for _, a in pool]
+            cnt = Counter(answers)
+            for pair in (("VALID", "INVALID"), ("YES", "NO")):
+                if pair[0] in cnt and pair[1] in cnt:
+                    a, b = cnt[pair[0]], cnt[pair[1]]
+                    lo, hi = min(a, b), max(a, b)
+                    if lo == 0:
+                        raise AssertionError(
+                            f"{name}: label {pair} has 0 count: {a} vs {b}")
+                    slack = max(2, int(0.10 * hi + 0.999))
+                    if (hi - lo) > slack:
+                        raise AssertionError(
+                            f"{name}: {pair[0]}/{pair[1]} imbalance "
+                            f"{a}/{b} exceeds slack {slack}")
+
+        # (5) regenerate and confirm the tail matches what's in the pool.
+        # We extend a copy of the curated head using the same _extend_to_100
+        # logic, then compare to the live pool.
+        head = list(pool[:head_size])
+        regen_pool = list(head)
+        _extend_to_100(regen_pool, gen_fn, seed=seed)
+        if regen_pool != pool:
+            # Find first mismatch for a useful error message.
+            for i, (live, regen) in enumerate(zip(pool, regen_pool)):
+                if live != regen:
+                    raise AssertionError(
+                        f"{name}[{i}] regen mismatch: live={live!r} regen={regen!r}"
+                    )
+            raise AssertionError(f"{name}: regen length mismatch")
+
+        if verbose:
+            print(f"  {name}: OK (100 items, no dups, deterministic)")
+
+    if verbose:
+        print("All 10 T1 pools validated.")
+
+
+def _maybe_validate() -> None:
+    import os
+    if os.environ.get("LLM_BLINK_VALIDATE") == "1":
+        _validate_t1_pools(verbose=True)
+
+
+_maybe_validate()
+
+
+if __name__ == "__main__":
+    _validate_t1_pools(verbose=True)
