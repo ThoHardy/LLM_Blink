@@ -222,4 +222,6 @@ LLM_Blink/
 ## Next steps
 
 - Run a difficulty sweep: `loads=("none","semantic_0","semantic_1","semantic_2","semantic_3","semantic_4")` to check that T1 accuracy decreases monotonically (sanity) and that the blink amplitude grows with level.
-- Re-run with `regimes=("direct",)` and compare (encoding vs generation-
+- Re-run with `regimes=("direct",)` and compare (encoding vs generation-dynamics blink).
+- Add a second model family (e.g. `gemma2:2b` via Ollama or `gemma-2-2b-it` via HF).
+- Titrate toward ~50% report rate via T2 length / mask / distractor similarity (see `../PROMPTS.md` P2).
