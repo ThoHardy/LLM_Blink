@@ -29,6 +29,216 @@ FILLERS = [
     "Sensor array recalibrated.",
     "Login from internal node {n}.",
 ]
+# NOTE: FILLERS above is kept for reference/back-compat; _filler() now samples
+# from the deterministic FILLER_POOL built below (Item 7).
+
+
+# ---------------------------------------------------------------------------
+# Deterministic 1000-phrase filler pool (Item 7).
+#
+# Generated once at module load via random.Random(20260606). The template
+# grammar covers ~60 system-log-style patterns x rich slot vocabularies
+# (service names, status codes, host names, version strings, numbers). The
+# resulting strings are deduped and trimmed to exactly 1000 unique entries.
+# Each trial samples from this pool with the trial's own RNG, so trial-level
+# determinism still flows from cfg.seed.
+# ---------------------------------------------------------------------------
+
+FILLER_POOL_SEED = 20260606
+FILLER_POOL_SIZE = 1000
+
+# Slot vocabularies. Wide enough that template * slots >> 1000.
+_FP_SERVICES = (
+    "auth", "billing", "cache", "cron", "dns", "edge", "etl", "gateway",
+    "graphql", "ingest", "kafka", "ldap", "logger", "mailer", "metrics",
+    "nginx", "oauth", "postgres", "queue", "redis", "router", "scheduler",
+    "search", "session", "smtp", "ssh", "storage", "stream", "sync", "webhook",
+)
+_FP_HOSTS = (
+    "alpha-01", "alpha-02", "bravo-03", "bravo-04", "charlie-05",
+    "delta-06", "echo-07", "foxtrot-08", "golf-09", "hotel-10",
+    "india-11", "juliet-12", "kilo-13", "lima-14", "mike-15",
+    "node-a", "node-b", "node-c", "node-d", "node-e",
+    "rack-12", "rack-13", "rack-14", "edge-eu", "edge-us", "edge-ap",
+)
+_FP_REGIONS = (
+    "us-east-1", "us-east-2", "us-west-1", "us-west-2",
+    "eu-west-1", "eu-central-1", "ap-south-1", "ap-northeast-1",
+    "sa-east-1", "ca-central-1",
+)
+_FP_STATUS_CODES = (
+    "200", "201", "202", "204", "301", "302", "304",
+    "400", "401", "403", "404", "409", "418", "422",
+    "429", "500", "502", "503", "504",
+)
+_FP_COMPONENTS = (
+    "ingestion pipeline", "background worker", "telemetry agent",
+    "config loader", "feature flag service", "rate limiter",
+    "task scheduler", "discovery client", "health probe",
+    "credential manager", "audit logger", "metrics exporter",
+)
+_FP_SENSORS = (
+    "thermal sensor", "humidity probe", "vibration monitor",
+    "pressure gauge", "voltage rail", "fan controller",
+    "ambient light sensor", "door contact", "smoke detector",
+)
+_FP_ROOMS = (
+    "lobby", "loading dock", "server room", "cold aisle",
+    "hot aisle", "break room", "operations center", "lab 2A",
+    "lab 3B", "lab 4C",
+)
+_FP_DBS = (
+    "users", "orders", "events", "sessions", "audit", "metrics",
+    "telemetry", "billing", "catalog", "inventory",
+)
+_FP_QUEUES = (
+    "ingest", "retry", "deadletter", "priority", "low", "high",
+    "batch", "stream", "indexer", "notifier",
+)
+_FP_FILES = (
+    "config.yaml", "schema.json", "secrets.env", "metrics.tsv",
+    "audit.log", "snapshot.bin", "state.db", "manifest.toml",
+    "checksums.sha256", "rollback.sql",
+)
+_FP_ENVS = ("production", "staging", "canary", "qa", "shadow")
+_FP_DAYS = ("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday")
+
+
+def _filler_templates() -> list[str]:
+    """Return ~60 distinct system-log-style sentence templates.
+
+    Each template uses named slots filled from the vocabularies above plus the
+    generic {n} (small int), {n3} (3-digit int), {v} (semver) and {ms} (latency).
+    """
+    return [
+        # service status (10)
+        "Service {svc} reports status {code} on host {host}.",
+        "Heartbeat from {svc} received after {ms} ms.",
+        "Service {svc} restarted on {host} ({env}).",
+        "Service {svc} entered degraded mode.",
+        "Service {svc} returned to nominal state.",
+        "Failover triggered for {svc} in region {region}.",
+        "Leader election completed for {svc}: new leader {host}.",
+        "Service {svc} drained {n} connections before shutdown.",
+        "Background worker {comp} finished cycle {n3}.",
+        "Component {comp} reloaded configuration successfully.",
+        # query/results (10)
+        "Query against {db} returned {n3} rows in {ms} ms.",
+        "Index rebuild on table {db} completed in {ms} ms.",
+        "Cache hit ratio for {svc} is {n} percent.",
+        "Replication lag on {db} is {n} seconds.",
+        "Snapshot of {db} written to volume {host}.",
+        "Migration {v} applied to {db} on {env}.",
+        "Read replica {host} caught up to primary.",
+        "Vacuum on {db} reclaimed {n3} pages.",
+        "Slow query log recorded {n} entries.",
+        "Connection pool for {svc} resized to {n} workers.",
+        # config changes (8)
+        "Configuration file {file} reloaded on {host}.",
+        "Feature flag '{svc}_beta' set to enabled.",
+        "Feature flag '{svc}_beta' set to disabled.",
+        "Threshold for {comp} adjusted to {n} percent.",
+        "Rotation policy updated for {file}.",
+        "Secret {file} rotated by {comp}.",
+        "Deployment of version {v} started on {env}.",
+        "Deployment of version {v} completed on {env}.",
+        # sensor readings (10)
+        "{sensor} in {room} reads {n} units.",
+        "{sensor} on {host} reports nominal range.",
+        "{sensor} threshold exceeded in {room}.",
+        "CPU temperature on {host} stable at {n}C.",
+        "Fan speed on {host} set to {n} percent.",
+        "Power draw on rack {host} is {n3} watts.",
+        "Ambient temperature in {room} measured at {n}C.",
+        "Humidity in {room} is {n} percent.",
+        "Vibration on {host} within tolerance.",
+        "Door contact in {room} reports closed.",
+        # network/security (10)
+        "Network latency to {region} is {ms} ms.",
+        "Packet loss to {host} is {n} percent.",
+        "Firewall rule {n3} updated on {host}.",
+        "TLS certificate for {svc} renewed for {n} days.",
+        "Login from internal node {host}.",
+        "Audit event {n3} recorded by {comp}.",
+        "Suspicious request blocked by {svc} (code {code}).",
+        "Session {n3} closed by {svc}.",
+        "Rate limit reached for endpoint /v1/{svc}.",
+        "DNS lookup for {svc}.internal resolved in {ms} ms.",
+        # storage/queue/backup (10)
+        "Backup job {n3} for {db} finished successfully.",
+        "Backup job {n3} for {db} encountered warning code {code}.",
+        "Disk usage on {host} is {n} percent.",
+        "Volume {host} mounted read-only for maintenance.",
+        "Queue '{queue}' depth is {n3} messages.",
+        "Queue '{queue}' drained in {ms} ms.",
+        "Dead-letter queue '{queue}' has {n} stale entries.",
+        "Archive of {file} uploaded to cold storage.",
+        "Object {file} replicated to region {region}.",
+        "Garbage collection on {svc} freed {n3} megabytes.",
+        # misc ops (5)
+        "Maintenance window scheduled for {day}.",
+        "Routine inspection of {comp} completed without findings.",
+        "Calibration of {sensor} in {room} completed.",
+        "Inventory check on rack {host} marked complete.",
+        "On-call rotation for {svc} handed over.",
+    ]
+
+
+def _build_filler_pool(seed: int = FILLER_POOL_SEED,
+                       size: int = FILLER_POOL_SIZE) -> list[str]:
+    """Build the deterministic 1000-string filler pool.
+
+    Templates are filled with random combinations from the slot vocabularies
+    using a fresh ``random.Random(seed)``. We oversample, dedupe by string
+    identity, and slice to exactly ``size`` unique entries. Raises if the
+    template/slot space cannot fill ``size`` unique strings.
+    """
+    rng = random.Random(seed)
+    templates = _filler_templates()
+    out: list[str] = []
+    seen: set[str] = set()
+
+    # Hard cap on attempts. Template count * average distinct slot products
+    # easily exceeds 1e5, so this is plenty of headroom.
+    max_attempts = size * 200
+    attempts = 0
+    while len(out) < size and attempts < max_attempts:
+        attempts += 1
+        tmpl = rng.choice(templates)
+        s = tmpl.format(
+            svc=rng.choice(_FP_SERVICES),
+            host=rng.choice(_FP_HOSTS),
+            region=rng.choice(_FP_REGIONS),
+            code=rng.choice(_FP_STATUS_CODES),
+            comp=rng.choice(_FP_COMPONENTS),
+            sensor=rng.choice(_FP_SENSORS),
+            room=rng.choice(_FP_ROOMS),
+            db=rng.choice(_FP_DBS),
+            queue=rng.choice(_FP_QUEUES),
+            file=rng.choice(_FP_FILES),
+            env=rng.choice(_FP_ENVS),
+            day=rng.choice(_FP_DAYS),
+            v=f"{rng.randint(1, 6)}.{rng.randint(0, 9)}.{rng.randint(0, 20)}",
+            n=rng.randint(1, 99),
+            n3=rng.randint(100, 999),
+            ms=rng.randint(1, 500),
+        )
+        if s in seen:
+            continue
+        seen.add(s)
+        out.append(s)
+
+    if len(out) < size:
+        raise RuntimeError(
+            f"FILLER_POOL build failed: only {len(out)}/{size} unique strings "
+            f"after {attempts} attempts; widen templates or slot vocabularies."
+        )
+    assert len(out) == size
+    assert len(set(out)) == size
+    return out
+
+
+FILLER_POOL: list[str] = _build_filler_pool()
 
 # ---------------------------------------------------------------------------
 # T1 SEMANTIC BANKS — five levels of inference load (see PROMPTS.md §P1).
@@ -319,7 +529,9 @@ def _get_t1(load: str, rng: random.Random):
 # ---------------------------------------------------------------------------
 
 def _filler(rng: random.Random) -> str:
-    return rng.choice(FILLERS).format(v=f"1.0.{rng.randint(0,9)}", n=rng.randint(1, 99))
+    # Sample from the deterministic 1000-phrase FILLER_POOL (Item 7).
+    # rng is the per-trial RNG so trial-level determinism is preserved.
+    return rng.choice(FILLER_POOL)
 
 
 def random_passphrase(rng: random.Random, n_words: int = 3) -> str:
