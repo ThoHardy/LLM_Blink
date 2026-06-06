@@ -28,9 +28,8 @@ import math
 import warnings
 from typing import Optional
 
-import torch
-import torch.nn.functional as F
-from transformers import AutoModelForCausalLM, AutoTokenizer
+# NOTE: torch / transformers are imported lazily inside the HuggingFace code
+# paths only.  The Ollama backend must work without them installed (see README).
 
 # -- defaults ------------------------------------------------------------------
 DEFAULT_HF_MODEL     = "Qwen/Qwen2.5-3B-Instruct"
@@ -190,6 +189,9 @@ def sequence_logprob(model, tok, system: str, user_prefix: str,
 # ==============================================================================
 
 def _load_hf(name: str, load_in_4bit: bool = False):
+    import torch
+    from transformers import AutoModelForCausalLM, AutoTokenizer
+
     tok = AutoTokenizer.from_pretrained(name)
     kwargs: dict = dict(device_map="auto")
     if load_in_4bit:
@@ -229,22 +231,36 @@ def _build_prompt_ids(tok, system: str, user: str,
 build_prompt_ids = _build_prompt_ids
 
 
-@torch.no_grad()
 def _report_generate_hf(model, tok, system: str, user: str,
                          max_new_tokens: int = 256) -> str:
-    ids = _build_prompt_ids(tok, system, user).to(model.device)
-    out = model.generate(
-        ids, max_new_tokens=max_new_tokens,
-        do_sample=False, pad_token_id=tok.eos_token_id,
-    )
-    gen = out[0, ids.shape[1]:]
-    return tok.decode(gen, skip_special_tokens=True)
+    import torch
+
+    with torch.no_grad():
+        ids = _build_prompt_ids(tok, system, user).to(model.device)
+        out = model.generate(
+            ids, max_new_tokens=max_new_tokens,
+            do_sample=False, pad_token_id=tok.eos_token_id,
+        )
+        gen = out[0, ids.shape[1]:]
+        return tok.decode(gen, skip_special_tokens=True)
 
 
-@torch.no_grad()
 def _sequence_logprob_hf(model, tok, system: str, user_prefix: str,
                           target_text: str,
                           prefilled_assistant: str = "") -> dict:
+    import torch
+    import torch.nn.functional as F
+
+    with torch.no_grad():
+        return _sequence_logprob_hf_impl(
+            torch, F, model, tok, system, user_prefix,
+            target_text, prefilled_assistant,
+        )
+
+
+def _sequence_logprob_hf_impl(torch, F, model, tok, system: str,
+                              user_prefix: str, target_text: str,
+                              prefilled_assistant: str = "") -> dict:
     ids_prompt = _build_prompt_ids(tok, system, user_prefix,
                                    add_generation_prompt=True)
     if prefilled_assistant:
