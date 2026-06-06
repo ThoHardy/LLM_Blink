@@ -9,6 +9,23 @@ See [`../LITERATURE.md`](../LITERATURE.md) for the design rationale and feasibil
 
 ---
 
+## Repository structure
+
+| File | Role |
+|------|------|
+| `model.py` | Model loading and scoring. Supports two backends: **HuggingFace** (`transformers` + `torch`) for GPU-accelerated models, and **Ollama** (via OpenAI-compatible API) for local CPU inference. Exposes `load_model()`, a log-prob scorer, and a greedy-generation scorer. |
+| `stimuli.py` | Stimulus generation. Builds the RSVP-like packet stream, samples T1 items from difficulty-graded banks (`semantic_0`–`4`, `math_0`–`4`), generates T2 passphrases, and inserts them at a given lag. |
+| `experiment.py` | Trial logic. Defines `TrialConfig`, `build_trial()`, and `run_sweep()` — the main loop that iterates over lags, loads, and regimes and collects both read-outs (binary report + joint log-prob). |
+| `analyze.py` | Analysis and plotting. `plot_ab()` draws the blink curve (T2 metric vs lag, one line per T1 load). Also contains aggregate helpers. |
+| `run_experiment.py` | CLI entry point. Parses arguments (`--model`, `--lags`, `--loads`, `--regimes`, `--n-seeds`, `--plot`, …), runs a full sweep, and writes results to a CSV. |
+| `__init__.py` | Package exports (`load_model`, `run_sweep`, `plot_ab`, `build_trial`, `TrialConfig`). |
+| `attentional_blink_colab.ipynb` | Interactive Colab notebook for cell-by-cell exploration. |
+| `pyproject.toml` | Package metadata — enables `pip install git+https://github.com/ThoHardy/LLM_Blink`. |
+| `requirements_local.txt` | Local dev dependencies (for running outside Colab). |
+
+---
+
+
 ## Quickstart — Google Colab (free T4 GPU)
 
 First set the runtime: **Runtime → Change runtime type → T4 GPU**.
@@ -205,6 +222,4 @@ LLM_Blink/
 ## Next steps
 
 - Run a difficulty sweep: `loads=("none","semantic_0","semantic_1","semantic_2","semantic_3","semantic_4")` to check that T1 accuracy decreases monotonically (sanity) and that the blink amplitude grows with level.
-- Re-run with `regimes=("direct",)` and compare (encoding vs generation-dynamics blink).
-- Add a second model family (e.g. `gemma2:2b` via Ollama or `gemma-2-2b-it` via HF).
-- Titrate toward ~50% report rate via T2 length / mask / distractor similarity (see `../PROMPTS.md` P2).
+- Re-run with `regimes=("direct",)` and compare (encoding vs generation-
