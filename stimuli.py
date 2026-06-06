@@ -215,6 +215,20 @@ T1_MATH_BANKS = {
     ],
 }
 
+# ---------------------------------------------------------------------------
+# Pool expansion: keep the 5 hand-curated heads frozen, then extend each pool
+# to 100 items using deterministic, seeded template generators (see
+# _t1_generators.py). All math answers are computed programmatically.
+# ---------------------------------------------------------------------------
+
+from . import _t1_generators as _gen
+
+T1_MATH_BANKS[0].extend(_gen.gen_math_l0(n=95, seed=100))
+T1_MATH_BANKS[1].extend(_gen.gen_math_l1(n=95, seed=101))
+T1_MATH_BANKS[2].extend(_gen.gen_math_l2(n=95, seed=102))
+T1_MATH_BANKS[3].extend(_gen.gen_math_l3(n=95, seed=103))
+T1_MATH_BANKS[4].extend(_gen.gen_math_l4(n=95, seed=104))
+
 # Legacy dict kept for backward compatibility
 T1_MATH = {
     "easy_math": T1_MATH_BANKS[0][0],
