@@ -361,6 +361,61 @@ RULES = ("You will be provided with a stream of sequential data packets. Read th
          "introductory phrases, or extra punctuation.")
 
 
+# ---------------------------------------------------------------------------
+# Worked example (fixed, no RNG). Prefixed to every prompt so the model sees a
+# fully-filled example of the OUTPUT TEMPLATE. Helps Qwen avoid emitting an
+# empty <Thinking>...</Thinking> block (Item 1).
+# ---------------------------------------------------------------------------
+
+_WORKED_EXAMPLE_STREAM = (
+    "[Packet 01]: System initialization complete. Weather is clear.\n"
+    "[Packet 02]: Update 1.0.3 applied to main server.\n"
+    "[Packet 03 - T1]: LOGIC OVERRIDE. Decide whether SALMON is an ANIMAL or a TOOL. "
+    "Answer ANIMAL or TOOL.\n"
+    "[Packet 04]: Sensor array recalibrated.\n"
+    "[Packet 05]: Disk usage at 42 percent.\n"
+    '[Packet 06 - T2]: The secure operational passphrase is "VICTOR XRAY ROMEO".\n'
+    "[Packet 07]: Backup job 17 finished successfully.\n"
+    "[Packet 08]: End of stream."
+)
+
+WORKED_EXAMPLE_COT = (
+    "EXAMPLE (illustration only - not part of the real stream):\n"
+    "DATA STREAM:\n"
+    f"{_WORKED_EXAMPLE_STREAM}\n"
+    "OUTPUT:\n"
+    "<Thinking>\n"
+    "The T1 packet asks whether SALMON is an ANIMAL or a TOOL; a salmon is a fish, "
+    "so the answer is ANIMAL. The T2 packet contains the passphrase "
+    '"VICTOR XRAY ROMEO".\n'
+    "</Thinking>\n"
+    "<Final_Answers>\n"
+    "Target 1 Result: ANIMAL\n"
+    "Target 2 Result: VICTOR XRAY ROMEO\n"
+    "</Final_Answers>\n"
+    "Now process the following ACTUAL stream:"
+)
+
+WORKED_EXAMPLE_DIRECT = (
+    "EXAMPLE (illustration only - not part of the real stream):\n"
+    "DATA STREAM:\n"
+    f"{_WORKED_EXAMPLE_STREAM}\n"
+    "OUTPUT:\n"
+    "<Final_Answers>\n"
+    "Target 2 Result: VICTOR XRAY ROMEO\n"
+    "Target 1 Result: ANIMAL\n"
+    "</Final_Answers>\n"
+    "Now process the following ACTUAL stream:"
+)
+
+
+def _worked_example(regime: str) -> str:
+    """Return the regime-appropriate fixed worked example block."""
+    if regime == "direct":
+        return WORKED_EXAMPLE_DIRECT
+    return WORKED_EXAMPLE_COT
+
+
 def build_trial(cfg: TrialConfig) -> Trial:
     rng = random.Random(cfg.seed)
     t2 = random_passphrase(rng, cfg.t2_words)
@@ -412,7 +467,8 @@ def build_trial(cfg: TrialConfig) -> Trial:
         assistant_prefix = (f"<Thinking>\n</Thinking>\n<Final_Answers>\n"
                             f"Target 1 Result: {t1a}\nTarget 2 Result: ")
 
-    header = f"{RULES}\nDATA STREAM:\n{stream}\n{template}"
+    example_block = _worked_example(cfg.regime)
+    header = f"{RULES}\n{example_block}\nDATA STREAM:\n{stream}\n{template}"
     return Trial(
         system=SYSTEM,
         user_prefix=header,
