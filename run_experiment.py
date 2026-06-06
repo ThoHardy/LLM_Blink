@@ -57,18 +57,21 @@ def main():
 
     # -- sweep parameters ------------------------------------------------------
     parser.add_argument(
-        "--lags", nargs="+", type=int, default=[0, 1, 2, 3, 5, 8],
+        "--lags", nargs="+", type=int, default=[0, 2, 4, 6, 8, 10],
         metavar="LAG",
         help="Lag values to sweep (packets between T1 and T2).",
     )
     parser.add_argument(
-        "--loads", nargs="+", default=["none", "easy", "hard"],
-        choices=["none", "easy", "hard", "easy_math", "hard_math"],
+        "--loads", nargs="+", default=["none", "semantic_4"],
         metavar="LOAD",
-        help="T1 load levels to include.",
+        help=(
+            "T1 load levels to include. Accepts 'none', the aliases "
+            "'easy'/'hard'/'easy_math'/'hard_math', or any explicit "
+            "'semantic_N' / 'math_N' (N=0..4)."
+        ),
     )
     parser.add_argument(
-        "--regimes", nargs="+", default=["cot"],
+        "--regimes", nargs="+", default=["cot", "direct"],
         choices=["cot", "direct"],
         metavar="REGIME",
         help="Answer regimes: 'cot' (chain-of-thought) and/or 'direct'.",
@@ -131,10 +134,19 @@ def main():
     # -- optional plot ---------------------------------------------------------
     if args.plot:
         import matplotlib.pyplot as plt
-        fig, axes = plt.subplots(1, 2, figsize=(12, 4))
-        plot_ab(df, "t2_mean_logprob", ax=axes[0])
-        if "report_correct" in df.columns:
-            plot_ab(df, "report_correct", ax=axes[1])
+        regimes_present = sorted(df["regime"].unique())
+        has_correct = "report_correct" in df.columns
+        n_rows = 2 if has_correct else 1
+        n_cols = len(regimes_present)
+        fig, axes = plt.subplots(
+            n_rows, n_cols,
+            figsize=(6 * n_cols, 4 * n_rows),
+            squeeze=False,
+        )
+        for col, regime in enumerate(regimes_present):
+            plot_ab(df, "t2_mean_logprob", regime=regime, ax=axes[0, col])
+            if has_correct:
+                plot_ab(df, "report_correct", regime=regime, ax=axes[1, col])
         plt.suptitle(args.model, fontsize=10)
         plt.tight_layout()
         plt.show()

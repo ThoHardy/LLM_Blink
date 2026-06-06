@@ -167,17 +167,18 @@ print("\nT2 to detect:", tr.t2_phrase, "| T1 answer:", tr.t1_answer)
 
 ### 4. Run a pilot lag sweep
 
-3 loads × 6 lags × `n_seeds` trials. Start with `n_seeds=10`, scale up once it looks right.
-`do_generation=True` also runs greedy decoding for the binary report measure (slower).
+2 loads × 6 lags × 2 regimes × `n_seeds` trials. Start with `n_seeds=10`, scale up once it
+looks right. `do_generation=True` also runs greedy decoding for the binary report measure
+(slower).
 
 ```python
 df = run_sweep(
     model, tok,
-    lags=(0, 1, 2, 3, 5, 8),
-    # T1 load: none (baseline) + five semantic levels + five math levels.
-    # Start with a subset; use all 11 for the full difficulty sweep.
-    loads=("none", "semantic_0", "semantic_2", "semantic_4"),
-    regimes=("cot",),       # try ("direct",) for the encoding regime
+    lags=(0, 2, 4, 6, 8, 10),
+    # Minimal Quickstart: baseline + hardest semantic level.
+    # T1 load supports all 11 levels (semantic_0..4, math_0..4, none) for the full sweep.
+    loads=("none", "semantic_4"),
+    regimes=("cot", "direct"),   # contrast generation-dynamics vs encoding blink
     n_seeds=10,
     do_generation=True,
 )
@@ -187,16 +188,30 @@ df.head()
 
 ### 5. Plot the AB curve
 
+One panel per regime, with both measures stacked. CoT (generation dynamics) on one side,
+direct (encoding) on the other.
+
 ```python
 import matplotlib.pyplot as plt
-fig, axes = plt.subplots(1, 2, figsize=(12, 4))
-plot_ab(df, "t2_mean_logprob", ax=axes[0])    # graded 'unconscious'
-if "report_correct" in df.columns:
-    plot_ab(df, "report_correct", ax=axes[1]) # binary 'conscious'
+regimes_present = sorted(df["regime"].unique())
+has_correct = "report_correct" in df.columns
+n_rows = 2 if has_correct else 1
+fig, axes = plt.subplots(
+    n_rows, len(regimes_present),
+    figsize=(6 * len(regimes_present), 4 * n_rows),
+    squeeze=False,
+)
+for col, regime in enumerate(regimes_present):
+    plot_ab(df, "t2_mean_logprob", regime=regime, ax=axes[0, col])  # graded 'unconscious'
+    if has_correct:
+        plot_ab(df, "report_correct", regime=regime, ax=axes[1, col])  # binary 'conscious'
 plt.tight_layout(); plt.show()
 ```
 
-**What to look for:** Higher semantic levels should deepen and/or widen the dip at lag 2–3 if a blink-like effect exists; `T1=none` stays flat (positional baseline). All flat → informative null.
+**What to look for:** `T1=semantic_4` should deepen and/or widen the dip at intermediate
+lags if a blink-like effect exists; `T1=none` stays flat (positional baseline). The
+CoT/direct contrast separates a generation-dynamics blink from an encoding one. All flat
+→ informative null.
 
 ### 6. Sanity check — was T1 load actually performed?
 
@@ -205,7 +220,7 @@ if "t1_correct" in df.columns:
     print(df.groupby("t1_load")["t1_correct"].mean(dropna=True))
 ```
 
-If `t1_correct` is near 0 for `hard`, the model isn't paying the load cost — interpret results with care.
+If `t1_correct` is near 0 for `semantic_4`, the model isn't paying the load cost — interpret results with care.
 
 ---
 
