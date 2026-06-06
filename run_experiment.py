@@ -77,6 +77,16 @@ def main():
         help="Answer regimes: 'cot' (chain-of-thought) and/or 'direct'.",
     )
     parser.add_argument(
+        "--n-pres", nargs="+", default=["auto"],
+        metavar="NPRE",
+        help=(
+            "Number of filler packets before T1 (Item 2: confound control). "
+            "Accepts ints (e.g. '--n-pres 2 4 6 8') to vary n_pre and let T2 "
+            "absolute position float, or 'auto' (default) to keep T2 at "
+            "target_t2_abs_index as today."
+        ),
+    )
+    parser.add_argument(
         "--n-seeds", type=int, default=10,
         help="Number of random seeds (trials) per condition cell.",
     )
@@ -99,10 +109,19 @@ def main():
 
     out_path = args.output or f"ab_results_{_slug(args.model)}.csv"
 
+    # Parse --n-pres: each token is either 'auto' (-> None) or an int.
+    n_pres: list[int | None] = []
+    for tok_ in args.n_pres:
+        if tok_.lower() == "auto":
+            n_pres.append(None)
+        else:
+            n_pres.append(int(tok_))
+
     print(f"Model  : {args.model}")
     print(f"Lags   : {args.lags}")
     print(f"Loads  : {args.loads}")
     print(f"Regimes: {args.regimes}")
+    print(f"n_pres : {n_pres}")
     print(f"Seeds  : {args.n_seeds} per cell")
     print(f"Output : {out_path}")
     print()
@@ -122,6 +141,7 @@ def main():
         lags=tuple(args.lags),
         loads=tuple(args.loads),
         regimes=tuple(args.regimes),
+        n_pres=tuple(n_pres),
         n_seeds=args.n_seeds,
         do_generation=not args.no_generation,
         verbose=True,

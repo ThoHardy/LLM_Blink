@@ -564,6 +564,7 @@ class Trial:
     t1_answer: str | None
     template_prefix_after_prompt: str  # assistant text preceding the T2 slot, for logprob scoring
     config: TrialConfig = field(default=None)
+    n_pre_used: int = 0          # actually used n_pre (resolves None to auto value)
 
 
 SYSTEM = "You are an automated data-extraction system."
@@ -689,6 +690,7 @@ def build_trial(cfg: TrialConfig) -> Trial:
         t1_answer=t1_ans,
         template_prefix_after_prompt=assistant_prefix,
         config=cfg,
+        n_pre_used=n_pre,
     )
 
 
