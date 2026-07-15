@@ -45,6 +45,7 @@ def run_trial(model, tok, cfg: TrialConfig, do_generation: bool = True) -> dict:
 
     row = {
         "lag": cfg.lag, "t1_load": cfg.t1_load, "regime": cfg.regime, "mask": cfg.mask,
+        "n_pre": tr.n_pre_used,
         "seed": cfg.seed, "t2_words": cfg.t2_words,
         "t2_phrase": tr.t2_phrase,
         "t2_total_logprob": lp["total_logprob"],
@@ -64,14 +65,23 @@ def run_trial(model, tok, cfg: TrialConfig, do_generation: bool = True) -> dict:
 
 
 def run_sweep(model, tok, lags=(0, 1, 2, 3, 5, 8), loads=("none", "easy", "hard"),
-              regimes=("cot", "direct"), masks=(False,), n_seeds: int = 20,
+              regimes=("cot", "direct"), masks=(False,),
+              n_pres: tuple[int | None, ...] = (None,),
+              n_seeds: int = 20,
               do_generation: bool = True, verbose: bool = True) -> pd.DataFrame:
-    """Full factorial sweep. n_seeds trials per cell (each with a fresh random T2)."""
+    """Full factorial sweep. n_seeds trials per cell (each with a fresh random T2).
+
+    ``n_pres`` is an independent sweep dimension (Item 2). ``None`` means
+    auto-compute n_pre to fix T2 at ``target_t2_abs_index`` (today's behavior).
+    Passing explicit ints lets T2 absolute position float with n_pre, so callers
+    can probe the confound between n_pre and T2 position directly.
+    """
     rows = []
-    cells = list(itertools.product(lags, loads, regimes, masks, range(n_seeds)))
+    cells = list(itertools.product(lags, loads, regimes, masks, n_pres, range(n_seeds)))
     pbar = tqdm(enumerate(cells), total=len(cells), disable=not verbose)
-    for k, (lag, load, regime, mask, seed) in pbar:
+    for k, (lag, load, regime, mask, n_pre, seed) in pbar:
         cfg = TrialConfig(lag=lag, t1_load=load, regime=regime, mask=mask,
+                          n_pre=n_pre,
                           seed=1000 * seed + lag + 7 * len(load))
         rows.append(run_trial(model, tok, cfg, do_generation=do_generation))
         if hasattr(pbar, "set_postfix"):

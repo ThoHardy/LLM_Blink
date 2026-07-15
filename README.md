@@ -14,7 +14,7 @@ See [`../LITERATURE.md`](../LITERATURE.md) for the design rationale and feasibil
 | File | Role |
 |------|------|
 | `model.py` | Model loading and scoring. Supports two backends: **HuggingFace** (`transformers` + `torch`) for GPU-accelerated models, and **Ollama** (via OpenAI-compatible API) for local CPU inference. Exposes `load_model()`, a log-prob scorer, and a greedy-generation scorer. |
-| `stimuli.py` | Stimulus generation. Builds the RSVP-like packet stream, samples T1 items from difficulty-graded banks (`semantic_0`–`4`, `math_0`–`4`), generates T2 passphrases, and inserts them at a given lag. |
+| `stimuli.py` | Stimulus generation. Builds the RSVP-like packet stream, samples T1 items from difficulty-graded banks (`semantic_0`–`4`, `math_0`–`4`), generates T2 passphrases, inserts them at a given lag, and draws filler packets from a **1000-phrase deterministic `FILLER_POOL`** (system-log style) seeded at module load. Also prefixes every prompt with a fixed worked example so the model sees the expected output form. |
 | `experiment.py` | Trial logic. Defines `TrialConfig`, `build_trial()`, and `run_sweep()` — the main loop that iterates over lags, loads, and regimes and collects both read-outs (binary report + joint log-prob). |
 | `analyze.py` | Analysis and plotting. `plot_ab()` draws the blink curve (T2 metric vs lag, one line per T1 load). Also contains aggregate helpers. |
 | `run_experiment.py` | CLI entry point. Parses arguments (`--model`, `--lags`, `--loads`, `--regimes`, `--n-seeds`, `--plot`, …), runs a full sweep, and writes results to a CSV. |
@@ -48,8 +48,15 @@ single cell. In a fresh Colab notebook:
 ```
 
 `run_experiment.py --help` lists every option (`--lags`, `--loads`, `--regimes`,
-`--n-seeds`, `--no-generation`, `--output`). Results land in
+`--n-pres`, `--n-seeds`, `--no-generation`, `--output`). Results land in
 `ab_results_<model_slug>.csv`.
+
+`--n-pres` is a confound-control dimension: by default it is `auto`
+(n_pre auto-computed so T2 stays at the same absolute packet index, today's
+behavior). Pass explicit ints (e.g. `--n-pres 2 4 6 8`) to vary the number of
+pre-T1 filler packets and let T2 absolute position float — useful for
+disentangling lag effects from position effects. The actually-used value is
+recorded in the `n_pre` column of every output row.
 
 To plot, read that CSV back in a notebook cell rather than passing `--plot`
 (a `!python` subprocess can't render inline figures):
