@@ -14,10 +14,10 @@ See [`../LITERATURE.md`](../LITERATURE.md) for the design rationale and feasibil
 | File | Role |
 |------|------|
 | `model.py` | Model loading and scoring. Supports two backends: **HuggingFace** (`transformers` + `torch`) for GPU-accelerated models, and **Ollama** (via OpenAI-compatible API) for local CPU inference. Exposes `load_model()`, a log-prob scorer, and a greedy-generation scorer. |
-| `stimuli.py` | Stimulus generation. Builds the RSVP-like packet stream, samples T1 items from difficulty-graded banks (`semantic_0`–`4`, `math_0`–`4`), generates T2 passphrases, inserts them at a given lag, and draws filler packets from a **1000-phrase deterministic `FILLER_POOL`** (system-log style) seeded at module load. Also prefixes every prompt with a fixed worked example so the model sees the expected output form. |
+| `stimuli.py` | Stimulus generation. Builds the RSVP-like packet stream, samples T1 items from difficulty-graded banks (`semantic_0`–`4`, `math_0`–`4`), generates T2 passphrases, inserts them at a given lag, and draws filler packets from a 1000-phrase deterministic `FILLER_POOL` (system-log style) seeded at module load. Also prefixes every prompt with a fixed worked example so the model sees the expected output form. |
 | `experiment.py` | Trial logic. Defines `TrialConfig`, `build_trial()`, and `run_sweep()` — the main loop that iterates over lags, loads, and regimes and collects both read-outs (binary report + joint log-prob). |
 | `analyze.py` | Analysis and plotting. `plot_ab()` draws the blink curve (T2 metric vs lag, one line per T1 load). Also contains aggregate helpers. |
-| `run_experiment.py` | CLI entry point. Parses arguments (`--model`, `--lags`, `--loads`, `--regimes`, `--n-seeds`, `--plot`, …), runs a full sweep, and writes results to a CSV. |
+| `run_experiment.py` | CLI entry point. Parses arguments (`--model`, `--lags`, `--loads`, `--regimes`, `--n-pres`, `--n-seeds`, `--plot`, …), runs a full sweep, and writes results to a CSV. |
 | `__init__.py` | Package exports (`load_model`, `run_sweep`, `plot_ab`, `build_trial`, `TrialConfig`). |
 | `attentional_blink_colab.ipynb` | Interactive Colab notebook for cell-by-cell exploration. |
 | `pyproject.toml` | Package metadata — enables `pip install git+https://github.com/ThoHardy/LLM_Blink`. |
@@ -25,6 +25,36 @@ See [`../LITERATURE.md`](../LITERATURE.md) for the design rationale and feasibil
 
 ---
 
+## Preview a random example prompt
+
+**Do this once before launching a sweep**, so you know exactly what the model receives. It needs no model and no GPU — `stimuli.py` builds the prompt text directly:
+
+```python
+import sys, os
+sys.path.insert(0, os.getcwd())      # adjust if LLM_Blink/ is elsewhere on sys.path
+import random
+from LLM_Blink import build_trial, TrialConfig
+
+tr = build_trial(TrialConfig(
+    lag=2,                    # try 0, 2, 4, 6, 8, 10 — the sweep's default lags
+    t1_load="semantic_4",     # "none", semantic_0..4, math_0..4
+    regime="cot",             # or "direct"
+    seed=random.randint(0, 1_000_000),   # new random draw every call
+))
+
+print("=== SYSTEM ===\n" + tr.system)
+print("\n=== USER PROMPT (sent to the model) ===\n" + tr.user_prefix)
+print("\n--- ground truth (not shown to the model) ---")
+print("T2 passphrase to detect:", tr.t2_phrase)
+print("T1 correct answer:      ", tr.t1_answer)
+```
+
+Run it again (or just change `seed`) for a fresh draw: a new random NATO passphrase for T2, a different item sampled from the `semantic_4` bank, and a different mix of filler packets from the 1000-phrase pool. Change `lag`, `t1_load`, or `regime` to preview any other condition in the sweep.
+
+- **In Colab**, run this in its own cell right after the `git clone` + `pip install` cell, before launching `run_experiment.py` (see step 1 below).
+- **Locally / Ollama**, run it as a script from inside the cloned repo, at the same level as the `LLM_Blink/` folder — paste it into a `python3` REPL or save it as `preview.py` and run `python3 preview.py`.
+
+---
 
 ## Quickstart — Google Colab (free T4 GPU)
 
@@ -41,8 +71,14 @@ single cell. In a fresh Colab notebook:
 !git clone https://github.com/ThoHardy/LLM_Blink.git
 !pip -q install "transformers>=4.44" accelerate
 # !pip -q install bitsandbytes        # only for 7B 4-bit
+```
 
-# 1. Run a sweep (CSV is written next to the notebook)
+**1. Preview one example prompt** — paste the snippet from
+[Preview a random example prompt](#preview-a-random-example-prompt) above into
+its own cell here, and look at the output before you spend any GPU time.
+
+```python
+# 2. Run a sweep (CSV is written next to the notebook)
 !python LLM_Blink/run_experiment.py --model Qwen/Qwen2.5-3B-Instruct --n-seeds 10
 # 7B in 4-bit:  !python LLM_Blink/run_experiment.py --model Qwen/Qwen2.5-7B-Instruct --load-in-4bit
 ```
@@ -51,10 +87,10 @@ single cell. In a fresh Colab notebook:
 `--n-pres`, `--n-seeds`, `--no-generation`, `--output`). Results land in
 `ab_results_<model_slug>.csv`.
 
-`--n-pres` is a confound-control dimension: by default it is `auto`
-(n_pre auto-computed so T2 stays at the same absolute packet index, today's
+`--n-pres` is a confound-control dimension: by default it is `auto` (`n_pre` is
+auto-computed so T2 stays at the same absolute packet index, today's default
 behavior). Pass explicit ints (e.g. `--n-pres 2 4 6 8`) to vary the number of
-pre-T1 filler packets and let T2 absolute position float — useful for
+pre-T1 filler packets and let T2's absolute position float — useful for
 disentangling lag effects from position effects. The actually-used value is
 recorded in the `n_pre` column of every output row.
 
@@ -135,12 +171,18 @@ pip install openai pandas matplotlib
 # transformers / torch are NOT needed for the Ollama backend
 ```
 
-### 3. Clone the repo and run
+### 3. Clone the repo, preview a prompt, and run
 
 ```bash
 git clone <your-repo-url>
 cd LLM_AB
+```
 
+Before running anything, preview one example prompt — see
+[Preview a random example prompt](#preview-a-random-example-prompt) above
+(no model or Ollama server needed for this step).
+
+```bash
 # Pass your model name once — everything else uses sensible defaults.
 python LLM_Blink/run_experiment.py --model gemma2:2b
 python LLM_Blink/run_experiment.py --model mistral:7b --n-seeds 20
@@ -166,6 +208,9 @@ Run `python LLM_Blink/run_experiment.py --help` for all options.
 
 ### 3. Inspect one trial (sanity check)
 
+Same idea as [Preview a random example prompt](#preview-a-random-example-prompt)
+above, but using the model/tokenizer you already loaded in step 2:
+
 ```python
 tr = build_trial(TrialConfig(lag=2, t1_load="semantic_3", regime="cot", seed=0))
 print(tr.user_prefix)
@@ -174,9 +219,8 @@ print("\nT2 to detect:", tr.t2_phrase, "| T1 answer:", tr.t1_answer)
 
 ### 4. Run a pilot lag sweep
 
-2 loads × 6 lags × 2 regimes × `n_seeds` trials. Start with `n_seeds=10`, scale up once it
-looks right. `do_generation=True` also runs greedy decoding for the binary report measure
-(slower).
+2 loads × 6 lags × 2 regimes × `n_seeds` trials. Start with `n_seeds=10`, scale up once it looks right.
+`do_generation=True` also runs greedy decoding for the binary report measure (slower).
 
 ```python
 df = run_sweep(
@@ -195,8 +239,7 @@ df.head()
 
 ### 5. Plot the AB curve
 
-One panel per regime, with both measures stacked. CoT (generation dynamics) on one side,
-direct (encoding) on the other.
+One panel per regime, with both measures stacked. CoT (generation dynamics) on one side, direct (encoding) on the other.
 
 ```python
 import matplotlib.pyplot as plt
@@ -209,16 +252,13 @@ fig, axes = plt.subplots(
     squeeze=False,
 )
 for col, regime in enumerate(regimes_present):
-    plot_ab(df, "t2_mean_logprob", regime=regime, ax=axes[0, col])  # graded 'unconscious'
+    plot_ab(df, "t2_mean_logprob", regime=regime, ax=axes[0, col])   # graded 'unconscious'
     if has_correct:
         plot_ab(df, "report_correct", regime=regime, ax=axes[1, col])  # binary 'conscious'
 plt.tight_layout(); plt.show()
 ```
 
-**What to look for:** `T1=semantic_4` should deepen and/or widen the dip at intermediate
-lags if a blink-like effect exists; `T1=none` stays flat (positional baseline). The
-CoT/direct contrast separates a generation-dynamics blink from an encoding one. All flat
-→ informative null.
+**What to look for:** `T1=semantic_4` should deepen and/or widen the dip at intermediate lags if a blink-like effect exists; `T1=none` stays flat (positional baseline). The CoT/direct contrast separates a generation-dynamics blink from an encoding one. All flat → informative null.
 
 ### 6. Sanity check — was T1 load actually performed?
 
@@ -245,5 +285,5 @@ LLM_Blink/
 
 - Run a difficulty sweep: `loads=("none","semantic_0","semantic_1","semantic_2","semantic_3","semantic_4")` to check that T1 accuracy decreases monotonically (sanity) and that the blink amplitude grows with level.
 - Re-run with `regimes=("direct",)` and compare (encoding vs generation-dynamics blink).
-- Add a second model family (e.g. `gemma2:2b` via Ollama or `gemma-2-2b-it` via HF).
-- Titrate toward ~50% report rate via T2 length / mask / distractor similarity (see `../PROMPTS.md` P2).
+- Add a second model family (e.g. gemma2:2b via Ollama or gemma-2-2b-it via HF).
+- Titrate toward ~50% report rate via T2 length / mask / distractor similarity (see ../PROMPTS.md P2).
