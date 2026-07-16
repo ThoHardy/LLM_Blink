@@ -109,8 +109,12 @@ def main():
         help="Number of random seeds (trials) per condition cell.",
     )
     parser.add_argument(
-        "--no-generation", action="store_true",
-        help="Skip greedy decoding; only compute log-prob scores (faster).",
+        "--encoding-baseline", action="store_true",
+        help=(
+            "Also compute the legacy empty-CoT teacher-forced T2 score per "
+            "trial ('*_encoding' columns). Control measure only: it is blind "
+            "to the model's reasoning by construction."
+        ),
     )
 
     # -- output ----------------------------------------------------------------
@@ -173,7 +177,7 @@ def main():
         n_posts=tuple(n_posts),
         n_seeds=args.n_seeds,
         temperature=args.temperature,
-        do_generation=not args.no_generation,
+        encoding_baseline=args.encoding_baseline,
         verbose=True,
     )
 

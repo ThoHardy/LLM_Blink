@@ -561,11 +561,12 @@ class TrialConfig:
 @dataclass
 class Trial:
     system: str
-    user_prefix: str             # everything up to (excluding) the T2 passphrase string
-    user_full: str               # full prompt incl. T2 + template (for generation)
+    user: str                    # the full user prompt (rules + example + stream + template)
     t2_phrase: str
     t1_answer: str | None
-    template_prefix_after_prompt: str  # assistant text preceding the T2 slot, for logprob scoring
+    template_prefix_after_prompt: str  # empty-CoT answer template up to the T2 slot; used only
+                                       # by the optional encoding-baseline control (see
+                                       # experiment.run_trial(encoding_baseline=True))
     config: TrialConfig = field(default=None)
     n_pre_used: int = 0          # actually used n_pre (resolves None to auto value)
     n_post_used: int = 0         # actually used n_post (resolves None to the random draw)
@@ -714,8 +715,7 @@ def build_trial(cfg: TrialConfig) -> Trial:
     header = f"{RULES}\n{example_block}\nDATA STREAM:\n{stream}\n{template}"
     return Trial(
         system=SYSTEM,
-        user_prefix=header,
-        user_full=header,
+        user=header,
         t2_phrase=t2,
         t1_answer=t1_ans,
         template_prefix_after_prompt=assistant_prefix,

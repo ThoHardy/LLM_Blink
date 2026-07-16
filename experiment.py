@@ -1,9 +1,22 @@
 """Run the lag sweep and collect both read-outs per trial.
 
-Each trial yields:
-- report_correct (bool): T2 appears correctly in greedy generation  -> "conscious"
-- t2_total_logprob / t2_joint_prob: teacher-forced joint prob of correct T2 -> "unconscious"
-- t1_correct (bool): sanity that the load task was actually performed
+Redesigned 2026-07-16 ("generate once, then read"): every trial runs ONE free
+generation pass, and BOTH measures are read off that same trajectory:
+
+- report_correct (bool): the generated T2 equals the correct passphrase
+  -> binary "conscious" report.
+- t2_total_logprob / t2_joint_prob: teacher-forced joint prob of the CORRECT
+  T2 conditioned on the model's OWN generated prefix at the T2 slot (its real
+  <Thinking> reasoning and its own T1 answer, cot regime) -> graded
+  "unconscious strength". At temperature>0 the prefix is the actually-sampled
+  one (Thomas, 2026-07-16), so the score is
+  P(correct T2 | model's actually-realized reasoning).
+- t1_correct (bool): sanity that the load task was actually performed.
+
+The old empty-CoT teacher-forced score (blind to reasoning, force-fed correct
+T1) is kept as an OPTIONAL control via ``encoding_baseline=True`` — it
+measures "encoding strength of T2 ignoring reasoning" and lands in
+``*_encoding`` columns. It is no longer the primary graded measure.
 """
 from __future__ import annotations
 import re
@@ -35,18 +48,48 @@ def _extract_t1(text: str) -> str | None:
 # verbatim in the output, the model copied the template instead of reasoning.
 _PLACEHOLDER_RE = re.compile(r"\[process the stream")
 
+# The T2 slot marker in the generated output. The scoring prefix ends right
+# after this marker (plus any whitespace / opening quote the model emitted),
+# i.e. exactly where the model's own T2 tokens would begin.
+_T2_SLOT_RE = re.compile(r"Target 2 Result:\s*\"?")
 
-def run_trial(model, tok, cfg: TrialConfig, do_generation: bool = True,
-              temperature: float = 0.0) -> dict:
+
+def _t2_scoring_prefix(generated: str) -> tuple[str, bool]:
+    """Split the generated text at the T2 slot for teacher-forced scoring.
+
+    Returns (prefix, slot_missing). ``prefix`` is the model's own generated
+    text up to (and including) the ``Target 2 Result:`` marker — the correct
+    T2 phrase is scored conditioned on it. If the model never emitted the
+    marker (or emitted it malformed), fall back to appending the marker to the
+    full generated text and flag the trial (slot_missing=True) so analyses can
+    gate on it, analogous to ``thinking_is_placeholder``.
+    """
+    m = _T2_SLOT_RE.search(generated)
+    if m:
+        return generated[: m.end()], False
+    return generated.rstrip() + "\nTarget 2 Result: ", True
+
+
+def run_trial(model, tok, cfg: TrialConfig, temperature: float = 0.0,
+              encoding_baseline: bool = False) -> dict:
     tr = build_trial(cfg)
 
-    # graded "unconscious" measure: joint log-prob of the correct T2 under the answer template
+    # -- 1. generation (always runs by design) ------------------------------
+    out = report_generate(model, tok, tr.system, tr.user, temperature=temperature)
+    got_t2 = _extract_t2(out)
+    got_t1 = _extract_t1(out)
+
+    # -- 2. graded measure: P(correct T2 | model's own generated prefix) ----
+    # One exact teacher-forced forward over [prompt + realized prefix + correct
+    # T2]; the scoring pass itself is greedy log-softmax, only the prefix is
+    # the (possibly sampled) realized one.
+    prefix, slot_missing = _t2_scoring_prefix(out)
     lp = sequence_logprob(
         model, tok,
         system=tr.system,
-        user_prefix=tr.user_prefix,
+        user_prefix=tr.user,
         target_text=tr.t2_phrase,
-        prefilled_assistant=tr.template_prefix_after_prompt,
+        prefilled_assistant=prefix,
     )
 
     row = {
@@ -56,25 +99,41 @@ def run_trial(model, tok, cfg: TrialConfig, do_generation: bool = True,
         "temperature": temperature,
         "seed": cfg.seed, "t2_words": cfg.t2_words,
         "t2_phrase": tr.t2_phrase,
+        # graded read-out (off the model's own trajectory)
         "t2_total_logprob": lp["total_logprob"],
         "t2_mean_logprob": lp["mean_logprob"],
         "t2_joint_prob": lp["joint_prob"],
         "t2_n_tokens": lp["n_tokens"],
+        # binary read-out (same generation pass)
+        "report_correct": (got_t2 == tr.t2_phrase),
+        "t1_correct": (got_t1 == tr.t1_answer) if tr.t1_answer else None,
+        # data-quality gates
+        # True = the model never emitted a usable 'Target 2 Result:' slot; the
+        # graded score used the appended-marker fallback.
+        "t2_slot_missing": slot_missing,
+        # True = the <Thinking> block just echoed the template placeholder
+        # (no real reasoning happened). cot regime only.
+        "thinking_is_placeholder": (
+            bool(_PLACEHOLDER_RE.search(out)) if cfg.regime == "cot" else None
+        ),
+        "raw_output": out,
     }
 
-    if do_generation:
-        out = report_generate(model, tok, tr.system, tr.user_full,
-                              temperature=temperature)
-        got_t2 = _extract_t2(out)
-        got_t1 = _extract_t1(out)
-        row["report_correct"] = (got_t2 == tr.t2_phrase)
-        row["t1_correct"] = (got_t1 == tr.t1_answer) if tr.t1_answer else None
-        # Data-quality gate for the cot regime: True means the <Thinking> block
-        # just echoed the template placeholder (no real reasoning happened).
-        row["thinking_is_placeholder"] = (
-            bool(_PLACEHOLDER_RE.search(out)) if cfg.regime == "cot" else None
+    # -- 3. optional control: old empty-CoT teacher-forced score ------------
+    # P(correct T2 | stream, EMPTY reasoning, force-fed correct T1). Blind to
+    # the CoT effect by construction; useful only as an encoding baseline.
+    if encoding_baseline:
+        lp0 = sequence_logprob(
+            model, tok,
+            system=tr.system,
+            user_prefix=tr.user,
+            target_text=tr.t2_phrase,
+            prefilled_assistant=tr.template_prefix_after_prompt,
         )
-        row["raw_output"] = out
+        row["t2_total_logprob_encoding"] = lp0["total_logprob"]
+        row["t2_mean_logprob_encoding"] = lp0["mean_logprob"]
+        row["t2_joint_prob_encoding"] = lp0["joint_prob"]
+
     return row
 
 
@@ -82,10 +141,15 @@ def run_sweep(model, tok, lags=(0, 1, 2, 3, 5, 8), loads=("none", "easy", "hard"
               regimes=("cot", "direct"), masks=(False,),
               n_pres: tuple[int | None, ...] = (None,),
               n_posts: tuple[int | None, ...] = (None,),
+              n_post: int | None = None,
               n_seeds: int = 20,
               temperature: float = 0.0,
-              do_generation: bool = True, verbose: bool = True) -> pd.DataFrame:
+              encoding_baseline: bool = False,
+              verbose: bool = True) -> pd.DataFrame:
     """Full factorial sweep. n_seeds trials per cell (each with a fresh random T2).
+
+    Every trial generates (there is no log-prob-only mode anymore): both
+    read-outs come from the same generation pass, see module docstring.
 
     ``n_pres`` is an independent sweep dimension (Item 2). ``None`` means
     auto-compute n_pre so the stream has exactly ``total_packets`` packets.
@@ -93,23 +157,29 @@ def run_sweep(model, tok, lags=(0, 1, 2, 3, 5, 8), loads=("none", "easy", "hard"
     can probe the confound between n_pre and T2 position directly.
 
     ``n_posts`` controls the fillers after T2. ``None`` (default) draws n_post
-    at random per trial in [0, budget] where the budget shrinks with lag/mask;
-    explicit ints fix it (bounded by the same budget).
+    at random per trial in [1, budget-1] where the budget shrinks with lag/mask;
+    explicit ints fix it (bounded by the same budget). ``n_post`` (singular) is
+    a convenience for a single fixed value: ``n_post=3`` is shorthand for
+    ``n_posts=(3,)`` and is forwarded to ``build_trial`` via ``TrialConfig``.
 
-    ``temperature`` is passed to the generation scorer (0.0 = greedy, the
-    default). It only affects the binary report measure, never log-prob scoring.
-    Sensible non-zero values: 0.3, 0.7, 1.0.
+    ``temperature`` applies to the generation pass; at >0 the graded score is
+    conditioned on the actually-sampled prefix (logged per row).
+
+    ``encoding_baseline=True`` additionally computes the legacy empty-CoT
+    teacher-forced score per trial (``*_encoding`` columns) as a control.
     """
+    if n_post is not None:
+        n_posts = (n_post,)
     rows = []
     cells = list(itertools.product(lags, loads, regimes, masks, n_pres, n_posts,
                                    range(n_seeds)))
     pbar = tqdm(enumerate(cells), total=len(cells), disable=not verbose)
-    for k, (lag, load, regime, mask, n_pre, n_post, seed) in pbar:
+    for k, (lag, load, regime, mask, n_pre, n_post_, seed) in pbar:
         cfg = TrialConfig(lag=lag, t1_load=load, regime=regime, mask=mask,
-                          n_pre=n_pre, n_post=n_post,
+                          n_pre=n_pre, n_post=n_post_,
                           seed=1000 * seed + lag + 7 * len(load))
-        rows.append(run_trial(model, tok, cfg, do_generation=do_generation,
-                              temperature=temperature))
+        rows.append(run_trial(model, tok, cfg, temperature=temperature,
+                              encoding_baseline=encoding_baseline))
         if hasattr(pbar, "set_postfix"):
             pbar.set_postfix(lag=lag, load=load)
     return pd.DataFrame(rows)

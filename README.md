@@ -3,7 +3,9 @@
 Tests whether an **Attentional-Blink (AB)-like phenomenon** exists in LLMs, using a deliberately operationalized notion of "conscious access":
 
 - **Conscious perception** of T2 = the item appears in the model's tokenized output (it is reported).
-- **Unconscious strength** of T2 = joint log-probability of the correct T2 under the forced answer template, regardless of what was actually generated.
+- **Unconscious strength** of T2 = joint log-probability of the correct T2 at the answer slot of the model's **own generated output** (its real chain-of-thought and its own T1 answer), regardless of what it actually emitted there.
+
+Both measures come from a single generation pass per trial: the model generates freely, then the correct-T2 log-prob is read teacher-forced over the model's own realized prefix at the `Target 2 Result:` slot.
 
 A stream of 15 text "packets" plays the role of the RSVP stream: T1 is a capacity-demanding task (semantic or math, 5 difficulty levels, 100 items per level), T2 is a novel 3-word NATO passphrase placed `lag` packets after T1, and the remaining packets are fillers drawn from a deterministic 1000-phrase pool. The AB prediction: T2 read-outs dip at intermediate lags after a demanding T1 and recover at long lags. See [`../LITERATURE.md`](../LITERATURE.md) for rationale and feasibility caveats — a null result is a legitimate outcome.
 
@@ -37,7 +39,7 @@ tr = build_trial(TrialConfig(
     regime="cot",             # or "direct"
     seed=random.randint(0, 1_000_000),
 ))
-print(tr.user_prefix)
+print(tr.user)
 print("\nT2 passphrase:", tr.t2_phrase, "| T1 answer:", tr.t1_answer,
       "| T2 packet index:", tr.t2_abs_index)
 ```
@@ -111,9 +113,9 @@ All options are visible via `run_experiment.py --help`; the same names exist as 
 | `--regimes` | `cot direct` | With or without a `<Thinking>` block before the answers. |
 | `--n-pres` | `auto` | Fillers before T1. `auto` fills up to 15 total packets; explicit ints (`--n-pres 2 4 6 8`) decouple lag from T2's absolute position (confound control). |
 | `--n-posts` | `random` | Fillers after T2. `random` draws per trial from `[1, budget−1]`; ints fix it. See *Stream geometry*. |
-| `--temperature` | `0.0` | Sampling temperature for the generation (report) measure only; allowed values `0.0` (greedy), `0.3`, `0.7`, `1.0`. Log-prob scoring always stays teacher-forced and deterministic. |
+| `--temperature` | `0.0` | Sampling temperature for the generation pass; allowed values `0.0` (greedy), `0.3`, `0.7`, `1.0`. At >0 the graded score conditions on the actually-sampled prefix (the scoring forward pass itself stays deterministic); `temperature` is logged per row. |
 | `--n-seeds` | `10` | Trials per condition cell. |
-| `--no-generation` | off | Skip decoding; log-prob measure only (much faster). |
+| `--encoding-baseline` | off | Additionally compute the legacy empty-CoT teacher-forced T2 score (`*_encoding` columns): P(correct T2 | stream, empty reasoning, force-fed correct T1). Control only — blind to the model's reasoning by construction. |
 
 ### Stream geometry
 
@@ -139,7 +141,13 @@ print(df.groupby("t1_load")["t1_correct"].mean())
 print(df[df.t1_load != "none"].groupby(["t1_correct", "lag"])["report_correct"].mean())
 ```
 
-**3. Positional baseline.** Any dip must exceed the `t1_load="none"` curve at the same lags (pure position/recency effect) and should be modulated by T1 difficulty. The `--n-pres` sweep and the logged `t2_abs_index` let you regress out absolute position explicitly.
+**3. Did the model emit a scorable T2 slot?** The graded measure conditions on the model's own output up to the `Target 2 Result:` marker. If the model never emitted that marker (truncation, format drift), the score falls back to appending the marker to the full generated text and the row is flagged `t2_slot_missing=True`. Check the rate and gate if needed:
+
+```python
+print(df.groupby(["regime", "t1_load"])["t2_slot_missing"].mean())
+```
+
+**4. Positional baseline.** Any dip must exceed the `t1_load="none"` curve at the same lags (pure position/recency effect) and should be modulated by T1 difficulty. The `--n-pres` sweep and the logged `t2_abs_index` let you regress out absolute position explicitly.
 
 ---
 
