@@ -110,14 +110,14 @@ All options are visible via `run_experiment.py --help`; the same names exist as 
 | `--loads` | `none semantic_4` | T1 difficulty. Accepts `none`, `semantic_0..4`, `math_0..4` (aliases `easy`/`hard`/`easy_math`/`hard_math`). |
 | `--regimes` | `cot direct` | With or without a `<Thinking>` block before the answers. |
 | `--n-pres` | `auto` | Fillers before T1. `auto` fills up to 15 total packets; explicit ints (`--n-pres 2 4 6 8`) decouple lag from T2's absolute position (confound control). |
-| `--n-posts` | `random` | Fillers after T2. `random` draws per trial from `[0, budget]`; ints fix it. See *Stream geometry*. |
+| `--n-posts` | `random` | Fillers after T2. `random` draws per trial from `[1, budget−1]`; ints fix it. See *Stream geometry*. |
 | `--temperature` | `0.0` | Sampling temperature for the generation (report) measure only; allowed values `0.0` (greedy), `0.3`, `0.7`, `1.0`. Log-prob scoring always stays teacher-forced and deterministic. |
 | `--n-seeds` | `10` | Trials per condition cell. |
 | `--no-generation` | off | Skip decoding; log-prob measure only (much faster). |
 
 ### Stream geometry
 
-Every stream has **exactly 15 packets** (T1 + T2 + `End of stream` + optional mask + fillers). The fillers split into `n_pre` (before T1) and `n_post` (after T2), so `n_post` is bounded by the lag: `n_post ≤ 15 − 3 − mask − lag`. By default `n_post` is drawn uniformly at random per trial (which makes T2's absolute position vary — a built-in positional control) and `n_pre` absorbs the remainder. Fix `n_post` to pin T2's position instead (`n_post=2` reproduces the old fixed layout with T2 at packet 12). The values actually used are logged per row (`n_pre`, `n_post`, `t2_abs_index`).
+Every stream has **exactly 15 packets** (T1 + T2 + `End of stream` + optional mask + fillers), with **at least one filler at each end**: packet 1 is always a filler (T1 is never first) and at least one filler separates T2 from `End of stream`. The fillers split into `n_pre` (before T1) and `n_post` (after T2), so given a lag, `n_post` ranges over `[1, 15 − 4 − mask − lag]`, T2 sits at packet `15 − n_post − 1`, and T1 at `15 − n_post − lag − 2`. By default `n_post` is drawn uniformly at random per trial (which makes T2's absolute position vary — a built-in positional control) and `n_pre` absorbs the remainder. Fix `n_post` to pin T2's position instead (`n_post=2` reproduces the old fixed layout with T2 at packet 12). The values actually used are logged per row (`n_pre`, `n_post`, `t2_abs_index`).
 
 ---
 

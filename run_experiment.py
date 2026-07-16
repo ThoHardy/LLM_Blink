@@ -91,8 +91,9 @@ def main():
         metavar="NPOST",
         help=(
             "Number of filler packets after T2. 'random' (default) draws a "
-            "fresh value per trial in [0, budget]; ints fix it. The budget "
-            "shrinks with lag so the stream always has 15 packets in total."
+            "fresh value per trial in [1, budget-1]; ints fix it. The budget "
+            "shrinks with lag, the stream always has 15 packets in total, "
+            "and at least one filler opens and closes the stream."
         ),
     )
     parser.add_argument(

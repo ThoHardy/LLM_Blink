@@ -550,7 +550,7 @@ class TrialConfig:
     regime: str = "cot"           # direct | cot
     mask: bool = False            # post-T1 mask packet
     n_pre: int | None = None      # fillers before T1 (None = auto: fill up to total_packets)
-    n_post: int | None = None     # fillers after T2 (None = random in [0, budget]; int = fixed)
+    n_post: int | None = None     # fillers after T2 (None = random in [1, budget-1]; int = fixed)
     total_packets: int = 15       # total stream length, incl. T1, T2, mask, fillers, 'End of stream'
     t2_words: int = 3
     target_t2_abs_index: int = 12  # LEGACY, no longer used: T2 position now follows from
@@ -647,26 +647,33 @@ def build_trial(cfg: TrialConfig) -> Trial:
     # n_post is drawn at random by default (or fixed via cfg.n_post); n_pre then
     # absorbs the remainder so the stream always has exactly total_packets packets.
     # Because lag+mask eat into the budget, n_post is bounded by the lag.
+    # At least one filler must open the stream (n_pre >= 1) and one must follow
+    # T2 (n_post >= 1), so T1 is never packet 1 and T2 never directly precedes
+    # 'End of stream'. Hence T2 = total - 1 - n_post and T1 = T2 - lag - 1 >= 2.
     fixed_blocks = 3 + (1 if cfg.mask else 0) + cfg.lag   # T1 + T2 + End + mask + lag fillers
     budget = cfg.total_packets - fixed_blocks             # fillers left for n_pre + n_post
-    if budget < 0:
+    if budget < 2:                                        # need >= 1 on each side
         raise ValueError(
             f"lag={cfg.lag} (mask={cfg.mask}) does not fit in "
-            f"total_packets={cfg.total_packets}; reduce lag or raise total_packets."
+            f"total_packets={cfg.total_packets} with >=1 filler at each end; "
+            f"reduce lag or raise total_packets."
         )
     if cfg.n_post is None:
-        n_post = rng.randint(0, budget)                   # random by default
+        n_post = rng.randint(1, budget - 1)               # random by default
     else:
         n_post = cfg.n_post
-        if not 0 <= n_post <= budget:
+        if not 1 <= n_post <= budget - 1:
             raise ValueError(
-                f"n_post={n_post} out of range [0, {budget}] for lag={cfg.lag}, "
-                f"mask={cfg.mask}, total_packets={cfg.total_packets}."
+                f"n_post={n_post} out of range [1, {budget - 1}] for lag={cfg.lag}, "
+                f"mask={cfg.mask}, total_packets={cfg.total_packets} "
+                f"(>=1 filler required at each end)."
             )
     if cfg.n_pre is None:
         n_pre = budget - n_post          # keeps the stream at exactly total_packets
     else:
         n_pre = cfg.n_pre                # explicit n_pre sweep (Item 2): total may then float
+        if n_pre < 1:
+            raise ValueError("n_pre must be >= 1 (the stream must open with a filler).")
 
     packets = []
     for _ in range(n_pre):
