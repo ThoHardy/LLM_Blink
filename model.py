@@ -65,13 +65,14 @@ class OllamaBackend:
 
     # -- generation ------------------------------------------------------------
 
-    def generate(self, system: str, user: str, max_new_tokens: int = 256) -> str:
-        """Free generation (greedy, temperature=0) -> assistant text."""
+    def generate(self, system: str, user: str, max_new_tokens: int = 256,
+                 temperature: float = 0.0) -> str:
+        """Free generation (temperature=0 -> greedy by default) -> assistant text."""
         resp = self._client.chat.completions.create(
             model=self.model_name,
             messages=_build_messages(system, user),
             max_tokens=max_new_tokens,
-            temperature=0,
+            temperature=temperature,
         )
         return resp.choices[0].message.content or ""
 
@@ -162,11 +163,16 @@ def load_model(
 # ==============================================================================
 
 def report_generate(model, tok, system: str, user: str,
-                    max_new_tokens: int = 256) -> str:
-    """Free generation -> decoded assistant text.  Binary report measure."""
+                    max_new_tokens: int = 256, temperature: float = 0.0) -> str:
+    """Free generation -> decoded assistant text.  Binary report measure.
+
+    temperature=0.0 (default) decodes greedily; any positive value switches to
+    sampling at that temperature (both backends). Log-prob scoring is unaffected.
+    """
     if isinstance(model, OllamaBackend):
-        return model.generate(system, user, max_new_tokens)
-    return _report_generate_hf(model, tok, system, user, max_new_tokens)
+        return model.generate(system, user, max_new_tokens, temperature=temperature)
+    return _report_generate_hf(model, tok, system, user, max_new_tokens,
+                               temperature=temperature)
 
 
 def sequence_logprob(model, tok, system: str, user_prefix: str,
@@ -232,15 +238,20 @@ build_prompt_ids = _build_prompt_ids
 
 
 def _report_generate_hf(model, tok, system: str, user: str,
-                         max_new_tokens: int = 256) -> str:
+                         max_new_tokens: int = 256,
+                         temperature: float = 0.0) -> str:
     import torch
+
+    gen_kwargs: dict = dict(max_new_tokens=max_new_tokens,
+                            pad_token_id=tok.eos_token_id)
+    if temperature and temperature > 0:
+        gen_kwargs.update(do_sample=True, temperature=float(temperature))
+    else:
+        gen_kwargs.update(do_sample=False)
 
     with torch.no_grad():
         ids = _build_prompt_ids(tok, system, user).to(model.device)
-        out = model.generate(
-            ids, max_new_tokens=max_new_tokens,
-            do_sample=False, pad_token_id=tok.eos_token_id,
-        )
+        out = model.generate(ids, **gen_kwargs)
         gen = out[0, ids.shape[1]:]
         return tok.decode(gen, skip_special_tokens=True)
 

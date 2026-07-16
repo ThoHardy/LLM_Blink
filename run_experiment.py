@@ -87,6 +87,23 @@ def main():
         ),
     )
     parser.add_argument(
+        "--n-posts", nargs="+", default=["random"],
+        metavar="NPOST",
+        help=(
+            "Number of filler packets after T2. 'random' (default) draws a "
+            "fresh value per trial in [0, budget]; ints fix it. The budget "
+            "shrinks with lag so the stream always has 15 packets in total."
+        ),
+    )
+    parser.add_argument(
+        "--temperature", type=float, default=0.0,
+        choices=[0.0, 0.3, 0.7, 1.0],
+        help=(
+            "Sampling temperature for the generation (report) measure. "
+            "0.0 = greedy decoding (default). Log-prob scoring is unaffected."
+        ),
+    )
+    parser.add_argument(
         "--n-seeds", type=int, default=10,
         help="Number of random seeds (trials) per condition cell.",
     )
@@ -117,11 +134,21 @@ def main():
         else:
             n_pres.append(int(tok_))
 
+    # Parse --n-posts: each token is either 'random' (-> None) or an int.
+    n_posts: list[int | None] = []
+    for tok_ in args.n_posts:
+        if tok_.lower() == "random":
+            n_posts.append(None)
+        else:
+            n_posts.append(int(tok_))
+
     print(f"Model  : {args.model}")
     print(f"Lags   : {args.lags}")
     print(f"Loads  : {args.loads}")
     print(f"Regimes: {args.regimes}")
     print(f"n_pres : {n_pres}")
+    print(f"n_posts: {n_posts}")
+    print(f"Temp.  : {args.temperature}")
     print(f"Seeds  : {args.n_seeds} per cell")
     print(f"Output : {out_path}")
     print()
@@ -142,7 +169,9 @@ def main():
         loads=tuple(args.loads),
         regimes=tuple(args.regimes),
         n_pres=tuple(n_pres),
+        n_posts=tuple(n_posts),
         n_seeds=args.n_seeds,
+        temperature=args.temperature,
         do_generation=not args.no_generation,
         verbose=True,
     )

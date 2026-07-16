@@ -2,7 +2,8 @@
 
 Key design choices (see ../PROMPTS.md and ../LITERATURE.md §C):
 - T2 is a NOVEL random NATO-word triplet each trial -> joint-P(T2) is not at ceiling.
-- T2 absolute position is held ~constant by padding before T1 (controls 'lost-in-the-middle').
+- Stream length is held constant at total_packets (default 15); n_post (fillers after T2)
+  is random by default and bounded by the lag, n_pre absorbs the remainder.
 - T1 has five load levels per track: semantic_0..4 and math_0..4 (plus 'none' baseline).
   Aliases: easy=semantic_0, hard=semantic_1, easy_math=math_0, hard_math=math_1.
 - Optional post-T1 'mask' packet (the human AB needs a mask).
@@ -548,10 +549,12 @@ class TrialConfig:
     t1_load: str = "hard"         # see _VALID_LOADS
     regime: str = "cot"           # direct | cot
     mask: bool = False            # post-T1 mask packet
-    n_pre: int | None = None      # fillers before T1 (auto: keeps T2 pos ~constant if None)
-    n_post: int = 2               # fillers after T2 before End of stream
+    n_pre: int | None = None      # fillers before T1 (None = auto: fill up to total_packets)
+    n_post: int | None = None     # fillers after T2 (None = random in [0, budget]; int = fixed)
+    total_packets: int = 15       # total stream length, incl. T1, T2, mask, fillers, 'End of stream'
     t2_words: int = 3
-    target_t2_abs_index: int = 12  # desired absolute packet index of T2 (position control)
+    target_t2_abs_index: int = 12  # LEGACY, no longer used: T2 position now follows from
+                                   # total_packets and n_post (index = total_packets - 1 - n_post)
     seed: int = 0
 
 
@@ -565,6 +568,8 @@ class Trial:
     template_prefix_after_prompt: str  # assistant text preceding the T2 slot, for logprob scoring
     config: TrialConfig = field(default=None)
     n_pre_used: int = 0          # actually used n_pre (resolves None to auto value)
+    n_post_used: int = 0         # actually used n_post (resolves None to the random draw)
+    t2_abs_index: int = 0        # 1-based absolute packet index where T2 landed
 
 
 SYSTEM = "You are an automated data-extraction system."
@@ -637,13 +642,31 @@ def build_trial(cfg: TrialConfig) -> Trial:
     if t1_line is None:                  # 'none' load -> neutral filler in the T1 slot
         t1_line = _filler(rng)
 
-    # position control: pad before T1 so that T2 lands at target_t2_abs_index
-    # layout: [n_pre fillers][T1][mask?][lag fillers][T2]
-    pre_blocks = 1 + (1 if cfg.mask else 0) + cfg.lag
-    if cfg.n_pre is None:
-        n_pre = max(0, cfg.target_t2_abs_index - 1 - pre_blocks)
+    # layout: [n_pre fillers][T1][mask?][lag fillers][T2][n_post fillers][End of stream]
+    # Fixed budget: total_packets = n_pre + n_post + (T1 + T2 + End + mask + lag).
+    # n_post is drawn at random by default (or fixed via cfg.n_post); n_pre then
+    # absorbs the remainder so the stream always has exactly total_packets packets.
+    # Because lag+mask eat into the budget, n_post is bounded by the lag.
+    fixed_blocks = 3 + (1 if cfg.mask else 0) + cfg.lag   # T1 + T2 + End + mask + lag fillers
+    budget = cfg.total_packets - fixed_blocks             # fillers left for n_pre + n_post
+    if budget < 0:
+        raise ValueError(
+            f"lag={cfg.lag} (mask={cfg.mask}) does not fit in "
+            f"total_packets={cfg.total_packets}; reduce lag or raise total_packets."
+        )
+    if cfg.n_post is None:
+        n_post = rng.randint(0, budget)                   # random by default
     else:
-        n_pre = cfg.n_pre
+        n_post = cfg.n_post
+        if not 0 <= n_post <= budget:
+            raise ValueError(
+                f"n_post={n_post} out of range [0, {budget}] for lag={cfg.lag}, "
+                f"mask={cfg.mask}, total_packets={cfg.total_packets}."
+            )
+    if cfg.n_pre is None:
+        n_pre = budget - n_post          # keeps the stream at exactly total_packets
+    else:
+        n_pre = cfg.n_pre                # explicit n_pre sweep (Item 2): total may then float
 
     packets = []
     for _ in range(n_pre):
@@ -654,7 +677,7 @@ def build_trial(cfg: TrialConfig) -> Trial:
     for _ in range(cfg.lag):
         packets.append(_filler(rng))
     packets.append((f'The secure operational passphrase is "{t2}".', " - T2"))
-    for _ in range(cfg.n_post):
+    for _ in range(n_post):
         packets.append(_filler(rng))
     packets.append("End of stream.")
 
@@ -691,6 +714,8 @@ def build_trial(cfg: TrialConfig) -> Trial:
         template_prefix_after_prompt=assistant_prefix,
         config=cfg,
         n_pre_used=n_pre,
+        n_post_used=n_post,
+        t2_abs_index=n_pre + 2 + (1 if cfg.mask else 0) + cfg.lag,
     )
 
 
