@@ -30,7 +30,12 @@ except ImportError:  # keep package dependency-light
         return iterable
 
 from .stimuli import TrialConfig, build_trial
-from .model import report_generate, sequence_logprob
+from .model import report_generate, sequence_logprob, DEFAULT_MAX_NEW_TOKENS
+
+# Generation halts once the closing template tag is emitted: everything we
+# need (Thinking, T1, T2) comes before it, and it keeps the large
+# max_new_tokens budget cheap on trials where the model finishes early.
+_STOP_AT = "</Final_Answers>"
 
 
 def _extract_t2(text: str) -> str | None:
@@ -71,11 +76,16 @@ def _t2_scoring_prefix(generated: str) -> tuple[str, bool]:
 
 
 def run_trial(model, tok, cfg: TrialConfig, temperature: float = 0.0,
-              encoding_baseline: bool = False) -> dict:
+              encoding_baseline: bool = False,
+              max_new_tokens: int = DEFAULT_MAX_NEW_TOKENS) -> dict:
     tr = build_trial(cfg)
 
     # -- 1. generation (always runs by design) ------------------------------
-    out = report_generate(model, tok, tr.system, tr.user, temperature=temperature)
+    out, truncated = report_generate(
+        model, tok, tr.system, tr.user,
+        max_new_tokens=max_new_tokens, temperature=temperature,
+        stop_at=_STOP_AT, return_truncated=True,
+    )
     got_t2 = _extract_t2(out)
     got_t1 = _extract_t1(out)
 
@@ -97,6 +107,7 @@ def run_trial(model, tok, cfg: TrialConfig, temperature: float = 0.0,
         "n_pre": tr.n_pre_used, "n_post": tr.n_post_used,
         "t2_abs_index": tr.t2_abs_index,
         "temperature": temperature,
+        "max_new_tokens": max_new_tokens,
         "seed": cfg.seed, "t2_words": cfg.t2_words,
         "t2_phrase": tr.t2_phrase,
         # graded read-out (off the model's own trajectory)
@@ -108,6 +119,11 @@ def run_trial(model, tok, cfg: TrialConfig, temperature: float = 0.0,
         "report_correct": (got_t2 == tr.t2_phrase),
         "t1_correct": (got_t1 == tr.t1_answer) if tr.t1_answer else None,
         # data-quality gates
+        # True = generation spent the whole max_new_tokens budget without
+        # finishing (no EOS / closing tag) — the output tail was cut off.
+        # Truncated trials look like report failures and their graded score
+        # uses a mutilated prefix: gate analyses on this like the flags below.
+        "output_truncated": truncated,
         # True = the model never emitted a usable 'Target 2 Result:' slot; the
         # graded score used the appended-marker fallback.
         "t2_slot_missing": slot_missing,
@@ -144,6 +160,7 @@ def run_sweep(model, tok, lags=(0, 1, 2, 3, 5, 8), loads=("none", "easy", "hard"
               n_post: int | None = None,
               n_seeds: int = 20,
               temperature: float = 0.0,
+              max_new_tokens: int = DEFAULT_MAX_NEW_TOKENS,
               encoding_baseline: bool = False,
               verbose: bool = True) -> pd.DataFrame:
     """Full factorial sweep. n_seeds trials per cell (each with a fresh random T2).
@@ -165,6 +182,11 @@ def run_sweep(model, tok, lags=(0, 1, 2, 3, 5, 8), loads=("none", "easy", "hard"
     ``temperature`` applies to the generation pass; at >0 the graded score is
     conditioned on the actually-sampled prefix (logged per row).
 
+    ``max_new_tokens`` is the generation budget per trial (default 1024;
+    logged per row). Generation stops early at the closing template tag, so
+    the budget is only spent when the model rambles. Trials that exhaust it
+    anyway are flagged ``output_truncated`` — gate analyses on that column.
+
     ``encoding_baseline=True`` additionally computes the legacy empty-CoT
     teacher-forced score per trial (``*_encoding`` columns) as a control.
     """
@@ -179,7 +201,8 @@ def run_sweep(model, tok, lags=(0, 1, 2, 3, 5, 8), loads=("none", "easy", "hard"
                           n_pre=n_pre, n_post=n_post_,
                           seed=1000 * seed + lag + 7 * len(load))
         rows.append(run_trial(model, tok, cfg, temperature=temperature,
-                              encoding_baseline=encoding_baseline))
+                              encoding_baseline=encoding_baseline,
+                              max_new_tokens=max_new_tokens))
         if hasattr(pbar, "set_postfix"):
             pbar.set_postfix(lag=lag, load=load)
     return pd.DataFrame(rows)

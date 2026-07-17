@@ -147,7 +147,14 @@ print(df[df.t1_load != "none"].groupby(["t1_correct", "lag"])["report_correct"].
 print(df.groupby(["regime", "t1_load"])["t2_slot_missing"].mean())
 ```
 
-**4. Positional baseline.** Any dip must exceed the `t1_load="none"` curve at the same lags (pure position/recency effect) and should be modulated by T1 difficulty. The `--n-pres` sweep and the logged `t2_abs_index` let you regress out absolute position explicitly.
+**4. Was the output truncated?** (2026-07-17) The model often re-enumerates all 15 packets inside `<Thinking>`; with the old 256-token budget this cut generation off before the T2 slot in ~45% of cot trials (0.5B pilot), mechanically producing `report_correct=False` and garbage graded scores. The budget is now `max_new_tokens=1024` (CLI `--max-new-tokens`) with an early stop at `</Final_Answers>`, and every row logs `output_truncated`. The rate should be ~0; exclude any flagged trial (it also explains most `t2_slot_missing`):
+
+```python
+print(df.groupby("regime")["output_truncated"].mean())
+ok = df[~df.output_truncated.astype(bool) & ~df.t2_slot_missing.astype(bool)]
+```
+
+**5. Positional baseline.** Any dip must exceed the `t1_load="none"` curve at the same lags (pure position/recency effect) and should be modulated by T1 difficulty. The `--n-pres` sweep and the logged `t2_abs_index` let you regress out absolute position explicitly.
 
 ---
 

@@ -33,6 +33,11 @@ from typing import Optional
 
 # -- defaults ------------------------------------------------------------------
 DEFAULT_HF_MODEL     = "Qwen/Qwen2.5-3B-Instruct"
+# Generation budget for the report pass. 256 was too small: in the cot regime
+# the model often re-enumerates all 15 packets inside <Thinking> (~400+ tokens)
+# and got cut off before reaching the T2 slot (45% of cot trials in the first
+# 0.5B pilot). 1024 leaves ample headroom; a stop string caps the actual cost.
+DEFAULT_MAX_NEW_TOKENS = 1024
 DEFAULT_OLLAMA_MODEL = "llama3.2:3b"
 OLLAMA_BASE_URL      = "http://localhost:11434/v1"
 
@@ -65,16 +70,33 @@ class OllamaBackend:
 
     # -- generation ------------------------------------------------------------
 
-    def generate(self, system: str, user: str, max_new_tokens: int = 256,
-                 temperature: float = 0.0) -> str:
-        """Free generation (temperature=0 -> greedy by default) -> assistant text."""
-        resp = self._client.chat.completions.create(
+    def generate(self, system: str, user: str,
+                 max_new_tokens: int = DEFAULT_MAX_NEW_TOKENS,
+                 temperature: float = 0.0,
+                 stop_at: Optional[str] = None,
+                 return_truncated: bool = False):
+        """Free generation (temperature=0 -> greedy by default) -> assistant text.
+
+        ``stop_at``: optional stop string (generation halts there; the OpenAI-
+        compatible API strips it from the returned text).
+        ``return_truncated=True`` -> returns (text, truncated) where
+        ``truncated`` means generation hit the ``max_new_tokens`` budget
+        (finish_reason == "length") instead of finishing naturally.
+        """
+        kwargs: dict = dict(
             model=self.model_name,
             messages=_build_messages(system, user),
             max_tokens=max_new_tokens,
             temperature=temperature,
         )
-        return resp.choices[0].message.content or ""
+        if stop_at:
+            kwargs["stop"] = [stop_at]
+        resp = self._client.chat.completions.create(**kwargs)
+        text = resp.choices[0].message.content or ""
+        if not return_truncated:
+            return text
+        truncated = getattr(resp.choices[0], "finish_reason", None) == "length"
+        return text, truncated
 
     # -- log-prob scoring ------------------------------------------------------
 
@@ -163,16 +185,31 @@ def load_model(
 # ==============================================================================
 
 def report_generate(model, tok, system: str, user: str,
-                    max_new_tokens: int = 256, temperature: float = 0.0) -> str:
+                    max_new_tokens: int = DEFAULT_MAX_NEW_TOKENS,
+                    temperature: float = 0.0,
+                    stop_at: Optional[str] = None,
+                    return_truncated: bool = False):
     """Free generation -> decoded assistant text.  Binary report measure.
 
     temperature=0.0 (default) decodes greedily; any positive value switches to
     sampling at that temperature (both backends). Log-prob scoring is unaffected.
+
+    ``stop_at``: optional stop string — generation halts once it appears
+    (e.g. the closing template tag), so a large ``max_new_tokens`` budget only
+    costs compute on trials that actually need it. HF keeps the stop string in
+    the returned text; the Ollama/OpenAI API strips it.
+    ``return_truncated=True`` -> returns ``(text, truncated)``;
+    ``truncated`` is True when generation ran into the ``max_new_tokens``
+    budget instead of finishing naturally (EOS or stop string) — i.e. the
+    output tail was cut off and downstream parsing of it cannot be trusted.
     """
     if isinstance(model, OllamaBackend):
-        return model.generate(system, user, max_new_tokens, temperature=temperature)
+        return model.generate(system, user, max_new_tokens,
+                              temperature=temperature, stop_at=stop_at,
+                              return_truncated=return_truncated)
     return _report_generate_hf(model, tok, system, user, max_new_tokens,
-                               temperature=temperature)
+                               temperature=temperature, stop_at=stop_at,
+                               return_truncated=return_truncated)
 
 
 def sequence_logprob(model, tok, system: str, user_prefix: str,
@@ -238,12 +275,18 @@ build_prompt_ids = _build_prompt_ids
 
 
 def _report_generate_hf(model, tok, system: str, user: str,
-                         max_new_tokens: int = 256,
-                         temperature: float = 0.0) -> str:
+                         max_new_tokens: int = DEFAULT_MAX_NEW_TOKENS,
+                         temperature: float = 0.0,
+                         stop_at: Optional[str] = None,
+                         return_truncated: bool = False):
     import torch
 
     gen_kwargs: dict = dict(max_new_tokens=max_new_tokens,
                             pad_token_id=tok.eos_token_id)
+    if stop_at:
+        # transformers >= 4.41; halts generation once the string is emitted
+        # (the string itself stays in the decoded output).
+        gen_kwargs.update(stop_strings=[stop_at], tokenizer=tok)
     if temperature and temperature > 0:
         gen_kwargs.update(do_sample=True, temperature=float(temperature))
     else:
@@ -253,7 +296,16 @@ def _report_generate_hf(model, tok, system: str, user: str,
         ids = _build_prompt_ids(tok, system, user).to(model.device)
         out = model.generate(ids, **gen_kwargs)
         gen = out[0, ids.shape[1]:]
-        return tok.decode(gen, skip_special_tokens=True)
+        text = tok.decode(gen, skip_special_tokens=True)
+        if not return_truncated:
+            return text
+        # Truncated = the full budget was spent AND generation did not end
+        # naturally (no EOS as last token, stop string never produced).
+        n_gen = int(gen.shape[0])
+        ended_eos = n_gen > 0 and int(gen[-1].item()) == tok.eos_token_id
+        ended_stop = bool(stop_at) and (stop_at in text)
+        truncated = (n_gen >= max_new_tokens) and not ended_eos and not ended_stop
+        return text, truncated
 
 
 def _sequence_logprob_hf(model, tok, system: str, user_prefix: str,

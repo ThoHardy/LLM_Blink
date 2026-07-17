@@ -105,6 +105,15 @@ def main():
         ),
     )
     parser.add_argument(
+        "--max-new-tokens", type=int, default=1024,
+        help=(
+            "Generation budget per trial. Generation stops early at the "
+            "closing </Final_Answers> tag, so this is an upper bound; trials "
+            "that exhaust it are flagged 'output_truncated' in the CSV. "
+            "256 was the old default and truncated ~45%% of cot trials."
+        ),
+    )
+    parser.add_argument(
         "--n-seeds", type=int, default=10,
         help="Number of random seeds (trials) per condition cell.",
     )
@@ -154,6 +163,7 @@ def main():
     print(f"n_pres : {n_pres}")
     print(f"n_posts: {n_posts}")
     print(f"Temp.  : {args.temperature}")
+    print(f"MaxTok : {args.max_new_tokens}")
     print(f"Seeds  : {args.n_seeds} per cell")
     print(f"Output : {out_path}")
     print()
@@ -177,6 +187,7 @@ def main():
         n_posts=tuple(n_posts),
         n_seeds=args.n_seeds,
         temperature=args.temperature,
+        max_new_tokens=args.max_new_tokens,
         encoding_baseline=args.encoding_baseline,
         verbose=True,
     )
