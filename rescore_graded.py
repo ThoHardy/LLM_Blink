@@ -36,6 +36,7 @@ import pandas as pd  # noqa: E402
 
 from LLM_Blink.stimuli import TrialConfig, build_trial  # noqa: E402
 from LLM_Blink.experiment import _t2_scoring_prefix  # noqa: E402
+from LLM_Blink.readout import t2_scoring_prefix_tasks  # noqa: E402
 
 try:
     from tqdm.auto import tqdm
@@ -50,14 +51,36 @@ def _as_bool(x) -> bool:
     return bool(x)
 
 
+def _is_task_row(row) -> bool:
+    """Combined-design (A x B x H) row? (n_tasks column present and set)."""
+    return "n_tasks" in row.index and pd.notna(row["n_tasks"])
+
+
 def _rebuild(row):
     """Rebuild the trial from the logged config/seed.
 
-    The original run may have drawn n_post randomly (default), or fixed
-    n_post / n_pre via CLI flags; fixing them changes downstream RNG draws, so
-    we try the candidate configs in order and accept the first whose realized
-    stream matches the logged t2_phrase / n_pre / n_post exactly.
+    Task-design rows (2026-07-20) rebuild from n_tasks/naming/passphrase_last
+    directly (their geometry axes are ignored). Legacy rows: the original run
+    may have drawn n_post randomly (default), or fixed n_post / n_pre via CLI
+    flags; fixing them changes downstream RNG draws, so we try the candidate
+    configs in order and accept the first whose realized stream matches the
+    logged t2_phrase / n_pre / n_post exactly.
     """
+    if _is_task_row(row):
+        try:
+            tr = build_trial(TrialConfig(
+                t1_load=str(row["t1_load"]), regime=str(row["regime"]),
+                t2_words=int(row["t2_words"]), seed=int(row["seed"]),
+                n_tasks=int(row["n_tasks"]), naming=str(row["naming"]),
+                passphrase_last=_as_bool(row["passphrase_last"]),
+            ))
+        except (ValueError, TypeError):
+            return None
+        if (tr.t2_phrase == str(row["t2_phrase"])
+                and str(tr.t2_task_name) == str(row["t2_task_name"])
+                and tr.t2_abs_index == int(row["t2_abs_index"])):
+            return tr
+        return None
     base = dict(lag=int(row["lag"]), t1_load=str(row["t1_load"]),
                 regime=str(row["regime"]), mask=_as_bool(row["mask"]),
                 t2_words=int(row["t2_words"]), seed=int(row["seed"]))
@@ -129,7 +152,11 @@ def main():
             totals.append(nan); means.append(nan); joints.append(nan)
             ntoks.append(0)
             continue
-        prefix, _slot_missing = _t2_scoring_prefix(raw)
+        if _is_task_row(row):
+            prefix, _slot_missing = t2_scoring_prefix_tasks(
+                raw, str(row["t2_task_name"]))
+        else:
+            prefix, _slot_missing = _t2_scoring_prefix(raw)
         if str(row["regime"]) == "cot":
             echoes.append(tr.t2_phrase in prefix.upper())
         else:

@@ -1,24 +1,32 @@
-"""Run the lag sweep and collect both read-outs per trial.
+"""Run the sweep and collect both read-outs per trial.
 
-Redesigned 2026-07-16 ("generate once, then read"): every trial runs ONE free
-generation pass, and BOTH measures are read off that same trajectory:
+Combined A x B x H design (2026-07-20) — the DEFAULT:
+- B: ``n_tasks`` tasks per stream (1 passphrase + n_tasks-1 loads), 15 packets.
+- A: ``finite_budget`` caps the tokens generated inside <Thinking> only; on
+  cap the block is force-closed and answers finish uncut (protocol.py).
+- H: per-trial task names (``naming`` = "ordered" | "non-ordered"), hidden
+  cardinality, free report "- Task <NAME>: <result>" (readout.py).
+The legacy single-T1 lag design is still available via n_tasks=None
+(run_sweep(n_tasks_list=(None,), finite_budgets=(None,), ...) or the CLI
+--legacy flag) and stays BIT-EXACT for rescore_graded.py.
 
-- report_correct (bool): the generated T2 equals the correct passphrase
-  -> binary "conscious" report.
+Read-outs, both off the SAME generated trajectory ("generate once, then
+read", 2026-07-16):
+- report_correct (bool): the passphrase task's reported answer equals the
+  correct passphrase -> binary "conscious" report.
 - t2_total_logprob / t2_joint_prob: teacher-forced joint prob of the CORRECT
-  T2 conditioned on the model's OWN generated prefix at the T2 slot (its real
-  <Thinking> reasoning and its own T1 answer, cot regime) -> graded
-  "unconscious strength". At temperature>0 the prefix is the actually-sampled
-  one (Thomas, 2026-07-16), so the score is
-  P(correct T2 | model's actually-realized reasoning).
-- t1_correct (bool): sanity that the load task was actually performed.
+  passphrase conditioned on the model's OWN generated prefix at the
+  passphrase answer slot -> graded "unconscious strength". At temperature>0
+  the prefix is the actually-sampled one (Thomas, 2026-07-16).
+- t1_correct: legacy = bool (the single T1); task design = FRACTION of load
+  tasks answered correctly (None when there are no load tasks).
+- tasks (JSON, task design only): per-task dicts with reported/correct.
 
-The old empty-CoT teacher-forced score (blind to reasoning, force-fed correct
-T1) is kept as an OPTIONAL control via ``encoding_baseline=True`` — it
-measures "encoding strength of T2 ignoring reasoning" and lands in
-``*_encoding`` columns. It is no longer the primary graded measure.
+The old empty-CoT teacher-forced score survives as an OPTIONAL legacy-only
+control via ``encoding_baseline=True`` (``*_encoding`` columns).
 """
 from __future__ import annotations
+import json
 import re
 import itertools
 import pandas as pd
@@ -30,13 +38,15 @@ except ImportError:  # keep package dependency-light
         return iterable
 
 from .stimuli import TrialConfig, build_trial
-from .model import report_generate, sequence_logprob, DEFAULT_MAX_NEW_TOKENS
+from .model import sequence_logprob, DEFAULT_MAX_NEW_TOKENS, OllamaBackend
+from .protocol import generate_trajectory, DEFAULT_ANSWER_BUDGET
+from .readout import parse_task_report, task_rows, t2_scoring_prefix_tasks
 
-# Generation halts once the closing template tag is emitted: everything we
-# need (Thinking, T1, T2) comes before it, and it keeps the large
-# max_new_tokens budget cheap on trials where the model finishes early.
-_STOP_AT = "</Final_Answers>"
 
+# ---------------------------------------------------------------------------
+# Legacy-template helpers (numbered "Target N Result:" design). Kept verbatim:
+# rescore_graded.py imports _t2_scoring_prefix, and legacy rows still use them.
+# ---------------------------------------------------------------------------
 
 def _extract_t2(text: str) -> str | None:
     m = re.search(r"Target 2 Result:\s*\"?([A-Z ]+?)\"?\s*(?:\n|$)", text)
@@ -49,25 +59,24 @@ def _extract_t1(text: str) -> str | None:
     return m.group(1).strip().upper() if m else None
 
 
-# Text the cot OUTPUT TEMPLATE uses as its <Thinking> placeholder. If it shows up
-# verbatim in the output, the model copied the template instead of reasoning.
+# Text the legacy cot OUTPUT TEMPLATE uses as its <Thinking> placeholder. If it
+# shows up verbatim in the output, the model copied the template instead of
+# reasoning.
 _PLACEHOLDER_RE = re.compile(r"\[process the stream")
 
-# The T2 slot marker in the generated output. The scoring prefix ends right
-# after this marker (plus any whitespace / opening quote the model emitted),
-# i.e. exactly where the model's own T2 tokens would begin.
+# Task-stream analog: the OUTPUT FORMAT instruction copied into <Thinking>
+# instead of actual reasoning (the phrase below appears nowhere else).
+_PLACEHOLDER_TASKS_RE = re.compile(r"identify every task packet")
+
+# The T2 slot marker in legacy generated output.
 _T2_SLOT_RE = re.compile(r"Target 2 Result:\s*\"?")
 
 
 def _t2_scoring_prefix(generated: str) -> tuple[str, bool]:
-    """Split the generated text at the T2 slot for teacher-forced scoring.
+    """Split legacy generated text at the T2 slot for teacher-forced scoring.
 
-    Returns (prefix, slot_missing). ``prefix`` is the model's own generated
-    text up to (and including) the ``Target 2 Result:`` marker — the correct
-    T2 phrase is scored conditioned on it. If the model never emitted the
-    marker (or emitted it malformed), fall back to appending the marker to the
-    full generated text and flag the trial (slot_missing=True) so analyses can
-    gate on it, analogous to ``thinking_is_placeholder``.
+    Returns (prefix, slot_missing); on a missing/malformed marker, falls back
+    to appending the marker to the full generated text and flags the trial.
     """
     m = _T2_SLOT_RE.search(generated)
     if m:
@@ -75,30 +84,56 @@ def _t2_scoring_prefix(generated: str) -> tuple[str, bool]:
     return generated.rstrip() + "\nTarget 2 Result: ", True
 
 
+# ---------------------------------------------------------------------------
+# One trial
+# ---------------------------------------------------------------------------
+
 def run_trial(model, tok, cfg: TrialConfig, temperature: float = 0.0,
               encoding_baseline: bool = False,
-              max_new_tokens: int = DEFAULT_MAX_NEW_TOKENS) -> dict:
+              max_new_tokens: int = DEFAULT_MAX_NEW_TOKENS,
+              finite_budget: int | None = None,
+              answer_budget: int = DEFAULT_ANSWER_BUDGET) -> dict:
     tr = build_trial(cfg)
+    legacy = cfg.n_tasks is None
 
-    # -- 1. generation (always runs by design) ------------------------------
-    out, truncated = report_generate(
-        model, tok, tr.system, tr.user,
-        max_new_tokens=max_new_tokens, temperature=temperature,
-        stop_at=_STOP_AT, return_truncated=True,
-    )
-    got_t2 = _extract_t2(out)
-    got_t1 = _extract_t1(out)
+    # -- 1. generation (single pass, or two-stage under a finite budget) ----
+    traj = generate_trajectory(model, tok, tr, finite_budget=finite_budget,
+                               temperature=temperature,
+                               max_new_tokens=max_new_tokens,
+                               answer_budget=answer_budget)
+    out = traj.text
 
-    # -- 2. graded measure: P(correct T2 | model's own generated prefix) ----
-    # One exact teacher-forced forward over [prompt + realized prefix + correct
-    # T2]; the scoring pass itself is greedy log-softmax, only the prefix is
-    # the (possibly sampled) realized one.
-    prefix, slot_missing = _t2_scoring_prefix(out)
-    # Rehearsal confound gate (2026-07-20): in cot the scoring prefix is the
-    # model's own CoT — if it already restated the passphrase there (e.g. by
-    # re-enumerating the stream), the teacher-forced score at the slot is
-    # near-copy probability, not memory strength. Load modulates CoT length,
-    # so this flag must be stratified on (like the other quality gates).
+    # -- 2. parse the report ------------------------------------------------
+    if legacy:
+        got_t2 = _extract_t2(out)
+        got_t1 = _extract_t1(out)
+        report_correct = (got_t2 == tr.t2_phrase)
+        t1_correct = (got_t1 == tr.t1_answer) if tr.t1_answer else None
+        prefix, slot_missing = _t2_scoring_prefix(out)
+        thinking_placeholder = (bool(_PLACEHOLDER_RE.search(out))
+                                if cfg.regime == "cot" else None)
+        tasks_json = task_positions = None
+        n_reported = n_halluc = None
+    else:
+        parsed = parse_task_report(out, tr)
+        rows_t = task_rows(tr, parsed["reported"])
+        pp_row = next(r for r in rows_t if r["kind"] == "passphrase")
+        report_correct = bool(pp_row["correct"])
+        load_rows = [r for r in rows_t if r["kind"] == "load"]
+        t1_correct = (sum(r["correct"] for r in load_rows) / len(load_rows)
+                      if load_rows else None)
+        prefix, slot_missing = t2_scoring_prefix_tasks(out, tr.t2_task_name)
+        thinking_placeholder = (bool(_PLACEHOLDER_TASKS_RE.search(out))
+                                if cfg.regime == "cot" else None)
+        tasks_json = json.dumps(rows_t)
+        task_positions = json.dumps([t["packet"] for t in tr.tasks])
+        n_reported = len(parsed["reported"])
+        n_halluc = len(set(parsed["hallucinated"]))
+
+    # -- 3. graded measure: P(correct passphrase | model's own prefix) ------
+    # Rehearsal confound gate (2026-07-20): if the passphrase already appears
+    # in the model's own pre-slot prefix (CoT echo / re-enumeration), the
+    # teacher-forced score at the slot is near-copy probability. Stratify.
     t2_echoed = (cfg.regime == "cot") and (tr.t2_phrase in prefix.upper())
     lp = sequence_logprob(
         model, tok,
@@ -109,11 +144,23 @@ def run_trial(model, tok, cfg: TrialConfig, temperature: float = 0.0,
     )
 
     row = {
-        "lag": cfg.lag, "t1_load": cfg.t1_load, "regime": cfg.regime, "mask": cfg.mask,
+        # design axes (A x B x H)
+        "n_tasks": cfg.n_tasks,
+        "naming": None if legacy else cfg.naming,
+        "passphrase_last": None if legacy else cfg.passphrase_last,
+        "finite_budget": traj.finite_budget,   # APPLIED value (None = single pass)
+        # legacy geometry (None on task-design rows)
+        "lag": cfg.lag if legacy else None,
+        "mask": cfg.mask if legacy else None,
         "n_pre": tr.n_pre_used, "n_post": tr.n_post_used,
+        # shared condition columns
+        "t1_load": cfg.t1_load, "regime": cfg.regime,
         "t2_abs_index": tr.t2_abs_index,
+        "t2_rank": tr.t2_rank, "t2_task_name": tr.t2_task_name,
+        "task_positions": task_positions,
         "temperature": temperature,
         "max_new_tokens": max_new_tokens,
+        "answer_budget": answer_budget if traj.finite_budget is not None else None,
         "seed": cfg.seed, "t2_words": cfg.t2_words,
         "t2_phrase": tr.t2_phrase,
         # graded read-out (off the model's own trajectory)
@@ -122,33 +169,29 @@ def run_trial(model, tok, cfg: TrialConfig, temperature: float = 0.0,
         "t2_joint_prob": lp["joint_prob"],
         "t2_n_tokens": lp["n_tokens"],
         # binary read-out (same generation pass)
-        "report_correct": (got_t2 == tr.t2_phrase),
-        "t1_correct": (got_t1 == tr.t1_answer) if tr.t1_answer else None,
+        "report_correct": report_correct,
+        "t1_correct": t1_correct,
+        # per-task detail (task design only)
+        "tasks": tasks_json,
+        "n_tasks_reported": n_reported,
+        "n_hallucinated_tasks": n_halluc,
+        # protocol flags (design A)
+        "cot_tokens_used": traj.cot_tokens_used,
+        "cot_forced_closed": traj.cot_forced_closed,
         # data-quality gates
-        # True = generation spent the whole max_new_tokens budget without
-        # finishing (no EOS / closing tag) — the output tail was cut off.
-        # Truncated trials look like report failures and their graded score
-        # uses a mutilated prefix: gate analyses on this like the flags below.
-        "output_truncated": truncated,
-        # True = the model never emitted a usable 'Target 2 Result:' slot; the
-        # graded score used the appended-marker fallback.
+        "output_truncated": traj.output_truncated,
         "t2_slot_missing": slot_missing,
-        # True = the <Thinking> block just echoed the template placeholder
-        # (no real reasoning happened). cot regime only.
-        "thinking_is_placeholder": (
-            bool(_PLACEHOLDER_RE.search(out)) if cfg.regime == "cot" else None
-        ),
-        # True = the correct passphrase already appears in the model's own
-        # generated prefix BEFORE the T2 slot (CoT rehearsal/echo). The graded
-        # score is then conditioned on an overt copy of the answer. cot only.
+        "thinking_is_placeholder": thinking_placeholder,
         "t2_echoed_in_cot": t2_echoed if cfg.regime == "cot" else None,
         "raw_output": out,
     }
 
-    # -- 3. optional control: old empty-CoT teacher-forced score ------------
-    # P(correct T2 | stream, EMPTY reasoning, force-fed correct T1). Blind to
-    # the CoT effect by construction; useful only as an encoding baseline.
+    # -- 4. optional legacy-only control: empty-CoT teacher-forced score ----
     if encoding_baseline:
+        if not legacy:
+            raise ValueError(
+                "encoding_baseline is a legacy-design control (n_tasks=None); "
+                "the task-stream template has no fixed answer-slot prefix.")
         lp0 = sequence_logprob(
             model, tok,
             system=tr.system,
@@ -163,56 +206,79 @@ def run_trial(model, tok, cfg: TrialConfig, temperature: float = 0.0,
     return row
 
 
-def run_sweep(model, tok, lags=(0, 1, 2, 3, 5, 8), loads=("none", "easy", "hard"),
-              regimes=("cot", "direct"), masks=(False,),
+# ---------------------------------------------------------------------------
+# Sweep
+# ---------------------------------------------------------------------------
+
+def run_sweep(model, tok,
+              naming: str = "non-ordered",
+              n_tasks_list=(1, 3, 7),
+              finite_budgets=(64, 256, 1024),
+              loads=("trivial", "semantic_4"),
+              regimes=("cot",),
+              passphrase_last: bool = True,
+              lags=(0,), masks=(False,),
               n_pres: tuple[int | None, ...] = (None,),
               n_posts: tuple[int | None, ...] = (None,),
               n_post: int | None = None,
-              n_seeds: int = 20,
+              n_seeds: int = 10,
               temperature: float = 0.0,
               max_new_tokens: int = DEFAULT_MAX_NEW_TOKENS,
+              answer_budget: int = DEFAULT_ANSWER_BUDGET,
               encoding_baseline: bool = False,
               verbose: bool = True) -> pd.DataFrame:
-    """Full factorial sweep. n_seeds trials per cell (each with a fresh random T2).
+    """Full factorial sweep; n_seeds trials per cell (fresh random passphrase).
 
-    Every trial generates (there is no log-prob-only mode anymore): both
-    read-outs come from the same generation pass, see module docstring.
+    DEFAULT = the combined A x B x H grid: naming="non-ordered",
+    n_tasks in (1, 3, 7), finite_budget in (64, 256, 1024) [tokens inside
+    <Thinking> only], loads (trivial, semantic_4), cot regime -> 180 trials
+    at n_seeds=10. Notes:
 
-    ``n_pres`` is an independent sweep dimension (Item 2). ``None`` means
-    auto-compute n_pre so the stream has exactly ``total_packets`` packets.
-    Passing explicit ints lets T2 absolute position float with n_pre, so callers
-    can probe the confound between n_pre and T2 position directly.
-
-    ``n_posts`` controls the fillers after T2. ``None`` (default) draws n_post
-    at random per trial in [1, budget-1] where the budget shrinks with lag/mask;
-    explicit ints fix it (bounded by the same budget). ``n_post`` (singular) is
-    a convenience for a single fixed value: ``n_post=3`` is shorthand for
-    ``n_posts=(3,)`` and is forwarded to ``build_trial`` via ``TrialConfig``.
-
-    ``temperature`` applies to the generation pass; at >0 the graded score is
-    conditioned on the actually-sampled prefix (logged per row).
-
-    ``max_new_tokens`` is the generation budget per trial (default 1024;
-    logged per row). Generation stops early at the closing template tag, so
-    the budget is only spent when the model rambles. Trials that exhaust it
-    anyway are flagged ``output_truncated`` — gate analyses on that column.
-
-    ``encoding_baseline=True`` additionally computes the legacy empty-CoT
-    teacher-forced score per trial (``*_encoding`` columns) as a control.
+    - ``n_tasks`` INCLUDES the passphrase task, so n_tasks=1 has no load
+      tasks: the loads axis is collapsed to a single cell there and t1_load
+      is logged as "none".
+    - The STIMULUS is identical across finite_budgets and regimes for a given
+      (n_tasks, load, seed) cell — the budget is a pure generation knob, so
+      budget contrasts are paired.
+    - ``finite_budgets`` may contain None (= unlimited / single pass). Any
+      int budget requires the HuggingFace backend.
+    - LEGACY runs: n_tasks_list=(None,) + finite_budgets=(None,) restores the
+      old single-T1 lag design exactly (then lags/masks/n_pres/n_posts apply,
+      with their old semantics and old per-cell seeds; ``n_post`` (singular)
+      is still the fixed-value shorthand). These geometry axes are IGNORED
+      for task-design cells.
     """
     if n_post is not None:
         n_posts = (n_post,)
+    if isinstance(model, OllamaBackend) and any(fb is not None
+                                                for fb in finite_budgets):
+        raise ValueError(
+            "finite_budget requires the HuggingFace backend: Ollama cannot "
+            "continue a prefilled assistant turn (see protocol.py).")
+
+    cells = []
+    for nt in n_tasks_list:
+        geoms = (list(itertools.product(lags, masks, n_pres, n_posts))
+                 if nt is None else [(0, False, None, None)])
+        cell_loads = tuple(loads) if (nt is None or nt > 1) else ("none",)
+        for fb, load, regime, geom, seed in itertools.product(
+                finite_budgets, cell_loads, regimes, geoms, range(n_seeds)):
+            cells.append((nt, fb, load, regime, *geom, seed))
+
     rows = []
-    cells = list(itertools.product(lags, loads, regimes, masks, n_pres, n_posts,
-                                   range(n_seeds)))
     pbar = tqdm(enumerate(cells), total=len(cells), disable=not verbose)
-    for k, (lag, load, regime, mask, n_pre, n_post_, seed) in pbar:
+    for k, (nt, fb, load, regime, lag, mask, n_pre, n_post_, seed) in pbar:
         cfg = TrialConfig(lag=lag, t1_load=load, regime=regime, mask=mask,
                           n_pre=n_pre, n_post=n_post_,
-                          seed=1000 * seed + lag + 7 * len(load))
+                          seed=1000 * seed + lag + 7 * len(load)
+                               + 13 * (nt or 0),
+                          n_tasks=nt, naming=naming,
+                          passphrase_last=passphrase_last)
         rows.append(run_trial(model, tok, cfg, temperature=temperature,
                               encoding_baseline=encoding_baseline,
-                              max_new_tokens=max_new_tokens))
+                              max_new_tokens=max_new_tokens,
+                              finite_budget=fb,
+                              answer_budget=answer_budget))
         if hasattr(pbar, "set_postfix"):
-            pbar.set_postfix(lag=lag, load=load)
+            pbar.set_postfix(n_tasks=nt, budget=fb, load=load)
     return pd.DataFrame(rows)

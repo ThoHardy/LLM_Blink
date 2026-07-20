@@ -332,6 +332,72 @@ def _report_generate_hf(model, tok, system: str, user: str,
         return text, truncated
 
 
+def continue_generate(model, tok, system: str, user: str,
+                      prefilled_assistant: str,
+                      max_new_tokens: int,
+                      temperature: float = 0.0,
+                      stop_at: Optional[str] = None):
+    """Free generation CONTINUING a prefilled assistant turn.
+
+    Returns ``(text, n_new_tokens, truncated)``: ``text`` is the newly
+    generated text only (the prefill is NOT included), ``n_new_tokens`` the
+    number of generated tokens, ``truncated`` True when the budget was spent
+    without EOS / stop string.
+
+    This is the one primitive the combined A/B/H design needs: protocol.py
+    uses it for both stages of the finite-CoT-budget protocol, and it will
+    also serve the future name-cued probes (H stage 2) and design D
+    (mid-CoT injection).
+
+    HF-only: Ollama's OpenAI-compatible endpoint is NOT verified to continue
+    (prefill) a trailing assistant message — it may close the turn instead,
+    silently changing the scored context (see CLAUDE.md KNOWN ISSUE
+    2026-07-20). It therefore raises on the Ollama backend.
+    """
+    if isinstance(model, OllamaBackend):
+        raise NotImplementedError(
+            "continue_generate (assistant prefill) is HF-only: Ollama's "
+            "OpenAI-compatible endpoint is not verified to continue a "
+            "trailing assistant message (CLAUDE.md KNOWN ISSUE 2026-07-20). "
+            "Use a HuggingFace model for finite_budget runs."
+        )
+    return _continue_generate_hf(model, tok, system, user, prefilled_assistant,
+                                 max_new_tokens, temperature, stop_at)
+
+
+def _continue_generate_hf(model, tok, system: str, user: str,
+                          prefilled_assistant: str,
+                          max_new_tokens: int,
+                          temperature: float = 0.0,
+                          stop_at: Optional[str] = None):
+    import torch
+
+    gen_kwargs: dict = dict(max_new_tokens=max_new_tokens,
+                            pad_token_id=tok.eos_token_id)
+    if stop_at:
+        gen_kwargs.update(stop_strings=[stop_at], tokenizer=tok)
+    if temperature and temperature > 0:
+        gen_kwargs.update(do_sample=True, temperature=float(temperature))
+    else:
+        gen_kwargs.update(do_sample=False)
+
+    with torch.no_grad():
+        ids = _build_prompt_ids(tok, system, user)
+        if prefilled_assistant:
+            pre = tok(prefilled_assistant, add_special_tokens=False,
+                      return_tensors="pt").input_ids
+            ids = torch.cat([ids, pre], dim=1)
+        ids = ids.to(model.device)
+        out = model.generate(ids, **gen_kwargs)
+        gen = out[0, ids.shape[1]:]
+        text = tok.decode(gen, skip_special_tokens=True)
+        n_gen = int(gen.shape[0])
+        ended_eos = n_gen > 0 and int(gen[-1].item()) == tok.eos_token_id
+        ended_stop = bool(stop_at) and (stop_at in text)
+        truncated = (n_gen >= max_new_tokens) and not ended_eos and not ended_stop
+        return text, n_gen, truncated
+
+
 def _sequence_logprob_hf(model, tok, system: str, user_prefix: str,
                           target_text: str,
                           prefilled_assistant: str = "") -> dict:

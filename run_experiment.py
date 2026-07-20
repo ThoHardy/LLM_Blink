@@ -2,16 +2,19 @@
 
 Usage
 -----
-    # Ollama (local) -- any tag without a "/" is auto-detected as Ollama:
-    python run_experiment.py --model gemma2:2b
-    python run_experiment.py --model mistral:7b
-    python run_experiment.py --model gemma3:12b --n-seeds 20
-
-    # HuggingFace (Colab / GPU) -- any tag containing "/" is auto-detected as HF:
+    # DEFAULT = combined A x B x H sweep: task streams (n_tasks incl. the
+    # passphrase task), finite CoT budgets (tokens inside <Thinking> only),
+    # non-ordered task names, free report. Requires a HuggingFace model
+    # (name contains "/"):
     python run_experiment.py --model Qwen/Qwen2.5-3B-Instruct
-    python run_experiment.py --model Qwen/Qwen2.5-7B-Instruct --load-in-4bit
 
-The model name is the only required argument; everything else has sensible defaults.
+    # pilot-sized:
+    python run_experiment.py --model Qwen/Qwen2.5-3B-Instruct \\
+        --n-tasks 1 7 --finite-budgets 128 1024 --n-seeds 3
+
+    # LEGACY single-T1 lag design (old defaults; Ollama models work here):
+    python run_experiment.py --model gemma3:4b --legacy
+
 Results are saved to <output> (default: ab_results_<model_slug>.csv).
 """
 
@@ -25,6 +28,14 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from LLM_Blink import load_model, run_sweep, plot_ab  # noqa: E402
 
+# New-design defaults (the A x B x H trimmed grid). --legacy switches any of
+# these still at their default back to the old single-T1 sweep values.
+_DEF_N_TASKS = ["1", "3", "7"]
+_DEF_BUDGETS = ["64", "256", "1024"]
+_DEF_LAGS = [0]
+_DEF_LOADS = ["trivial", "semantic_4"]
+_DEF_REGIMES = ["cot"]
+
 
 def _slug(model_name: str) -> str:
     """Turn a model name into a safe filename fragment."""
@@ -33,7 +44,8 @@ def _slug(model_name: str) -> str:
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Run the LLM Attentional Blink lag sweep.",
+        description="Run the LLM Attentional Blink sweep "
+                    "(default: combined A x B x H task-stream design).",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
 
@@ -43,7 +55,7 @@ def main():
         help=(
             "Model to use.  Ollama tag (no '/') for local use, e.g. 'gemma2:2b', "
             "'mistral:7b', 'gemma3:12b'.  HuggingFace Hub ID (contains '/') for "
-            "Colab/GPU, e.g. 'Qwen/Qwen2.5-3B-Instruct'."
+            "Colab/GPU, e.g. 'Qwen/Qwen2.5-3B-Instruct'. Finite budgets need HF."
         ),
     )
     parser.add_argument(
@@ -65,46 +77,84 @@ def main():
         ),
     )
 
-    # -- sweep parameters ------------------------------------------------------
+    # -- combined-design axes (A x B x H) --------------------------------------
     parser.add_argument(
-        "--lags", nargs="+", type=int, default=[0, 2, 4, 6, 8, 10],
-        metavar="LAG",
-        help="Lag values to sweep (packets between T1 and T2).",
-    )
-    parser.add_argument(
-        "--loads", nargs="+", default=["none", "trivial", "semantic_4"],
-        metavar="LOAD",
+        "--n-tasks", nargs="+", default=list(_DEF_N_TASKS), metavar="N",
         help=(
-            "T1 load levels to include. Accepts 'none', the aliases "
-            "'easy'/'hard'/'easy_math'/'hard_math', or any explicit "
-            "'semantic_N' / 'math_N' (N=0..4)."
+            "Design B axis: tasks per stream, INCLUDING the passphrase task "
+            "(1..15; 15 = tasks-only stream, no fillers). n_tasks=1 has no "
+            "load tasks, so the loads axis collapses there. The token "
+            "'legacy' selects the old single-T1 lag design instead."
         ),
     )
     parser.add_argument(
-        "--regimes", nargs="+", default=["cot", "direct"],
-        choices=["cot", "direct"],
-        metavar="REGIME",
-        help="Answer regimes: 'cot' (chain-of-thought) and/or 'direct'.",
-    )
-    parser.add_argument(
-        "--n-pres", nargs="+", default=["auto"],
-        metavar="NPRE",
+        "--finite-budgets", nargs="+", default=list(_DEF_BUDGETS),
+        metavar="BUDGET",
         help=(
-            "Number of filler packets before T1 (Item 2: confound control). "
-            "Accepts ints (e.g. '--n-pres 2 4 6 8') to vary n_pre and let T2 "
-            "absolute position float, or 'auto' (default) to keep T2 at "
-            "target_t2_abs_index as today."
+            "Design A axis: max tokens generated INSIDE <Thinking> (0..2000); "
+            "on cap the block is force-closed and answers finish uncut "
+            "(cot_forced_closed flag). 'inf' = unlimited (single pass). "
+            "Applies to the cot regime only; ints require a HF model."
         ),
     )
     parser.add_argument(
-        "--n-posts", nargs="+", default=["random"],
-        metavar="NPOST",
+        "--naming", choices=["ordered", "non-ordered"], default="non-ordered",
         help=(
-            "Number of filler packets after T2. 'random' (default) draws a "
-            "fresh value per trial in [1, budget-1]; ints fix it. The budget "
-            "shrinks with lag, the stream always has 15 packets in total, "
-            "and at least one filler opens and closes the stream."
+            "Design H axis: task names. 'ordered' = Task 1..n in stream "
+            "order; 'non-ordered' = per-trial random names (Task WATERMELON)."
         ),
+    )
+    parser.add_argument(
+        "--passphrase-rank", choices=["last", "random"], default="last",
+        help="Position of the passphrase task among the tasks.",
+    )
+    parser.add_argument(
+        "--answer-budget", type=int, default=512,
+        help=(
+            "Stage-2 generation budget (the <Final_Answers> block) when a "
+            "finite budget is applied. Generous by design: the report channel "
+            "is never rationed; trials that exhaust it anyway are flagged "
+            "output_truncated."
+        ),
+    )
+    parser.add_argument(
+        "--legacy", action="store_true",
+        help=(
+            "Run the OLD single-T1 lag design with its old defaults "
+            "(lags 0..10, loads none/trivial/semantic_4, cot+direct, no "
+            "finite budget). Equivalent to --n-tasks legacy "
+            "--finite-budgets inf --naming ordered plus old lag/load/regime "
+            "defaults for any of those flags left unset."
+        ),
+    )
+
+    # -- legacy sweep parameters -----------------------------------------------
+    parser.add_argument(
+        "--lags", nargs="+", type=int, default=list(_DEF_LAGS), metavar="LAG",
+        help="LEGACY design only: lag values (packets between T1 and T2). "
+             "Ignored for task-design cells.",
+    )
+    parser.add_argument(
+        "--loads", nargs="+", default=list(_DEF_LOADS), metavar="LOAD",
+        help=(
+            "T1/load-task levels. Accepts 'none' (legacy only), 'trivial', "
+            "the aliases 'easy'/'hard'/'easy_math'/'hard_math', or any "
+            "explicit 'semantic_N' / 'math_N' (N=0..4)."
+        ),
+    )
+    parser.add_argument(
+        "--regimes", nargs="+", default=list(_DEF_REGIMES),
+        choices=["cot", "direct"], metavar="REGIME",
+        help="Answer regimes: 'cot' (chain-of-thought) and/or 'direct'. "
+             "Finite budgets only act on 'cot'.",
+    )
+    parser.add_argument(
+        "--n-pres", nargs="+", default=["auto"], metavar="NPRE",
+        help="LEGACY design only: fillers before T1 ('auto' or ints).",
+    )
+    parser.add_argument(
+        "--n-posts", nargs="+", default=["random"], metavar="NPOST",
+        help="LEGACY design only: fillers after T2 ('random' or ints).",
     )
     parser.add_argument(
         "--temperature", type=float, default=0.0,
@@ -117,10 +167,9 @@ def main():
     parser.add_argument(
         "--max-new-tokens", type=int, default=1024,
         help=(
-            "Generation budget per trial. Generation stops early at the "
-            "closing </Final_Answers> tag, so this is an upper bound; trials "
-            "that exhaust it are flagged 'output_truncated' in the CSV. "
-            "256 was the old default and truncated ~45%% of cot trials."
+            "Generation budget for SINGLE-PASS trials (finite budget 'inf' or "
+            "direct regime). Generation stops early at </Final_Answers>; "
+            "trials that exhaust it are flagged 'output_truncated'."
         ),
     )
     parser.add_argument(
@@ -130,9 +179,8 @@ def main():
     parser.add_argument(
         "--encoding-baseline", action="store_true",
         help=(
-            "Also compute the legacy empty-CoT teacher-forced T2 score per "
-            "trial ('*_encoding' columns). Control measure only: it is blind "
-            "to the model's reasoning by construction."
+            "LEGACY design only: also compute the empty-CoT teacher-forced T2 "
+            "score per trial ('*_encoding' columns)."
         ),
     )
 
@@ -143,39 +191,71 @@ def main():
     )
     parser.add_argument(
         "--plot", action="store_true",
-        help="Show the AB curve plot after the sweep (requires a display).",
+        help="Show summary plots after the sweep (requires a display).",
     )
 
     args = parser.parse_args()
 
+    # -- --legacy: restore old defaults for anything left unset ---------------
+    if args.legacy:
+        args.n_tasks = ["legacy"]
+        args.finite_budgets = ["inf"]
+        args.naming = "ordered"
+        if args.lags == _DEF_LAGS:
+            args.lags = [0, 2, 4, 6, 8, 10]
+        if args.loads == _DEF_LOADS:
+            args.loads = ["none", "trivial", "semantic_4"]
+        if args.regimes == _DEF_REGIMES:
+            args.regimes = ["cot", "direct"]
+
+    # -- parse token lists -----------------------------------------------------
+    n_tasks_list: list[int | None] = []
+    for tk in args.n_tasks:
+        if str(tk).lower() in ("legacy", "none"):
+            n_tasks_list.append(None)
+        else:
+            v = int(tk)
+            if not 1 <= v <= 15:
+                parser.error(f"--n-tasks {v}: must be in 1..15 (or 'legacy').")
+            n_tasks_list.append(v)
+
+    finite_budgets: list[int | None] = []
+    for tk in args.finite_budgets:
+        if str(tk).lower() in ("inf", "none", "unlimited"):
+            finite_budgets.append(None)
+        else:
+            v = int(tk)
+            if not 0 <= v <= 2000:
+                parser.error(f"--finite-budgets {v}: must be in 0..2000 (or 'inf').")
+            finite_budgets.append(v)
+
+    if "/" not in args.model and any(b is not None for b in finite_budgets):
+        parser.error(
+            "finite budgets require a HuggingFace model (Ollama cannot "
+            "continue a prefilled assistant turn). Use a HF ID, or "
+            "--finite-budgets inf, or --legacy."
+        )
+
+    n_pres: list[int | None] = [None if t.lower() == "auto" else int(t)
+                                for t in args.n_pres]
+    n_posts: list[int | None] = [None if t.lower() == "random" else int(t)
+                                 for t in args.n_posts]
+
     out_path = args.output or f"ab_results_{_slug(args.model)}.csv"
 
-    # Parse --n-pres: each token is either 'auto' (-> None) or an int.
-    n_pres: list[int | None] = []
-    for tok_ in args.n_pres:
-        if tok_.lower() == "auto":
-            n_pres.append(None)
-        else:
-            n_pres.append(int(tok_))
-
-    # Parse --n-posts: each token is either 'random' (-> None) or an int.
-    n_posts: list[int | None] = []
-    for tok_ in args.n_posts:
-        if tok_.lower() == "random":
-            n_posts.append(None)
-        else:
-            n_posts.append(int(tok_))
-
-    print(f"Model  : {args.model}")
-    print(f"Lags   : {args.lags}")
-    print(f"Loads  : {args.loads}")
-    print(f"Regimes: {args.regimes}")
-    print(f"n_pres : {n_pres}")
-    print(f"n_posts: {n_posts}")
-    print(f"Temp.  : {args.temperature}")
-    print(f"MaxTok : {args.max_new_tokens}")
-    print(f"Seeds  : {args.n_seeds} per cell")
-    print(f"Output : {out_path}")
+    print(f"Model    : {args.model}")
+    print(f"n_tasks  : {n_tasks_list}")
+    print(f"Budgets  : {finite_budgets} (CoT tokens; answer budget "
+          f"{args.answer_budget})")
+    print(f"Naming   : {args.naming}  (passphrase rank: {args.passphrase_rank})")
+    print(f"Loads    : {args.loads}")
+    print(f"Regimes  : {args.regimes}")
+    if any(nt is None for nt in n_tasks_list):
+        print(f"Lags     : {args.lags}  n_pres: {n_pres}  n_posts: {n_posts}")
+    print(f"Temp.    : {args.temperature}")
+    print(f"MaxTok   : {args.max_new_tokens} (single-pass trials)")
+    print(f"Seeds    : {args.n_seeds} per cell")
+    print(f"Output   : {out_path}")
     print()
 
     # -- load model ------------------------------------------------------------
@@ -191,38 +271,57 @@ def main():
     # -- sweep -----------------------------------------------------------------
     df = run_sweep(
         model, tok,
-        lags=tuple(args.lags),
+        naming=args.naming,
+        n_tasks_list=tuple(n_tasks_list),
+        finite_budgets=tuple(finite_budgets),
         loads=tuple(args.loads),
         regimes=tuple(args.regimes),
+        passphrase_last=(args.passphrase_rank == "last"),
+        lags=tuple(args.lags),
         n_pres=tuple(n_pres),
         n_posts=tuple(n_posts),
         n_seeds=args.n_seeds,
         temperature=args.temperature,
         max_new_tokens=args.max_new_tokens,
+        answer_budget=args.answer_budget,
         encoding_baseline=args.encoding_baseline,
         verbose=True,
     )
 
     df.to_csv(out_path, index=False)
     print(f"\nSaved {len(df)} rows to {out_path}")
-    print(df.groupby(["t1_load", "regime"])["t2_mean_logprob"].mean().to_string())
+    if df["n_tasks"].notna().any():
+        gb = ["t1_load", "n_tasks", "finite_budget"]
+    else:
+        gb = ["t1_load", "regime"]
+    print(df.groupby(gb, dropna=False)[["report_correct", "t2_mean_logprob"]]
+          .mean().to_string())
 
     # -- optional plot ---------------------------------------------------------
     if args.plot:
         import matplotlib.pyplot as plt
-        regimes_present = sorted(df["regime"].unique())
-        has_correct = "report_correct" in df.columns
-        n_rows = 2 if has_correct else 1
-        n_cols = len(regimes_present)
-        fig, axes = plt.subplots(
-            n_rows, n_cols,
-            figsize=(6 * n_cols, 4 * n_rows),
-            squeeze=False,
-        )
-        for col, regime in enumerate(regimes_present):
-            plot_ab(df, "t2_mean_logprob", regime=regime, ax=axes[0, col])
-            if has_correct:
-                plot_ab(df, "report_correct", regime=regime, ax=axes[1, col])
+        if df["n_tasks"].notna().any():
+            fig, axes = plt.subplots(2, 2, figsize=(12, 8), squeeze=False)
+            for r, measure in enumerate(("t2_mean_logprob", "report_correct")):
+                plot_ab(df, measure, x="n_tasks", by="finite_budget",
+                        ax=axes[r, 0])
+                plot_ab(df, measure, x="finite_budget", by="n_tasks",
+                        ax=axes[r, 1])
+        else:
+            regimes_present = sorted(df["regime"].unique())
+            has_correct = "report_correct" in df.columns
+            n_rows = 2 if has_correct else 1
+            n_cols = len(regimes_present)
+            fig, axes = plt.subplots(
+                n_rows, n_cols,
+                figsize=(6 * n_cols, 4 * n_rows),
+                squeeze=False,
+            )
+            for col, regime in enumerate(regimes_present):
+                plot_ab(df, "t2_mean_logprob", regime=regime, ax=axes[0, col])
+                if has_correct:
+                    plot_ab(df, "report_correct", regime=regime,
+                            ax=axes[1, col])
         plt.suptitle(args.model, fontsize=10)
         plt.tight_layout()
         plt.show()

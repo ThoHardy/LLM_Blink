@@ -11,6 +11,9 @@ Key design choices (see ../PROMPTS.md and ../LITERATURE.md §C):
   Aliases: easy=semantic_0, hard=semantic_1, easy_math=math_0, hard_math=math_1.
 - Optional post-T1 'mask' packet (the human AB needs a mask).
 - Two output regimes: 'direct' (answer T2 first, no scratchpad) and 'cot' (solve T1 first).
+- Combined A×B×H design (2026-07-20): TrialConfig.n_tasks=int switches to task streams
+  (n_tasks named tasks incl. the passphrase, free report, hidden count) — see §'Combined
+  A×B×H design' below. n_tasks=None (default) keeps the legacy design above BIT-EXACT.
 """
 from __future__ import annotations
 import random
@@ -597,6 +600,16 @@ class TrialConfig:
     target_t2_abs_index: int = 12  # LEGACY, no longer used: T2 position now follows from
                                    # total_packets and n_post (index = total_packets - 1 - n_post)
     seed: int = 0
+    # --- combined A×B×H design (2026-07-20) ---------------------------------
+    # n_tasks=None -> legacy single-T1 design (everything above applies).
+    # n_tasks=int (1..total_packets) -> task-stream design: n_tasks tasks
+    # (1 passphrase + n_tasks-1 load tasks of level t1_load) scattered among
+    # total_packets numbered packets; 'End of stream.' becomes an unnumbered
+    # closing line, so n_tasks=total_packets means tasks-only. lag / mask /
+    # n_pre / n_post / target_t2_abs_index are IGNORED in this mode.
+    n_tasks: int | None = None
+    naming: str = "ordered"        # "ordered" (Task 1..n, stream order) | "non-ordered"
+    passphrase_last: bool = True   # passphrase = last task; False -> random rank
 
 
 @dataclass
@@ -612,6 +625,13 @@ class Trial:
     n_pre_used: int = 0          # actually used n_pre (resolves None to auto value)
     n_post_used: int = 0         # actually used n_post (resolves None to the random draw)
     t2_abs_index: int = 0        # 1-based absolute packet index where T2 landed
+    # --- combined-design extras (2026-07-20) ---------------------------------
+    tasks: list = field(default_factory=list)  # per-task dicts: name, kind,
+                                               # packet, rank, question, answer
+    forced_close_text: str = ""    # injected by protocol.py when the finite
+                                   # CoT budget forces the block closed
+    t2_task_name: str | None = None  # name of the passphrase task (new design)
+    t2_rank: int | None = None       # 1-based rank of the passphrase task
 
 
 SYSTEM = "You are an automated data-extraction system."
@@ -676,7 +696,7 @@ def _worked_example(regime: str) -> str:
     return WORKED_EXAMPLE_COT
 
 
-def build_trial(cfg: TrialConfig) -> Trial:
+def _build_trial_legacy(cfg: TrialConfig) -> Trial:
     rng = random.Random(cfg.seed)
     t2 = random_passphrase(rng, cfg.t2_words)
 
@@ -760,11 +780,234 @@ def build_trial(cfg: TrialConfig) -> Trial:
         t2_phrase=t2,
         t1_answer=t1_ans,
         template_prefix_after_prompt=assistant_prefix,
+        forced_close_text=_LEGACY_FORCED_CLOSE if cfg.regime == "cot" else "",
         config=cfg,
         n_pre_used=n_pre,
         n_post_used=n_post,
         t2_abs_index=n_pre + 2 + (1 if cfg.mask else 0) + cfg.lag,
     )
+
+
+
+# ===========================================================================
+# Combined A×B×H design (2026-07-20): task streams
+# ===========================================================================
+# B: n_tasks tasks in one stream (1 passphrase + n_tasks-1 load tasks).
+# H: per-trial task names ("ordered" = Task 1..n in stream order,
+#    "non-ordered" = random names from TASK_NAME_BANK), hidden cardinality,
+#    free report ("- Task <NAME>: <result>", one line per task found).
+# A: the finite CoT budget lives in protocol.py; Trial.forced_close_text is
+#    what gets injected when the budget forces the <Thinking> block closed.
+
+_VALID_NAMINGS = ("ordered", "non-ordered")
+
+# 100 task names: unique, uppercase, disjoint from the NATO alphabet (reserved
+# for passphrases / the mask decoy), from _TRIVIAL_WORDS (trivial-task
+# answers), and from the reserved worked-example names.
+TASK_NAME_BANK = (
+    "WATERMELON", "PYRAMID", "LANTERN", "CACTUS", "DOLPHIN", "MARBLE",
+    "TROMBONE", "GLACIER", "PUMPKIN", "SAPPHIRE", "WALRUS", "ORCHID",
+    "TOBOGGAN", "CHIMNEY", "FALCON", "NUTMEG", "ORIGAMI", "PELICAN",
+    "QUILT", "RASPBERRY", "SUNDIAL", "TULIP", "UMBRELLA", "VOLCANO",
+    "WHEELBARROW", "YOGURT", "ZEPPELIN", "ANCHOVY", "BAGPIPE", "CARNIVAL",
+    "DAFFODIL", "EGGPLANT", "FLAMINGO", "GARGOYLE", "HAMMOCK", "IGLOO",
+    "JIGSAW", "KAYAK", "LOBSTER", "MANDOLIN", "NARWHAL", "OBELISK",
+    "PARSNIP", "QUARRY", "RHUBARB", "SCARECROW", "TAPESTRY", "UKULELE",
+    "VELVET", "WOMBAT", "XYLOPHONE", "YODEL", "ZUCCHINI", "ALMOND",
+    "BONSAI", "CATAPULT", "DUMPLING", "EMERALD", "FERRET", "GONDOLA",
+    "HARMONICA", "ICEBERG", "JASMINE", "KETTLE", "LILAC", "METRONOME",
+    "NECTARINE", "PLATYPUS", "PISTACHIO", "QUICKSAND", "RAVIOLI",
+    "SAXOPHONE", "THIMBLE", "UNICYCLE", "VINEYARD", "WALNUT", "YACHT",
+    "ZIGZAG", "ABACUS", "BLIZZARD", "CENTIPEDE", "DANDELION", "ESPRESSO",
+    "FIREFLY", "GAZEBO", "HEDGEHOG", "INKWELL", "JUKEBOX", "KUMQUAT",
+    "LULLABY", "MONGOOSE", "NOODLE", "OPAL", "PORCUPINE", "QUIVER",
+    "ROOSTER", "SNORKEL", "TANGERINE", "URCHIN", "VULTURE",
+)
+
+_RESERVED_EXAMPLE_NAMES = ("CATHEDRAL", "MARMALADE")
+
+_NUM_WORDS = {1: "one", 2: "two", 3: "three", 4: "four", 5: "five", 6: "six"}
+
+# Injected after a capped <Thinking> block (see protocol.py). The task-stream
+# template never lists answer slots (hidden count), so the close is bare; the
+# legacy template injects its first slot so the model lands on the checklist.
+FORCED_CLOSE_TASKS = "</Thinking>\n<Final_Answers>\n"
+_LEGACY_FORCED_CLOSE = "</Thinking>\n<Final_Answers>\nTarget 1 Result: "
+
+RULES_TASKS = (
+    "You will be provided with a stream of sequential data packets. Some packets contain a "
+    "task, tagged '[Packet xx - Task <NAME>]'. Read the entire stream, then report the "
+    "result of every task in the stream. Output EXACTLY in the format described at the "
+    "end. Do not add conversational text, introductory phrases, or extra punctuation."
+)
+
+
+def _passphrase_task_line(t2: str, n_words: int) -> str:
+    num = _NUM_WORDS.get(n_words, str(n_words))
+    return f'Copy-paste these {num} words: "{t2}".'
+
+
+def _sample_load_items(load: str, rng: random.Random, k: int) -> list:
+    """k distinct (question, answer) items of the given load level."""
+    if k == 0:
+        return []
+    if load == "none":
+        raise ValueError(
+            "t1_load='none' is incompatible with n_tasks > 1: load tasks need "
+            "a bank. Use 'trivial' as the near-zero-demand baseline."
+        )
+    if load == "trivial":
+        words = rng.sample(_TRIVIAL_WORDS, k)
+        return [(f"This task is trivial: report the word {w} as this task's "
+                 f"result.", w) for w in words]
+    if load in _SEMANTIC_ALIASES:
+        bank = T1_SEMANTIC_BANKS[_SEMANTIC_ALIASES[load]]
+    elif load in _MATH_ALIASES:
+        bank = T1_MATH_BANKS[_MATH_ALIASES[load]]
+    else:
+        raise ValueError(
+            f"Unknown t1_load: {load!r}. Valid values: {', '.join(_VALID_LOADS)}"
+        )
+    return [tuple(item) for item in rng.sample(bank, k)]
+
+
+def _worked_example_tasks(naming: str, regime: str) -> str:
+    """Fixed worked example for the task-stream template.
+
+    Shows 2 tasks; live test streams draw their own n_tasks, and the reserved
+    example names never appear in TASK_NAME_BANK, so nothing leaks. The
+    example demonstrates the '- Task <NAME>: <result>' line format and (cot)
+    counting the tasks found, without any copyable placeholder text.
+    """
+    n1, n2 = ("1", "2") if naming == "ordered" else _RESERVED_EXAMPLE_NAMES
+    stream = (
+        "[Packet 01]: System initialization complete. Weather is clear.\n"
+        f"[Packet 02 - Task {n1}]: Decide whether SALMON is an ANIMAL or a "
+        "TOOL. Answer ANIMAL or TOOL.\n"
+        "[Packet 03]: Update 1.0.3 applied to main server.\n"
+        f'[Packet 04 - Task {n2}]: Copy-paste these three words: '
+        '"VICTOR XRAY ROMEO".\n'
+        "[Packet 05]: Backup job 17 finished successfully.\n"
+        "End of stream."
+    )
+    thinking = (
+        "<Thinking>\n"
+        f"Packet 02 is Task {n1}: a salmon is a fish, so the answer is ANIMAL. "
+        f"Packet 04 is Task {n2}: I must copy the three words VICTOR XRAY "
+        "ROMEO. I found 2 tasks in this stream.\n"
+        "</Thinking>\n"
+    )
+    answers = (
+        "<Final_Answers>\n"
+        f"- Task {n1}: ANIMAL\n"
+        f"- Task {n2}: VICTOR XRAY ROMEO\n"
+        "</Final_Answers>"
+    )
+    body = (thinking + answers) if regime == "cot" else answers
+    return ("EXAMPLE (illustration only - not part of the real stream):\n"
+            "DATA STREAM:\n"
+            f"{stream}\n"
+            "OUTPUT:\n"
+            f"{body}\n"
+            "Now process the following ACTUAL stream:")
+
+
+def _output_format_tasks(regime: str) -> str:
+    """Answer-format spec. Prose instructions, no fill-in-the-blank placeholder
+    (CoT-skip fix 1): the only literal-looking line is the per-task line format
+    itself, which the worked example shows correctly instantiated."""
+    if regime == "direct":
+        return (
+            "OUTPUT FORMAT:\n"
+            "A <Final_Answers> block with EXACTLY one line per task you found "
+            "in the stream, each line in the form:\n"
+            "- Task <NAME>: <result>"
+        )
+    return (
+        "OUTPUT FORMAT:\n"
+        "First a <Thinking> block: reason step by step in your own words - "
+        "identify every task packet in the stream and solve each one. Do not "
+        "copy instruction text into it.\n"
+        "Then a <Final_Answers> block with EXACTLY one line per task you "
+        "found in the stream, each line in the form:\n"
+        "- Task <NAME>: <result>"
+    )
+
+
+def _build_trial_tasks(cfg: TrialConfig) -> Trial:
+    """Build a combined-design (A×B×H) task-stream trial.
+
+    RNG draw order (fixed — rescore_graded.py replays it from the logged
+    config/seed): passphrase words -> task positions -> passphrase rank (only
+    if passphrase_last=False) -> task names (only if non-ordered) -> load
+    items -> fillers in packet order.
+    """
+    n, total = cfg.n_tasks, cfg.total_packets
+    if not 1 <= n <= total:
+        raise ValueError(f"n_tasks={n} out of range [1, {total}]")
+    if cfg.naming not in _VALID_NAMINGS:
+        raise ValueError(f"naming={cfg.naming!r}; valid: {_VALID_NAMINGS}")
+
+    rng = random.Random(cfg.seed)
+    t2 = random_passphrase(rng, cfg.t2_words)
+    positions = sorted(rng.sample(range(1, total + 1), n))
+    pp_rank = (n - 1) if cfg.passphrase_last else rng.randrange(n)
+    if cfg.naming == "non-ordered":
+        names = rng.sample(TASK_NAME_BANK, n)
+    else:
+        names = [str(i + 1) for i in range(n)]
+    load_items = _sample_load_items(cfg.t1_load, rng, n - 1)
+
+    tasks, li = [], iter(load_items)
+    for rank, (pos, name) in enumerate(zip(positions, names)):
+        if rank == pp_rank:
+            q, a, kind = _passphrase_task_line(t2, cfg.t2_words), t2, "passphrase"
+        else:
+            (q, a), kind = next(li), "load"
+        tasks.append(dict(name=name, kind=kind, packet=pos, rank=rank + 1,
+                          question=q, answer=a))
+
+    by_pos = {t["packet"]: t for t in tasks}
+    lines = []
+    for i in range(1, total + 1):
+        if i in by_pos:
+            t = by_pos[i]
+            lines.append(f"[Packet {i:02d} - Task {t['name']}]: {t['question']}")
+        else:
+            lines.append(f"[Packet {i:02d}]: {_filler(rng)}")
+    lines.append("End of stream.")   # unnumbered: does not consume a packet slot
+    stream = "\n".join(lines)
+
+    header = (f"{RULES_TASKS}\n{_worked_example_tasks(cfg.naming, cfg.regime)}\n"
+              f"DATA STREAM:\n{stream}\n{_output_format_tasks(cfg.regime)}")
+    pp = tasks[pp_rank]
+    return Trial(
+        system=SYSTEM,
+        user=header,
+        t2_phrase=t2,
+        t1_answer=None,                    # per-task answers live in .tasks
+        template_prefix_after_prompt="",   # encoding-baseline control is legacy-only
+        forced_close_text=FORCED_CLOSE_TASKS if cfg.regime == "cot" else "",
+        config=cfg,
+        n_pre_used=None,
+        n_post_used=None,
+        t2_abs_index=pp["packet"],
+        tasks=tasks,
+        t2_task_name=pp["name"],
+        t2_rank=pp_rank + 1,
+    )
+
+
+def build_trial(cfg: TrialConfig) -> Trial:
+    """Dispatch on cfg.n_tasks.
+
+    n_tasks=None -> legacy single-T1 design (BIT-EXACT, do not touch: '
+    'rescore_graded.py rebuilds old CSVs through this path).
+    n_tasks=int  -> combined A×B×H task-stream design.
+    """
+    if cfg.n_tasks is None:
+        return _build_trial_legacy(cfg)
+    return _build_trial_tasks(cfg)
 
 
 # ---------------------------------------------------------------------------
@@ -875,8 +1118,19 @@ def _validate_t1_pools(verbose: bool = False) -> None:
     if verbose:
         print("  trivial: OK (100 items, no dups, no NATO words)")
 
+    # (7) task-name bank (2026-07-20, combined design): 100 unique uppercase
+    # names, disjoint from NATO, trivial-task answers and reserved example names.
+    assert len(TASK_NAME_BANK) == expected_size, (
+        f"task names: expected {expected_size}, got {len(TASK_NAME_BANK)}")
+    assert len(set(TASK_NAME_BANK)) == len(TASK_NAME_BANK), (
+        "task names: duplicates")
+    _bad = [w for w in TASK_NAME_BANK
+            if (not w.isupper()) or (w in nato) or (w in set(_TRIVIAL_WORDS))
+            or (w in _RESERVED_EXAMPLE_NAMES)]
+    assert not _bad, f"task names invalid or colliding: {_bad[:5]}"
     if verbose:
-        print("All 11 T1 pools validated.")
+        print("  task-name bank: OK (100 names, no collisions)")
+        print("All 11 T1 pools + task-name bank validated.")
 
 
 def _maybe_validate() -> None:
