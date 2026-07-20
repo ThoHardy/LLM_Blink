@@ -57,7 +57,8 @@ class OllamaBackend:
         Base URL of the Ollama server (default http://localhost:11434/v1).
     """
 
-    def __init__(self, model_name: str, base_url: str = OLLAMA_BASE_URL) -> None:
+    def __init__(self, model_name: str, base_url: str = OLLAMA_BASE_URL,
+                 approx_logprobs: bool = False) -> None:
         try:
             from openai import OpenAI  # type: ignore
         except ImportError as exc:
@@ -66,6 +67,7 @@ class OllamaBackend:
                 "Install it with:  pip install openai"
             ) from exc
         self.model_name = model_name
+        self.approx_logprobs = approx_logprobs
         self._client = OpenAI(base_url=base_url, api_key="ollama")
 
     # -- generation ------------------------------------------------------------
@@ -102,14 +104,34 @@ class OllamaBackend:
 
     def sequence_logprob(self, system: str, user_prefix: str,
                          target_text: str, prefilled_assistant: str = "") -> dict:
-        """Approximate teacher-forced log-prob via Ollama's logprobs API.
+        """Graded T2 log-prob — NOT AVAILABLE on the Ollama backend (returns NaN).
 
-        The trick: pass ``prefilled_assistant`` as the last assistant message so
-        Ollama continues exactly from that prefix, then collect log-probs for the
-        tokens that cover ``target_text``.
+        Ollama's API cannot teacher-force an arbitrary continuation: the old
+        implementation (kept below, opt-in via ``approx_logprobs=True``) sent
+        the prefix as a trailing assistant message, let Ollama GENERATE ~30
+        tokens greedily, then char-aligned the generated tokens to
+        ``target_text`` — substituting top-20 lookups on mismatch and a
+        ``min(top20)-2`` / flat -25.0 penalty when absent. That is not a joint
+        log-prob: it largely re-codes the binary report measure, and mismatch
+        trials collapse onto a ~-25 penalty floor (found 2026-07-20; it
+        produced the spurious "inverted load effect" in the gemma3:4b run).
+        Whether Ollama's OpenAI-compat endpoint even continues a trailing
+        assistant message (vs. closing the turn) is unverified.
 
-        Requires Ollama >= 0.3.  Returns NaN fields on failure.
+        Use the HuggingFace backend for graded read-outs, or re-score a saved
+        Ollama CSV exactly with ``rescore_graded.py`` (same model via HF).
         """
+        if not self.approx_logprobs:
+            warnings.warn(
+                "[OllamaBackend] Graded log-prob scoring is disabled on the "
+                "Ollama backend (it cannot teacher-force; the old approximate "
+                "path re-codes the report measure and has a -25 penalty "
+                "floor). Returning NaN. Use a HuggingFace model for graded "
+                "read-outs, re-score the saved CSV with rescore_graded.py, or "
+                "opt back in explicitly with approx_logprobs=True."
+            )
+            return _nan_logprob()
+
         messages = _build_messages(system, user_prefix)
         if prefilled_assistant:
             messages.append({"role": "assistant", "content": prefilled_assistant})
@@ -153,6 +175,7 @@ def load_model(
     backend: str = "auto",
     load_in_4bit: bool = False,
     ollama_base_url: str = OLLAMA_BASE_URL,
+    ollama_approx_logprobs: bool = False,
 ):
     """Load a model and return (model, tok).
 
@@ -174,7 +197,8 @@ def load_model(
 
     if resolved == "ollama":
         model_name = name or DEFAULT_OLLAMA_MODEL
-        return OllamaBackend(model_name, base_url=ollama_base_url), None
+        return OllamaBackend(model_name, base_url=ollama_base_url,
+                             approx_logprobs=ollama_approx_logprobs), None
 
     model_name = name or DEFAULT_HF_MODEL
     return _load_hf(model_name, load_in_4bit)

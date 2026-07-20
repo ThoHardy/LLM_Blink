@@ -4,7 +4,10 @@ Key design choices (see ../PROMPTS.md and ../LITERATURE.md §C):
 - T2 is a NOVEL random NATO-word triplet each trial -> joint-P(T2) is not at ceiling.
 - Stream length is held constant at total_packets (default 15); n_post (fillers after T2)
   is random by default and bounded by the lag, n_pre absorbs the remainder.
-- T1 has five load levels per track: semantic_0..4 and math_0..4 (plus 'none' baseline).
+- T1 has five load levels per track: semantic_0..4 and math_0..4, plus two baselines:
+  'trivial' (a tagged T1 packet that demands no computation — schema-preserving) and
+  'none' (untagged filler in the T1 slot — NOTE: schema-violating, the stream then has
+  no '[Packet xx - T1]' while the template still asks for 'Target 1 Result:').
   Aliases: easy=semantic_0, hard=semantic_1, easy_math=math_0, hard_math=math_1.
 - Optional post-T1 'mask' packet (the human AB needs a mask).
 - Two output regimes: 'direct' (answer T2 first, no scratchpad) and 'cot' (solve T1 first).
@@ -502,8 +505,43 @@ _MATH_ALIASES = {
     "math_3": 3,
     "math_4": 4,
 }
+# ---------------------------------------------------------------------------
+# Trivial T1 baseline (added 2026-07-20)
+# ---------------------------------------------------------------------------
+# A tagged "[Packet xx - T1]" task that requires no computation: report a given
+# word. Purpose: schema-preserving baseline. The 'none' load puts an UNTAGGED
+# filler in the T1 slot, so 'none' differs from real loads in schema validity
+# (no T1 marker, yet the template demands "Target 1 Result:"), not just in
+# load. 'trivial' isolates the load factor: same stream schema, ~zero demand.
+# 100 distinct words; none is a NATO alphabet word (those are reserved for the
+# T2 passphrase and the mask decoy).
+
+_TRIVIAL_WORDS = (
+    "BLUE", "RED", "GREEN", "YELLOW", "PURPLE", "ORANGE", "BLACK", "WHITE",
+    "BROWN", "PINK", "GRAY", "SILVER", "GOLD", "CYAN", "MAGENTA", "CRIMSON",
+    "VIOLET", "INDIGO", "TEAL", "MAROON",
+    "CAT", "DOG", "HORSE", "COW", "SHEEP", "GOAT", "PIG", "DUCK", "GOOSE",
+    "OWL", "FOX", "WOLF", "BEAR", "DEER", "MOOSE", "OTTER", "SEAL", "WHALE",
+    "SHARK", "CRAB", "FROG", "TOAD", "SNAKE", "EAGLE", "HAWK", "CROW",
+    "ROBIN", "FINCH", "TROUT", "SALMON",
+    "TABLE", "CHAIR", "SPOON", "FORK", "KNIFE", "PLATE", "CUP", "BOWL",
+    "LAMP", "CLOCK", "DOOR", "WINDOW", "FLOOR", "ROOF", "WALL", "BRICK",
+    "STONE", "RIVER", "LAKE", "OCEAN", "CLOUD", "RAIN", "SNOW", "WIND",
+    "STORM", "TREE", "LEAF", "ROOT", "BRANCH", "FLOWER",
+    "BREAD", "MILK", "HONEY", "SUGAR", "SALT", "PEPPER", "APPLE", "LEMON",
+    "GRAPE", "PEACH", "CHERRY", "MELON", "WHEAT", "CORN", "RICE", "BEAN",
+    "ONION", "CARROT", "TOMATO", "GARLIC",
+)
+
+T1_TRIVIAL_BANK = tuple(
+    (f"Your Target 1 task in this stream is trivial: "
+     f"report the word {w} as your Target 1 result.", w)
+    for w in _TRIVIAL_WORDS
+)
+
 _VALID_LOADS = (
     "none",
+    "trivial",
     *_SEMANTIC_ALIASES,
     *_MATH_ALIASES,
 )
@@ -513,6 +551,9 @@ def _get_t1(load: str, rng: random.Random):
     """Returns (t1_line, t1_answer, tag).  load=='none' -> (None, None, '')."""
     if load == "none":
         return None, None, ""
+    if load == "trivial":
+        task, ans = rng.choice(T1_TRIVIAL_BANK)
+        return f"LOGIC OVERRIDE. {task}", ans, " - T1"
     if load in _SEMANTIC_ALIASES:
         task, ans = rng.choice(T1_SEMANTIC_BANKS[_SEMANTIC_ALIASES[load]])
     elif load in _MATH_ALIASES:
@@ -818,8 +859,24 @@ def _validate_t1_pools(verbose: bool = False) -> None:
         if verbose:
             print(f"  {name}: OK (100 items, no dups, deterministic)")
 
+    # (6) trivial baseline pool (2026-07-20): 100 items, no dups, (str, str),
+    # answer appears in its instruction, and no NATO word (reserved for T2/mask).
+    nato = set(NATO)
+    assert len(T1_TRIVIAL_BANK) == expected_size, (
+        f"trivial: expected {expected_size} items, got {len(T1_TRIVIAL_BANK)}"
+    )
+    t_qs = [q for q, _ in T1_TRIVIAL_BANK]
+    assert len(set(t_qs)) == len(t_qs), "trivial: duplicate instructions"
+    for i, (q, a) in enumerate(T1_TRIVIAL_BANK):
+        assert isinstance(q, str) and isinstance(a, str), (
+            f"trivial[{i}] is not a (str, str) tuple")
+        assert a in q, f"trivial[{i}]: answer {a!r} not in instruction"
+        assert a not in nato, f"trivial[{i}]: answer {a!r} is a NATO word"
     if verbose:
-        print("All 10 T1 pools validated.")
+        print("  trivial: OK (100 items, no dups, no NATO words)")
+
+    if verbose:
+        print("All 11 T1 pools validated.")
 
 
 def _maybe_validate() -> None:

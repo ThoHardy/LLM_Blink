@@ -54,6 +54,16 @@ def main():
         "--ollama-url", default="http://localhost:11434/v1",
         help="Ollama only: base URL of the Ollama server.",
     )
+    parser.add_argument(
+        "--ollama-approx-logprobs", action="store_true",
+        help=(
+            "Ollama only: re-enable the OLD approximate graded scorer. "
+            "WARNING: it is not teacher-forced (it re-codes the report "
+            "measure, with a -25 penalty floor on mismatch) — graded columns "
+            "are then pseudo-log-probs. Default: graded columns are NaN on "
+            "Ollama; use a HF model or rescore_graded.py for real scores."
+        ),
+    )
 
     # -- sweep parameters ------------------------------------------------------
     parser.add_argument(
@@ -62,7 +72,7 @@ def main():
         help="Lag values to sweep (packets between T1 and T2).",
     )
     parser.add_argument(
-        "--loads", nargs="+", default=["none", "semantic_4"],
+        "--loads", nargs="+", default=["none", "trivial", "semantic_4"],
         metavar="LOAD",
         help=(
             "T1 load levels to include. Accepts 'none', the aliases "
@@ -174,6 +184,7 @@ def main():
         args.model,
         load_in_4bit=args.load_in_4bit,
         ollama_base_url=args.ollama_url,
+        ollama_approx_logprobs=args.ollama_approx_logprobs,
     )
     print("Model ready.\n")
 

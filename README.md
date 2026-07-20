@@ -121,6 +121,10 @@ All options are visible via `run_experiment.py --help`; the same names exist as 
 
 Every stream has **exactly 15 packets** (T1 + T2 + `End of stream` + optional mask + fillers), with **at least one filler at each end**: packet 1 is always a filler (T1 is never first) and at least one filler separates T2 from `End of stream`. The fillers split into `n_pre` (before T1) and `n_post` (after T2), so given a lag, `n_post` ranges over `[1, 15 − 4 − mask − lag]`, T2 sits at packet `15 − n_post − 1`, and T1 at `15 − n_post − lag − 2`. By default `n_post` is drawn uniformly at random per trial (which makes T2's absolute position vary — a built-in positional control) and `n_pre` absorbs the remainder. Fix `n_post` to pin T2's position instead (`n_post=2` reproduces the old fixed layout with T2 at packet 12). The values actually used are logged per row (`n_pre`, `n_post`, `t2_abs_index`).
 
+### Baselines (2026-07-20)
+
+Two baseline loads exist and they are **not equivalent**: `trivial` puts a tagged `[Packet xx - T1]` in the stream whose task demands no computation ("report the word BLUE"), preserving the two-target schema; `none` puts an *untagged* filler in the T1 slot, so the stream contains no T1 marker while the output template still demands `Target 1 Result:` — a schema violation that differs from real loads in more than load. Use `trivial` as the load baseline; keep `none` only to measure the schema effect itself. The default sweep is now `none, trivial, semantic_4`.
+
 ---
 
 ## Sanity checks & controls
@@ -154,9 +158,25 @@ print(df.groupby("regime")["output_truncated"].mean())
 ok = df[~df.output_truncated.astype(bool) & ~df.t2_slot_missing.astype(bool)]
 ```
 
-**5. Positional baseline.** Any dip must exceed the `t1_load="none"` curve at the same lags (pure position/recency effect) and should be modulated by T1 difficulty. The `--n-pres` sweep and the logged `t2_abs_index` let you regress out absolute position explicitly.
+**5. Was T2 rehearsed inside the CoT?** (2026-07-20) The graded score conditions on the model's own `<Thinking>` text. If the model restated the passphrase there (it often re-enumerates the stream), the teacher-forced score at the slot is near-copy probability, not memory strength — and CoT length varies with load, so this can invert load effects. Every `cot` row logs `t2_echoed_in_cot`; stratify on it (`rescore_graded.py --verify-only` back-fills the column for old CSVs):
+
+```python
+print(df[df.regime == "cot"].groupby(["t1_load", "t2_echoed_in_cot"])["t2_total_logprob"].mean())
+```
+
+**6. Positional baseline.** Any dip must exceed the `t1_load="none"` curve at the same lags (pure position/recency effect) and should be modulated by T1 difficulty. The `--n-pres` sweep and the logged `t2_abs_index` let you regress out absolute position explicitly.
 
 ---
+
+## Backends & the graded measure (2026-07-20)
+
+**The graded log-prob is only computed on the HuggingFace backend.** Ollama's API cannot teacher-force a continuation; the old Ollama "scorer" generated ~30 tokens and char-aligned them to the target with a −25 penalty floor on mismatch — a pseudo-log-prob that re-codes the report measure (it produced a spurious inverted load effect). On Ollama runs the `t2_*` graded columns are now **NaN** (report/`t1_correct`/flags are unaffected). To get exact graded scores for an Ollama run, re-score the saved CSV with the HF version of the same weights:
+
+```bash
+python rescore_graded.py ab_results_gemma3_4b.csv --model google/gemma-3-4b-it
+```
+
+This rebuilds each trial deterministically from the logged config/seed (verify first with `--verify-only`, no GPU needed), conditions on the logged `raw_output` prefix, and writes `t2_*_hf` columns plus `rescore_ok`. The old approximate scorer remains available via `--ollama-approx-logprobs` for comparison only.
 
 ## What to look for
 

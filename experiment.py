@@ -94,6 +94,12 @@ def run_trial(model, tok, cfg: TrialConfig, temperature: float = 0.0,
     # T2]; the scoring pass itself is greedy log-softmax, only the prefix is
     # the (possibly sampled) realized one.
     prefix, slot_missing = _t2_scoring_prefix(out)
+    # Rehearsal confound gate (2026-07-20): in cot the scoring prefix is the
+    # model's own CoT — if it already restated the passphrase there (e.g. by
+    # re-enumerating the stream), the teacher-forced score at the slot is
+    # near-copy probability, not memory strength. Load modulates CoT length,
+    # so this flag must be stratified on (like the other quality gates).
+    t2_echoed = (cfg.regime == "cot") and (tr.t2_phrase in prefix.upper())
     lp = sequence_logprob(
         model, tok,
         system=tr.system,
@@ -132,6 +138,10 @@ def run_trial(model, tok, cfg: TrialConfig, temperature: float = 0.0,
         "thinking_is_placeholder": (
             bool(_PLACEHOLDER_RE.search(out)) if cfg.regime == "cot" else None
         ),
+        # True = the correct passphrase already appears in the model's own
+        # generated prefix BEFORE the T2 slot (CoT rehearsal/echo). The graded
+        # score is then conditioned on an overt copy of the answer. cot only.
+        "t2_echoed_in_cot": t2_echoed if cfg.regime == "cot" else None,
         "raw_output": out,
     }
 
