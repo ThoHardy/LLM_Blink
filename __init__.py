@@ -15,11 +15,12 @@ from .model import (load_model, report_generate, continue_generate,
                     sequence_logprob)
 from .protocol import generate_trajectory, Trajectory
 from .experiment import run_trial, run_sweep
-from .analyze import summarize, plot_ab
+from .analyze import summarize, plot_ab, backfill_readout_columns
 
 __all__ = [
     "TrialConfig", "build_trial", "random_passphrase",
     "load_model", "report_generate", "continue_generate", "sequence_logprob",
     "generate_trajectory", "Trajectory",
     "run_trial", "run_sweep", "summarize", "plot_ab",
+    "backfill_readout_columns",
 ]

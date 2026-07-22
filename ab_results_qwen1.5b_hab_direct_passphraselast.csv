@@ -1,0 +1,689 @@
+n_tasks,naming,passphrase_last,finite_budget,lag,mask,n_pre,n_post,t1_load,regime,t2_abs_index,t2_rank,t2_task_name,task_positions,temperature,max_new_tokens,answer_budget,seed,t2_words,t2_phrase,t2_total_logprob,t2_mean_logprob,t2_joint_prob,t2_n_tokens,report_correct,report_contains,phrase_anywhere,t1_correct,tasks,n_tasks_reported,n_hallucinated_tasks,answer_migration,cot_tokens_used,cot_forced_closed,output_truncated,t2_slot_missing,thinking_is_placeholder,t2_echoed_in_cot,raw_output
+1,non-ordered,False,,,,,,none,direct,3,1,UNICYCLE,[3],0.0,1024,,41,3,MIKE KILO HOTEL,-11.265243530273438,-1.6093205043247767,1.2810523912776262e-05,7,True,True,True,,"[{""name"": ""UNICYCLE"", ""kind"": ""passphrase"", ""packet"": 3, ""rank"": 1, ""answer"": ""MIKE KILO HOTEL"", ""reported"": true, ""response"": ""MIKE KILO HOTEL"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}]",1,0,0.0,,,False,False,,,"A Final_Answers block with exactly one line per task you found in the stream, each line in the form:
+- Task UNICYCLE: MIKE KILO HOTEL
+- Task FEATURE_FLAG: search_beta
+- Task SERVICE_POSTGRES: golf-09
+- Task BACKGROUND_WORKER_RATE_LIMITER: cycle 311"
+1,non-ordered,False,,,,,,none,direct,1,1,URCHIN,[1],0.0,1024,,1041,3,OSCAR FOXTROT MIKE,-9.65100383758545,-1.3787148339407784,6.43609237158671e-05,7,False,False,False,,"[{""name"": ""URCHIN"", ""kind"": ""passphrase"", ""packet"": 1, ""rank"": 1, ""answer"": ""OSCAR FOXTROT MIKE"", ""reported"": false, ""response"": null, ""correct"": false, ""correct_lenient"": false, ""answer_migrated"": false}]",0,5,,,,False,True,,,"A <Final_Answers>  
+- Task URCHEL: OSAR FOTXRT MIKE  
+- Task MARMALADE: VICTOR XRAY ROMEO  
+- Task QUEUE_BETA: ENABLED  
+- Task DEPLOYMENT: VERSION 5.2.0  
+- Task HEARTBEAT: RECEIVED AFTER 464 MS  
+- Task SESSION_CLOSE: CLOSED BY KAFKA  
+- Task QUERY: RETURNED 316 ROWS IN 154 MS  
+- Task CPU_TEMP: STABLE AT 69C  
+- Task CONFIG_RELOAD: STATE.DB RELOADED ON NODE-D  
+- Task QUEUE_DEPTH: DEPTH IS 639 MESSAGES"
+1,non-ordered,False,,,,,,none,direct,10,1,ORIGAMI,[10],0.0,1024,,2041,3,BRAVO OSCAR WHISKEY,-23.11602783203125,-2.8895034790039062,9.137694767513693e-11,8,True,True,True,,"[{""name"": ""ORIGAMI"", ""kind"": ""passphrase"", ""packet"": 10, ""rank"": 1, ""answer"": ""BRAVO OSCAR WHISKEY"", ""reported"": true, ""response"": ""BRAVO OSCAR WHISKEY"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}]",1,13,0.0,,,True,False,,,"A <Final_Answers>  
+- Task ORIGAMI: BRAVO OSCAR WHISKEY  
+- Task PIRANHA: WASHINGTON KILO MARCH  
+- Task TIGER: SUCCESS  
+- Task LION: FAILURE  
+- Task JUMBO: 100  
+- Task ZEBRA: 200  
+- Task HAWK: 300  
+- Task FOX: 400  
+- Task GAZELLE: 500  
+- Task RHINO: 600  
+- Task LEOPARD: 700  
+- Task CAMEL: 800  
+- Task ZEBRA: 900  
+- Task LION: 1000  
+- Task TIGER: 1100  
+- Task BULL: 1200  
+- Task ELEPHANT: 1300  
+- Task RHINO: 1400  
+- Task LION: 1500  
+- Task TIGER: 1600  
+- Task BULL: 1700  
+- Task ELEPHANT: 1800  
+- Task RHINO: 1900  
+- Task LION: 2000  
+- Task TIGER: 2100  
+- Task BULL: 2200  
+- Task ELEPHANT: 2300  
+- Task RHINO: 2400  
+- Task LION: 2500  
+- Task TIGER: 2600  
+- Task BULL: 2700  
+- Task ELEPHANT: 2800  
+- Task RHINO: 2900  
+- Task LION: 3000  
+- Task TIGER: 3100  
+- Task BULL: 3200  
+- Task ELEPHANT: 3300  
+- Task RHINO: 3400  
+- Task LION: 3500  
+- Task TIGER: 3600  
+- Task BULL: 3700  
+- Task ELEPHANT: 3800  
+- Task RHINO: 3900  
+- Task LION: 4000  
+- Task TIGER: 4100  
+- Task BULL: 4200  
+- Task ELEPHANT: 4300  
+- Task RHINO: 4400  
+- Task LION: 4500  
+- Task TIGER: 4600  
+- Task BULL: 4700  
+- Task ELEPHANT: 4800  
+- Task RHINO: 4900  
+- Task LION: 5000  
+- Task TIGER: 5100  
+- Task BULL: 5200  
+- Task ELEPHANT: 5300  
+- Task RHINO: 5400  
+- Task LION: 5500  
+- Task TIGER: 5600  
+- Task BULL: 5700  
+- Task ELEPHANT: 5800  
+- Task RHINO: 5900  
+- Task LION: 6000  
+- Task TIGER: 6100  
+- Task BULL: 6200  
+- Task ELEPHANT: 6300  
+- Task RHINO: 6400  
+- Task LION: 6500  
+- Task TIGER: 6600  
+- Task BULL: 6700  
+- Task ELEPHANT: 6800  
+- Task RHINO: 6900  
+- Task LION: 7000  
+- Task TIGER: 7100  
+- Task BULL: 7200  
+- Task ELEPHANT: 7300  
+- Task RHINO: 7400  
+- Task LION: 7500  
+- Task TIGER: 7600  
+- Task BULL: 7700  
+- Task ELEPHANT: 7800  
+- Task RHINO: 7900  
+- Task LION: 8000  
+- Task TIGER: 8100  
+- Task BULL: 8200  
+- Task ELEPHANT: 8300  
+- Task RHINO: 8400  
+- Task LION: "
+1,non-ordered,False,,,,,,none,direct,11,1,DANDELION,[11],0.0,1024,,3041,3,BRAVO YANKEE MIKE,-25.250091552734375,-2.8055657280815973,1.0814951365012426e-11,9,True,True,True,,"[{""name"": ""DANDELION"", ""kind"": ""passphrase"", ""packet"": 11, ""rank"": 1, ""answer"": ""BRAVO YANKEE MIKE"", ""reported"": true, ""response"": ""BRAVO YANKEE MIKE"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}]",1,1,0.0,,,False,False,,,"A <Final_Answers>  
+- Task DANDELION: BRAVO YANKEE MIKE  
+- Task METEOR: END OF_STREAM"
+1,non-ordered,False,,,,,,none,direct,3,1,HEDGEHOG,[3],0.0,1024,,4041,3,UNIFORM ROMEO KILO,-8.051267623901367,-1.1501810891287667,0.0003186976828146726,7,True,True,True,,"[{""name"": ""HEDGEHOG"", ""kind"": ""passphrase"", ""packet"": 3, ""rank"": 1, ""answer"": ""UNIFORM ROMEO KILO"", ""reported"": true, ""response"": ""UNIFORM ROMEO KILO"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}]",1,3,0.0,,,False,False,,,"A <Final_Answers>  
+- Task HEDGEHOG: UNIFORM ROMEO KILO  
+- Task MANTLE:  
+- Task SERVICE:  
+- Task STORAGE:  
+- Task DISCOVERY:  
+- Task CACHE:  
+- Task COMPONENT:"
+1,non-ordered,False,,,,,,none,direct,12,1,YODEL,[12],0.0,1024,,5041,3,WHISKEY YANKEE ROMEO,-10.04893684387207,-1.1165485382080078,4.323168832343072e-05,9,True,True,True,,"[{""name"": ""YODEL"", ""kind"": ""passphrase"", ""packet"": 12, ""rank"": 1, ""answer"": ""WHISKEY YANKEE ROMEO"", ""reported"": true, ""response"": ""WHISKEY YANKEE ROMEO"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}]",1,3,0.0,,,False,False,,,"A <Final_Answers>  
+- Task YODEL: WHISKEY YANKEE ROMEO  
+- Task ZAP: COPY-PASTE ME FIRST  
+- Task TIGER: 19C  
+- Task LION: 365ms"
+1,non-ordered,False,,,,,,none,direct,11,1,VINEYARD,[11],0.0,1024,,6041,3,YANKEE ALPHA SIERRA,-14.44405746459961,-1.8055071830749512,5.333662898010516e-07,8,True,True,True,,"[{""name"": ""VINEYARD"", ""kind"": ""passphrase"", ""packet"": 11, ""rank"": 1, ""answer"": ""YANKEE ALPHA SIERRA"", ""reported"": true, ""response"": ""YANKEE ALPHA SIERRA"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}]",1,0,0.0,,,False,False,,,"A <Final_Answers>  
+- Task VINEYARD: YANKEE ALPHA SIERRA  
+- Packet 15 - Task EDGE_BETA: ENABLED"
+1,non-ordered,False,,,,,,none,direct,12,1,YACHT,[12],0.0,1024,,7041,3,YANKEE OSCAR CHARLIE,-14.678274154663086,-1.6309193505181208,4.2199425820399483e-07,9,True,True,True,,"[{""name"": ""YACHT"", ""kind"": ""passphrase"", ""packet"": 12, ""rank"": 1, ""answer"": ""YANKEE OSCAR CHARLIE"", ""reported"": true, ""response"": ""YANKEE OSCAR CHARLIE"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}]",1,0,0.0,,,False,False,,,"A <Final_Answers>  
+- Task YACHT: YANKEE OSCAR CHARLIE  
+- Packet 14 - Task MIGRATION: 6.0.9  
+- Packet 15 - Task RACK HOTEL: 692 watts"
+1,non-ordered,False,,,,,,none,direct,15,1,RHUBARB,[15],0.0,1024,,8041,3,INDIA ZULU HOTEL,-2.5858404636383057,-0.369405780519758,0.07533273845911026,7,True,True,True,,"[{""name"": ""RHUBARB"", ""kind"": ""passphrase"", ""packet"": 15, ""rank"": 1, ""answer"": ""INDIA ZULU HOTEL"", ""reported"": true, ""response"": ""INDIA ZULU HOTEL"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}]",1,0,0.0,,,False,False,,,"A <Final_Answers>  
+- Task RHUBARB: INDIA ZULU HOTEL"
+1,non-ordered,False,,,,,,none,direct,10,1,GONDOLA,[10],0.0,1024,,9041,3,YANKEE HOTEL PAPA,-14.839496612548828,-1.8549370765686035,3.591604524899594e-07,8,True,True,True,,"[{""name"": ""GONDOLA"", ""kind"": ""passphrase"", ""packet"": 10, ""rank"": 1, ""answer"": ""YANKEE HOTEL PAPA"", ""reported"": true, ""response"": ""YANKEE HOTEL PAPA"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}]",1,0,0.0,,,False,False,,,"A <Final_Answers>  
+- Task GONDOLA: YANKEE HOTEL PAPA  
+- Task door_contact_on_rack_12_reports_nominal_range: NOMINAL  
+- Task dns_lookup_for_cron_internal_resolved_in_247_ms: RESOLVED_IN_247_MS  
+- Task service_cron_restarted_on_foxtrot_08_shadow: RESTARTED  
+- Task tls_certificate_for_sync_renewed_for_44_days: RENEWED_FOR_44_DAYS  
+- Task kafka_beta_set_to_enabled: ENABLED"
+2,non-ordered,False,,,,,,trivial,direct,8,2,KUMQUAT,"[1, 8]",0.0,1024,,75,3,OSCAR SIERRA NOVEMBER,-7.563653469085693,-0.9454566836357117,0.000518975721206516,8,True,True,True,0.0,"[{""name"": ""INKWELL"", ""kind"": ""load"", ""packet"": 1, ""rank"": 1, ""answer"": ""HAWK"", ""reported"": true, ""response"": ""This task is trivial: report the word HAWK as this task's result."", ""correct"": false, ""correct_lenient"": true, ""answer_migrated"": false}, {""name"": ""KUMQUAT"", ""kind"": ""passphrase"", ""packet"": 8, ""rank"": 2, ""answer"": ""OSCAR SIERRA NOVEMBER"", ""reported"": true, ""response"": ""OSCAR SIERRA NOVEMBER"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}]",2,0,0.0,,,False,False,,,"A <Final_Answers>  
+- Task INKWELL: This task is trivial: report the word HAWK as this task's result.
+- Task KUMQUAT: OSCAR SIERRA NOVEMBER
+- Task SERVICE_SMTP: Status 422 on host juliet-12"
+2,non-ordered,False,,,,,,trivial,direct,13,2,QUICKSAND,"[1, 13]",0.0,1024,,1075,3,NOVEMBER BRAVO GOLF,-8.051302909851074,-1.1501861299787248,0.00031868641963228583,7,True,True,True,0.0,"[{""name"": ""MONGOOSE"", ""kind"": ""load"", ""packet"": 1, ""rank"": 1, ""answer"": ""STORM"", ""reported"": false, ""response"": null, ""correct"": false, ""correct_lenient"": false, ""answer_migrated"": false}, {""name"": ""QUICKSAND"", ""kind"": ""passphrase"", ""packet"": 13, ""rank"": 2, ""answer"": ""NOVEMBER BRAVO GOLF"", ""reported"": true, ""response"": ""NOVEMBER BRAVO GOLF"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}]",1,0,0.0,,,False,False,,,"A Final_Answers block with exactly one line per task found in the stream, each line in the form:
+- Task QUICKSAND: NOVEMBER BRAVO GOLF"
+2,non-ordered,False,,,,,,trivial,direct,8,1,DUMPLING,"[8, 10]",0.0,1024,,2075,3,TANGO KILO MIKE,-20.11620330810547,-2.873743329729353,1.8350331254524122e-09,7,True,True,True,0.0,"[{""name"": ""DUMPLING"", ""kind"": ""passphrase"", ""packet"": 8, ""rank"": 1, ""answer"": ""TANGO KILO MIKE"", ""reported"": true, ""response"": ""TANGO KILO MIKE"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}, {""name"": ""URCHIN"", ""kind"": ""load"", ""packet"": 10, ""rank"": 2, ""answer"": ""PINK"", ""reported"": false, ""response"": null, ""correct"": false, ""correct_lenient"": false, ""answer_migrated"": false}]",1,1,0.0,,,False,False,,,"A <Final_Answers>  
+- Task DUMPLING: TANGO KILO MIKE
+- Task URCHEL: PINK
+</Final_Answers>"
+2,non-ordered,False,,,,,,trivial,direct,13,2,PYRAMID,"[9, 13]",0.0,1024,,3075,3,TANGO LIMA XRAY,-21.579647064208984,-3.5966078440348306,4.246961948783934e-10,6,True,True,True,1.0,"[{""name"": ""CHIMNEY"", ""kind"": ""load"", ""packet"": 9, ""rank"": 1, ""answer"": ""RED"", ""reported"": true, ""response"": ""RED"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}, {""name"": ""PYRAMID"", ""kind"": ""passphrase"", ""packet"": 13, ""rank"": 2, ""answer"": ""TANGO LIMA XRAY"", ""reported"": true, ""response"": ""TANGO LIMA XRAY"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}]",2,0,0.0,,,False,False,,,"A <Final_Answers>  
+- Task CHIMNEY: RED
+- Task PYRAMID: TANGO LIMA XRAY
+</Final_Answers>"
+2,non-ordered,False,,,,,,trivial,direct,13,2,DUMPLING,"[2, 13]",0.0,1024,,4075,3,BRAVO QUEBEC PAPA,-25.44500160217285,-3.1806252002716064,8.899716900934163e-12,8,True,True,True,1.0,"[{""name"": ""BONSAI"", ""kind"": ""load"", ""packet"": 2, ""rank"": 1, ""answer"": ""KNIFE"", ""reported"": true, ""response"": ""KNIFE"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}, {""name"": ""DUMPLING"", ""kind"": ""passphrase"", ""packet"": 13, ""rank"": 2, ""answer"": ""BRAVO QUEBEC PAPA"", ""reported"": true, ""response"": ""BRAVO QUEBEC PAPA"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}]",2,6,0.0,,,False,False,,,"A <Final_Answers>  
+- Task BONSAI: KNIFE  
+- Task DUMPLING: BRAVO QUEBEC PAPA  
+- Task MARMALADE: VICTOR XRAY ROMEO  
+- Task TELEMETRY: AUDIT EVENT 668  
+- Task CALIBRATION: DOOR CONTACT IN LOADING DCK COMPLETED  
+- Task FIREWALL: FIREWALL RULE 299 UPDATED ON FOXTROT-08  
+- Task SERVICE_BILLING: NOMINAL STATE  
+- Task TEMPERATURE: CPU TEMPERATURE ON GOLF-09 STABLE AT 29C  
+- Task SMOKER: NORMALLY RANGE ON FOXTROT-08  
+- Task RATE_LIMIT: THRESHOLD EXCEEDED IN HOT AISLE"
+2,non-ordered,False,,,,,,trivial,direct,12,2,FALCON,"[8, 12]",0.0,1024,,5075,3,WHISKEY FOXTROT VICTOR,-9.536744117736816,-1.0596382353040907,7.215137884486467e-05,9,True,True,True,1.0,"[{""name"": ""EGGPLANT"", ""kind"": ""load"", ""packet"": 8, ""rank"": 1, ""answer"": ""CYAN"", ""reported"": true, ""response"": ""CYAN"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}, {""name"": ""FALCON"", ""kind"": ""passphrase"", ""packet"": 12, ""rank"": 2, ""answer"": ""WHISKEY FOXTROT VICTOR"", ""reported"": true, ""response"": ""WHISKEY FOXTROT VICTOR"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}]",2,5,0.0,,,False,False,,,"A <Final_Answers>  
+- Task EGGPLANT: CYAN  
+- Task FALCON: WHISKEY FOXTROT VICTOR  
+- Task POSTGRESQL: RESTARTED  
+- Task QUEUE: DEPTH 830  
+- Task SERVICE: EDGE-EU STATUS 429  
+- Task CALIBRATION: COMPLETED  
+- Task BACKUP_JOB: ENCOUNTERED WARNING CODE 400  
+- Task VACUUM: RECLAIMED 230 PAGES"
+2,non-ordered,False,,,,,,trivial,direct,9,1,EGGPLANT,"[9, 11]",0.0,1024,,6075,3,CHARLIE ZULU GOLF,-3.110015392303467,-0.38875192403793335,0.04460027068853378,8,True,True,True,1.0,"[{""name"": ""EGGPLANT"", ""kind"": ""passphrase"", ""packet"": 9, ""rank"": 1, ""answer"": ""CHARLIE ZULU GOLF"", ""reported"": true, ""response"": ""CHARLIE ZULU GOLF"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}, {""name"": ""DANDELION"", ""kind"": ""load"", ""packet"": 11, ""rank"": 2, ""answer"": ""HONEY"", ""reported"": true, ""response"": ""HONEY"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}]",2,0,0.0,,,False,False,,,"A <Final_Answers>  
+- Task EGGPLANT: CHARLIE ZULU GOLF
+- Task DANDELION: HONEY
+</Final_Answers>"
+2,non-ordered,False,,,,,,trivial,direct,6,2,FIREFLY,"[5, 6]",0.0,1024,,7075,3,KILO ZULU MIKE,-11.491373062133789,-1.6416247231619698,1.0217863746220246e-05,7,False,False,True,0.0,"[{""name"": ""KAYAK"", ""kind"": ""load"", ""packet"": 5, ""rank"": 1, ""answer"": ""APPLE"", ""reported"": true, ""response"": ""- Task FIREFLY: KILO ZULU MIKE"", ""correct"": false, ""correct_lenient"": false, ""answer_migrated"": false}, {""name"": ""FIREFLY"", ""kind"": ""passphrase"", ""packet"": 6, ""rank"": 2, ""answer"": ""KILO ZULU MIKE"", ""reported"": false, ""response"": null, ""correct"": false, ""correct_lenient"": false, ""answer_migrated"": false}]",1,5,0.0,,,False,False,,,"A <Final_Answers>  
+- Task KAYAK: 
+- Task FIREFLY: KILO ZULU MIKE
+- Task GARAGE: 
+- Task SERVER: 
+- Task FIREHOSE: 
+- Task FAN: 
+- Task HEARTBEAT: 
+- Task QUERY: 
+- Task CONFIGURATION: 
+- Task CALIBRATION: 
+- Task INDEX: 
+- Task SPOUT:"
+2,non-ordered,False,,,,,,trivial,direct,13,2,JUKEBOX,"[2, 13]",0.0,1024,,8075,3,INDIA LIMA HOTEL,-3.511812210083008,-0.5853020350138346,0.029842784628272057,6,True,True,True,1.0,"[{""name"": ""MARBLE"", ""kind"": ""load"", ""packet"": 2, ""rank"": 1, ""answer"": ""CORN"", ""reported"": true, ""response"": ""CORN"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}, {""name"": ""JUKEBOX"", ""kind"": ""passphrase"", ""packet"": 13, ""rank"": 2, ""answer"": ""INDIA LIMA HOTEL"", ""reported"": true, ""response"": ""INDIA LIMA HOTEL"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}]",2,0,0.0,,,False,False,,,"A Final_Answers block with exactly one line per task you found in the stream, each line in the form:
+- Task MARBLE: CORN
+- Task JUKEBOX: INDIA LIMA HOTEL
+- Task SERVICE_SESSION_RESTARTED_ON_ALPHA_01_CANARY: CANARY
+- Task INVENTORY_CHECK_ON_RACK_FOXTROT_08_MARKED_COMPLETE: COMPLETE"
+2,non-ordered,False,,,,,,trivial,direct,13,2,RHUBARB,"[11, 13]",0.0,1024,,9075,3,QUEBEC ZULU CHARLIE,-2.230577230453491,-0.24784191449483237,0.10746637731790543,9,True,True,True,1.0,"[{""name"": ""BONSAI"", ""kind"": ""load"", ""packet"": 11, ""rank"": 1, ""answer"": ""WOLF"", ""reported"": true, ""response"": ""WOLF"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}, {""name"": ""RHUBARB"", ""kind"": ""passphrase"", ""packet"": 13, ""rank"": 2, ""answer"": ""QUEBEC ZULU CHARLIE"", ""reported"": true, ""response"": ""QUEBEC ZULU CHARLIE"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}]",2,0,0.0,,,False,False,,,"A <Final_Answers>  
+- Task BONSAI: WOLF  
+- Task RHUBARB: QUEBEC ZULU CHARLIE"
+2,non-ordered,False,,,,,,semantic_2,direct,4,1,QUARRY,"[4, 7]",0.0,1024,,96,3,LIMA KILO VICTOR,-23.706287384033203,-2.9632859230041504,5.063959321316425e-11,8,True,True,True,1.0,"[{""name"": ""QUARRY"", ""kind"": ""passphrase"", ""packet"": 4, ""rank"": 1, ""answer"": ""LIMA KILO VICTOR"", ""reported"": true, ""response"": ""LIMA KILO VICTOR"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}, {""name"": ""TANGERINE"", ""kind"": ""load"", ""packet"": 7, ""rank"": 2, ""answer"": ""INVALID"", ""reported"": true, ""response"": ""INVALID"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}]",2,2,0.0,,,False,False,,,"A <Final_Answers>  
+- Task QUARRY: LIMA KILO VICTOR
+- Task TANGERINE: INVALID
+- Task NOTIFIER: Nominal_range
+- Task HEALTH_PROBE: 558
+- Task INVENTORY: 2.1.9
+- Task DOOR_CONTACT_HOT_AISEL: Closed
+- Task SERVER_ROOM_HUMIDITY: 23%"
+2,non-ordered,False,,,,,,semantic_2,direct,7,1,LOBSTER,"[7, 8]",0.0,1024,,1096,3,UNIFORM NOVEMBER DELTA,-8.028193473815918,-1.1468847819737025,0.0003261368547100574,7,True,True,True,0.0,"[{""name"": ""LOBSTER"", ""kind"": ""passphrase"", ""packet"": 7, ""rank"": 1, ""answer"": ""UNIFORM NOVEMBER DELTA"", ""reported"": true, ""response"": ""UNIFORM NOVEMBER DELTA"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}, {""name"": ""HAMMOCK"", ""kind"": ""load"", ""packet"": 8, ""rank"": 2, ""answer"": ""VALID"", ""reported"": true, ""response"": ""INVALID"", ""correct"": false, ""correct_lenient"": false, ""answer_migrated"": false}]",2,0,0.0,,,False,False,,,"A Final_Answers block with exactly one line per task you found in the stream, each line in the form:
+- Task LOBSTER: UNIFORM NOVEMBER DELTA
+- Task HAMMOCK: INVALID
+- Task SERVICE_GATEWAY: RESTARTED
+- Task DOOR_CONTACT: CLOSED"
+2,non-ordered,False,,,,,,semantic_2,direct,15,2,PISTACHIO,"[11, 15]",0.0,1024,,2096,3,ALPHA ZULU DELTA,-10.848340034484863,-1.5497628620692663,1.9436845832387917e-05,7,False,False,False,0.0,"[{""name"": ""MANDOLIN"", ""kind"": ""load"", ""packet"": 11, ""rank"": 1, ""answer"": ""VALID"", ""reported"": true, ""response"": ""INVALID"", ""correct"": false, ""correct_lenient"": false, ""answer_migrated"": false}, {""name"": ""PISTACHIO"", ""kind"": ""passphrase"", ""packet"": 15, ""rank"": 2, ""answer"": ""ALPHA ZULU DELTA"", ""reported"": true, ""response"": ""ALPHAZULUDELTA"", ""correct"": false, ""correct_lenient"": false, ""answer_migrated"": false}]",2,0,0.0,,,False,False,,,"A Final_Answers block with exactly one line per task you found in the stream, each line in the form:
+
+- Task MANDOLIN: INVALID
+- Task PISTACHIO: ALPHAZULUDELTA
+</Final_Answers>"
+2,non-ordered,False,,,,,,semantic_2,direct,4,1,HEDGEHOG,"[4, 8]",0.0,1024,,3096,3,YANKEE BRAVO NOVEMBER,-14.637587547302246,-1.6263986163669162,4.39517833683567e-07,9,True,True,True,1.0,"[{""name"": ""HEDGEHOG"", ""kind"": ""passphrase"", ""packet"": 4, ""rank"": 1, ""answer"": ""YANKEE BRAVO NOVEMBER"", ""reported"": true, ""response"": ""YANKEE BRAVO NOVEMBER"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}, {""name"": ""QUICKSAND"", ""kind"": ""load"", ""packet"": 8, ""rank"": 2, ""answer"": ""INVALID"", ""reported"": true, ""response"": ""INVALID"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}]",2,1,0.0,,,False,False,,,"A Final_Answers block with exactly one line per task you found in the stream, each line in the form:
+- Task HEDGEHOG: YANKEE BRAVO NOVEMBER
+- Task QUICKSAND: INVALID
+- Task DOOR_CONTACT: 43
+- Task SERVICE_SESSION: NOMINAL
+- Task LOGIN: INTERNAL_NODE_BRAVO-04"
+2,non-ordered,False,,,,,,semantic_2,direct,15,2,YOGURT,"[13, 15]",0.0,1024,,4096,3,VICTOR CHARLIE ZULU,-19.587671279907227,-2.1764079199896917,3.113023838707818e-09,9,True,True,True,0.0,"[{""name"": ""ALMOND"", ""kind"": ""load"", ""packet"": 13, ""rank"": 1, ""answer"": ""VALID"", ""reported"": true, ""response"": ""INVALID"", ""correct"": false, ""correct_lenient"": false, ""answer_migrated"": false}, {""name"": ""YOGURT"", ""kind"": ""passphrase"", ""packet"": 15, ""rank"": 2, ""answer"": ""VICTOR CHARLIE ZULU"", ""reported"": true, ""response"": ""VICTOR CHARLIE ZULU"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}]",2,0,0.0,,,False,False,,,"A Final_Answers block with exactly one line per task you found in the stream, each line in the form:
+
+- Task ALMOND: INVALID
+- Task YOGURT: VICTOR CHARLIE ZULU"
+2,non-ordered,False,,,,,,semantic_2,direct,15,2,OPAL,"[8, 15]",0.0,1024,,5096,3,QUEBEC OSCAR NOVEMBER,-2.3951773643493652,-0.29939717054367065,0.09115651249885559,8,True,True,True,1.0,"[{""name"": ""FERRET"", ""kind"": ""load"", ""packet"": 8, ""rank"": 1, ""answer"": ""INVALID"", ""reported"": true, ""response"": ""INVALID"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}, {""name"": ""OPAL"", ""kind"": ""passphrase"", ""packet"": 15, ""rank"": 2, ""answer"": ""QUEBEC OSCAR NOVEMBER"", ""reported"": true, ""response"": ""QUEBEC OSCAR NOVEMBER"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}]",2,0,0.0,,,False,False,,,"A Final_Answers block with exactly one line per task you found in the stream, each line in the form:
+
+- Task FERRET: INVALID
+- Task OPAL: QUEBEC OSCAR NOVEMBER"
+2,non-ordered,False,,,,,,semantic_2,direct,12,1,FIREFLY,"[12, 15]",0.0,1024,,6096,3,QUEBEC TANGO ECHO,-2.816037178039551,-0.4022910254342215,0.05984262004494667,7,True,True,True,1.0,"[{""name"": ""FIREFLY"", ""kind"": ""passphrase"", ""packet"": 12, ""rank"": 1, ""answer"": ""QUEBEC TANGO ECHO"", ""reported"": true, ""response"": ""QUEBEC TANGO ECHO"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}, {""name"": ""EMERALD"", ""kind"": ""load"", ""packet"": 15, ""rank"": 2, ""answer"": ""INVALID"", ""reported"": true, ""response"": ""INVALID"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}]",2,2,0.0,,,False,False,,,"A Final_Answers block with EXACTLY one line per task you found in the stream, each line in the form:
+- Task CATHEDRAL: ANIMAL
+- Task MARMALADE: VICTOR XRAY ROMEO
+- Task FIREFLY: QUEBEC TANGO ECHO
+- Task EMERALD: INVALID"
+2,non-ordered,False,,,,,,semantic_2,direct,3,1,DAFFODIL,"[3, 8]",0.0,1024,,7096,3,KILO VICTOR YANKEE,-8.701643943786621,-0.9668493270874023,0.00016631218022666872,9,True,True,True,0.0,"[{""name"": ""DAFFODIL"", ""kind"": ""passphrase"", ""packet"": 3, ""rank"": 1, ""answer"": ""KILO VICTOR YANKEE"", ""reported"": true, ""response"": ""KILO VICTOR YANKEE"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}, {""name"": ""PLATYPUS"", ""kind"": ""load"", ""packet"": 8, ""rank"": 2, ""answer"": ""YES"", ""reported"": true, ""response"": ""NO"", ""correct"": false, ""correct_lenient"": false, ""answer_migrated"": false}]",2,0,0.0,,,False,False,,,"A Final_Answers block with exactly one line per task you found in the stream, each line in the form:
+- Task DAFFODIL: KILO VICTOR YANKEE
+- Task PLATYPUS: NO
+- Task SERVICE_MAILER: 36
+- Task INDEX_REBUILD: NO
+- Task THRESHOLD_ADJUSTMENT: YES"
+2,non-ordered,False,,,,,,semantic_2,direct,4,2,HEDGEHOG,"[1, 4]",0.0,1024,,8096,3,ECHO SIERRA BRAVO,-21.288143157958984,-3.041163308279855,5.684298587382841e-10,7,True,True,True,0.0,"[{""name"": ""URCHIN"", ""kind"": ""load"", ""packet"": 1, ""rank"": 1, ""answer"": ""YES"", ""reported"": false, ""response"": null, ""correct"": false, ""correct_lenient"": false, ""answer_migrated"": false}, {""name"": ""HEDGEHOG"", ""kind"": ""passphrase"", ""packet"": 4, ""rank"": 2, ""answer"": ""ECHO SIERRA BRAVO"", ""reported"": true, ""response"": ""ECHO SIERRA BRAVO"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}]",1,1,0.0,,,False,False,,,"A <Final_Answers>  
+- Task URCHEL: NO  
+- Task HEDGEHOG: ECHO SIERRA BRAVO  
+- Task FEATURE_FLAG: queue_beta  
+- Task FEATURE_FLAG: scheduler_beta  
+- Task SERVICE_CACHE: 48  
+- Task SERVICE_METRICS: 79"
+2,non-ordered,False,,,,,,semantic_2,direct,1,1,UNICYCLE,"[1, 14]",0.0,1024,,9096,3,CHARLIE JULIET LIMA,-5.471747875213623,-0.6839684844017029,0.004203877877444029,8,True,True,True,0.0,"[{""name"": ""UNICYCLE"", ""kind"": ""passphrase"", ""packet"": 1, ""rank"": 1, ""answer"": ""CHARLIE JULIET LIMA"", ""reported"": true, ""response"": ""CHARLIE JULIET LIMA"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}, {""name"": ""JASMINE"", ""kind"": ""load"", ""packet"": 14, ""rank"": 2, ""answer"": ""VALID"", ""reported"": false, ""response"": null, ""correct"": false, ""correct_lenient"": false, ""answer_migrated"": false}]",1,1,0.0,,,False,False,,,"A Final_Answers block with exactly one line per task you found in the stream, each line in the form:
+- Task UNICYCLE: CHARLIE JULIET LIMA
+- Task MARMALADE: 
+- Task JASMINE: INVALID"
+3,non-ordered,False,,,,,,trivial,direct,3,1,PLATYPUS,"[3, 11, 15]",0.0,1024,,88,3,MIKE GOLF KILO,-9.153854370117188,-1.3076934814453125,0.00010581118112895638,7,True,True,True,0.5,"[{""name"": ""PLATYPUS"", ""kind"": ""passphrase"", ""packet"": 3, ""rank"": 1, ""answer"": ""MIKE GOLF KILO"", ""reported"": true, ""response"": ""MIKE GOLF KILO"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}, {""name"": ""URCHIN"", ""kind"": ""load"", ""packet"": 11, ""rank"": 2, ""answer"": ""RED"", ""reported"": false, ""response"": null, ""correct"": false, ""correct_lenient"": false, ""answer_migrated"": false}, {""name"": ""LULLABY"", ""kind"": ""load"", ""packet"": 15, ""rank"": 3, ""answer"": ""EAGLE"", ""reported"": true, ""response"": ""EAGLE"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}]",2,3,0.0,,,False,False,,,"A Final_Answers block with exactly one line per task found in the stream, each line in the form:
+- Task CATHEDRAL: ANIMAL
+- Task MARMALADE: VICTOR XRAY ROMEO
+- Task PLATYPUS: MIKE GOLF KILO
+- Task URCHEL: RED
+- Task LULLABY: EAGLE"
+3,non-ordered,False,,,,,,trivial,direct,6,1,NARWHAL,"[6, 7, 8]",0.0,1024,,1088,3,ROMEO VICTOR QUEBEC,-3.1517884731292725,-0.39397355914115906,0.042775556445121765,8,True,True,True,1.0,"[{""name"": ""NARWHAL"", ""kind"": ""passphrase"", ""packet"": 6, ""rank"": 1, ""answer"": ""ROMEO VICTOR QUEBEC"", ""reported"": true, ""response"": ""ROMEO VICTOR QUEBEC"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}, {""name"": ""FLAMINGO"", ""kind"": ""load"", ""packet"": 7, ""rank"": 2, ""answer"": ""HAWK"", ""reported"": true, ""response"": ""HAWK"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}, {""name"": ""HEDGEHOG"", ""kind"": ""load"", ""packet"": 8, ""rank"": 3, ""answer"": ""OCEAN"", ""reported"": true, ""response"": ""OCEAN"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}]",3,2,0.0,,,False,False,,,"A Final_Answers block with exactly one line per task found in the stream, each line in the form:
+- Task CATHEDRAL: ANIMAL
+- Task MARMALADE: VICTOR XRAY ROMEO
+- Task NARWHAL: ROMEO VICTOR QUEBEC
+- Task FLAMINGO: HAWK
+- Task HEDGEHOG: OCEAN
+- Task NARWHAL: ROMEO VICTOR QUEBEC
+- Task FLAMINGO: HAWK
+- Task HEDGEHOG: OCEAN
+- Task NARWHAL: ROMEO VICTOR QUEBEC
+- Task FLAMINGO: HAWK
+- Task HEDGEHOG: OCEAN
+- Task NARWHAL: ROMEO VICTOR QUEBEC
+- Task FLAMINGO: HAWK
+- Task HEDGEHOG: OCEAN"
+3,non-ordered,False,,,,,,trivial,direct,4,1,UNICYCLE,"[4, 7, 13]",0.0,1024,,2088,3,SIERRA PAPA XRAY,-10.371789932250977,-1.4816842760358537,3.130321056232788e-05,7,True,True,True,1.0,"[{""name"": ""UNICYCLE"", ""kind"": ""passphrase"", ""packet"": 4, ""rank"": 1, ""answer"": ""SIERRA PAPA XRAY"", ""reported"": true, ""response"": ""SIERRA PAPA XRAY"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}, {""name"": ""CHIMNEY"", ""kind"": ""load"", ""packet"": 7, ""rank"": 2, ""answer"": ""SALMON"", ""reported"": true, ""response"": ""SALMON"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}, {""name"": ""URCHIN"", ""kind"": ""load"", ""packet"": 13, ""rank"": 3, ""answer"": ""SALT"", ""reported"": true, ""response"": ""SALT"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}]",3,0,0.0,,,False,False,,,"A Final_Answers block with exactly one line per task you found in the stream, each line in the form:
+- Task UNICYCLE: SIERRA PAPA XRAY
+- Task CHIMNEY: SALMON
+- Task URCHIN: SALT
+- Task URCHIN: SALT"
+3,non-ordered,False,,,,,,trivial,direct,9,2,TULIP,"[2, 9, 12]",0.0,1024,,3088,3,PAPA INDIA VICTOR,-16.612579345703125,-2.373225620814732,6.098856886183057e-08,7,True,True,True,1.0,"[{""name"": ""WALNUT"", ""kind"": ""load"", ""packet"": 2, ""rank"": 1, ""answer"": ""SUGAR"", ""reported"": true, ""response"": ""SUGAR"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}, {""name"": ""TULIP"", ""kind"": ""passphrase"", ""packet"": 9, ""rank"": 2, ""answer"": ""PAPA INDIA VICTOR"", ""reported"": true, ""response"": ""PAPA INDIA VICTOR"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}, {""name"": ""LOBSTER"", ""kind"": ""load"", ""packet"": 12, ""rank"": 3, ""answer"": ""CHAIR"", ""reported"": true, ""response"": ""CHAIR"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}]",3,0,0.0,,,False,False,,,"A Final_Answers block with exactly one line per task you found in the stream, each line in the form:
+- Task WALNUT: SUGAR
+- Task TULIP: PAPA INDIA VICTOR
+- Task LOBSTER: CHAIR
+- Task LOBSTER: CHAIR
+- Task LOBSTER: CHAIR"
+3,non-ordered,False,,,,,,trivial,direct,13,3,LULLABY,"[2, 11, 13]",0.0,1024,,4088,3,ALPHA HOTEL INDIA,-10.083550453186035,-1.6805917421976726,4.1760882595553994e-05,6,True,True,True,1.0,"[{""name"": ""DOLPHIN"", ""kind"": ""load"", ""packet"": 2, ""rank"": 1, ""answer"": ""BRANCH"", ""reported"": true, ""response"": ""BRANCH"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}, {""name"": ""RAVIOLI"", ""kind"": ""load"", ""packet"": 11, ""rank"": 2, ""answer"": ""SPOON"", ""reported"": true, ""response"": ""SPOON"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}, {""name"": ""LULLABY"", ""kind"": ""passphrase"", ""packet"": 13, ""rank"": 3, ""answer"": ""ALPHA HOTEL INDIA"", ""reported"": true, ""response"": ""ALPHA HOTEL INDIA"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}]",3,1,0.0,,,False,False,,,"A <Final_Answers>  
+- Task DOLPHIN: BRANCH
+- Task RAVIOLI: SPOON
+- Task LULLABY: ALPHA HOTEL INDIA
+- Task SESSION: CLOSED_BY_GRAPHQL"
+3,non-ordered,False,,,,,,trivial,direct,8,3,TAPESTRY,"[2, 6, 8]",0.0,1024,,5088,3,WHISKEY ROMEO MIKE,-10.240195274353027,-1.4628850391932897,3.570587796275504e-05,7,True,True,True,0.5,"[{""name"": ""URCHIN"", ""kind"": ""load"", ""packet"": 2, ""rank"": 1, ""answer"": ""LAKE"", ""reported"": false, ""response"": null, ""correct"": false, ""correct_lenient"": false, ""answer_migrated"": false}, {""name"": ""ANCHOVY"", ""kind"": ""load"", ""packet"": 6, ""rank"": 2, ""answer"": ""BLACK"", ""reported"": true, ""response"": ""BLACK"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}, {""name"": ""TAPESTRY"", ""kind"": ""passphrase"", ""packet"": 8, ""rank"": 3, ""answer"": ""WHISKEY ROMEO MIKE"", ""reported"": true, ""response"": ""WHISKEY ROMEO MIKE"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}]",2,6,0.0,,,False,False,,,"A Final_Answers block with exactly one line per task you found in the stream, each line in the form:
+- Task URCHELIN: LAKE
+- Task TAPESTRY: WHISKEY ROMEO MIKE
+- Task ANCHOVY: BLACK
+- Task MARMALADE: COPY-PASTE THESE THREE WORDS: ""HUMIDITY IN OPERATIONS CENTER IS 65 PERCENT""
+- Task DISKUSAGE: 85 PERCENT
+- Task NOTIFIER: DEPTH OF QUEUE 'NOTIFIER' IS 269 MESSAGES
+- Task AUDITLOG: OBJECT AUDIT.LOG REPLICATED TO REGION CA-CENTRAL-1
+- Task QUEUENOTIFIER: DEPTH OF QUEUE 'NOTIFIER' IS 269 MESSAGES"
+3,non-ordered,False,,,,,,trivial,direct,7,2,FALCON,"[1, 7, 15]",0.0,1024,,6088,3,QUEBEC JULIET UNIFORM,-3.040839672088623,-0.3801049590110779,0.04779474064707756,8,False,False,True,1.0,"[{""name"": ""SNORKEL"", ""kind"": ""load"", ""packet"": 1, ""rank"": 1, ""answer"": ""HORSE"", ""reported"": true, ""response"": ""HORSE"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}, {""name"": ""FALCON"", ""kind"": ""passphrase"", ""packet"": 7, ""rank"": 2, ""answer"": ""QUEBEC JULIET UNIFORM"", ""reported"": false, ""response"": null, ""correct"": false, ""correct_lenient"": false, ""answer_migrated"": false}, {""name"": ""KAYAK"", ""kind"": ""load"", ""packet"": 15, ""rank"": 3, ""answer"": ""STONE"", ""reported"": true, ""response"": ""STONE"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}]",2,1,0.0,,,False,False,,,"A Final_Answers block with exactly one line per task you found in the stream, each line in the form:
+- Task SNORKEL: HORSE
+- Task MARMALADE: 
+- Task FALCON: QUEBEC JULIET UNIFORM
+- Task KAYAK: STONE"
+3,non-ordered,False,,,,,,trivial,direct,4,2,MARBLE,"[1, 4, 5]",0.0,1024,,7088,3,ROMEO BRAVO MIKE,-2.4615046977996826,-0.41025078296661377,0.08530649542808533,6,True,True,True,1.0,"[{""name"": ""FALCON"", ""kind"": ""load"", ""packet"": 1, ""rank"": 1, ""answer"": ""BOWL"", ""reported"": true, ""response"": ""BOWL"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}, {""name"": ""MARBLE"", ""kind"": ""passphrase"", ""packet"": 4, ""rank"": 2, ""answer"": ""ROMEO BRAVO MIKE"", ""reported"": true, ""response"": ""ROMEO BRAVO MIKE"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}, {""name"": ""WATERMELON"", ""kind"": ""load"", ""packet"": 5, ""rank"": 3, ""answer"": ""SNAKE"", ""reported"": true, ""response"": ""SNAKE"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}]",3,0,0.0,,,False,False,,,"A Final_Answers block with exactly one line per task you found in the stream, each line in the form:
+- Task FALCON: BOWL
+- Task MARBLE: ROMEO BRAVO MIKE
+- Task WATERMELON: SNAKE
+- Task SECRET_SNAPSHOT_BIN_ROTATION: None (no such task)"
+3,non-ordered,False,,,,,,trivial,direct,10,1,RHUBARB,"[10, 13, 14]",0.0,1024,,8088,3,ZULU CHARLIE TANGO,-15.240386009216309,-1.9050482511520386,2.405384122994292e-07,8,True,True,True,1.0,"[{""name"": ""RHUBARB"", ""kind"": ""passphrase"", ""packet"": 10, ""rank"": 1, ""answer"": ""ZULU CHARLIE TANGO"", ""reported"": true, ""response"": ""ZULU CHARLIE TANGO"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}, {""name"": ""LULLABY"", ""kind"": ""load"", ""packet"": 13, ""rank"": 2, ""answer"": ""TREE"", ""reported"": true, ""response"": ""TREE"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}, {""name"": ""GAZEBO"", ""kind"": ""load"", ""packet"": 14, ""rank"": 3, ""answer"": ""BEAN"", ""reported"": true, ""response"": ""BEAN"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}]",3,0,0.0,,,False,False,,,"A Final_Answers block with exactly one line per task you found in the stream, each line in the form:
+- Task RHUBARB: ZULU CHARLIE TANGO
+- Task LULLABY: TREE
+- Task GAZEBO: BEAN"
+3,non-ordered,False,,,,,,trivial,direct,10,1,EGGPLANT,"[10, 11, 13]",0.0,1024,,9088,3,TANGO ALPHA WHISKEY,-19.963890075683594,-3.327315012613932,2.1369417346761566e-09,6,True,True,True,1.0,"[{""name"": ""EGGPLANT"", ""kind"": ""passphrase"", ""packet"": 10, ""rank"": 1, ""answer"": ""TANGO ALPHA WHISKEY"", ""reported"": true, ""response"": ""TANGO ALPHA WHISKEY"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}, {""name"": ""DUMPLING"", ""kind"": ""load"", ""packet"": 11, ""rank"": 2, ""answer"": ""BRICK"", ""reported"": true, ""response"": ""BRICK"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}, {""name"": ""LOBSTER"", ""kind"": ""load"", ""packet"": 13, ""rank"": 3, ""answer"": ""FOX"", ""reported"": true, ""response"": ""FOX"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}]",3,0,0.0,,,False,False,,,"A <Final_Answers>  
+- Task EGGPLANT: TANGO ALPHA WHISKEY
+- Task DUMPLING: BRICK
+- Task LOBSTER: FOX
+</Final_Answers>"
+3,non-ordered,False,,,,,,semantic_2,direct,1,1,CARNIVAL,"[1, 8, 9]",0.0,1024,,109,3,INDIA HOTEL OSCAR,-4.793686866760254,-0.798947811126709,0.008281867019832134,6,True,True,True,1.0,"[{""name"": ""CARNIVAL"", ""kind"": ""passphrase"", ""packet"": 1, ""rank"": 1, ""answer"": ""INDIA HOTEL OSCAR"", ""reported"": true, ""response"": ""INDIA HOTEL OSCAR"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}, {""name"": ""LILAC"", ""kind"": ""load"", ""packet"": 8, ""rank"": 2, ""answer"": ""INVALID"", ""reported"": true, ""response"": ""INVALID"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}, {""name"": ""KETTLE"", ""kind"": ""load"", ""packet"": 9, ""rank"": 3, ""answer"": ""NO"", ""reported"": true, ""response"": ""NO"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}]",3,1,0.0,,,False,False,,,"A Final_Answers block with exactly one line per task you found in the stream, each line in the form:
+
+- Task CARNIVAL: INDIA HOTEL OSCAR
+- Task MARMALADE: None
+- Task LILAC: INVALID
+- Task KETTLE: NO
+- Task INDEX_REBUILD: YES
+- Task QUEUE_DEPTH: 242
+- Task SMTP_HIT_RATIO: 30
+- Task OPERATIONS_CENTER_TEMP: 61C
+- Task DNS_RESOLVER_TIME: 306ms"
+3,non-ordered,False,,,,,,semantic_2,direct,11,3,LULLABY,"[2, 10, 11]",0.0,1024,,1109,3,MIKE CHARLIE PAPA,-9.869644165039062,-1.4099491664341517,5.1721130148507655e-05,7,True,True,True,0.5,"[{""name"": ""LANTERN"", ""kind"": ""load"", ""packet"": 2, ""rank"": 1, ""answer"": ""VALID"", ""reported"": true, ""response"": ""INVALID"", ""correct"": false, ""correct_lenient"": false, ""answer_migrated"": true}, {""name"": ""THIMBLE"", ""kind"": ""load"", ""packet"": 10, ""rank"": 2, ""answer"": ""INVALID"", ""reported"": true, ""response"": ""INVALID"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}, {""name"": ""LULLABY"", ""kind"": ""passphrase"", ""packet"": 11, ""rank"": 3, ""answer"": ""MIKE CHARLIE PAPA"", ""reported"": true, ""response"": ""MIKE CHARLIE PAPA"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}]",3,0,0.3333333333333333,,,False,False,,,"A Final_Answers block with EXACTLY one line per task you found in the stream, each line in the form:
+- Task LANTERN: INVALID
+- Task THIMBLE: INVALID
+- Task LULLABY: MIKE CHARLIE PAPA
+- Packet 14 - Task THIMBLE: None (no task specified)
+- Packet 15 - Task LULLABY: None (no task specified)"
+3,non-ordered,False,,,,,,semantic_2,direct,6,2,CHIMNEY,"[1, 6, 11]",0.0,1024,,2109,3,MIKE ROMEO NOVEMBER,-10.718376159667969,-1.5311965942382812,2.213443258369807e-05,7,True,True,True,0.5,"[{""name"": ""HARMONICA"", ""kind"": ""load"", ""packet"": 1, ""rank"": 1, ""answer"": ""VALID"", ""reported"": true, ""response"": ""INVALID"", ""correct"": false, ""correct_lenient"": false, ""answer_migrated"": false}, {""name"": ""CHIMNEY"", ""kind"": ""passphrase"", ""packet"": 6, ""rank"": 2, ""answer"": ""MIKE ROMEO NOVEMBER"", ""reported"": true, ""response"": ""MIKE ROMEO NOVEMBER"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}, {""name"": ""WHEELBARROW"", ""kind"": ""load"", ""packet"": 11, ""rank"": 3, ""answer"": ""VALID"", ""reported"": true, ""response"": ""VALID"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}]",3,0,0.0,,,False,False,,,"A <Final_Answers>  
+- Task HARMONICA: INVALID
+- Task CHIMNEY: MIKE ROMEO NOVEMBER
+- Task WHEELBARROW: VALID
+- Task WHEELBARROW: INVALID
+- Task WHEELBARROW: VALID
+- Task WHEELBARROW: INVALID"
+3,non-ordered,False,,,,,,semantic_2,direct,11,3,VELVET,"[7, 10, 11]",0.0,1024,,3109,3,ECHO ZULU HOTEL,-19.810495376586914,-2.830070768083845,2.4912147900124637e-09,7,True,True,True,0.0,"[{""name"": ""UNICYCLE"", ""kind"": ""load"", ""packet"": 7, ""rank"": 1, ""answer"": ""YES"", ""reported"": true, ""response"": ""NO"", ""correct"": false, ""correct_lenient"": false, ""answer_migrated"": false}, {""name"": ""WOMBAT"", ""kind"": ""load"", ""packet"": 10, ""rank"": 2, ""answer"": ""VALID"", ""reported"": true, ""response"": ""INVALID"", ""correct"": false, ""correct_lenient"": false, ""answer_migrated"": false}, {""name"": ""VELVET"", ""kind"": ""passphrase"", ""packet"": 11, ""rank"": 3, ""answer"": ""ECHO ZULU HOTEL"", ""reported"": true, ""response"": ""ECHO ZULU HOTEL"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}]",3,0,0.0,,,False,False,,,"A <Final_Answers>  
+- Task UNICYCLE: NO
+- Task WOMBAT: INVALID
+- Task VELVET: ECHO ZULU HOTEL"
+3,non-ordered,False,,,,,,semantic_2,direct,9,2,DOLPHIN,"[6, 9, 10]",0.0,1024,,4109,3,JULIET FOXTROT YANKEE,-19.936002731323242,-1.8123638846657493,2.1973742825309728e-09,11,True,True,True,1.0,"[{""name"": ""TULIP"", ""kind"": ""load"", ""packet"": 6, ""rank"": 1, ""answer"": ""NO"", ""reported"": true, ""response"": ""NO"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}, {""name"": ""DOLPHIN"", ""kind"": ""passphrase"", ""packet"": 9, ""rank"": 2, ""answer"": ""JULIET FOXTROT YANKEE"", ""reported"": true, ""response"": ""JULIET FOXTROT YANKEE"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}, {""name"": ""WALNUT"", ""kind"": ""load"", ""packet"": 10, ""rank"": 3, ""answer"": ""INVALID"", ""reported"": true, ""response"": ""INVALID"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}]",3,0,0.0,,,True,False,,,"A <Final_Answers>  
+- Task TULIP: NO
+- Task DOLPHIN: JULIET FOXTROT YANKEE
+- Task WALNUT: INVALID
+- Task DOLPHIN: JULIET FOXTROT YANKEE
+- Task DOLPHIN: JULIET FOXTROT YANKEE
+- Task DOLPHIN: JULIET FOXTROT YANKEE
+- Task DOLPHIN: JULIET FOXTROT YANKEE
+- Task DOLPHIN: JULIET FOXTROT YANKEE
+- Task DOLPHIN: JULIET FOXTROT YANKEE
+- Task DOLPHIN: JULIET FOXTROT YANKEE
+- Task DOLPHIN: JULIET FOXTROT YANKEE
+- Task DOLPHIN: JULIET FOXTROT YANKEE
+- Task DOLPHIN: JULIET FOXTROT YANKEE
+- Task DOLPHIN: JULIET FOXTROT YANKEE
+- Task DOLPHIN: JULIET FOXTROT YANKEE
+- Task DOLPHIN: JULIET FOXTROT YANKEE
+- Task DOLPHIN: JULIET FOXTROT YANKEE
+- Task DOLPHIN: JULIET FOXTROT YANKEE
+- Task DOLPHIN: JULIET FOXTROT YANKEE
+- Task DOLPHIN: JULIET FOXTROT YANKEE
+- Task DOLPHIN: JULIET FOXTROT YANKEE
+- Task DOLPHIN: JULIET FOXTROT YANKEE
+- Task DOLPHIN: JULIET FOXTROT YANKEE
+- Task DOLPHIN: JULIET FOXTROT YANKEE
+- Task DOLPHIN: JULIET FOXTROT YANKEE
+- Task DOLPHIN: JULIET FOXTROT YANKEE
+- Task DOLPHIN: JULIET FOXTROT YANKEE
+- Task DOLPHIN: JULIET FOXTROT YANKEE
+- Task DOLPHIN: JULIET FOXTROT YANKEE
+- Task DOLPHIN: JULIET FOXTROT YANKEE
+- Task DOLPHIN: JULIET FOXTROT YANKEE
+- Task DOLPHIN: JULIET FOXTROT YANKEE
+- Task DOLPHIN: JULIET FOXTROT YANKEE
+- Task DOLPHIN: JULIET FOXTROT YANKEE
+- Task DOLPHIN: JULIET FOXTROT YANKEE
+- Task DOLPHIN: JULIET FOXTROT YANKEE
+- Task DOLPHIN: JULIET FOXTROT YANKEE
+- Task DOLPHIN: JULIET FOXTROT YANKEE
+- Task DOLPHIN: JULIET FOXTROT YANKEE
+- Task DOLPHIN: JULIET FOXTROT YANKEE
+- Task DOLPHIN: JULIET FOXTROT YANKEE
+- Task DOLPHIN: JULIET FOXTROT YANKEE
+- Task DOLPHIN: JULIET FOXTROT YANKEE
+- Task DOLPHIN: JULIET FOXTROT YANKEE
+- Task DOLPHIN: JULIET FOXTROT YANKEE
+- Task DOLPHIN: JULIET FOXTROT YANKEE
+- Task DOLPHIN: JULIET FOXTROT YANKEE
+- Task DOLPHIN: JULIET FOXTROT YANKEE
+- Task DOLPHIN: JULIET FOXTROT YANKEE
+- Task DOLPHIN: JULIET FOXTROT YANKEE
+- Task DOLPHIN: JULIET FOXTROT YANKEE
+- Task DOLPHIN: JULIET FOXTROT YANKEE
+- Task DOLPHIN: JULIET FOXTROT YANKEE
+- Task DOLPHIN: JULIET FOXTROT YANKEE
+- Task DOLPHIN: JULIET FOXTROT YANKEE
+- Task DOLPHIN: JULIET FOXTROT YANKEE
+- Task DOLPHIN: JULIET FOXTROT YANKEE
+- Task DOLPHIN: JULIET FO"
+3,non-ordered,False,,,,,,semantic_2,direct,5,1,MANDOLIN,"[5, 7, 14]",0.0,1024,,5109,3,MIKE WHISKEY KILO,-10.266857147216797,-1.2833571434020996,3.4766468161251396e-05,8,True,True,True,1.0,"[{""name"": ""MANDOLIN"", ""kind"": ""passphrase"", ""packet"": 5, ""rank"": 1, ""answer"": ""MIKE WHISKEY KILO"", ""reported"": true, ""response"": ""MIKE WHISKEY KILO"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}, {""name"": ""BAGPIPE"", ""kind"": ""load"", ""packet"": 7, ""rank"": 2, ""answer"": ""YES"", ""reported"": true, ""response"": ""YES"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}, {""name"": ""JASMINE"", ""kind"": ""load"", ""packet"": 14, ""rank"": 3, ""answer"": ""INVALID"", ""reported"": true, ""response"": ""INVALID"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}]",3,0,0.0,,,False,False,,,"A <Final_Answers>  
+- Task MANDOLIN: MIKE WHISKEY KILO
+- Task BAGPIPE: YES
+- Task JASMINE: INVALID"
+3,non-ordered,False,,,,,,semantic_2,direct,7,1,LILAC,"[7, 12, 15]",0.0,1024,,6109,3,GOLF ZULU YANKEE,-21.118295669555664,-2.346477296617296,6.736599611478766e-10,9,True,True,True,0.5,"[{""name"": ""LILAC"", ""kind"": ""passphrase"", ""packet"": 7, ""rank"": 1, ""answer"": ""GOLF ZULU YANKEE"", ""reported"": true, ""response"": ""GOLF ZULU YANKEE"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}, {""name"": ""OPAL"", ""kind"": ""load"", ""packet"": 12, ""rank"": 2, ""answer"": ""YES"", ""reported"": true, ""response"": ""YES"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}, {""name"": ""PISTACHIO"", ""kind"": ""load"", ""packet"": 15, ""rank"": 3, ""answer"": ""VALID"", ""reported"": true, ""response"": ""INVALID"", ""correct"": false, ""correct_lenient"": false, ""answer_migrated"": false}]",3,0,0.0,,,False,False,,,"A <Final_Answers>  
+- Task LILAC: GOLF ZULU YANKEE
+- Task OPAL: YES
+- Task PISTACHIO: INVALID"
+3,non-ordered,False,,,,,,semantic_2,direct,3,1,URCHIN,"[3, 4, 6]",0.0,1024,,7109,3,BRAVO YANKEE TANGO,-18.72673988342285,-2.0807488759358725,7.3634307540260124e-09,9,False,False,True,0.0,"[{""name"": ""URCHIN"", ""kind"": ""passphrase"", ""packet"": 3, ""rank"": 1, ""answer"": ""BRAVO YANKEE TANGO"", ""reported"": false, ""response"": null, ""correct"": false, ""correct_lenient"": false, ""answer_migrated"": false}, {""name"": ""TAPESTRY"", ""kind"": ""load"", ""packet"": 4, ""rank"": 2, ""answer"": ""VALID"", ""reported"": true, ""response"": ""INVALID"", ""correct"": false, ""correct_lenient"": false, ""answer_migrated"": false}, {""name"": ""PYRAMID"", ""kind"": ""load"", ""packet"": 6, ""rank"": 3, ""answer"": ""YES"", ""reported"": true, ""response"": ""NO"", ""correct"": false, ""correct_lenient"": false, ""answer_migrated"": false}]",2,1,0.0,,,False,True,,,"A <Final_Answers>  
+- Task URCHELIN: BRAVO YANKEE TANGO
+- Task TAPESTRY: INVALID
+- Task PYRAMID: NO
+- Task SECRET_STATE_DB: DISCOVERY_CLIENT
+- Task CONNECTION_POOL_METRICS: RESIZED_TO_67_WORKERS
+- Task DEAD_LETTER_QUEUE_INGEST: STALE_ENTRIES_98
+- Task CONNECTION_POOL_INGEST: RESIZED_TO_75_WORKERS
+- Task CONFIGURATION_FILE_METRICS_TSV: RELOADED_ON_BRVOY_04"
+3,non-ordered,False,,,,,,semantic_2,direct,7,2,JUKEBOX,"[2, 7, 8]",0.0,1024,,8109,3,FOXTROT CHARLIE VICTOR,-3.9278676509857178,-0.4364297389984131,0.01968560367822647,9,True,True,True,0.5,"[{""name"": ""HEDGEHOG"", ""kind"": ""load"", ""packet"": 2, ""rank"": 1, ""answer"": ""NO"", ""reported"": true, ""response"": ""NO"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}, {""name"": ""JUKEBOX"", ""kind"": ""passphrase"", ""packet"": 7, ""rank"": 2, ""answer"": ""FOXTROT CHARLIE VICTOR"", ""reported"": true, ""response"": ""FOXTROT CHARLIE VICTOR"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}, {""name"": ""SAXOPHONE"", ""kind"": ""load"", ""packet"": 8, ""rank"": 3, ""answer"": ""VALID"", ""reported"": true, ""response"": ""INVALID"", ""correct"": false, ""correct_lenient"": false, ""answer_migrated"": false}]",3,0,0.0,,,False,False,,,"A <Final_Answers>  
+- Task HEDGEHOG: NO
+- Task JUKEBOX: FOXTROT CHARLIE VICTOR
+- Task SAXOPHONE: INVALID
+- Task CACHE HIT: 29%"
+3,non-ordered,False,,,,,,semantic_2,direct,3,1,HAMMOCK,"[3, 7, 14]",0.0,1024,,9109,3,HOTEL LIMA UNIFORM,-21.337923049926758,-3.048274721418108,5.408262726547264e-10,7,True,True,True,0.5,"[{""name"": ""HAMMOCK"", ""kind"": ""passphrase"", ""packet"": 3, ""rank"": 1, ""answer"": ""HOTEL LIMA UNIFORM"", ""reported"": true, ""response"": ""HOTEL LIMA UNIFORM"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}, {""name"": ""EMERALD"", ""kind"": ""load"", ""packet"": 7, ""rank"": 2, ""answer"": ""VALID"", ""reported"": true, ""response"": ""INVALID"", ""correct"": false, ""correct_lenient"": false, ""answer_migrated"": false}, {""name"": ""GLACIER"", ""kind"": ""load"", ""packet"": 14, ""rank"": 3, ""answer"": ""NO"", ""reported"": true, ""response"": ""NO"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}]",3,0,0.0,,,False,False,,,"A Final_Answers block with exactly one line per task you found in the stream, each line in the form:
+- Task HAMMOCK: HOTEL LIMA UNIFORM
+- Task EMERALD: INVALID
+- Task GLACIER: NO"
+5,non-ordered,False,,,,,,trivial,direct,4,1,RASPBERRY,"[4, 6, 10, 11, 14]",0.0,1024,,114,3,HOTEL SIERRA DELTA,-20.307659149169922,-2.5384573936462402,1.5152897825387868e-09,8,True,True,True,1.0,"[{""name"": ""RASPBERRY"", ""kind"": ""passphrase"", ""packet"": 4, ""rank"": 1, ""answer"": ""HOTEL SIERRA DELTA"", ""reported"": true, ""response"": ""HOTEL SIERRA DELTA"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}, {""name"": ""NECTARINE"", ""kind"": ""load"", ""packet"": 6, ""rank"": 2, ""answer"": ""STORM"", ""reported"": true, ""response"": ""STORM"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}, {""name"": ""PLATYPUS"", ""kind"": ""load"", ""packet"": 10, ""rank"": 3, ""answer"": ""BROWN"", ""reported"": true, ""response"": ""BROWN"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}, {""name"": ""INKWELL"", ""kind"": ""load"", ""packet"": 11, ""rank"": 4, ""answer"": ""LAKE"", ""reported"": true, ""response"": ""LAKE"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}, {""name"": ""KAYAK"", ""kind"": ""load"", ""packet"": 14, ""rank"": 5, ""answer"": ""FINCH"", ""reported"": true, ""response"": ""FINCH"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}]",5,2,0.0,,,True,False,,,"A Final_Answers block with exactly one line per task found in the stream, each line in the form:
+- Task CATHEDRAL: ANIMAL
+- Task MARMALADE: VICTOR XRAY ROMEO
+- Task RASPBERRY: HOTEL SIERRA DELTA
+- Task NECTARINE: STORM
+- Task INKWELL: LAKE
+- Task KAYAK: FINCH
+- Task PLATYPUS: BROWN
+- Task INKWELL: LAKE
+- Task KAYAK: FINCH
+- Task PLATYPUS: BROWN
+- Task INKWELL: LAKE
+- Task KAYAK: FINCH
+- Task PLATYPUS: BROWN
+- Task INKWELL: LAKE
+- Task KAYAK: FINCH
+- Task PLATYPUS: BROWN
+- Task INKWELL: LAKE
+- Task KAYAK: FINCH
+- Task PLATYPUS: BROWN
+- Task INKWELL: LAKE
+- Task KAYAK: FINCH
+- Task PLATYPUS: BROWN
+- Task INKWELL: LAKE
+- Task KAYAK: FINCH
+- Task PLATYPUS: BROWN
+- Task INKWELL: LAKE
+- Task KAYAK: FINCH
+- Task PLATYPUS: BROWN
+- Task INKWELL: LAKE
+- Task KAYAK: FINCH
+- Task PLATYPUS: BROWN
+- Task INKWELL: LAKE
+- Task KAYAK: FINCH
+- Task PLATYPUS: BROWN
+- Task INKWELL: LAKE
+- Task KAYAK: FINCH
+- Task PLATYPUS: BROWN
+- Task INKWELL: LAKE
+- Task KAYAK: FINCH
+- Task PLATYPUS: BROWN
+- Task INKWELL: LAKE
+- Task KAYAK: FINCH
+- Task PLATYPUS: BROWN
+- Task INKWELL: LAKE
+- Task KAYAK: FINCH
+- Task PLATYPUS: BROWN
+- Task INKWELL: LAKE
+- Task KAYAK: FINCH
+- Task PLATYPUS: BROWN
+- Task INKWELL: LAKE
+- Task KAYAK: FINCH
+- Task PLATYPUS: BROWN
+- Task INKWELL: LAKE
+- Task KAYAK: FINCH
+- Task PLATYPUS: BROWN
+- Task INKWELL: LAKE
+- Task KAYAK: FINCH
+- Task PLATYPUS: BROWN
+- Task INKWELL: LAKE
+- Task KAYAK: FINCH
+- Task PLATYPUS: BROWN
+- Task INKWELL: LAKE
+- Task KAYAK: FINCH
+- Task PLATYPUS: BROWN
+- Task INKWELL: LAKE
+- Task KAYAK: FINCH
+- Task PLATYPUS: BROWN
+- Task INKWELL: LAKE
+- Task KAYAK: FINCH
+- Task PLATYPUS: BROWN
+- Task INKWELL: LAKE
+- Task KAYAK: FINCH
+- Task PLATYPUS: BROWN
+- Task INKWELL: LAKE
+- Task KAYAK: FINCH
+- Task PLATYPUS: BROWN
+- Task INKWELL: LAKE
+- Task KAYAK: FINCH
+- Task PLATYPUS: BROWN
+- Task INKWELL: LAKE
+- Task KAYAK: FINCH
+- Task PLATYPUS: BROWN
+- Task INKWELL: LAKE
+- Task KAYAK: FINCH
+- Task PLATYPUS: BROWN
+- Task INKWELL: LAKE
+- Task KAYAK: FINCH
+- Task PLATYPUS: BROWN
+- Task INKWELL: LAKE
+- Task KAYAK: FINCH
+- Task PLATYPUS: BROWN
+- Task INKWELL: LAKE
+- Task KAYAK: FINCH
+- Task PLATYPUS: BROWN
+- Task INKWELL: LAKE
+- Task KAYAK: FINCH
+- Task PLATYPUS: BROWN
+- Task INKWELL: LAKE
+- Task KAYAK: FINCH
+- Task PLATYPUS: BROWN
+- Task INKWELL: LAKE
+- Task KAYAK: FINCH
+- Task PLATYPUS: BROWN
+- Task INKWELL: LAKE
+- Task KAYAK: FINCH
+- Task PLATYPUS: BROWN
+"
+5,non-ordered,False,,,,,,trivial,direct,14,5,CENTIPEDE,"[8, 10, 11, 12, 14]",0.0,1024,,1114,3,QUEBEC INDIA OSCAR,-2.3544845581054688,-0.3363549368722098,0.09494242817163467,7,True,True,True,1.0,"[{""name"": ""METRONOME"", ""kind"": ""load"", ""packet"": 8, ""rank"": 1, ""answer"": ""RICE"", ""reported"": true, ""response"": ""RICE"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}, {""name"": ""CATAPULT"", ""kind"": ""load"", ""packet"": 10, ""rank"": 2, ""answer"": ""SPOON"", ""reported"": true, ""response"": ""SPOON"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}, {""name"": ""LANTERN"", ""kind"": ""load"", ""packet"": 11, ""rank"": 3, ""answer"": ""CHERRY"", ""reported"": true, ""response"": ""CHERRY"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}, {""name"": ""DAFFODIL"", ""kind"": ""load"", ""packet"": 12, ""rank"": 4, ""answer"": ""PLATE"", ""reported"": true, ""response"": ""PLATE"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}, {""name"": ""CENTIPEDE"", ""kind"": ""passphrase"", ""packet"": 14, ""rank"": 5, ""answer"": ""QUEBEC INDIA OSCAR"", ""reported"": true, ""response"": ""QUEBEC INDIA OSCAR"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}]",5,0,0.0,,,False,False,,,"A Final_Answers block with exactly one line per task you found in the stream, each line in the form:
+
+- Task METRONOME: RICE
+- Task CATAPULT: SPOON
+- Task LANTERN: CHERRY
+- Task DAFFODIL: PLATE
+- Task CENTIPEDE: QUEBEC INDIA OSCAR
+- Task CENTIPEDE: QUEBEC INDIA OSCAR"
+5,non-ordered,False,,,,,,trivial,direct,4,1,YOGURT,"[4, 5, 8, 9, 15]",0.0,1024,,2114,3,HOTEL GOLF VICTOR,-19.5375919342041,-2.4421989917755127,3.272891735406347e-09,8,True,True,True,1.0,"[{""name"": ""YOGURT"", ""kind"": ""passphrase"", ""packet"": 4, ""rank"": 1, ""answer"": ""HOTEL GOLF VICTOR"", ""reported"": true, ""response"": ""HOTEL GOLF VICTOR"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}, {""name"": ""EGGPLANT"", ""kind"": ""load"", ""packet"": 5, ""rank"": 2, ""answer"": ""BEAR"", ""reported"": true, ""response"": ""BEAR"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}, {""name"": ""PISTACHIO"", ""kind"": ""load"", ""packet"": 8, ""rank"": 3, ""answer"": ""MAROON"", ""reported"": true, ""response"": ""MAROON"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}, {""name"": ""QUARRY"", ""kind"": ""load"", ""packet"": 9, ""rank"": 4, ""answer"": ""VIOLET"", ""reported"": true, ""response"": ""VIOLET"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}, {""name"": ""TROMBONE"", ""kind"": ""load"", ""packet"": 15, ""rank"": 5, ""answer"": ""DUCK"", ""reported"": true, ""response"": ""DUCK"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}]",5,0,0.0,,,False,False,,,"A Final_Answers block with exactly one line per task found in the stream, each line in the form:
+- Task YOGURT: HOTEL GOLF VICTOR
+- Task EGGPLANT: BEAR
+- Task PISTACHIO: MAROON
+- Task QUARRY: VIOLET
+- Task TROMBONE: DUCK"
+5,non-ordered,False,,,,,,trivial,direct,11,4,SAXOPHONE,"[5, 7, 8, 11, 13]",0.0,1024,,3114,3,HOTEL INDIA ROMEO,-19.243301391601562,-2.7490430559430803,4.392789687557297e-09,7,True,True,True,1.0,"[{""name"": ""PARSNIP"", ""kind"": ""load"", ""packet"": 5, ""rank"": 1, ""answer"": ""CAT"", ""reported"": true, ""response"": ""CAT"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}, {""name"": ""PELICAN"", ""kind"": ""load"", ""packet"": 7, ""rank"": 2, ""answer"": ""ONION"", ""reported"": true, ""response"": ""ONION"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}, {""name"": ""DUMPLING"", ""kind"": ""load"", ""packet"": 8, ""rank"": 3, ""answer"": ""GRAPE"", ""reported"": true, ""response"": ""GRAPE"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}, {""name"": ""SAXOPHONE"", ""kind"": ""passphrase"", ""packet"": 11, ""rank"": 4, ""answer"": ""HOTEL INDIA ROMEO"", ""reported"": true, ""response"": ""HOTEL INDIA ROMEO"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}, {""name"": ""DAFFODIL"", ""kind"": ""load"", ""packet"": 13, ""rank"": 5, ""answer"": ""WALL"", ""reported"": true, ""response"": ""WALL"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}]",5,0,0.0,,,False,False,,,"A Final_Answers block with exactly one line per task you found in the stream, each line in the form:
+- Task SAXOPHONE: HOTEL INDIA ROMEO
+- Task DAFFODIL: WALL
+- Task PARSNIP: CAT
+- Task PELICAN: ONION
+- Task DUMPLING: GRAPE
+- Task SAXOPHONE: HOTEL INDIA ROMEO
+- Task DAFFODIL: WALL
+- Task PARSNIP: CAT
+- Task PELICAN: ONION
+- Task DUMPLING: GRAPE
+- Task SAXOPHONE: HOTEL INDIA ROMEO
+- Task DAFFODIL: WALL
+- Task PARSNIP: CAT
+- Task PELICAN: ONION
+- Task DUMPLING: GRAPE"
+5,non-ordered,False,,,,,,trivial,direct,9,4,HAMMOCK,"[1, 2, 4, 9, 15]",0.0,1024,,4114,3,ALPHA XRAY WHISKEY,-9.762155532836914,-1.3945936475481306,5.759035047958605e-05,7,False,False,False,1.0,"[{""name"": ""UNICYCLE"", ""kind"": ""load"", ""packet"": 1, ""rank"": 1, ""answer"": ""WOLF"", ""reported"": true, ""response"": ""WOLF"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}, {""name"": ""KUMQUAT"", ""kind"": ""load"", ""packet"": 2, ""rank"": 2, ""answer"": ""CRAB"", ""reported"": true, ""response"": ""CRAB"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}, {""name"": ""GONDOLA"", ""kind"": ""load"", ""packet"": 4, ""rank"": 3, ""answer"": ""LAMP"", ""reported"": true, ""response"": ""LAMP"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}, {""name"": ""HAMMOCK"", ""kind"": ""passphrase"", ""packet"": 9, ""rank"": 4, ""answer"": ""ALPHA XRAY WHISKEY"", ""reported"": true, ""response"": ""ALPHAXRAYWHISKEY"", ""correct"": false, ""correct_lenient"": false, ""answer_migrated"": false}, {""name"": ""WATERMELON"", ""kind"": ""load"", ""packet"": 15, ""rank"": 5, ""answer"": ""CARROT"", ""reported"": true, ""response"": ""CARROT"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}]",5,0,0.0,,,False,False,,,"A <Final_Answers>  
+- Task UNICYCLE: WOLF
+- Task KUMQUAT: CRAB
+- Task GONDOLA: LAMP
+- Task HAMMOCK: ALPHAXRAYWHISKEY
+- Task WATERMELON: CARROT"
+5,non-ordered,False,,,,,,trivial,direct,4,1,JIGSAW,"[4, 10, 11, 12, 14]",0.0,1024,,5114,3,GOLF QUEBEC OSCAR,-21.687034606933594,-3.0981478009905135,3.814525639800337e-10,7,True,True,True,1.0,"[{""name"": ""JIGSAW"", ""kind"": ""passphrase"", ""packet"": 4, ""rank"": 1, ""answer"": ""GOLF QUEBEC OSCAR"", ""reported"": true, ""response"": ""GOLF QUEBEC OSCAR"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}, {""name"": ""ORIGAMI"", ""kind"": ""load"", ""packet"": 10, ""rank"": 2, ""answer"": ""SEAL"", ""reported"": true, ""response"": ""SEAL"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}, {""name"": ""QUICKSAND"", ""kind"": ""load"", ""packet"": 11, ""rank"": 3, ""answer"": ""TABLE"", ""reported"": true, ""response"": ""TABLE"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}, {""name"": ""BLIZZARD"", ""kind"": ""load"", ""packet"": 12, ""rank"": 4, ""answer"": ""BLUE"", ""reported"": true, ""response"": ""BLUE"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}, {""name"": ""BAGPIPE"", ""kind"": ""load"", ""packet"": 14, ""rank"": 5, ""answer"": ""BLACK"", ""reported"": true, ""response"": ""BLACK"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}]",5,0,0.0,,,False,False,,,"A Final_Answers block with exactly one line per task you found in the stream, each line in the form:
+
+- Task JIGSAW: GOLF QUEBEC OSCAR
+- Task QUICKSAND: TABLE
+- Task BLIZZARD: BLUE
+- Task BAGPIPE: BLACK
+- Task ORIGAMI: SEAL"
+5,non-ordered,False,,,,,,trivial,direct,14,5,ZIGZAG,"[7, 9, 11, 12, 14]",0.0,1024,,6114,3,CHARLIE SIERRA ECHO,-4.398468971252441,-0.5498086214065552,0.012296151369810104,8,True,True,True,1.0,"[{""name"": ""JIGSAW"", ""kind"": ""load"", ""packet"": 7, ""rank"": 1, ""answer"": ""CRAB"", ""reported"": true, ""response"": ""CRAB"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}, {""name"": ""ZEPPELIN"", ""kind"": ""load"", ""packet"": 9, ""rank"": 2, ""answer"": ""LEMON"", ""reported"": true, ""response"": ""LEMON"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}, {""name"": ""CACTUS"", ""kind"": ""load"", ""packet"": 11, ""rank"": 3, ""answer"": ""MAROON"", ""reported"": true, ""response"": ""MAROON"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}, {""name"": ""HARMONICA"", ""kind"": ""load"", ""packet"": 12, ""rank"": 4, ""answer"": ""STONE"", ""reported"": true, ""response"": ""STONE"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}, {""name"": ""ZIGZAG"", ""kind"": ""passphrase"", ""packet"": 14, ""rank"": 5, ""answer"": ""CHARLIE SIERRA ECHO"", ""reported"": true, ""response"": ""CHARLIE SIERRA ECHO"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}]",5,0,0.0,,,False,False,,,"A Final_Answers block with exactly one line per task you found in the stream, each line in the form:
+- Task JIGSAW: CRAB
+- Task ZEPPELIN: LEMON
+- Task CACTUS: MAROON
+- Task HARMONICA: STONE
+- Task ZIGZAG: CHARLIE SIERRA ECHO"
+5,non-ordered,False,,,,,,trivial,direct,3,2,UKULELE,"[2, 3, 6, 13, 15]",0.0,1024,,7114,3,HOTEL PAPA FOXTROT,-21.909931182861328,-2.738741397857666,3.0523741867405363e-10,8,True,True,True,1.0,"[{""name"": ""DAFFODIL"", ""kind"": ""load"", ""packet"": 2, ""rank"": 1, ""answer"": ""GARLIC"", ""reported"": true, ""response"": ""GARLIC"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}, {""name"": ""UKULELE"", ""kind"": ""passphrase"", ""packet"": 3, ""rank"": 2, ""answer"": ""HOTEL PAPA FOXTROT"", ""reported"": true, ""response"": ""HOTEL PAPA FOXTROT"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}, {""name"": ""VOLCANO"", ""kind"": ""load"", ""packet"": 6, ""rank"": 3, ""answer"": ""CYAN"", ""reported"": true, ""response"": ""CYAN"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}, {""name"": ""VINEYARD"", ""kind"": ""load"", ""packet"": 13, ""rank"": 4, ""answer"": ""OWL"", ""reported"": true, ""response"": ""OWL"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}, {""name"": ""RAVIOLI"", ""kind"": ""load"", ""packet"": 15, ""rank"": 5, ""answer"": ""WHITE"", ""reported"": true, ""response"": ""WHITE"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}]",5,0,0.0,,,False,False,,,"A <Final_Answers>  
+- Task DAFFODIL: GARLIC  
+- Task UKULELE: HOTEL PAPA FOXTROT  
+- Task VOLCANO: CYAN  
+- Task VINEYARD: OWL  
+- Task RAVIOLI: WHITE"
+5,non-ordered,False,,,,,,trivial,direct,4,2,WOMBAT,"[1, 4, 6, 7, 12]",0.0,1024,,8114,3,MIKE ECHO YANKEE,-9.260375022888184,-1.157546877861023,9.511964890407398e-05,8,True,True,True,0.75,"[{""name"": ""CARNIVAL"", ""kind"": ""load"", ""packet"": 1, ""rank"": 1, ""answer"": ""GOLD"", ""reported"": true, ""response"": ""TRIVIAL"", ""correct"": false, ""correct_lenient"": false, ""answer_migrated"": false}, {""name"": ""WOMBAT"", ""kind"": ""passphrase"", ""packet"": 4, ""rank"": 2, ""answer"": ""MIKE ECHO YANKEE"", ""reported"": true, ""response"": ""MIKE ECHO YANKEE"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}, {""name"": ""FERRET"", ""kind"": ""load"", ""packet"": 6, ""rank"": 3, ""answer"": ""GREEN"", ""reported"": true, ""response"": ""GREEN"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}, {""name"": ""PYRAMID"", ""kind"": ""load"", ""packet"": 7, ""rank"": 4, ""answer"": ""BLUE"", ""reported"": true, ""response"": ""BLUE"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}, {""name"": ""TAPESTRY"", ""kind"": ""load"", ""packet"": 12, ""rank"": 5, ""answer"": ""BEAR"", ""reported"": true, ""response"": ""BEAR"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}]",5,0,0.0,,,False,False,,,"A Final_Answers block with exactly one line per task you found in the stream, each line in the form:
+- Task CARNIVAL: TRIVIAL
+- Task WOMBAT: MIKE ECHO YANKEE
+- Task FERRET: GREEN
+- Task TAPESTRY: BEAR
+- Task PYRAMID: BLUE
+- Task CARNIVAL: TRIVIAL
+- Task WOMBAT: MIKE ECHO YANKEE
+- Task FERRET: GREEN
+- Task TAPESTRY: BEAR
+- Task PYRAMID: BLUE
+- Task CARNIVAL: TRIVIAL
+- Task WOMBAT: MIKE ECHO YANKEE
+- Task FERRET: GREEN
+- Task TAPESTRY: BEAR
+- Task PYRAMID: BLUE"
+5,non-ordered,False,,,,,,trivial,direct,11,3,MONGOOSE,"[2, 7, 11, 12, 15]",0.0,1024,,9114,3,UNIFORM SIERRA KILO,-10.356447219848633,-1.294555902481079,3.178718907292932e-05,8,True,True,True,1.0,"[{""name"": ""JASMINE"", ""kind"": ""load"", ""packet"": 2, ""rank"": 1, ""answer"": ""CHAIR"", ""reported"": true, ""response"": ""CHAIR"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}, {""name"": ""TULIP"", ""kind"": ""load"", ""packet"": 7, ""rank"": 2, ""answer"": ""BROWN"", ""reported"": true, ""response"": ""BROWN"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}, {""name"": ""MONGOOSE"", ""kind"": ""passphrase"", ""packet"": 11, ""rank"": 3, ""answer"": ""UNIFORM SIERRA KILO"", ""reported"": true, ""response"": ""UNIFORM SIERRA KILO"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}, {""name"": ""ORCHID"", ""kind"": ""load"", ""packet"": 12, ""rank"": 4, ""answer"": ""LAMP"", ""reported"": true, ""response"": ""LAMP"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}, {""name"": ""XYLOPHONE"", ""kind"": ""load"", ""packet"": 15, ""rank"": 5, ""answer"": ""STORM"", ""reported"": true, ""response"": ""STORM"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}]",5,0,0.0,,,False,False,,,"A <Final_Answers>  
+- Task JASMINE: CHAIR
+- Task TULIP: BROWN
+- Task MONGOOSE: UNIFORM SIERRA KILO
+- Task ORCHID: LAMP
+- Task XYLOPHONE: STORM"
+5,non-ordered,False,,,,,,semantic_2,direct,5,1,EMERALD,"[5, 8, 10, 11, 13]",0.0,1024,,135,3,VICTOR LIMA UNIFORM,-17.651193618774414,-2.521599088396345,2.1586588516697702e-08,7,True,True,True,0.75,"[{""name"": ""EMERALD"", ""kind"": ""passphrase"", ""packet"": 5, ""rank"": 1, ""answer"": ""VICTOR LIMA UNIFORM"", ""reported"": true, ""response"": ""VICTOR LIMA UNIFORM"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}, {""name"": ""JIGSAW"", ""kind"": ""load"", ""packet"": 8, ""rank"": 2, ""answer"": ""INVALID"", ""reported"": true, ""response"": ""INVALID"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}, {""name"": ""PYRAMID"", ""kind"": ""load"", ""packet"": 10, ""rank"": 3, ""answer"": ""INVALID"", ""reported"": true, ""response"": ""INVALID"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}, {""name"": ""WALNUT"", ""kind"": ""load"", ""packet"": 11, ""rank"": 4, ""answer"": ""INVALID"", ""reported"": true, ""response"": ""INVALID"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}, {""name"": ""RASPBERRY"", ""kind"": ""load"", ""packet"": 13, ""rank"": 5, ""answer"": ""VALID"", ""reported"": true, ""response"": ""INVALID"", ""correct"": false, ""correct_lenient"": false, ""answer_migrated"": true}]",5,3,0.2,,,False,False,,,"A Final_Answers block with EXACTLY one line per task you found in the stream, each line in the form:
+- Task CATHEDRAL: ANIMAL
+- Task MARMALADE: VICTOR XRAY ROMEO
+- Task EMERALD: VICTOR LIMA UNIFORM
+- Task JIGSAW: INVALID
+- Task PYRAMID: INVALID
+- Task WALNUT: INVALID
+- Task RASPBERRY: INVALID
+- Task DEPLOYMENT: SUCCESS
+- Task AUDIT_EVENT: SUCCESS"
+5,non-ordered,False,,,,,,semantic_2,direct,10,4,GONDOLA,"[4, 5, 9, 10, 15]",0.0,1024,,1135,3,ROMEO OSCAR ECHO,-2.7757744789123535,-0.4626290798187256,0.06230120733380318,6,True,True,True,0.0,"[{""name"": ""OBELISK"", ""kind"": ""load"", ""packet"": 4, ""rank"": 1, ""answer"": ""VALID"", ""reported"": true, ""response"": ""INVALID"", ""correct"": false, ""correct_lenient"": false, ""answer_migrated"": false}, {""name"": ""METRONOME"", ""kind"": ""load"", ""packet"": 5, ""rank"": 2, ""answer"": ""VALID"", ""reported"": true, ""response"": ""INVALID"", ""correct"": false, ""correct_lenient"": false, ""answer_migrated"": false}, {""name"": ""PYRAMID"", ""kind"": ""load"", ""packet"": 9, ""rank"": 3, ""answer"": ""YES"", ""reported"": true, ""response"": ""NO"", ""correct"": false, ""correct_lenient"": false, ""answer_migrated"": false}, {""name"": ""GONDOLA"", ""kind"": ""passphrase"", ""packet"": 10, ""rank"": 4, ""answer"": ""ROMEO OSCAR ECHO"", ""reported"": true, ""response"": ""ROMEO OSCAR ECHO"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}, {""name"": ""VOLCANO"", ""kind"": ""load"", ""packet"": 15, ""rank"": 5, ""answer"": ""VALID"", ""reported"": true, ""response"": ""INVALID"", ""correct"": false, ""correct_lenient"": false, ""answer_migrated"": false}]",5,2,0.0,,,False,False,,,"A Final_Answers block with EXACTLY one line per task you found in the stream, each line in the form:
+- Task CATHEDRAL: INVALID
+- Task MARMALADE: VICTOR XRAY ROMEO
+- Task OBELISK: INVALID
+- Task METRONOME: INVALID
+- Task PYRAMID: NO
+- Task GONDOLA: ROMEO OSCAR ECHO
+- Task VOLCANO: INVALID"
+5,non-ordered,False,,,,,,semantic_2,direct,13,3,GARGOYLE,"[3, 10, 13, 14, 15]",0.0,1024,,2135,3,TANGO ALPHA YANKEE,-21.23264503479004,-3.0332350049700056,6.008684660940844e-10,7,True,True,True,1.0,"[{""name"": ""SCARECROW"", ""kind"": ""load"", ""packet"": 3, ""rank"": 1, ""answer"": ""NO"", ""reported"": true, ""response"": ""NO"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}, {""name"": ""KETTLE"", ""kind"": ""load"", ""packet"": 10, ""rank"": 2, ""answer"": ""NO"", ""reported"": true, ""response"": ""NO"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}, {""name"": ""GARGOYLE"", ""kind"": ""passphrase"", ""packet"": 13, ""rank"": 3, ""answer"": ""TANGO ALPHA YANKEE"", ""reported"": true, ""response"": ""TANGO ALPHA YANKEE"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}, {""name"": ""HEDGEHOG"", ""kind"": ""load"", ""packet"": 14, ""rank"": 4, ""answer"": ""YES"", ""reported"": true, ""response"": ""YES"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}, {""name"": ""QUILT"", ""kind"": ""load"", ""packet"": 15, ""rank"": 5, ""answer"": ""INVALID"", ""reported"": true, ""response"": ""INVALID"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}]",5,0,0.0,,,False,False,,,"A <Final_Answers>  
+- Task SCARECROW: NO
+- Task KETTLE: NO
+- Task GARGOYLE: TANGO ALPHA YANKEE
+- Task HEDGEHOG: YES
+- Task QUILT: INVALID"
+5,non-ordered,False,,,,,,semantic_2,direct,10,4,PLATYPUS,"[7, 8, 9, 10, 15]",0.0,1024,,3135,3,NOVEMBER SIERRA ROMEO,-10.583772659301758,-1.3229715824127197,2.5323628506157547e-05,8,True,True,True,0.75,"[{""name"": ""OBELISK"", ""kind"": ""load"", ""packet"": 7, ""rank"": 1, ""answer"": ""INVALID"", ""reported"": true, ""response"": ""INVALID"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}, {""name"": ""WALNUT"", ""kind"": ""load"", ""packet"": 8, ""rank"": 2, ""answer"": ""INVALID"", ""reported"": true, ""response"": ""INVALID"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}, {""name"": ""CACTUS"", ""kind"": ""load"", ""packet"": 9, ""rank"": 3, ""answer"": ""VALID"", ""reported"": true, ""response"": ""INVALID"", ""correct"": false, ""correct_lenient"": false, ""answer_migrated"": true}, {""name"": ""PLATYPUS"", ""kind"": ""passphrase"", ""packet"": 10, ""rank"": 4, ""answer"": ""NOVEMBER SIERRA ROMEO"", ""reported"": true, ""response"": ""NOVEMBER SIERRA ROMEO"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}, {""name"": ""HAMMOCK"", ""kind"": ""load"", ""packet"": 15, ""rank"": 5, ""answer"": ""YES"", ""reported"": true, ""response"": ""YES"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}]",5,0,0.2,,,False,False,,,"A <Final_Answers>  
+- Task OBELISK: INVALID
+- Task WALNUT: INVALID
+- Task CACTUS: INVALID
+- Task PLATYPUS: NOVEMBER SIERRA ROMEO
+- Task HAMMOCK: YES"
+5,non-ordered,False,,,,,,semantic_2,direct,8,4,URCHIN,"[1, 3, 6, 8, 11]",0.0,1024,,4135,3,INDIA WHISKEY VICTOR,-10.175506591796875,-1.2719383239746094,3.8091988244559616e-05,8,False,False,True,0.75,"[{""name"": ""QUILT"", ""kind"": ""load"", ""packet"": 1, ""rank"": 1, ""answer"": ""INVALID"", ""reported"": true, ""response"": ""INVALID"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}, {""name"": ""VOLCANO"", ""kind"": ""load"", ""packet"": 3, ""rank"": 2, ""answer"": ""INVALID"", ""reported"": true, ""response"": ""INVALID"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}, {""name"": ""TROMBONE"", ""kind"": ""load"", ""packet"": 6, ""rank"": 3, ""answer"": ""VALID"", ""reported"": true, ""response"": ""INVALID"", ""correct"": false, ""correct_lenient"": false, ""answer_migrated"": true}, {""name"": ""URCHIN"", ""kind"": ""passphrase"", ""packet"": 8, ""rank"": 4, ""answer"": ""INDIA WHISKEY VICTOR"", ""reported"": true, ""response"": ""NO"", ""correct"": false, ""correct_lenient"": false, ""answer_migrated"": true}, {""name"": ""ORIGAMI"", ""kind"": ""load"", ""packet"": 11, ""rank"": 5, ""answer"": ""NO"", ""reported"": true, ""response"": ""NO"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}]",5,1,0.4,,,False,False,,,"A <Final_Answers>
+- Task QUILT: INVALID
+- Task VOLCANO: INVALID
+- Task TROMBONE: INVALID
+- Task URCHEL: INDIA WHISKEY VICTOR
+- Task ORIGAMI: NO
+- Task URCHIN: NO
+</Final_Answers>"
+5,non-ordered,False,,,,,,semantic_2,direct,5,4,TAPESTRY,"[1, 2, 3, 5, 13]",0.0,1024,,5135,3,INDIA HOTEL QUEBEC,-3.5789647102355957,-0.5112806728907994,0.0279045719653368,7,True,True,True,0.25,"[{""name"": ""FLAMINGO"", ""kind"": ""load"", ""packet"": 1, ""rank"": 1, ""answer"": ""INVALID"", ""reported"": true, ""response"": ""INVALID"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}, {""name"": ""DANDELION"", ""kind"": ""load"", ""packet"": 2, ""rank"": 2, ""answer"": ""YES"", ""reported"": true, ""response"": ""NO"", ""correct"": false, ""correct_lenient"": false, ""answer_migrated"": false}, {""name"": ""YOGURT"", ""kind"": ""load"", ""packet"": 3, ""rank"": 3, ""answer"": ""VALID"", ""reported"": true, ""response"": ""INVALID"", ""correct"": false, ""correct_lenient"": false, ""answer_migrated"": true}, {""name"": ""TAPESTRY"", ""kind"": ""passphrase"", ""packet"": 5, ""rank"": 4, ""answer"": ""INDIA HOTEL QUEBEC"", ""reported"": true, ""response"": ""INDIA HOTEL QUEBEC"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}, {""name"": ""WALNUT"", ""kind"": ""load"", ""packet"": 13, ""rank"": 5, ""answer"": ""INVALID"", ""reported"": true, ""response"": ""VALID"", ""correct"": false, ""correct_lenient"": false, ""answer_migrated"": true}]",5,0,0.4,,,False,False,,,"A <Final_Answers>  
+- Task FLAMINGO: INVALID
+- Task DANDELION: NO
+- Task YOGURT: INVALID
+- Task TAPESTRY: INDIA HOTEL QUEBEC
+- Task WALNUT: VALID
+- Task WALNUT: INVALID"
+5,non-ordered,False,,,,,,semantic_2,direct,8,2,OBELISK,"[2, 8, 10, 14, 15]",0.0,1024,,6135,3,ALPHA CHARLIE BRAVO,-11.477400779724121,-1.6396286828177316,1.0361632121203002e-05,7,False,False,False,0.75,"[{""name"": ""MONGOOSE"", ""kind"": ""load"", ""packet"": 2, ""rank"": 1, ""answer"": ""NO"", ""reported"": true, ""response"": ""NO"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}, {""name"": ""OBELISK"", ""kind"": ""passphrase"", ""packet"": 8, ""rank"": 2, ""answer"": ""ALPHA CHARLIE BRAVO"", ""reported"": true, ""response"": ""ALPHACHARLIEBRAVO"", ""correct"": false, ""correct_lenient"": false, ""answer_migrated"": false}, {""name"": ""XYLOPHONE"", ""kind"": ""load"", ""packet"": 10, ""rank"": 3, ""answer"": ""INVALID"", ""reported"": true, ""response"": ""INVALID"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}, {""name"": ""KAYAK"", ""kind"": ""load"", ""packet"": 14, ""rank"": 4, ""answer"": ""INVALID"", ""reported"": true, ""response"": ""INVALID"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}, {""name"": ""PORCUPINE"", ""kind"": ""load"", ""packet"": 15, ""rank"": 5, ""answer"": ""VALID"", ""reported"": true, ""response"": ""INVALID"", ""correct"": false, ""correct_lenient"": false, ""answer_migrated"": true}]",5,0,0.2,,,False,False,,,"A <Final_Answers>  
+- Task MONGOOSE: NO
+- Task OBELISK: ALPHACHARLIEBRAVO
+- Task XYLOPHONE: INVALID
+- Task KAYAK: INVALID
+- Task PORCUPINE: INVALID"
+5,non-ordered,False,,,,,,semantic_2,direct,8,4,METRONOME,"[1, 5, 7, 8, 11]",0.0,1024,,7135,3,XRAY KILO FOXTROT,-17.379392623901367,-2.172424077987671,2.832863721380363e-08,8,True,True,True,1.0,"[{""name"": ""MARBLE"", ""kind"": ""load"", ""packet"": 1, ""rank"": 1, ""answer"": ""INVALID"", ""reported"": true, ""response"": ""INVALID"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}, {""name"": ""VOLCANO"", ""kind"": ""load"", ""packet"": 5, ""rank"": 2, ""answer"": ""INVALID"", ""reported"": true, ""response"": ""INVALID"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}, {""name"": ""KAYAK"", ""kind"": ""load"", ""packet"": 7, ""rank"": 3, ""answer"": ""INVALID"", ""reported"": true, ""response"": ""INVALID"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}, {""name"": ""METRONOME"", ""kind"": ""passphrase"", ""packet"": 8, ""rank"": 4, ""answer"": ""XRAY KILO FOXTROT"", ""reported"": true, ""response"": ""XRAY KILO FOXTROT"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}, {""name"": ""JIGSAW"", ""kind"": ""load"", ""packet"": 11, ""rank"": 5, ""answer"": ""NO"", ""reported"": true, ""response"": ""NO"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}]",5,0,0.0,,,False,False,,,"A <Final_Answers>  
+- Task MARBLE: INVALID
+- Task VOLCANO: INVALID
+- Task KAYAK: INVALID
+- Task METRONOME: XRAY KILO FOXTROT
+- Task JIGSAW: NO
+- Task SECRET_SECRETS_ENV: SUCCESS
+- Task NETWORK_LATENCY: 14 ms
+- Task LEADER_ELECTION: SUCCESS
+- Task THERMAL_SENSOR: NOMINAL"
+5,non-ordered,False,,,,,,semantic_2,direct,2,1,VULTURE,"[2, 5, 6, 8, 15]",0.0,1024,,8135,3,UNIFORM QUEBEC PAPA,-8.567560195922852,-1.2239371708461217,0.0001901760697364807,7,True,True,True,0.75,"[{""name"": ""VULTURE"", ""kind"": ""passphrase"", ""packet"": 2, ""rank"": 1, ""answer"": ""UNIFORM QUEBEC PAPA"", ""reported"": true, ""response"": ""UNIFORM QUEBEC PAPA"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}, {""name"": ""NARWHAL"", ""kind"": ""load"", ""packet"": 5, ""rank"": 2, ""answer"": ""NO"", ""reported"": true, ""response"": ""NO"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}, {""name"": ""FLAMINGO"", ""kind"": ""load"", ""packet"": 6, ""rank"": 3, ""answer"": ""VALID"", ""reported"": true, ""response"": ""INVALID"", ""correct"": false, ""correct_lenient"": false, ""answer_migrated"": false}, {""name"": ""QUIVER"", ""kind"": ""load"", ""packet"": 8, ""rank"": 4, ""answer"": ""NO"", ""reported"": true, ""response"": ""NO"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}, {""name"": ""ICEBERG"", ""kind"": ""load"", ""packet"": 15, ""rank"": 5, ""answer"": ""VALID"", ""reported"": true, ""response"": ""VALID"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}]",5,0,0.0,,,False,False,,,"A <Final_Answers>  
+- Task VULTURE: UNIFORM QUEBEC PAPA
+- Task NARWHAL: NO
+- Task FLAMINGO: INVALID
+- Task QUIVER: NO
+- Task ICEBERG: VALID"
+5,non-ordered,False,,,,,,semantic_2,direct,11,5,HARMONICA,"[2, 3, 6, 9, 11]",0.0,1024,,9135,3,LIMA QUEBEC FOXTROT,-14.931682586669922,-1.8664603233337402,3.2753118262007774e-07,8,True,True,True,0.5,"[{""name"": ""ROOSTER"", ""kind"": ""load"", ""packet"": 2, ""rank"": 1, ""answer"": ""INVALID"", ""reported"": true, ""response"": ""INVALID"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}, {""name"": ""YACHT"", ""kind"": ""load"", ""packet"": 3, ""rank"": 2, ""answer"": ""INVALID"", ""reported"": true, ""response"": ""INVALID"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}, {""name"": ""SNORKEL"", ""kind"": ""load"", ""packet"": 6, ""rank"": 3, ""answer"": ""VALID"", ""reported"": true, ""response"": ""INVALID"", ""correct"": false, ""correct_lenient"": false, ""answer_migrated"": true}, {""name"": ""SUNDIAL"", ""kind"": ""load"", ""packet"": 9, ""rank"": 4, ""answer"": ""YES"", ""reported"": true, ""response"": ""NO"", ""correct"": false, ""correct_lenient"": false, ""answer_migrated"": false}, {""name"": ""HARMONICA"", ""kind"": ""passphrase"", ""packet"": 11, ""rank"": 5, ""answer"": ""LIMA QUEBEC FOXTROT"", ""reported"": true, ""response"": ""LIMA QUEBEC FOXTROT"", ""correct"": true, ""correct_lenient"": true, ""answer_migrated"": false}]",5,0,0.2,,,False,False,,,"A <Final_Answers>  
+- Task ROOSTER: INVALID
+- Task YACHT: INVALID
+- Task SNORKEL: INVALID
+- Task SUNDIAL: NO
+- Task HARMONICA: LIMA QUEBEC FOXTROT
+- Task FAN_CONTROLLER: YES"

@@ -11,8 +11,13 @@ the budget: consolidation time is the only thing rationed. This turns the
 Semantics
 ---------
 finite_budget=None -> one generation pass, exactly the legacy behavior.
-finite_budget=0    -> forced-empty <Thinking> (no stage-1 generation at all);
-                      bridges toward the 'direct' regime / encoding baseline.
+finite_budget=0    -> REMOVED (2026-07-21, Thomas): the zero point of the
+                      budget axis IS the direct regime. A forced-empty
+                      '<Thinking>\n</Thinking>' is an ambiguous stimulus (the
+                      template announces reasoning that never happens) and may
+                      confuse the model for no reason — use regime='direct'
+                      for the no-consolidation condition instead. Passing 0
+                      raises ValueError.
 finite_budget=n>0  -> stage 1: continue from '<Thinking>\\n' with
                       max_new_tokens=n, stopping at '</Thinking>'. If the stop
                       never fires, the block is force-closed
@@ -67,31 +72,32 @@ def generate_trajectory(model, tok, trial, finite_budget: int | None = None,
             stop_at=STOP_ANSWERS, return_truncated=True)
         return Trajectory(out, truncated, None, None, None)
 
-    if not 0 <= finite_budget <= MAX_FINITE_BUDGET:
+    if finite_budget == 0:
         raise ValueError(
-            f"finite_budget={finite_budget} out of range [0, {MAX_FINITE_BUDGET}]")
+            "finite_budget=0 was removed (2026-07-21): an empty forced "
+            "'<Thinking></Thinking>' is an ambiguous stimulus. The zero point "
+            "of the budget axis is regime='direct' — use that instead.")
+    if not 0 < finite_budget <= MAX_FINITE_BUDGET:
+        raise ValueError(
+            f"finite_budget={finite_budget} out of range (0, {MAX_FINITE_BUDGET}]")
     if not trial.forced_close_text:
         raise ValueError(
             "trial.forced_close_text is empty: cannot force-close a capped "
             "<Thinking> block (was the trial built for regime='cot'?)")
 
     # -- stage 1: the rationed <Thinking> span -------------------------------
-    if finite_budget == 0:
-        prefix = THINKING_OPEN + trial.forced_close_text
-        used, forced = 0, True
-    else:
-        cot_text, used, _s1_trunc = continue_generate(
-            model, tok, trial.system, trial.user,
-            prefilled_assistant=THINKING_OPEN,
-            max_new_tokens=finite_budget, temperature=temperature,
-            stop_at=STOP_THINKING)
-        if STOP_THINKING in cot_text:
-            forced = False
-            prefix = THINKING_OPEN + cot_text
-        else:                          # cap hit mid-thought: that's the manipulation
-            forced = True
-            sep = "" if (cot_text == "" or cot_text.endswith("\n")) else "\n"
-            prefix = THINKING_OPEN + cot_text + sep + trial.forced_close_text
+    cot_text, used, _s1_trunc = continue_generate(
+        model, tok, trial.system, trial.user,
+        prefilled_assistant=THINKING_OPEN,
+        max_new_tokens=finite_budget, temperature=temperature,
+        stop_at=STOP_THINKING)
+    if STOP_THINKING in cot_text:
+        forced = False
+        prefix = THINKING_OPEN + cot_text
+    else:                              # cap hit mid-thought: that's the manipulation
+        forced = True
+        sep = "" if (cot_text == "" or cot_text.endswith("\n")) else "\n"
+        prefix = THINKING_OPEN + cot_text + sep + trial.forced_close_text
 
     # -- stage 2: answers, never rationed ------------------------------------
     ans_text, _n2, s2_trunc = continue_generate(

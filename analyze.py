@@ -6,14 +6,97 @@ Combined-design figures: read-out vs n_tasks (lines per finite_budget) and
 vs finite_budget (lines per n_tasks) — pass ``x`` / ``by`` accordingly.
 """
 from __future__ import annotations
+import json
+
 import pandas as pd
 import matplotlib.pyplot as plt
+
+from .readout import (answer_contains, normalize_answer,
+                      parse_task_report_names, task_rows, cot_enumeration_stats)
+
+
+def backfill_readout_columns(df: pd.DataFrame) -> pd.DataFrame:
+    """RE-PARSE the free report of an old CSV with the current tolerant
+    parser (no GPU needed) and recompute every parser-derived column.
+
+    2026-07-21: the original parser missed answers not in ``- Task NAME: ...``
+    form (e.g. quoted list items inside a ```python code fence, the Qwen0.5B
+    direct-regime habit) — 17/20 direct+trivial trials of the second HAB pilot
+    were logged as 0 tasks reported. This backfill re-runs
+    ``parse_task_report_names`` on ``raw_output`` using the task names stored
+    in the ``tasks`` JSON, then recomputes, for task-design rows:
+    ``tasks`` (rebuilt rows incl. ``correct_lenient`` / ``answer_migrated``),
+    ``report_correct``, ``report_contains``, ``n_tasks_reported``,
+    ``n_hallucinated_tasks``, ``answer_migration``, ``t1_correct`` (fraction
+    of load tasks answered exactly), and ``phrase_anywhere`` (all rows).
+    2026-07-22: also recomputes the anti-enumeration compliance columns
+    (``n_packets_in_cot``, ``n_filler_packets_in_cot``,
+    ``enumerated_fillers_in_cot``) on task-design cot rows — retroactive on
+    CSVs predating idea I1. Legacy rows (no tasks JSON) only get
+    ``phrase_anywhere``.
+
+    NOT recomputed (needs the model): ``t2_*`` log-probs and
+    ``t2_slot_missing`` — the graded columns still reflect the slot found at
+    run time. Returns a modified COPY.
+    """
+    df = df.copy()
+    out_cols = {c: [] for c in (
+        "tasks", "report_correct", "report_contains", "phrase_anywhere",
+        "n_tasks_reported", "n_hallucinated_tasks", "answer_migration",
+        "t1_correct", "n_packets_in_cot", "n_filler_packets_in_cot",
+        "enumerated_fillers_in_cot")}
+    for _, r in df.iterrows():
+        raw = str(r.get("raw_output") or "")
+        phrase = str(r.get("t2_phrase", "") or "")
+        out_cols["phrase_anywhere"].append(
+            bool(phrase) and phrase.upper() in raw.upper())
+        tj = r.get("tasks")
+        if not isinstance(tj, str) or not tj:            # legacy row
+            for c in ("tasks", "report_correct", "report_contains",
+                      "n_tasks_reported", "n_hallucinated_tasks",
+                      "answer_migration", "t1_correct", "n_packets_in_cot",
+                      "n_filler_packets_in_cot", "enumerated_fillers_in_cot"):
+                out_cols[c].append(r.get(c))
+            continue
+        tasks = json.loads(tj)
+        parsed = parse_task_report_names(raw, (t["name"] for t in tasks))
+        rows = task_rows(tasks, parsed["reported"])
+        pp = next(t for t in rows if t["kind"] == "passphrase")
+        load_rows = [t for t in rows if t["kind"] == "load"]
+        rep_rows = [t for t in rows if t["reported"]]
+        out_cols["tasks"].append(json.dumps(rows))
+        out_cols["report_correct"].append(bool(pp["correct"]))
+        out_cols["report_contains"].append(bool(pp["correct_lenient"]))
+        out_cols["n_tasks_reported"].append(len(parsed["reported"]))
+        out_cols["n_hallucinated_tasks"].append(
+            len(set(parsed["hallucinated"])))
+        out_cols["answer_migration"].append(
+            sum(t["answer_migrated"] for t in rep_rows) / len(rep_rows)
+            if rep_rows else None)
+        out_cols["t1_correct"].append(
+            sum(t["correct"] for t in load_rows) / len(load_rows)
+            if load_rows else r.get("t1_correct"))
+        if str(r.get("regime")) == "cot":
+            es = cot_enumeration_stats(raw, [t["packet"] for t in tasks])
+        else:
+            es = {"n_packets_in_cot": None, "n_filler_packets_in_cot": None,
+                  "enumerated_fillers_in_cot": None}
+        for c in ("n_packets_in_cot", "n_filler_packets_in_cot",
+                  "enumerated_fillers_in_cot"):
+            out_cols[c].append(es[c])
+    for c, v in out_cols.items():
+        df[c] = v
+    return df
 
 
 def summarize(df: pd.DataFrame, by=("t1_load", "lag")) -> pd.DataFrame:
     agg = {"t2_mean_logprob": ["mean", "sem"], "t2_joint_prob": ["mean", "sem"]}
-    if "report_correct" in df.columns:
-        agg["report_correct"] = ["mean", "sem"]
+    for c in ("report_correct", "report_contains", "phrase_anywhere"):
+        if c in df.columns:
+            df = df.assign(**{c: pd.to_numeric(df[c].map(
+                {True: 1.0, False: 0.0, "True": 1.0, "False": 0.0}),
+                errors="coerce")})
+            agg[c] = ["mean", "sem"]
     g = df.groupby(list(by), dropna=False).agg(agg)
     g.columns = ["_".join(c) for c in g.columns]
     return g.reset_index()

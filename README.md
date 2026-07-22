@@ -126,9 +126,10 @@ All options are visible via `run_experiment.py --help`; the same names exist as 
 | Option | Default | Meaning |
 |--------|---------|---------|
 | `--n-tasks` | `1 3 7` | **B axis.** Tasks per stream, INCLUDING the passphrase task (1..15; `15` = tasks-only stream, no fillers). At `1` there are no load tasks, so the loads axis collapses there (logged `t1_load="none"`). The token `legacy` selects the old single-T1 design instead. |
-| `--finite-budgets` | `64 256 1024` | **A axis.** Max tokens generated *inside* `<Thinking>` (0..2000). On cap the block is force-closed (`cot_forced_closed=True`, `cot_tokens_used` logged) and the answers finish uncut. `inf` = unlimited (single pass). Acts on the `cot` regime only; int budgets require the HF backend. The stimulus is identical across budgets for a given (n_tasks, load, seed): budget contrasts are paired. |
+| `--finite-budgets` | `64 256 1024` | **A axis.** Max tokens generated *inside* `<Thinking>` (1..2000; budget 0 was removed 2026-07-21 — the zero point of the budget axis is `--regimes direct`, since a forced-empty `<Thinking></Thinking>` is an ambiguous stimulus). On cap the block is force-closed (`cot_forced_closed=True`, `cot_tokens_used` logged) and the answers finish uncut. `inf` = unlimited (single pass). Acts on the `cot` regime only; int budgets require the HF backend. The stimulus is identical across budgets for a given (n_tasks, load, seed): budget contrasts are paired. |
 | `--naming` | `non-ordered` | **H axis.** `ordered` = `Task 1..n` in stream order; `non-ordered` = per-trial random names (`Task WATERMELON`). The task count is never revealed either way (free report). |
-| `--passphrase-rank` | `last` | Passphrase task is the last task, or at a `random` rank among the tasks (`t2_rank` logged). |
+| `--passphrase-rank` | `both` | Sweeps BOTH arms by default (2026-07-22): `last` = position-stress / anti-LITM headline arm, `random` = rank/lag deconfound arm (`t2_rank` logged). Pick one to halve the grid. |
+| `--no-anti-enumeration` | off | Drops the anti-enumeration instruction from the cot template (idea I1; default ON since 2026-07-22). Compliance columns `n_packets_in_cot` / `n_filler_packets_in_cot` / `enumerated_fillers_in_cot` are logged either way, and `backfill_readout_columns` computes them retroactively on old CSVs. |
 | `--answer-budget` | `512` | Stage-2 budget (the `<Final_Answers>` block) under a finite budget. Generous by design — the report channel is never rationed; exhaustion is flagged `output_truncated`. |
 | `--loads` | `trivial semantic_4` | Load-task difficulty. Accepts `trivial`, `semantic_0..4`, `math_0..4` (aliases `easy`/`hard`/`easy_math`/`hard_math`); `none` is legacy-only. |
 | `--regimes` | `cot` | With or without a `<Thinking>` block. Budgets only act on `cot`. |
@@ -148,7 +149,7 @@ All options are visible via `run_experiment.py --help`; the same names exist as 
 
 ### Stream geometry
 
-**Task design (default):** always exactly 15 numbered packets; `n_tasks` of them are task packets at seeded-random positions (logged in `task_positions`), the rest are fillers, and `End of stream.` is an **unnumbered** closing line — so `n_tasks=15` is a tasks-only stream. The passphrase task is the last task by default (`--passphrase-rank random` frees its rank); `t2_rank` and `t2_abs_index` are logged per row.
+**Task design (default):** always exactly 15 numbered packets; `n_tasks` of them are task packets at seeded-random positions (logged in `task_positions`), the rest are fillers, and `End of stream.` is an **unnumbered** closing line — so `n_tasks=15` is a tasks-only stream. The passphrase-rank arm is a sweep axis (default both `last` and `random`, 2026-07-22); `t2_rank` and `t2_abs_index` are logged per row. The cot template also carries an explicit anti-enumeration instruction by default (`--no-anti-enumeration` restores the older prompt).
 
 **Legacy design:** every stream has **exactly 15 packets** (T1 + T2 + `End of stream` + optional mask + fillers), with **at least one filler at each end**: packet 1 is always a filler (T1 is never first) and at least one filler separates T2 from `End of stream`. The fillers split into `n_pre` (before T1) and `n_post` (after T2), so given a lag, `n_post` ranges over `[1, 15 − 4 − mask − lag]`, T2 sits at packet `15 − n_post − 1`, and T1 at `15 − n_post − lag − 2`. By default `n_post` is drawn uniformly at random per trial (which makes T2's absolute position vary — a built-in positional control) and `n_pre` absorbs the remainder. Fix `n_post` to pin T2's position instead (`n_post=2` reproduces the old fixed layout with T2 at packet 12). The values actually used are logged per row (`n_pre`, `n_post`, `t2_abs_index`).
 
@@ -182,6 +183,8 @@ print(df[df.t1_load != "none"].groupby(["t1_correct", "lag"])["report_correct"].
 print(df.groupby(["regime", "t1_load"])["t2_slot_missing"].mean())
 ```
 
+> **Task-design caveat (2026-07-21).** Under free report with hidden cardinality, `t2_slot_missing` means *the passphrase task was never spontaneously reported* — that is the H-design **detection outcome**, not a format artifact. NEVER gate detection/report analyses on it (doing so makes passphrase detection tautologically 1.0). Gate **only the graded log-prob analyses** on it, and never average slot-present with fallback-scored trials: the fallback scores a synthetic slot after `</Final_Answers>` and is a different quantity (~3 nats higher in the 0.5B pilot).
+
 **4. Was the output truncated?** (2026-07-17) The model often re-enumerates all 15 packets inside `<Thinking>`; with the old 256-token budget this cut generation off before the T2 slot in ~45% of cot trials (0.5B pilot), mechanically producing `report_correct=False` and garbage graded scores. The budget is now `max_new_tokens=1024` (CLI `--max-new-tokens`) with an early stop at `</Final_Answers>`, and every row logs `output_truncated`. The rate should be ~0; exclude any flagged trial (it also explains most `t2_slot_missing`):
 
 ```python
@@ -193,6 +196,15 @@ ok = df[~df.output_truncated.astype(bool) & ~df.t2_slot_missing.astype(bool)]
 
 ```python
 print(df[df.regime == "cot"].groupby(["t1_load", "t2_echoed_in_cot"])["t2_total_logprob"].mean())
+```
+
+**7. Exact-match undercounts access; binding errors are real (2026-07-21).** The model often wraps the correct answer in echo text (`- Task ICEBERG: copy-paste these three words: "SIERRA ROMEO LIMA".`) — exact `report_correct` scores this 0 even though the passphrase is in the tokenized output (the project's operational definition of access). Every task-design row now logs the access ladder `report_correct` (exact) ⊆ `report_contains` (word-bounded containment in the reported line) ⊆ `phrase_anywhere` (anywhere in the output, incl. CoT), plus `answer_migration` — the fraction of reported lines carrying ANOTHER task's answer (binding error / illusory-conjunction analog; 23% of reported lines in the 0.5B pilot, rising with load). Per-task versions (`correct_lenient`, `answer_migrated`) live in the `tasks` JSON. `analyze.backfill_readout_columns(df)` recomputes all of them on old CSVs without a GPU:
+
+```python
+from LLM_Blink.analyze import backfill_readout_columns
+df = backfill_readout_columns(df)   # no-op columns if already present (overwrites)
+print(df.groupby("n_tasks")[["report_correct", "report_contains", "phrase_anywhere"]].mean())
+print(df.groupby(["n_tasks", "t1_load"])["answer_migration"].mean())
 ```
 
 **6. Budget protocol & detection checks (task design, 2026-07-20).** Under a finite budget, check that the manipulation actually bound: the forced-close rate should fall as the budget grows, and `cot_tokens_used` should saturate below generous budgets. On the H side, `n_tasks_reported` vs `n_tasks` gives the detection rate per condition, and `n_hallucinated_tasks` (well-formed task lines with fabricated names) plus the per-task `tasks` JSON column (explode it for per-task analyses) complete the picture:

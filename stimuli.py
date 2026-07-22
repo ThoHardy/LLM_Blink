@@ -610,6 +610,13 @@ class TrialConfig:
     n_tasks: int | None = None
     naming: str = "ordered"        # "ordered" (Task 1..n, stream order) | "non-ordered"
     passphrase_last: bool = True   # passphrase = last task; False -> random rank
+    # Anti-enumeration instruction (2026-07-22, idea I1): when True the cot
+    # OUTPUT FORMAT explicitly forbids re-enumerating the stream packet by
+    # packet inside <Thinking>. Task-design cot only; no effect on direct or
+    # legacy trials, and NO effect on any RNG draw (pure prompt-text change).
+    # Default True for new runs; rescore_graded defaults it to False for CSVs
+    # predating the column, which reproduces the old prompt byte-exactly.
+    anti_enumeration: bool = True
 
 
 @dataclass
@@ -912,10 +919,15 @@ def _worked_example_tasks(naming: str, regime: str) -> str:
             "Now process the following ACTUAL stream:")
 
 
-def _output_format_tasks(regime: str) -> str:
+def _output_format_tasks(regime: str, anti_enumeration: bool = False) -> str:
     """Answer-format spec. Prose instructions, no fill-in-the-blank placeholder
     (CoT-skip fix 1): the only literal-looking line is the per-task line format
-    itself, which the worked example shows correctly instantiated."""
+    itself, which the worked example shows correctly instantiated.
+
+    anti_enumeration=True (cot only) appends an explicit prohibition on
+    re-enumerating the stream packet by packet inside <Thinking> (idea I1).
+    False reproduces the pre-2026-07-22 prompt byte-exactly.
+    """
     if regime == "direct":
         return (
             "OUTPUT FORMAT:\n"
@@ -923,11 +935,16 @@ def _output_format_tasks(regime: str) -> str:
             "in the stream, each line in the form:\n"
             "- Task <NAME>: <result>"
         )
+    anti = (
+        " Do NOT list or summarize the stream packet by packet: skip filler "
+        "packets entirely and mention ONLY the task packets you found."
+        if anti_enumeration else ""
+    )
     return (
         "OUTPUT FORMAT:\n"
         "First a <Thinking> block: reason step by step in your own words - "
         "identify every task packet in the stream and solve each one. Do not "
-        "copy instruction text into it.\n"
+        f"copy instruction text into it.{anti}\n"
         "Then a <Final_Answers> block with EXACTLY one line per task you "
         "found in the stream, each line in the form:\n"
         "- Task <NAME>: <result>"
@@ -979,7 +996,8 @@ def _build_trial_tasks(cfg: TrialConfig) -> Trial:
     stream = "\n".join(lines)
 
     header = (f"{RULES_TASKS}\n{_worked_example_tasks(cfg.naming, cfg.regime)}\n"
-              f"DATA STREAM:\n{stream}\n{_output_format_tasks(cfg.regime)}")
+              f"DATA STREAM:\n{stream}\n"
+              f"{_output_format_tasks(cfg.regime, cfg.anti_enumeration)}")
     pp = tasks[pp_rank]
     return Trial(
         system=SYSTEM,

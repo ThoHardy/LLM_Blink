@@ -68,11 +68,18 @@ def _rebuild(row):
     """
     if _is_task_row(row):
         try:
+            # anti_enumeration (2026-07-22): CSVs predating the column get
+            # False -> byte-exact old prompt (the flag changes prompt text
+            # only, never RNG, but the graded score conditions on the prompt).
+            anti = (_as_bool(row["anti_enumeration"])
+                    if "anti_enumeration" in row.index
+                    and pd.notna(row["anti_enumeration"]) else False)
             tr = build_trial(TrialConfig(
                 t1_load=str(row["t1_load"]), regime=str(row["regime"]),
                 t2_words=int(row["t2_words"]), seed=int(row["seed"]),
                 n_tasks=int(row["n_tasks"]), naming=str(row["naming"]),
                 passphrase_last=_as_bool(row["passphrase_last"]),
+                anti_enumeration=anti,
             ))
         except (ValueError, TypeError):
             return None

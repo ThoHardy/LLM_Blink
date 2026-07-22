@@ -40,7 +40,8 @@ except ImportError:  # keep package dependency-light
 from .stimuli import TrialConfig, build_trial
 from .model import sequence_logprob, DEFAULT_MAX_NEW_TOKENS, OllamaBackend
 from .protocol import generate_trajectory, DEFAULT_ANSWER_BUDGET
-from .readout import parse_task_report, task_rows, t2_scoring_prefix_tasks
+from .readout import (parse_task_report, task_rows,
+                      t2_scoring_prefix_tasks, cot_enumeration_stats)
 
 
 # ---------------------------------------------------------------------------
@@ -114,6 +115,10 @@ def run_trial(model, tok, cfg: TrialConfig, temperature: float = 0.0,
                                 if cfg.regime == "cot" else None)
         tasks_json = task_positions = None
         n_reported = n_halluc = None
+        report_contains = answer_migration = None
+        enum_stats = {"n_packets_in_cot": None,
+                      "n_filler_packets_in_cot": None,
+                      "enumerated_fillers_in_cot": None}
     else:
         parsed = parse_task_report(out, tr)
         rows_t = task_rows(tr, parsed["reported"])
@@ -129,6 +134,18 @@ def run_trial(model, tok, cfg: TrialConfig, temperature: float = 0.0,
         task_positions = json.dumps([t["packet"] for t in tr.tasks])
         n_reported = len(parsed["reported"])
         n_halluc = len(set(parsed["hallucinated"]))
+        # Lenient access + binding errors (2026-07-21, pilot review):
+        report_contains = bool(pp_row["correct_lenient"])
+        rep_rows = [r for r in rows_t if r["reported"]]
+        answer_migration = (sum(r["answer_migrated"] for r in rep_rows)
+                            / len(rep_rows)) if rep_rows else None
+        # Anti-enumeration compliance (idea I1, 2026-07-22): distinct packet
+        # indices referenced in <Thinking>; filler refs = non-compliance.
+        enum_stats = (cot_enumeration_stats(out, [t["packet"] for t in tr.tasks])
+                      if cfg.regime == "cot" else
+                      {"n_packets_in_cot": None,
+                       "n_filler_packets_in_cot": None,
+                       "enumerated_fillers_in_cot": None})
 
     # -- 3. graded measure: P(correct passphrase | model's own prefix) ------
     # Rehearsal confound gate (2026-07-20): if the passphrase already appears
@@ -148,6 +165,7 @@ def run_trial(model, tok, cfg: TrialConfig, temperature: float = 0.0,
         "n_tasks": cfg.n_tasks,
         "naming": None if legacy else cfg.naming,
         "passphrase_last": None if legacy else cfg.passphrase_last,
+        "anti_enumeration": None if legacy else cfg.anti_enumeration,
         "finite_budget": traj.finite_budget,   # APPLIED value (None = single pass)
         # legacy geometry (None on task-design rows)
         "lag": cfg.lag if legacy else None,
@@ -170,11 +188,21 @@ def run_trial(model, tok, cfg: TrialConfig, temperature: float = 0.0,
         "t2_n_tokens": lp["n_tokens"],
         # binary read-out (same generation pass)
         "report_correct": report_correct,
+        # lenient access measures (2026-07-21): exact-match report_correct
+        # undercounts access when the model wraps the right answer in echo
+        # text. phrase_anywhere = passphrase appears ANYWHERE in the raw
+        # output (incl. CoT) — the project's operational definition of
+        # conscious access, at its most permissive.
+        "report_contains": report_contains,
+        "phrase_anywhere": tr.t2_phrase.upper() in out.upper(),
         "t1_correct": t1_correct,
         # per-task detail (task design only)
         "tasks": tasks_json,
         "n_tasks_reported": n_reported,
         "n_hallucinated_tasks": n_halluc,
+        # fraction of REPORTED task lines carrying another task's answer
+        # (binding error / illusory-conjunction analog; None if none reported)
+        "answer_migration": answer_migration,
         # protocol flags (design A)
         "cot_tokens_used": traj.cot_tokens_used,
         "cot_forced_closed": traj.cot_forced_closed,
@@ -183,6 +211,10 @@ def run_trial(model, tok, cfg: TrialConfig, temperature: float = 0.0,
         "t2_slot_missing": slot_missing,
         "thinking_is_placeholder": thinking_placeholder,
         "t2_echoed_in_cot": t2_echoed if cfg.regime == "cot" else None,
+        # anti-enumeration compliance (task-design cot rows only)
+        "n_packets_in_cot": enum_stats["n_packets_in_cot"],
+        "n_filler_packets_in_cot": enum_stats["n_filler_packets_in_cot"],
+        "enumerated_fillers_in_cot": enum_stats["enumerated_fillers_in_cot"],
         "raw_output": out,
     }
 
@@ -216,7 +248,8 @@ def run_sweep(model, tok,
               finite_budgets=(64, 256, 1024),
               loads=("trivial", "semantic_4"),
               regimes=("cot",),
-              passphrase_last: bool = True,
+              passphrase_last=(True, False),
+              anti_enumeration: bool = True,
               lags=(0,), masks=(False,),
               n_pres: tuple[int | None, ...] = (None,),
               n_posts: tuple[int | None, ...] = (None,),
@@ -242,6 +275,13 @@ def run_sweep(model, tok,
       budget contrasts are paired.
     - ``finite_budgets`` may contain None (= unlimited / single pass). Any
       int budget requires the HuggingFace backend.
+    - ``passphrase_last`` is a sweep AXIS since 2026-07-22: pass a bool or a
+      tuple of bools (default BOTH arms: last = position-stress/anti-LITM
+      headline, random = rank/lag deconfound). The two arms share every RNG
+      draw up to the rank draw, so contrasts are near-paired.
+    - ``anti_enumeration`` (default True) adds the I1 instruction to the cot
+      template; pass False for the pre-2026-07-22 prompt. Not a sweep axis
+      (run two sweeps to compare arms).
     - LEGACY runs: n_tasks_list=(None,) + finite_budgets=(None,) restores the
       old single-T1 lag design exactly (then lags/masks/n_pres/n_posts apply,
       with their old semantics and old per-cell seeds; ``n_post`` (singular)
@@ -250,30 +290,54 @@ def run_sweep(model, tok,
     """
     if n_post is not None:
         n_posts = (n_post,)
+    # Guard against the classic missing-comma bug: regimes=("cot") is the STRING
+    # "cot", which itertools.product iterates as 'c','o','t' -> three bogus
+    # regimes, none equal to "cot", so the CoT template AND the finite_budget
+    # axis are silently dropped (2026-07-21 incident). Same for loads/naming.
+    if isinstance(regimes, str):
+        raise TypeError(
+            f"regimes must be a tuple/list, got the string {regimes!r} - "
+            f"did you write regimes=({regimes!r}) instead of ({regimes!r},)?")
+    if isinstance(loads, str):
+        raise TypeError(
+            f"loads must be a tuple/list, got the string {loads!r} - "
+            f"did you write loads=({loads!r}) instead of ({loads!r},)?")
+    bad = [r for r in regimes if r not in ("cot", "direct")]
+    if bad:
+        raise ValueError(f"unknown regime(s) {bad}; expected 'cot' / 'direct'")
     if isinstance(model, OllamaBackend) and any(fb is not None
                                                 for fb in finite_budgets):
         raise ValueError(
             "finite_budget requires the HuggingFace backend: Ollama cannot "
             "continue a prefilled assistant turn (see protocol.py).")
 
+    if isinstance(passphrase_last, bool):
+        passphrase_last = (passphrase_last,)
+    pp_arms = tuple(passphrase_last)
+
     cells = []
     for nt in n_tasks_list:
         geoms = (list(itertools.product(lags, masks, n_pres, n_posts))
                  if nt is None else [(0, False, None, None)])
         cell_loads = tuple(loads) if (nt is None or nt > 1) else ("none",)
-        for fb, load, regime, geom, seed in itertools.product(
-                finite_budgets, cell_loads, regimes, geoms, range(n_seeds)):
-            cells.append((nt, fb, load, regime, *geom, seed))
+        # passphrase_last only changes the stimulus for task-design cells
+        # (legacy path ignores it) -> collapse the axis on legacy cells.
+        cell_arms = pp_arms if nt is not None else (pp_arms[0],)
+        for fb, load, regime, pp, geom, seed in itertools.product(
+                finite_budgets, cell_loads, regimes, cell_arms, geoms,
+                range(n_seeds)):
+            cells.append((nt, fb, load, regime, pp, *geom, seed))
 
     rows = []
     pbar = tqdm(enumerate(cells), total=len(cells), disable=not verbose)
-    for k, (nt, fb, load, regime, lag, mask, n_pre, n_post_, seed) in pbar:
+    for k, (nt, fb, load, regime, pp, lag, mask, n_pre, n_post_, seed) in pbar:
         cfg = TrialConfig(lag=lag, t1_load=load, regime=regime, mask=mask,
                           n_pre=n_pre, n_post=n_post_,
                           seed=1000 * seed + lag + 7 * len(load)
                                + 13 * (nt or 0),
                           n_tasks=nt, naming=naming,
-                          passphrase_last=passphrase_last)
+                          passphrase_last=pp,
+                          anti_enumeration=anti_enumeration)
         rows.append(run_trial(model, tok, cfg, temperature=temperature,
                               encoding_baseline=encoding_baseline,
                               max_new_tokens=max_new_tokens,

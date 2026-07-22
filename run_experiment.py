@@ -105,8 +105,16 @@ def main():
         ),
     )
     parser.add_argument(
-        "--passphrase-rank", choices=["last", "random"], default="last",
-        help="Position of the passphrase task among the tasks.",
+        "--passphrase-rank", choices=["last", "random", "both"], default="both",
+        help="Position of the passphrase task among the tasks. 'both' (default "
+             "since 2026-07-22) sweeps the two arms: last = position-stress/"
+             "anti-LITM headline, random = rank/lag deconfound.",
+    )
+    parser.add_argument(
+        "--no-anti-enumeration", action="store_true",
+        help="Drop the anti-enumeration instruction from the cot template "
+             "(restores the pre-2026-07-22 prompt; compliance flags are "
+             "logged either way).",
     )
     parser.add_argument(
         "--answer-budget", type=int, default=512,
@@ -225,8 +233,11 @@ def main():
             finite_budgets.append(None)
         else:
             v = int(tk)
-            if not 0 <= v <= 2000:
-                parser.error(f"--finite-budgets {v}: must be in 0..2000 (or 'inf').")
+            if not 0 < v <= 2000:
+                parser.error(f"--finite-budgets {v}: must be in 1..2000 (or "
+                             "'inf'). Budget 0 was removed 2026-07-21: the "
+                             "zero point of the budget axis is the direct "
+                             "regime (--regimes direct).")
             finite_budgets.append(v)
 
     if "/" not in args.model and any(b is not None for b in finite_budgets):
@@ -247,7 +258,8 @@ def main():
     print(f"n_tasks  : {n_tasks_list}")
     print(f"Budgets  : {finite_budgets} (CoT tokens; answer budget "
           f"{args.answer_budget})")
-    print(f"Naming   : {args.naming}  (passphrase rank: {args.passphrase_rank})")
+    print(f"Naming   : {args.naming}  (passphrase rank: {args.passphrase_rank}, "
+          f"anti-enumeration: {not args.no_anti_enumeration})")
     print(f"Loads    : {args.loads}")
     print(f"Regimes  : {args.regimes}")
     if any(nt is None for nt in n_tasks_list):
@@ -276,7 +288,9 @@ def main():
         finite_budgets=tuple(finite_budgets),
         loads=tuple(args.loads),
         regimes=tuple(args.regimes),
-        passphrase_last=(args.passphrase_rank == "last"),
+        passphrase_last=((True, False) if args.passphrase_rank == "both"
+                         else args.passphrase_rank == "last"),
+        anti_enumeration=not args.no_anti_enumeration,
         lags=tuple(args.lags),
         n_pres=tuple(n_pres),
         n_posts=tuple(n_posts),
