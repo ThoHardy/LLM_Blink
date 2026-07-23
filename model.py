@@ -24,8 +24,10 @@ For the Ollama backend ``tok`` is ``None``; callers never need to inspect it.
 """
 from __future__ import annotations
 
+import json
 import math
 import warnings
+import urllib.request
 from typing import Optional
 
 # NOTE: torch / transformers are imported lazily inside the HuggingFace code
@@ -69,6 +71,29 @@ class OllamaBackend:
         self.model_name = model_name
         self.approx_logprobs = approx_logprobs
         self._client = OpenAI(base_url=base_url, api_key="ollama")
+        # Native Ollama root (strip the OpenAI-compat "/v1" suffix). The native
+        # /api/chat endpoint is what continue_generate uses: unlike the
+        # OpenAI-compat path it returns eval_count (generated-token count, ->
+        # cot_tokens_used) and done_reason ("length" => budget hit) directly.
+        root = base_url.rstrip("/")
+        self._native_url = root[:-3].rstrip("/") if root.endswith("/v1") else root
+
+    def _native_chat(self, messages: list, num_predict: int,
+                     temperature: float, stop: Optional[list] = None) -> dict:
+        """POST the native /api/chat endpoint (non-streaming) and return the
+        decoded JSON. Kept dependency-free (urllib) so the Ollama backend needs
+        no extra packages beyond ``openai``."""
+        options: dict = {"temperature": temperature, "num_predict": num_predict}
+        if stop:
+            options["stop"] = stop
+        payload = {"model": self.model_name, "messages": messages,
+                   "stream": False, "options": options}
+        req = urllib.request.Request(
+            self._native_url + "/api/chat",
+            data=json.dumps(payload).encode("utf-8"),
+            headers={"Content-Type": "application/json"})
+        with urllib.request.urlopen(req) as resp:
+            return json.loads(resp.read().decode("utf-8"))
 
     # -- generation ------------------------------------------------------------
 
@@ -99,6 +124,49 @@ class OllamaBackend:
             return text
         truncated = getattr(resp.choices[0], "finish_reason", None) == "length"
         return text, truncated
+
+    # -- continuation (assistant prefill) --------------------------------------
+
+    def continue_generate(self, system: str, user: str,
+                          prefilled_assistant: str, max_new_tokens: int,
+                          temperature: float = 0.0,
+                          stop_at: Optional[str] = None):
+        """Free generation CONTINUING a prefilled assistant turn (Ollama).
+
+        Matches the HF ``_continue_generate_hf`` contract exactly, returning
+        ``(text, n_new_tokens, truncated)`` where ``text`` is ONLY the newly
+        generated span (prefill not included).
+
+        Mechanism: the native ``/api/chat`` endpoint continues — rather than
+        closes — the assistant turn when the last message has role
+        ``assistant`` (every stored chat template gates its end-of-turn marker
+        on ``{{ if not $last }}``; verified 2026-07-22 on Qwen/Gemma/Mistral
+        families). This resolves the CLAUDE.md 2026-07-20 KNOWN ISSUE: prefill
+        continuation IS available on Ollama via the native endpoint (the
+        OpenAI-compat path used elsewhere does not surface eval_count).
+
+        Two semantics are reproduced to match HF so protocol.py is unchanged:
+          * ``stop_at`` is stripped from Ollama's returned content, but HF keeps
+            it (generation halts *at* the string). On a natural stop we
+            re-append ``stop_at`` so ``STOP_THINKING in cot_text`` still holds.
+          * ``truncated`` == the budget was spent without a natural end, i.e.
+            ``done_reason == "length"`` (mirrors HF's
+            ``n_gen >= max_new_tokens and not ended_eos/stop``).
+        """
+        messages = _build_messages(system, user)
+        messages.append({"role": "assistant", "content": prefilled_assistant})
+        stop = [stop_at] if stop_at else None
+        resp = self._native_chat(messages, num_predict=max_new_tokens,
+                                 temperature=temperature, stop=stop)
+        text = resp.get("message", {}).get("content", "") or ""
+        done_reason = resp.get("done_reason")
+        n_new = int(resp.get("eval_count", 0) or 0)
+        truncated = (done_reason == "length")
+        # Natural close (stop string or EOS): re-append the stop string HF would
+        # have kept, so the caller's `stop_at in text` check behaves as on HF.
+        if stop_at and not truncated and stop_at not in text:
+            text = text + stop_at
+        return text, n_new, truncated
 
     # -- log-prob scoring ------------------------------------------------------
 
@@ -349,18 +417,15 @@ def continue_generate(model, tok, system: str, user: str,
     also serve the future name-cued probes (H stage 2) and design D
     (mid-CoT injection).
 
-    HF-only: Ollama's OpenAI-compatible endpoint is NOT verified to continue
-    (prefill) a trailing assistant message — it may close the turn instead,
-    silently changing the scored context (see CLAUDE.md KNOWN ISSUE
-    2026-07-20). It therefore raises on the Ollama backend.
+    Ollama support (added 2026-07-22): implemented via the NATIVE ``/api/chat``
+    endpoint, which continues a trailing assistant message (the OpenAI-compat
+    path used for plain generation does not surface the generated-token count).
+    See ``OllamaBackend.continue_generate`` for how the HF semantics (stop
+    string kept in text; ``truncated`` == budget hit) are reproduced.
     """
     if isinstance(model, OllamaBackend):
-        raise NotImplementedError(
-            "continue_generate (assistant prefill) is HF-only: Ollama's "
-            "OpenAI-compatible endpoint is not verified to continue a "
-            "trailing assistant message (CLAUDE.md KNOWN ISSUE 2026-07-20). "
-            "Use a HuggingFace model for finite_budget runs."
-        )
+        return model.continue_generate(system, user, prefilled_assistant,
+                                       max_new_tokens, temperature, stop_at)
     return _continue_generate_hf(model, tok, system, user, prefilled_assistant,
                                  max_new_tokens, temperature, stop_at)
 
