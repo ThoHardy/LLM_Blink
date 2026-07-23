@@ -305,11 +305,9 @@ def run_sweep(model, tok,
     bad = [r for r in regimes if r not in ("cot", "direct")]
     if bad:
         raise ValueError(f"unknown regime(s) {bad}; expected 'cot' / 'direct'")
-    if isinstance(model, OllamaBackend) and any(fb is not None
-                                                for fb in finite_budgets):
-        raise ValueError(
-            "finite_budget requires the HuggingFace backend: Ollama cannot "
-            "continue a prefilled assistant turn (see protocol.py).")
+    # finite_budget on Ollama is supported since 2026-07-22: the native
+    # /api/chat endpoint continues a prefilled assistant turn (see
+    # model.OllamaBackend.continue_generate). No backend gate needed.
 
     if isinstance(passphrase_last, bool):
         passphrase_last = (passphrase_last,)
