@@ -139,3 +139,54 @@ def score_access_samples(samples, t2_phrase: str,
                if t2_in_cot(text, t2_phrase, t2_task_name))
     return dict(s=int(hits), k=int(len(samples)),
                 degenerate=(len(set(samples)) == 1 and len(samples) > 1))
+
+
+# ---------------------------------------------------------------------------
+# nested probe (§3.3 / §4.3): sample CoTs, then reports within each CoT
+# ---------------------------------------------------------------------------
+
+def nested_fork(model, tok, trial, traj, k_cot: int = 8, k_rep: int = 8,
+                temperature: float = 1.0, seed: int = 0, n_workers: int = 8):
+    """For each of k_cot sampled CoTs, draw k_rep reports from its transition.
+
+    The variance decomposition teacher-forcing cannot produce (§4.3): if report
+    is near-deterministic GIVEN a CoT (within-CoT variance ~0, all variance
+    BETWEEN CoTs) access is decided in the workspace = **ignition**; substantial
+    within-CoT variance = the read-out is itself stochastic = **graded**.
+
+    Returns list of dicts, one per sampled CoT:
+      {cot_id, s (reports containing the passphrase), k (=k_rep),
+       t2_in_this_cot (was the passphrase task in the sampled CoT)}.
+    Feed the (cot_id, per-report 0/1) to ``mixture.icc_nested``.
+    """
+    pre_off = traj.offset("pre_cot")
+    if pre_off is None:
+        raise ValueError("no <Thinking> opener to fork the CoT from")
+    cot_prefix = traj.text[:pre_off]                      # prompt + '<Thinking>\n'
+    cots = fork_samples(model, tok, trial, traj, at="pre_cot", k=k_cot,
+                        temperature=temperature, seed=seed, n_workers=n_workers,
+                        raise_on_degenerate=False)
+    out = []
+    for j, cot in enumerate(cots):
+        # rebuild a trajectory whose reasoning IS this sampled CoT, then fork it.
+        text = cot_prefix + cot.rstrip() + "\n" + _ANSWERS_OPEN + "\n"
+        pseudo = _PseudoTraj(text)
+        reps = fork_samples(model, tok, trial, pseudo, at="post_cot", k=k_rep,
+                            temperature=temperature, seed=seed * 131 + j + 1,
+                            n_workers=n_workers, raise_on_degenerate=False)
+        sc = score_report_samples(reps, trial.t2_task_name, trial.t2_phrase)
+        out.append(dict(cot_id=j, s=sc["s"], k=sc["k"],
+                        t2_in_this_cot=int(t2_in_cot(cot, trial.t2_phrase,
+                                                     trial.t2_task_name))))
+    return out
+
+
+class _PseudoTraj:
+    """Minimal Trajectory-like object exposing .text and .offset for a rebuilt
+    prompt+CoT+transition string (used by the nested probe)."""
+    def __init__(self, text):
+        self.text = text
+
+    def offset(self, at):
+        from .protocol import Trajectory
+        return Trajectory.offset(self, at)
