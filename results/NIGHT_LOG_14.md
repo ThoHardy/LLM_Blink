@@ -189,6 +189,27 @@ cleaner π-vs-μ manipulation is probably n_tasks, not load-difficulty. (ii) rep
 isn't PURELY all-or-none — the ~0.33 context-recovery channel is a genuine graded
 backstop (the passphrase persists in context, §5 scope limit a).
 
+## MECHANISM — CoT-induced blindness is a serial-scan completion failure
+
+Resolving the T=1 "inversion" (full n=126 cot). CoT length by load: trivial
+median 518 chars < semantic_2 770 < semantic_4 943 (trivial tasks need no
+reasoning → short CoT). And length drives detection:
+
+- length tercile → report_rate / access: short 0.38 / 0.21; mid 0.52 / 0.26;
+  long 0.64 / 0.56 — **monotone, longer CoT → more access AND more report.**
+- within-cell (difficulty held constant): semantic_4 ρ(len, report_rate)=+0.44
+  (p=0.004), ρ(len, access)=+0.50 (p=0.001); trivial ρ(len, access)=+0.31 (p=0.04).
+
+→ The CoT acts as a **serial scan**; the passphrase (last rank) is dropped when
+the scan is short/incomplete (the model commits to answering before reaching it).
+Load raises CoT length, so trivial→short CoT→more drops — hence the "inversion".
+Longer thinking HELPS the last item (opposite to naive "overthinking hurts"),
+yet cot still trails direct overall (0.51 vs 0.81) because direct has no serial
+bottleneck. This is a mechanistic refinement of the published CIB effect and it
+nests cleanly in the two-stage picture: **the serial workspace IS the CoT scan;
+access = being reached by the scan (graded, length-dependent); report = readout
+(all-or-none, gated by scan inclusion, with a context-recovery backstop).**
+
 ## Plan from here (analyse-and-iterate)
 
 1. Replicate the two-stage dissociation on **qwen2.5:3b** (nested probe → access
