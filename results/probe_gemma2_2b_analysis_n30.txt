@@ -1,0 +1,70 @@
+  raw count means (s/k) by load: {'semantic_2': np.float64(0.529), 'semantic_4': np.float64(0.59), 'trivial': np.float64(0.372)}
+  held-out logdens: {'M0': -2.2966, 'Mpi': -2.2714, 'Mmu': -2.3162, 'Mfull': -2.3321}
+          M0-Mpi: -0.0252 CI[-0.0647,+0.0157]  
+          M0-Mmu: +0.0197 CI[-0.0782,+0.1217]  
+        M0-Mfull: +0.0356 CI[-0.0755,+0.1616]  
+         Mmu-Mpi: -0.0448 CI[-0.1371,+0.0328]  
+       Mfull-Mpi: -0.0607 CI[-0.1690,+0.0320]  
+       Mfull-Mmu: -0.0159 CI[-0.0654,+0.0287]  
+  Tarone Z (overdispersion): 94.5
+  >>> VERDICT: graded (no bimodality: Mfull does not beat M0)
+  Mfull mu(lo)=[0.045, 0.172, 0.031] mu(hi)=[0.955, 0.879, 0.709]
+        pi=[0.361, 0.504, 0.83]  (loads=['trivial', 'semantic_2', 'semantic_4'])
+  pi->mu null band Δμ_hi(extreme loads): [-0.224  0.247] | observed -0.245 -> OUTSIDE (graded signal)
+
+======================================================================
+MIXTURE: REPORT(direct baseline) probe, regime=direct, condition=load
+======================================================================
+  n=90  per load: {'semantic_2': 30, 'semantic_4': 30, 'trivial': 30}
+  raw count means (s/k) by load: {'semantic_2': np.float64(0.743), 'semantic_4': np.float64(0.757), 'trivial': np.float64(0.91)}
+  held-out logdens: {'M0': -2.5361, 'Mpi': -2.4558, 'Mmu': -2.5296, 'Mfull': -2.5677}
+          M0-Mpi: -0.0804 CI[-0.2412,+0.0719]  
+          M0-Mmu: -0.0065 CI[-0.1421,+0.1193]  
+        M0-Mfull: +0.0316 CI[-0.1168,+0.1865]  
+         Mmu-Mpi: -0.0739 CI[-0.1869,+0.0289]  
+       Mfull-Mpi: -0.1120 CI[-0.2486,-0.0024] *
+       Mfull-Mmu: -0.0381 CI[-0.1059,+0.0122]  
+  Tarone Z (overdispersion): 31.4
+  >>> VERDICT: graded (no bimodality: Mfull does not beat M0)
+  Mfull mu(lo)=[0.993, 0.465, 0.403] mu(hi)=[0.902, 0.847, 0.857]
+        pi=[0.882, 0.723, 0.761]  (loads=['trivial', 'semantic_2', 'semantic_4'])
+  pi->mu null band Δμ_hi(extreme loads): [-0.108  0.082] | observed -0.046 -> inside (no graded claim)
+
+======================================================================
+MIXTURE: ACCESS probe, regime=cot, condition=load
+======================================================================
+  n=90  per load: {'semantic_2': 30, 'semantic_4': 30, 'trivial': 30}
+  raw count means (s/k) by load: {'semantic_2': np.float64(0.437), 'semantic_4': np.float64(0.395), 'trivial': np.float64(0.428)}
+  held-out logdens: {'M0': -2.5616, 'Mpi': -2.592, 'Mmu': -2.6157, 'Mfull': -2.6324}
+          M0-Mpi: +0.0305 CI[+0.0190,+0.0431] *
+          M0-Mmu: +0.0542 CI[+0.0183,+0.0930] *
+        M0-Mfull: +0.0709 CI[+0.0276,+0.1196] *
+         Mmu-Mpi: -0.0237 CI[-0.0568,+0.0071]  
+       Mfull-Mpi: -0.0404 CI[-0.0823,+0.0008]  
+       Mfull-Mmu: -0.0167 CI[-0.0397,+0.0038]  
+  Tarone Z (overdispersion): 6.1
+  >>> VERDICT: graded (no bimodality: Mfull does not beat M0)
+  Mfull mu(lo)=[0.398, 0.231, 0.365] mu(hi)=[0.565, 0.476, 0.733]
+        pi=[0.181, 0.839, 0.081]  (loads=['trivial', 'semantic_2', 'semantic_4'])
+  pi->mu null band Δμ_hi(extreme loads): [-0.361  0.291] | observed +0.168 -> inside (no graded claim)
+
+======================================================================
+ACCESS TAXONOMY (5): report x access, cot only
+======================================================================
+  semantic_2  : 1=0.55  2=0.17  3=0.28
+  semantic_4  : 1=0.60  2=0.10  3=0.30
+  trivial     : 1=0.37  2=0.20  3=0.43
+  (level 2 = the theoretically-loaded 'accessed but not reported' cell)
+  mean access_rate vs report_rate by load (cot):
+               ar     rr
+t1_load                 
+semantic_2  0.448  0.529
+semantic_4  0.395  0.590
+trivial     0.428  0.372
+
+======================================================================
+D6 length mediation (within-cell, cot)
+======================================================================
+  semantic_2  : n=30  rho(len, realized_report)=+0.10 (p=0.612) | vs report_rate rho=+0.18 (p=0.349)
+  semantic_4  : n=30  rho(len, realized_report)=+0.40 (p=0.027) | vs report_rate rho=+0.28 (p=0.138)
+  trivial     : n=30  rho(len, realized_report)=+0.02 (p=0.898) | vs report_rate rho=+0.13 (p=0.496)

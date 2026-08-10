@@ -121,8 +121,42 @@ direct}, passphrase_last, base_temp=1.0, k=20, access on, n_seeds=150 → 900 ce
 ~4 h, `results/probe_gemma2_2b.csv` (seed-major so partial data spans all cells).
 Ollama runs manual `screen -S ollama_par` with OLLAMA_NUM_PARALLEL=8.
 
-## Next (analyse-and-iterate)
+## FIRST REAL RESULT — gemma2:2b, n=30/cell (partial pilot)
 
-- Analyse partial → first π-vs-μ read on report AND access stages.
-- Iterate: 2nd model (qwen2.5:3b / mistral:7b), or the D4 report-order axis, or a
-  finer load axis — decided by what the first analysis shows.
+Validity all green: report fork coverage 1.00, degenerate rate 0.00 (seeds
+effective), calibration mean(report_rate)≈realized binary, **self-consistency
+0.91 (realized=1) vs 0.16 (realized=0)** — the probe measures a real,
+CoT-content-dependent quantity (0.16 = context-recovery floor).
+
+**1. ACCESS = GRADED (clean).** Condition=load, cot. M0 (single graded component)
+beats every mixture: M0−Mfull +0.071, CI [0.028, 0.120] excludes 0; Tarone Z=6.1
+(mild). Access rates cluster mid-range (~0.4), no piling at 0/k. → **entry into
+the serial workspace is a graded / resource-limited process, not all-or-none.**
+
+**2. REPORT = strongly overdispersed (Tarone Z=94.5), modes near 0.05/0.95**
+(ignition-shaped), but **underpowered at n=30**: Mfull does not yet beat M0
+(a single high-ρ Beta can mimic a U-shape — exactly the subtlety §4 warns of).
+π→μ null test marginal. Needs n≈120 to separate bimodal vs graded.
+
+**3. TWO-STAGE DISSOCIATION visible** (the paper's 2nd headline): overdispersion
+6 (access) vs 94 (report) → any discreteness is concentrated at the **read-out**
+stage, not at workspace entry. Emerging answer to "where does discreteness
+arise": at report, not access.
+
+**4. Anomaly — inverted load gradient at T=1.** trivial-cot report 0.37 <
+semantic-cot 0.53–0.59 — INVERTED vs the T=0 corpus (trivial 0.74 > semantic
+0.5). D6 within-cell: longer CoT → MORE report (Spearman ρ=+0.40, p=0.03 on
+semantic_4). → the CoT-blindness is mediated by CoT length/thoroughness; trivial
+load → short CoT → drops the (last) passphrase more. The CIB effect (direct−cot)
+is LARGEST for trivial at T=1 (0.91→0.37). To investigate.
+
+**5. Access taxonomy:** level-2 (accessed, NOT reported) ~0.15–0.20 across loads —
+the theoretically-loaded GWT cell is populated.
+
+## Plan from here (analyse-and-iterate)
+
+1. Pivot the pilot to **report-only** (access answered → 2.5× faster) to push
+   report to n≈120/cell for the bimodal-vs-graded verdict (the headline).
+2. **Nested probe** on gemma2:2b (ICC) — the clean report-stage test, free of the
+   CoT-content confound the forked report probe carries.
+3. 2nd model (qwen2.5:3b) for replication; investigate the T=1 trivial inversion.
