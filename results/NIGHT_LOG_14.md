@@ -69,9 +69,60 @@ prefer either answer:
 
 ---
 
-## Next
+## Step 1 — forked-resampling primitive (DONE) ✅
 
-- Step 1 — `resample.py` forked-resampling primitive (both backends; test on Ollama).
-- Step 2 — wire the report/access probes into `experiment.py`.
-- Pilot — gemma2:2b, then ANALYSE and iterate (Ulysse's directive: don't just run,
-  analyse and launch the next experiment off the result).
+`resample.py::fork_samples` rebuilds `prompt + traj.text[:fork]` and draws k
+continuations at T=1 with DISTINCT per-sample seeds from a SEPARATE numpy
+Generator (stimulus RNG untouched → `_rebuild` stays bit-exact). Raises
+`DegenerateForkError` if all k are identical (the Ollama fixed-seed silent
+failure, §3.4). `model.py`: seed passthrough on both backends. `readout.py`:
+`t2_in_cot` (name-or-content access probe). Committed `6676ac5`.
+
+### Hard reality confronted: small models don't emit the clean template
+
+Inspecting real gemma2:2b cot outputs (the pilot model) forced a redesign of the
+fork point. gemma2:2b **almost never closes `</Thinking>` (19%) and never emits
+`</Final_Answers>`** — it jumps `<Thinking> … <Final_Answers>\n- Task X: …` then
+EOS. So the fork point had to be the **`<Final_Answers>` OPENER** (the real
+read-out transition, present ~99% on every model tried), not `</Thinking>`.
+Forking on `</Thinking>` would have left the primary probe undefined on 80% of
+the very trials that carry the effect. The DIRECT regime has NO scaffold at all
+(report lines in a bare ``` fence) → its report probe forks at `response`
+(offset 0, resample the whole turn) = p(report | prompt).
+
+### The CIB mechanism on gemma2:2b is REAL, not a truncation artifact
+
+Corpus check (unlike the June gemma3:4b "blink"): `output_truncated = 0.0` in
+every cell. The effect is genuine — under cot the serial enumeration in
+`<Thinking>` sometimes **drops the passphrase task entirely** (it is last / rank
+5), consolidating the load tasks and losing the simple one. Exactly the AB
+signature (the last, simple item drops when the serial stage is busy). And
+`t2_echoed_in_cot` ~0.3–0.46 on cot means the passphrase is often IN the CoT yet
+NOT reported → the §5 **level-2 cell (accessed, not reported)** exists in the raw
+corpus already.
+
+## Step 2 — probes + pilot runner (DONE) ✅
+
+`probe_pilot.py` (standalone, resumable, incremental, threaded) writes per-trial
+`report_s/k` and `access_s/k`. `probe_analyze.py` runs validity + the mixture CV
+verdict + histograms. Committed. (Full experiment.py column integration deferred
+as a follow-up — the standalone path already delivers the science.)
+
+Live k=10 smoke on gemma2:2b (semantic_2) already suggestive:
+- report probe (cot): per-trial rates **0/10, 10/10, 2/10** → looks BIMODAL
+  (ignition at the report stage);
+- access probe (cot): **6/10, 4/10, 8/10** → intermediate (access looks more
+  GRADED). A two-stage dissociation, which is the paper's second headline.
+
+## Pilot (RUNNING)
+
+gemma2:2b, n_tasks=5, loads {trivial, semantic_2, semantic_4}, regimes {cot,
+direct}, passphrase_last, base_temp=1.0, k=20, access on, n_seeds=150 → 900 cells,
+~4 h, `results/probe_gemma2_2b.csv` (seed-major so partial data spans all cells).
+Ollama runs manual `screen -S ollama_par` with OLLAMA_NUM_PARALLEL=8.
+
+## Next (analyse-and-iterate)
+
+- Analyse partial → first π-vs-μ read on report AND access stages.
+- Iterate: 2nd model (qwen2.5:3b / mistral:7b), or the D4 report-order axis, or a
+  finer load axis — decided by what the first analysis shows.
