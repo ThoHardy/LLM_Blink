@@ -77,10 +77,10 @@ def _counts(df, regime, s_col, k_col, min_n=20):
 
 
 def mixture_report(df, s_col="report_s", k_col="report_k", regime="cot",
-                   label="REPORT", folds=8, seeds=3, boot=1500):
+                   label="REPORT", folds=8, seeds=3, boot=1500, min_n=20):
     print("\n" + "=" * 70 + f"\nMIXTURE: {label} probe, regime={regime}, "
           f"condition=load\n" + "=" * 70)
-    d = _counts(df, regime, s_col, k_col)
+    d = _counts(df, regime, s_col, k_col, min_n=min_n)
     if d.t1_load.nunique() < 2:
         print("  not enough loads with data yet."); return None
     s = d[s_col].to_numpy(); k = d[k_col].to_numpy(); cond = d["t1_load"].tolist()
@@ -191,10 +191,10 @@ def main():
     a = ap.parse_args()
     df = _load(a.csv)
     validity(df)
-    mixture_report(df, "report_s", "report_k", "cot", "REPORT")
-    mixture_report(df, "report_s", "report_k", "direct", "REPORT(direct baseline)")
+    mixture_report(df, "report_s", "report_k", "cot", "REPORT", min_n=a.min_n)
+    mixture_report(df, "report_s", "report_k", "direct", "REPORT(direct baseline)", min_n=a.min_n)
     if "access_k" in df and df.access_k.notna().any():
-        mixture_report(df, "access_s", "access_k", "cot", "ACCESS")
+        mixture_report(df, "access_s", "access_k", "cot", "ACCESS", min_n=a.min_n)
     access_taxonomy(df)
     length_mediation(df)
     if not a.no_fig:
