@@ -184,6 +184,8 @@ def nested_fork(model, tok, trial, traj, k_cot: int = 8, k_rep: int = 8,
 class _PseudoTraj:
     """Minimal Trajectory-like object exposing .text and .offset for a rebuilt
     prompt+CoT+transition string (used by the nested probe)."""
+    _ANSWERS_OPEN = "<Final_Answers>"   # Trajectory.offset reads self._ANSWERS_OPEN
+
     def __init__(self, text):
         self.text = text
 
