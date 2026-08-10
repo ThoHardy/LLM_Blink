@@ -210,9 +210,21 @@ nests cleanly in the two-stage picture: **the serial workspace IS the CoT scan;
 access = being reached by the scan (graded, length-dependent); report = readout
 (all-or-none, gated by scan inclusion, with a context-recovery backstop).**
 
-## Plan from here (analyse-and-iterate)
+## REPLICATION — qwen2.5:3b (n=42/load): two-stage dissociation HOLDS, cleaner
 
-1. Replicate the two-stage dissociation on **qwen2.5:3b** (nested probe → access
-   rate + ICC in one run) [RUNNING].
-2. If time: mistral:7b; a clean π-vs-μ run with condition=n_tasks; investigate
-   the T=1 trivial inversion.
+`results/fig_replication_two_stage.png`. ICC = 0.85 (trivial), 0.86 (semantic_4)
+— even higher than gemma2:2b. report | in CoT = 0.88–0.92, | not in CoT =
+0.14–0.17 (weaker context recovery than gemma2:2b). And access shows the
+**expected** load gradient: mean access trivial 0.83 > semantic_4 0.51 (load
+reduces workspace entry). gemma2:2b's inversion was its short-CoT artifact; qwen
+(which closes </Thinking> reliably) gives the clean gradient. Two models, same
+dissociation: **graded access, all-or-none read-out.**
+
+## Plan from here
+
+1. mistral:7b as a 3rd model [RUNNING].
+2. Deliverables: repo RESULTS + figures (done); a draft issue-#14 update for
+   Ulysse to post (results are preliminary, n~40 — not auto-posting to Thomas's
+   public repo without an explicit ask); optional HTML summary artifact.
+3. Open: a clean π-vs-μ run (condition=n_tasks, not load-difficulty); confirmatory
+   n≥200; the D4 report-order axis.
