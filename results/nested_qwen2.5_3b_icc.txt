@@ -1,0 +1,16 @@
+======================================================================
+NESTED PROBE: results/nested_qwen2.5_3b.csv
+======================================================================
+rows(CoTs): 352  trials: 44  loads: ['semantic_4', 'trivial']
+
+  semantic_4:  ICC=0.851   (1=ignition, 0=graded read-out)
+    between-CoT var=0.220  within-CoT var=0.031  n_CoTs=176
+    fraction of CoTs 'decided' (rr<=.1 or >=.9): 0.83   mean access(t2_in_CoT)=0.51
+    report_rate | passphrase NOT in CoT : 0.144 (n=87)
+    report_rate | passphrase IN CoT     : 0.878 (n=89)
+
+  trivial:  ICC=0.845   (1=ignition, 0=graded read-out)
+    between-CoT var=0.142  within-CoT var=0.021  n_CoTs=176
+    fraction of CoTs 'decided' (rr<=.1 or >=.9): 0.89   mean access(t2_in_CoT)=0.83
+    report_rate | passphrase NOT in CoT : 0.183 (n=30)
+    report_rate | passphrase IN CoT     : 0.921 (n=146)

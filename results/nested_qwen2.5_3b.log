@@ -1,0 +1,10 @@
+[nested] qwen2.5:3b: 90 trials, 0 done, k_cot=8 k_rep=6
+  skip seed=1114 load=trivial: no <Thinking> opener to fork the CoT from
+  5 trials in 207s (41.5s/trial)
+  10 trials in 400s (40.0s/trial)
+  15 trials in 599s (39.9s/trial)
+  20 trials in 774s (38.7s/trial)
+  25 trials in 985s (39.4s/trial)
+  30 trials in 1184s (39.5s/trial)
+  35 trials in 1390s (39.7s/trial)
+  40 trials in 1583s (39.6s/trial)
