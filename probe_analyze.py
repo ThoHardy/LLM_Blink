@@ -159,6 +159,30 @@ def figures(df, out_dir):
     fig.savefig(p, dpi=110); print(f"\n[fig] {p}")
 
 
+def length_mediation(df):
+    """D6 (§6): WITHIN a (load) cell — difficulty held constant by construction —
+    does a longer natural CoT predict lower report? Spearman rho of cot_len_chars
+    vs realized report, cot rows only. A negative rho within cells is the
+    length->detection mediation Li et al.'s between-item null cannot see."""
+    from scipy.stats import spearmanr
+    print("\n" + "=" * 70 + "\nD6 length mediation (within-cell, cot)\n" + "=" * 70)
+    d = df[(df.regime == "cot")].dropna(subset=["cot_len_chars"])
+    if not len(d):
+        print("  no cot rows."); return
+    for L, g in d.groupby("t1_load"):
+        if len(g) < 15 or g.realized_report_contains.nunique() < 2:
+            print(f"  {L:12}: n={len(g)} (too few / no variance)"); continue
+        rho, p = spearmanr(g.cot_len_chars, g.realized_report_contains)
+        # also vs forked report_rate if present
+        extra = ""
+        gg = g[g.report_k > 0]
+        if len(gg) > 15:
+            rr = gg.report_s / gg.report_k
+            rho2, p2 = spearmanr(gg.cot_len_chars, rr)
+            extra = f" | vs report_rate rho={rho2:+.2f} (p={p2:.3f})"
+        print(f"  {L:12}: n={len(g)}  rho(len, realized_report)={rho:+.2f} (p={p:.3f}){extra}")
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("csv")
@@ -172,6 +196,7 @@ def main():
     if "access_k" in df and df.access_k.notna().any():
         mixture_report(df, "access_s", "access_k", "cot", "ACCESS")
     access_taxonomy(df)
+    length_mediation(df)
     if not a.no_fig:
         figures(df, os.path.dirname(os.path.abspath(a.csv)))
 
