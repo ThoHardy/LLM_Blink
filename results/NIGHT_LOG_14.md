@@ -153,10 +153,45 @@ is LARGEST for trivial at T=1 (0.91→0.37). To investigate.
 **5. Access taxonomy:** level-2 (accessed, NOT reported) ~0.15–0.20 across loads —
 the theoretically-loaded GWT cell is populated.
 
+## DECISIVE RESULT — the two-stage dissociation (gemma2:2b)
+
+`results/fig_two_stage_gemma2_2b.png`. Three independent measures agree:
+
+**A. Report probe is BIMODAL** (n=126 cot pooled): counts pile at 0 AND k. The
+mixture on report counts (condition=regime, n=252) rejects M0 decisively —
+M0−Mfull −0.178, CI [−0.266, −0.085] excludes 0; Tarone Z=112. So report is NOT
+a single graded component: **two modes (~0.08 / 0.85)**.
+
+**B. Access probe is UNIMODAL, GRADED** (mass in the middle, peak ~8/20). Mixture:
+M0 (single graded component) WINS — M0−Mfull +0.071, CI [0.028, 0.120]; Tarone
+Z=6.1. Workspace ENTRY is graded/resource-limited, not all-or-none.
+
+**C. Nested probe: report is decided by the CoT** — ICC 0.73 (semantic_4), 0.81
+(trivial); between-CoT var (0.19–0.21) ≫ within-CoT var (0.04–0.06). report | in
+CoT = 0.90–0.94, report | not in CoT = 0.30–0.34 (a context-recovery channel).
+
+→ **The discreteness of conscious access arises at the workspace→report READ-OUT,
+gated by whether the item entered the serial workspace; workspace ENTRY itself is
+graded.** This is a clean, novel two-stage answer to the paper's §1 second
+headline, and the LLM analog of the access-vs-report question.
+
+**π-vs-μ (finer):** within the confirmed bimodality, whether load/regime moves π
+(fraction in the reported mode) or μ (mode locations) is AMBIGUOUS at n≈126
+(Mpi≈Mmu≈Mfull). Under the fixed-mode model the cot→direct CIB reads as a
+π-shift (0.54→0.97 in the high mode) — ignition-consistent — but μ-shift is not
+excluded. Needs the confirmatory n≥200. NB the regime contrast has a fork-point
+confound (cot=post_cot vs direct=response); do not over-read it.
+
+**Caveats / open (honest):** (i) the load axis is non-monotonic at T=1 — trivial
+cot report (0.37) < semantic (0.53–0.59), INVERTED vs the T=0 corpus; D6 shows
+longer CoT → more report, so the effect is CoT-length/thoroughness mediated. The
+cleaner π-vs-μ manipulation is probably n_tasks, not load-difficulty. (ii) report
+isn't PURELY all-or-none — the ~0.33 context-recovery channel is a genuine graded
+backstop (the passphrase persists in context, §5 scope limit a).
+
 ## Plan from here (analyse-and-iterate)
 
-1. Pivot the pilot to **report-only** (access answered → 2.5× faster) to push
-   report to n≈120/cell for the bimodal-vs-graded verdict (the headline).
-2. **Nested probe** on gemma2:2b (ICC) — the clean report-stage test, free of the
-   CoT-content confound the forked report probe carries.
-3. 2nd model (qwen2.5:3b) for replication; investigate the T=1 trivial inversion.
+1. Replicate the two-stage dissociation on **qwen2.5:3b** (nested probe → access
+   rate + ICC in one run) [RUNNING].
+2. If time: mistral:7b; a clean π-vs-μ run with condition=n_tasks; investigate
+   the T=1 trivial inversion.
