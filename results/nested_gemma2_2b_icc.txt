@@ -1,0 +1,16 @@
+======================================================================
+NESTED PROBE: results/nested_gemma2_2b.csv
+======================================================================
+rows(CoTs): 492  trials: 82  loads: ['semantic_4', 'trivial']
+
+  semantic_4:  ICC=0.726   (1=ignition, 0=graded read-out)
+    between-CoT var=0.191  within-CoT var=0.057  n_CoTs=246
+    fraction of CoTs 'decided' (rr<=.1 or >=.9): 0.68   mean access(t2_in_CoT)=0.41
+    report_rate | passphrase NOT in CoT : 0.314 (n=145)
+    report_rate | passphrase IN CoT     : 0.898 (n=101)
+
+  trivial:  ICC=0.810   (1=ignition, 0=graded read-out)
+    between-CoT var=0.207  within-CoT var=0.039  n_CoTs=246
+    fraction of CoTs 'decided' (rr<=.1 or >=.9): 0.79   mean access(t2_in_CoT)=0.39
+    report_rate | passphrase NOT in CoT : 0.338 (n=151)
+    report_rate | passphrase IN CoT     : 0.944 (n=95)
