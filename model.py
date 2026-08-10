@@ -79,13 +79,22 @@ class OllamaBackend:
         self._native_url = root[:-3].rstrip("/") if root.endswith("/v1") else root
 
     def _native_chat(self, messages: list, num_predict: int,
-                     temperature: float, stop: Optional[list] = None) -> dict:
+                     temperature: float, stop: Optional[list] = None,
+                     seed: Optional[int] = None) -> dict:
         """POST the native /api/chat endpoint (non-streaming) and return the
         decoded JSON. Kept dependency-free (urllib) so the Ollama backend needs
-        no extra packages beyond ``openai``."""
+        no extra packages beyond ``openai``.
+
+        ``seed``: when given, sets Ollama's sampling seed. Essential for the
+        forked-resampling probes (#14 §3.4): at temperature>0 a FIXED seed makes
+        Ollama deterministic (k identical samples), so the caller passes a
+        DISTINCT seed per sample to get k independent draws reproducibly.
+        """
         options: dict = {"temperature": temperature, "num_predict": num_predict}
         if stop:
             options["stop"] = stop
+        if seed is not None:
+            options["seed"] = int(seed)
         payload = {"model": self.model_name, "messages": messages,
                    "stream": False, "options": options}
         req = urllib.request.Request(
@@ -130,7 +139,8 @@ class OllamaBackend:
     def continue_generate(self, system: str, user: str,
                           prefilled_assistant: str, max_new_tokens: int,
                           temperature: float = 0.0,
-                          stop_at: Optional[str] = None):
+                          stop_at: Optional[str] = None,
+                          seed: Optional[int] = None):
         """Free generation CONTINUING a prefilled assistant turn (Ollama).
 
         Matches the HF ``_continue_generate_hf`` contract exactly, returning
@@ -157,7 +167,7 @@ class OllamaBackend:
         messages.append({"role": "assistant", "content": prefilled_assistant})
         stop = [stop_at] if stop_at else None
         resp = self._native_chat(messages, num_predict=max_new_tokens,
-                                 temperature=temperature, stop=stop)
+                                 temperature=temperature, stop=stop, seed=seed)
         text = resp.get("message", {}).get("content", "") or ""
         done_reason = resp.get("done_reason")
         n_new = int(resp.get("eval_count", 0) or 0)
@@ -404,7 +414,8 @@ def continue_generate(model, tok, system: str, user: str,
                       prefilled_assistant: str,
                       max_new_tokens: int,
                       temperature: float = 0.0,
-                      stop_at: Optional[str] = None):
+                      stop_at: Optional[str] = None,
+                      seed: Optional[int] = None):
     """Free generation CONTINUING a prefilled assistant turn.
 
     Returns ``(text, n_new_tokens, truncated)``: ``text`` is the newly
@@ -425,18 +436,22 @@ def continue_generate(model, tok, system: str, user: str,
     """
     if isinstance(model, OllamaBackend):
         return model.continue_generate(system, user, prefilled_assistant,
-                                       max_new_tokens, temperature, stop_at)
+                                       max_new_tokens, temperature, stop_at,
+                                       seed=seed)
     return _continue_generate_hf(model, tok, system, user, prefilled_assistant,
-                                 max_new_tokens, temperature, stop_at)
+                                 max_new_tokens, temperature, stop_at, seed=seed)
 
 
 def _continue_generate_hf(model, tok, system: str, user: str,
                           prefilled_assistant: str,
                           max_new_tokens: int,
                           temperature: float = 0.0,
-                          stop_at: Optional[str] = None):
+                          stop_at: Optional[str] = None,
+                          seed: Optional[int] = None):
     import torch
 
+    if seed is not None:
+        torch.manual_seed(int(seed))
     gen_kwargs: dict = dict(max_new_tokens=max_new_tokens,
                             pad_token_id=tok.eos_token_id)
     if stop_at:
