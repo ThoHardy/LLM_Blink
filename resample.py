@@ -42,8 +42,9 @@ from .readout import parse_task_report_names, answer_contains, t2_in_cot
 # access probe (resample the CoT) stops there; the report probe stops at the
 # answer-block CLOSER.
 _ANSWERS_OPEN = "<Final_Answers>"
-_DEFAULT_STOP = {"pre_cot": _ANSWERS_OPEN, "post_cot": STOP_ANSWERS}
-_DEFAULT_BUDGET = {"pre_cot": 640, "post_cot": 256}
+_DEFAULT_STOP = {"pre_cot": _ANSWERS_OPEN, "post_cot": STOP_ANSWERS,
+                 "response": STOP_ANSWERS}
+_DEFAULT_BUDGET = {"pre_cot": 640, "post_cot": 256, "response": 256}
 
 
 class DegenerateForkError(RuntimeError):

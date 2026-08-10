@@ -82,8 +82,15 @@ class Trajectory:
                           opener if present, else after ``</Thinking>`` (resample
                           the report; the primary report probe).
         at="post_answers" -> just after ``</Final_Answers>`` (end of report).
+        at="response"  -> 0: resample the whole assistant turn from the prompt.
+                          Used for the report probe in the DIRECT regime, whose
+                          output carries no <Thinking>/<Final_Answers> scaffold
+                          (small models emit the report lines directly, e.g. in a
+                          ``` fence) so there is nothing to fork "after the CoT".
         """
         t = self.text
+        if at == "response":
+            return 0
         if at == "pre_cot":
             i = t.find(THINKING_OPEN.rstrip("\n"))    # "<Thinking>"
             if i == -1:
