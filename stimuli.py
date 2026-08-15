@@ -628,6 +628,17 @@ class TrialConfig:
     # prompt text: NO effect on any RNG draw (7.2.2). rescore_graded defaults it
     # to "none" for CSVs predating the column (byte-exact old prompt).
     report_order: str = "none"
+    # T1-engagement axis (2026-08-15, issue #14 Step 5 / D3): whether the model
+    # is asked to SOLVE the load tasks or IGNORE them.
+    #   "solve"  -> today's prompt, byte-exact.
+    #   "ignore" -> append a uniform, content-defined rule that does NOT name the
+    #               passphrase: load tasks (determine/deduce/compute) get UNKNOWN,
+    #               while the copy-paste passphrase task is untouched. Dissociates
+    #               consolidation from detection (the model must still DETECT the
+    #               load tasks to answer UNKNOWN) — see the paper caveat. Pure
+    #               prompt text, NO RNG draw. rescore_graded defaults it to
+    #               "solve" for CSVs predating the column.
+    load_engagement: str = "solve"
 
 
 @dataclass
@@ -868,6 +879,14 @@ RULES_TASKS = (
     "end. Do not add conversational text, introductory phrases, or extra punctuation."
 )
 
+_VALID_LOAD_ENGAGEMENTS = ("solve", "ignore")
+# Uniform, content-defined (does NOT name the passphrase). Only tasks that
+# ask to determine/deduce/compute are affected; the copy-paste passphrase is not.
+_LOAD_IGNORE_RULE = (
+    " For any task that asks you to determine, deduce, or compute something, "
+    "answer UNKNOWN."
+)
+
 
 def _passphrase_task_line(t2: str, n_words: int) -> str:
     num = _NUM_WORDS.get(n_words, str(n_words))
@@ -997,6 +1016,10 @@ def _build_trial_tasks(cfg: TrialConfig) -> Trial:
     if cfg.report_order not in _VALID_REPORT_ORDERS:
         raise ValueError(
             f"report_order={cfg.report_order!r}; valid: {_VALID_REPORT_ORDERS}")
+    if cfg.load_engagement not in _VALID_LOAD_ENGAGEMENTS:
+        raise ValueError(
+            f"load_engagement={cfg.load_engagement!r}; "
+            f"valid: {_VALID_LOAD_ENGAGEMENTS}")
 
     rng = random.Random(cfg.seed)
     t2 = random_passphrase(rng, cfg.t2_words)
@@ -1028,7 +1051,9 @@ def _build_trial_tasks(cfg: TrialConfig) -> Trial:
     lines.append("End of stream.")   # unnumbered: does not consume a packet slot
     stream = "\n".join(lines)
 
-    header = (f"{RULES_TASKS}\n"
+    rules = RULES_TASKS + (_LOAD_IGNORE_RULE
+                           if cfg.load_engagement == "ignore" else "")
+    header = (f"{rules}\n"
               f"{_worked_example_tasks(cfg.naming, cfg.regime, cfg.report_order)}\n"
               f"DATA STREAM:\n{stream}\n"
               f"{_output_format_tasks(cfg.regime, cfg.anti_enumeration, cfg.report_order)}")
