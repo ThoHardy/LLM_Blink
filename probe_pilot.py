@@ -41,6 +41,7 @@ from LLM_Blink import load_model                                    # noqa: E402
 from LLM_Blink.stimuli import TrialConfig, build_trial             # noqa: E402
 from LLM_Blink.protocol import generate_trajectory                 # noqa: E402
 from LLM_Blink.readout import (parse_task_report_names,            # noqa: E402
+                               parse_task_report, task_rows,
                                answer_contains, t2_in_cot)
 from LLM_Blink.resample import (fork_samples, score_report_samples,  # noqa: E402
                                 score_access_samples, DegenerateForkError)
@@ -49,7 +50,7 @@ FIELDS = [
     "model", "n_tasks", "naming", "t1_load", "regime", "passphrase_last",
     "base_temp", "probe_k", "seed", "t2_phrase", "t2_task_name", "t2_rank",
     "t2_abs_index", "cot_len_chars", "base_output_truncated", "has_fork_point",
-    "realized_report_contains", "realized_t2_in_cot",
+    "realized_report_contains", "realized_t2_in_cot", "t1_correct",
     "report_s", "report_k", "report_degenerate",
     "access_s", "access_k", "access_degenerate",
 ]
@@ -75,6 +76,18 @@ def _realized_report(traj_text, task_name, phrase):
     parsed = parse_task_report_names(traj_text, [task_name])
     resp = parsed["reported"].get(str(task_name).upper())
     return answer_contains(resp, phrase)
+
+
+def _t1_correct(traj_text, tr):
+    """Load-task accuracy (fraction of load rows exact-correct), same formula
+    as experiment.py:128 — panel 1 of the #10 dissociation figure (CoT should
+    HELP this while it HURTS passphrase report)."""
+    parsed = parse_task_report(traj_text, tr)
+    rows_t = task_rows(tr, parsed["reported"])
+    load_rows = [r for r in rows_t if r["kind"] == "load"]
+    if not load_rows:
+        return ""
+    return sum(r["correct"] for r in load_rows) / len(load_rows)
 
 
 def run(args):
@@ -134,6 +147,7 @@ def run(args):
                 traj.text, tr.t2_task_name, tr.t2_phrase)),
             realized_t2_in_cot=int(t2_in_cot(traj.text, tr.t2_phrase, tr.t2_task_name))
                                 if regime == "cot" else "",
+            t1_correct=_t1_correct(traj.text, tr),
             report_s="", report_k="", report_degenerate="",
             access_s="", access_k="", access_degenerate="",
         )
