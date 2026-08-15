@@ -17,6 +17,7 @@ Key design choices (see ../PROMPTS.md and ../LITERATURE.md §C):
 """
 from __future__ import annotations
 import random
+import re
 from dataclasses import dataclass, field
 
 NATO = ["ALPHA", "BRAVO", "CHARLIE", "DELTA", "ECHO", "FOXTROT", "GOLF", "HOTEL",
@@ -439,6 +440,7 @@ T1_MATH_BANKS = {
 # ---------------------------------------------------------------------------
 
 from . import _t1_generators as _gen
+from ._math_bench import MATH_BENCH_BANKS   # Hendrycks MATH Algebra, Levels 1-5
 
 
 def _extend_to_100(pool: list, generator, *, target: int = 100, seed: int,
@@ -508,6 +510,8 @@ _MATH_ALIASES = {
     "math_3": 3,
     "math_4": 4,
 }
+# Hendrycks MATH Algebra (Step 6): math_bench_<L> -> MATH difficulty Level L.
+_MATH_BENCH_ALIASES = {f"math_bench_{lvl}": lvl for lvl in range(1, 6)}
 # ---------------------------------------------------------------------------
 # Trivial T1 baseline (added 2026-07-20)
 # ---------------------------------------------------------------------------
@@ -547,6 +551,7 @@ _VALID_LOADS = (
     "trivial",
     *_SEMANTIC_ALIASES,
     *_MATH_ALIASES,
+    *_MATH_BENCH_ALIASES,
 )
 
 
@@ -561,6 +566,8 @@ def _get_t1(load: str, rng: random.Random):
         task, ans = rng.choice(T1_SEMANTIC_BANKS[_SEMANTIC_ALIASES[load]])
     elif load in _MATH_ALIASES:
         task, ans = rng.choice(T1_MATH_BANKS[_MATH_ALIASES[load]])
+    elif load in _MATH_BENCH_ALIASES:
+        task, ans = rng.choice(MATH_BENCH_BANKS[_MATH_BENCH_ALIASES[load]])
     else:
         raise ValueError(
             f"Unknown t1_load: {load!r}. "
@@ -910,11 +917,13 @@ def _sample_load_items(load: str, rng: random.Random, k: int) -> list:
         bank = T1_SEMANTIC_BANKS[_SEMANTIC_ALIASES[load]]
     elif load in _MATH_ALIASES:
         bank = T1_MATH_BANKS[_MATH_ALIASES[load]]
+    elif load in _MATH_BENCH_ALIASES:
+        bank = MATH_BENCH_BANKS[_MATH_BENCH_ALIASES[load]]
     else:
         raise ValueError(
             f"Unknown t1_load: {load!r}. Valid values: {', '.join(_VALID_LOADS)}"
         )
-    return [tuple(item) for item in rng.sample(bank, k)]
+    return [tuple(item) for item in rng.sample(list(bank), k)]
 
 
 def _worked_example_tasks(naming: str, regime: str,
@@ -1178,6 +1187,30 @@ def _validate_t1_pools(verbose: bool = False) -> None:
 
         if verbose:
             print(f"  {name}: OK (100 items, no dups, deterministic)")
+
+    # (5b) MATH-bench pools (Step 6): static JSON from the Hendrycks MATH
+    # Algebra subset (not programmatic, so no regen check). 100 items/level, no
+    # duplicate instructions, (str, str) tuples, integer answers, distinct
+    # levels. Distinctness across levels guards against a build regression that
+    # would collapse the difficulty axis.
+    _mb_seen = set()
+    for lvl in range(1, 6):
+        pool = MATH_BENCH_BANKS[lvl]
+        assert len(pool) == expected_size, (
+            f"math_bench_{lvl}: expected {expected_size}, got {len(pool)}")
+        qs = [q for q, _ in pool]
+        assert len(set(qs)) == len(qs), f"math_bench_{lvl}: duplicate instructions"
+        for i, item in enumerate(pool):
+            assert (isinstance(item, tuple) and len(item) == 2
+                    and isinstance(item[0], str) and isinstance(item[1], str)), (
+                f"math_bench_{lvl}[{i}] not a (str, str): {item!r}")
+            assert re.fullmatch(r"-?\d+", item[1]), (
+                f"math_bench_{lvl}[{i}]: non-integer answer {item[1]!r}")
+        assert not (_mb_seen & set(qs)), (
+            f"math_bench_{lvl}: shares problems with a lower level")
+        _mb_seen |= set(qs)
+        if verbose:
+            print(f"  math_bench_{lvl}: OK (100 items, no dups, integer answers)")
 
     # (6) trivial baseline pool (2026-07-20): 100 items, no dups, (str, str),
     # answer appears in its instruction, and no NATO word (reserved for T2/mask).
