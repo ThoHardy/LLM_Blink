@@ -1,0 +1,3 @@
+gemma3:4b  exit=0  elapsed=557s  (2.32s/trial)
+gemma2:9b  exit=0  elapsed=713s  (2.97s/trial)
+gemma3:12b  exit=0  elapsed=1103s  (4.59s/trial)

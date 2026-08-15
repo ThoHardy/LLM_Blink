@@ -220,11 +220,39 @@ reduces workspace entry). gemma2:2b's inversion was its short-CoT artifact; qwen
 (which closes </Thinking> reliably) gives the clean gradient. Two models, same
 dissociation: **graded access, all-or-none read-out.**
 
-## Plan from here
+## 3rd MODEL — mistral:7b BREAKS the pattern: the read-out locus is MODEL-DEPENDENT
 
-1. mistral:7b as a 3rd model [RUNNING].
-2. Deliverables: repo RESULTS + figures (done); a draft issue-#14 update for
-   Ulysse to post (results are preliminary, n~40 — not auto-posting to Thomas's
-   public repo without an explicit ask); optional HTML summary artifact.
-3. Open: a clean π-vs-μ run (condition=n_tasks, not load-difficulty); confirmatory
-   n≥200; the D4 report-order axis.
+mistral:7b (n=15–16/load): **ICC = 0.27 (semantic_4), 0.14 (trivial)** — LOW.
+within-CoT var (0.14–0.17) ≫ between-CoT var (0.06–0.09). report | passphrase-in-CoT
+is only **0.45–0.66** (vs ~0.9 for gemma/qwen). access is very high (0.75–0.96).
+So mistral **accesses the item then reports it only stochastically → GRADED read-out.**
+
+**Mechanism (from the raw CoT, T=0 corpus):** mistral often writes the passphrase out
+IN `<Thinking>` and then makes an explicit DECISION not to report it —
+> "For Task VULTURE … report the three words 'CHARLIE NOVEMBER KILO'. However, this
+> task is not identified as such in the format of the other tasks … I will not include
+> it in the final answers."
+
+So the two model families gate discreteness at DIFFERENT loci:
+- **gemma2:2b, qwen2.5:3b** — read-out gated by workspace ENTRY (all-or-none): in the
+  CoT ⇒ reported. ICC 0.73–0.86.
+- **mistral:7b** — near-complete entry, but a stochastic read-out DECISION to
+  include/suppress ⇒ GRADED read-out, large level-2 (accessed, not reported). ICC 0.12–0.27.
+
+**This is the corrected headline** (a 3rd model was essential — two models alone would
+have over-claimed a universal all-or-none read-out): *workspace ACCESS is graded on
+every model; the READ-OUT's discreteness is model-dependent.* Both the ignition and the
+graded-read-out outcomes that Thomas said are each publishable actually co-occur across
+models. `results/fig_replication_two_stage.png` (3 models).
+
+## Status at wrap-up
+
+DONE: Steps 1–3 (validated), 3-model two-stage results, mechanism, figures, HTML
+brief (artifact, private), draft issue comment (held for review). All committed on
+`feat/issue-14-mixture-probes`. Ollama: the desktop app was replaced by a manual
+`screen -S ollama_par` serve with OLLAMA_NUM_PARALLEL=8 — to revert, `screen -S
+ollama_par -X quit` and relaunch Ollama.app.
+
+OPEN (next session): confirmatory n≥200 to settle π-vs-μ within the bimodal models;
+condition=n_tasks (cleaner load knob than difficulty); D4 report-order; Step 6 MATH
+track; scale the model panel (is graded read-out a Mistral-family trait?).

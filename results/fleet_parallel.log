@@ -1,0 +1,7 @@
+>>> 22:02:53 starting gemma3:4b (workers=8 seeds=10)
+>>> 22:12:10 done gemma3:4b exit=0 elapsed=557s
+>>> 22:12:10 starting gemma2:9b (workers=8 seeds=10)
+>>> 22:24:03 done gemma2:9b exit=0 elapsed=713s
+>>> 22:24:03 starting gemma3:12b (workers=8 seeds=10)
+>>> 22:42:26 done gemma3:12b exit=0 elapsed=1103s
+>>> 22:42:26 starting gemma2:27b (workers=8 seeds=10)

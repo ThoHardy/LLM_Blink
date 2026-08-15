@@ -1,0 +1,11 @@
+[nested] mistral:7b: 80 trials, 0 done, k_cot=8 k_rep=6
+  5 trials in 748s (149.6s/trial)
+  10 trials in 1532s (153.2s/trial)
+  15 trials in 2228s (148.5s/trial)
+  20 trials in 2975s (148.8s/trial)
+  25 trials in 3640s (145.6s/trial)
+  30 trials in 4312s (143.7s/trial)
+[nested] mistral:7b: 70 trials, 31 done, k_cot=8 k_rep=6
+  5 trials in 720s (144.0s/trial)
+  10 trials in 1419s (141.9s/trial)
+  15 trials in 2177s (145.1s/trial)

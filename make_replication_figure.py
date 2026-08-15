@@ -40,6 +40,7 @@ def main(out, csvs):
         # left: ignition bars + ICC
         ax = axes[i][0]
         x = np.arange(len(loads)); w = 0.36
+        iccs_for_title = []
         for j, L in enumerate(loads):
             g = nd[nd.t1_load == L]
             r_in = (g[g.t2_in_this_cot == 1].eval("s/k")).mean()
@@ -48,7 +49,7 @@ def main(out, csvs):
             for _, r in g.iterrows():
                 gid = int(r.seed) * 1000 + int(r.cot_id)
                 ids += [gid] * int(r.k); y += [1] * int(r.s) + [0] * int(r.k - r.s)
-            icc = icc_nested(ids, y)
+            icc = icc_nested(ids, y); iccs_for_title.append(icc)
             ax.bar(j - w/2, r_in, w, color=C_IN,
                    label="passphrase IN CoT" if j == 0 else None)
             ax.bar(j + w/2, r_out, w, color=C_OUT,
@@ -56,7 +57,10 @@ def main(out, csvs):
             ax.text(j, 1.03, f"ICC={icc:.2f}", ha="center", fontsize=10, weight="bold")
         ax.set_xticks(x); ax.set_xticklabels(loads); ax.set_ylim(0, 1.16)
         ax.set_ylabel("report_rate | this CoT")
-        ax.set_title(f"{name}: read-out is decided by the CoT (all-or-none)")
+        mean_icc = float(np.mean(iccs_for_title))
+        kind = ("read-out gated by CoT entry (ALL-OR-NONE)"
+                if mean_icc >= 0.5 else "read-out a stochastic decision (GRADED)")
+        ax.set_title(f"{name}: {kind}")
         ax.legend(loc="center left", fontsize=8)
 
         # right: per-trial access-rate distribution
@@ -70,8 +74,10 @@ def main(out, csvs):
         ax2.set_xlabel("fraction of sampled CoTs containing the passphrase")
         ax2.set_ylabel("trials"); ax2.legend(fontsize=8)
 
-    fig.suptitle("Two-stage dissociation REPLICATES: graded workspace access, "
-                 "all-or-none read-out", fontsize=14, weight="bold")
+    fig.suptitle("Graded workspace access on every model; the READ-OUT's "
+                 "discreteness is MODEL-DEPENDENT\n(gemma2:2b, qwen2.5:3b: "
+                 "all-or-none read-out  ·  mistral:7b: graded read-out)",
+                 fontsize=13, weight="bold")
     fig.tight_layout(rect=[0, 0, 1, 0.98])
     fig.savefig(out, dpi=120)
     print("wrote", out)

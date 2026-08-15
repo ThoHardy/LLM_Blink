@@ -1,0 +1,93 @@
+[22:33:23] Overnight sweep starting: 11 models, anchor_seeds=6 seeds=8 k=(1, 3, 5) arms=both
+[22:33:23] === qwen2.5:0.5b (0.5B, Qwen2.5) ===
+/Users/ulysse/__projects__/LLM_Blink/model.py:193: UserWarning: [OllamaBackend] Graded log-prob scoring is disabled on the Ollama backend (it cannot teacher-force; the old approximate path re-codes the report measure and has a -25 penalty floor). Returning NaN. Use a HuggingFace model for graded read-outs, re-score the saved CSV with rescore_graded.py, or opt back in explicitly with approx_logprobs=True.
+  warnings.warn(
+[22:33:27]   natural CoT median = 44 tok -> budgets (11, 22, 44, None)
+/Users/ulysse/__projects__/LLM_Blink/model.py:193: UserWarning: [OllamaBackend] Graded log-prob scoring is disabled on the Ollama backend (it cannot teacher-force; the old approximate path re-codes the report measure and has a -25 penalty floor). Returning NaN. Use a HuggingFace model for graded read-outs, re-score the saved CSV with rescore_graded.py, or opt back in explicitly with approx_logprobs=True.
+  warnings.warn(
+/Users/ulysse/__projects__/LLM_Blink/overnight_sweep.py:118: FutureWarning: The behavior of DataFrame concatenation with empty or all-NA entries is deprecated. In a future version, this will no longer exclude empty or all-NA columns when determining the result dtypes. To retain the old behavior, exclude the relevant entries before the concat operation.
+  df = pd.concat([anchor_df, cot, direct], ignore_index=True)
+[22:35:41]   DONE qwen2.5:0.5b: blink_v1=0.5 direct_ceiling=0.156 forced_close=0.734 in 2.3min -> /Users/ulysse/__projects__/LLM_Blink/results/ab_qwen2.5_0.5b.csv
+[22:35:41] === qwen2.5:1.5b (1.5B, Qwen2.5) ===
+/Users/ulysse/__projects__/LLM_Blink/model.py:193: UserWarning: [OllamaBackend] Graded log-prob scoring is disabled on the Ollama backend (it cannot teacher-force; the old approximate path re-codes the report measure and has a -25 penalty floor). Returning NaN. Use a HuggingFace model for graded read-outs, re-score the saved CSV with rescore_graded.py, or opt back in explicitly with approx_logprobs=True.
+  warnings.warn(
+[22:35:56]   natural CoT median = 122 tok -> budgets (30, 61, 122, None)
+/Users/ulysse/__projects__/LLM_Blink/overnight_sweep.py:118: FutureWarning: The behavior of DataFrame concatenation with empty or all-NA entries is deprecated. In a future version, this will no longer exclude empty or all-NA columns when determining the result dtypes. To retain the old behavior, exclude the relevant entries before the concat operation.
+  df = pd.concat([anchor_df, cot, direct], ignore_index=True)
+[22:42:14]   DONE qwen2.5:1.5b: blink_v1=0.536 direct_ceiling=0.875 forced_close=0.869 in 6.5min -> /Users/ulysse/__projects__/LLM_Blink/results/ab_qwen2.5_1.5b.csv
+[22:42:14] === gemma2:2b (2.0B, Gemma2) ===
+/Users/ulysse/__projects__/LLM_Blink/model.py:193: UserWarning: [OllamaBackend] Graded log-prob scoring is disabled on the Ollama backend (it cannot teacher-force; the old approximate path re-codes the report measure and has a -25 penalty floor). Returning NaN. Use a HuggingFace model for graded read-outs, re-score the saved CSV with rescore_graded.py, or opt back in explicitly with approx_logprobs=True.
+  warnings.warn(
+[22:42:33]   natural CoT median = 129 tok -> budgets (32, 64, 129, None)
+/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/multiprocessing/resource_tracker.py:216: UserWarning: resource_tracker: There appear to be 1 leaked semaphore objects to clean up at shutdown
+  warnings.warn('resource_tracker: There appear to be %d '
+(eval):6: command not found: setsid
+[22:49:48] Overnight sweep starting: 11 models, anchor_seeds=6 seeds=8 k=(1, 3, 5) arms=both
+[22:49:48] skip qwen2.5:0.5b (already in progress log)
+[22:49:48] skip qwen2.5:1.5b (already in progress log)
+[22:49:48] === gemma2:2b (2.0B, Gemma2) ===
+/Users/ulysse/__projects__/LLM_Blink/model.py:193: UserWarning: [OllamaBackend] Graded log-prob scoring is disabled on the Ollama backend (it cannot teacher-force; the old approximate path re-codes the report measure and has a -25 penalty floor). Returning NaN. Use a HuggingFace model for graded read-outs, re-score the saved CSV with rescore_graded.py, or opt back in explicitly with approx_logprobs=True.
+  warnings.warn(
+[22:50:04]   natural CoT median = 129 tok -> budgets (32, 64, 129, None)
+/Users/ulysse/__projects__/LLM_Blink/model.py:193: UserWarning: [OllamaBackend] Graded log-prob scoring is disabled on the Ollama backend (it cannot teacher-force; the old approximate path re-codes the report measure and has a -25 penalty floor). Returning NaN. Use a HuggingFace model for graded read-outs, re-score the saved CSV with rescore_graded.py, or opt back in explicitly with approx_logprobs=True.
+  warnings.warn(
+/Users/ulysse/__projects__/LLM_Blink/overnight_sweep.py:118: FutureWarning: The behavior of DataFrame concatenation with empty or all-NA entries is deprecated. In a future version, this will no longer exclude empty or all-NA columns when determining the result dtypes. To retain the old behavior, exclude the relevant entries before the concat operation.
+  df = pd.concat([anchor_df, cot, direct], ignore_index=True)
+[22:57:05]   DONE gemma2:2b: blink_v1=0.188 direct_ceiling=1.0 forced_close=0.746 in 7.3min -> /Users/ulysse/__projects__/LLM_Blink/results/ab_gemma2_2b.csv
+[22:57:05] === qwen2.5:3b (3.0B, Qwen2.5) ===
+/Users/ulysse/__projects__/LLM_Blink/model.py:193: UserWarning: [OllamaBackend] Graded log-prob scoring is disabled on the Ollama backend (it cannot teacher-force; the old approximate path re-codes the report measure and has a -25 penalty floor). Returning NaN. Use a HuggingFace model for graded read-outs, re-score the saved CSV with rescore_graded.py, or opt back in explicitly with approx_logprobs=True.
+  warnings.warn(
+[22:57:22]   natural CoT median = 88 tok -> budgets (22, 44, 88, None)
+/Users/ulysse/__projects__/LLM_Blink/overnight_sweep.py:118: FutureWarning: The behavior of DataFrame concatenation with empty or all-NA entries is deprecated. In a future version, this will no longer exclude empty or all-NA columns when determining the result dtypes. To retain the old behavior, exclude the relevant entries before the concat operation.
+  df = pd.concat([anchor_df, cot, direct], ignore_index=True)
+[23:04:02]   DONE qwen2.5:3b: blink_v1=0.581 direct_ceiling=0.969 forced_close=0.742 in 7.0min -> /Users/ulysse/__projects__/LLM_Blink/results/ab_qwen2.5_3b.csv
+[23:04:02] === gemma3:4b (4.0B, Gemma3) ===
+/Users/ulysse/__projects__/LLM_Blink/model.py:193: UserWarning: [OllamaBackend] Graded log-prob scoring is disabled on the Ollama backend (it cannot teacher-force; the old approximate path re-codes the report measure and has a -25 penalty floor). Returning NaN. Use a HuggingFace model for graded read-outs, re-score the saved CSV with rescore_graded.py, or opt back in explicitly with approx_logprobs=True.
+  warnings.warn(
+[23:04:33]   natural CoT median = 106 tok -> budgets (26, 53, 106, None)
+/Users/ulysse/__projects__/LLM_Blink/overnight_sweep.py:118: FutureWarning: The behavior of DataFrame concatenation with empty or all-NA entries is deprecated. In a future version, this will no longer exclude empty or all-NA columns when determining the result dtypes. To retain the old behavior, exclude the relevant entries before the concat operation.
+  df = pd.concat([anchor_df, cot, direct], ignore_index=True)
+[23:15:44]   DONE gemma3:4b: blink_v1=0.226 direct_ceiling=0.969 forced_close=0.821 in 11.7min -> /Users/ulysse/__projects__/LLM_Blink/results/ab_gemma3_4b.csv
+[23:15:44] === mistral:7b (7.0B, Mistral) ===
+/Users/ulysse/__projects__/LLM_Blink/model.py:193: UserWarning: [OllamaBackend] Graded log-prob scoring is disabled on the Ollama backend (it cannot teacher-force; the old approximate path re-codes the report measure and has a -25 penalty floor). Returning NaN. Use a HuggingFace model for graded read-outs, re-score the saved CSV with rescore_graded.py, or opt back in explicitly with approx_logprobs=True.
+  warnings.warn(
+[23:16:33]   natural CoT median = 124 tok -> budgets (31, 62, 124, None)
+/Users/ulysse/__projects__/LLM_Blink/overnight_sweep.py:118: FutureWarning: The behavior of DataFrame concatenation with empty or all-NA entries is deprecated. In a future version, this will no longer exclude empty or all-NA columns when determining the result dtypes. To retain the old behavior, exclude the relevant entries before the concat operation.
+  df = pd.concat([anchor_df, cot, direct], ignore_index=True)
+[23:35:18]   DONE mistral:7b: blink_v1=0.517 direct_ceiling=0.906 forced_close=0.778 in 19.6min -> /Users/ulysse/__projects__/LLM_Blink/results/ab_mistral_7b.csv
+[23:35:18] === qwen2.5:7b (7.0B, Qwen2.5) ===
+/Users/ulysse/__projects__/LLM_Blink/model.py:193: UserWarning: [OllamaBackend] Graded log-prob scoring is disabled on the Ollama backend (it cannot teacher-force; the old approximate path re-codes the report measure and has a -25 penalty floor). Returning NaN. Use a HuggingFace model for graded read-outs, re-score the saved CSV with rescore_graded.py, or opt back in explicitly with approx_logprobs=True.
+  warnings.warn(
+[23:35:53]   natural CoT median = 97 tok -> budgets (24, 48, 97, None)
+/Users/ulysse/__projects__/LLM_Blink/overnight_sweep.py:118: FutureWarning: The behavior of DataFrame concatenation with empty or all-NA entries is deprecated. In a future version, this will no longer exclude empty or all-NA columns when determining the result dtypes. To retain the old behavior, exclude the relevant entries before the concat operation.
+  df = pd.concat([anchor_df, cot, direct], ignore_index=True)
+[23:48:12]   DONE qwen2.5:7b: blink_v1=0.047 direct_ceiling=1.0 forced_close=0.766 in 12.9min -> /Users/ulysse/__projects__/LLM_Blink/results/ab_qwen2.5_7b.csv
+[23:48:12] === gemma2:9b (9.0B, Gemma2) ===
+/Users/ulysse/__projects__/LLM_Blink/model.py:193: UserWarning: [OllamaBackend] Graded log-prob scoring is disabled on the Ollama backend (it cannot teacher-force; the old approximate path re-codes the report measure and has a -25 penalty floor). Returning NaN. Use a HuggingFace model for graded read-outs, re-score the saved CSV with rescore_graded.py, or opt back in explicitly with approx_logprobs=True.
+  warnings.warn(
+[23:49:06]   natural CoT median = 121 tok -> budgets (30, 60, 121, None)
+/Users/ulysse/__projects__/LLM_Blink/overnight_sweep.py:118: FutureWarning: The behavior of DataFrame concatenation with empty or all-NA entries is deprecated. In a future version, this will no longer exclude empty or all-NA columns when determining the result dtypes. To retain the old behavior, exclude the relevant entries before the concat operation.
+  df = pd.concat([anchor_df, cot, direct], ignore_index=True)
+[00:10:25]   DONE gemma2:9b: blink_v1=0.0 direct_ceiling=1.0 forced_close=0.734 in 22.2min -> /Users/ulysse/__projects__/LLM_Blink/results/ab_gemma2_9b.csv
+[00:10:25] === gemma3:12b (12.0B, Gemma3) ===
+/Users/ulysse/__projects__/LLM_Blink/model.py:193: UserWarning: [OllamaBackend] Graded log-prob scoring is disabled on the Ollama backend (it cannot teacher-force; the old approximate path re-codes the report measure and has a -25 penalty floor). Returning NaN. Use a HuggingFace model for graded read-outs, re-score the saved CSV with rescore_graded.py, or opt back in explicitly with approx_logprobs=True.
+  warnings.warn(
+[00:11:34]   natural CoT median = 96 tok -> budgets (24, 48, 96, None)
+/Users/ulysse/__projects__/LLM_Blink/overnight_sweep.py:118: FutureWarning: The behavior of DataFrame concatenation with empty or all-NA entries is deprecated. In a future version, this will no longer exclude empty or all-NA columns when determining the result dtypes. To retain the old behavior, exclude the relevant entries before the concat operation.
+  df = pd.concat([anchor_df, cot, direct], ignore_index=True)
+[00:41:30]   DONE gemma3:12b: blink_v1=0.125 direct_ceiling=1.0 forced_close=0.802 in 31.1min -> /Users/ulysse/__projects__/LLM_Blink/results/ab_gemma3_12b.csv
+[00:41:30] === mistral-nemo:12b (12.0B, Mistral) ===
+/Users/ulysse/__projects__/LLM_Blink/model.py:193: UserWarning: [OllamaBackend] Graded log-prob scoring is disabled on the Ollama backend (it cannot teacher-force; the old approximate path re-codes the report measure and has a -25 penalty floor). Returning NaN. Use a HuggingFace model for graded read-outs, re-score the saved CSV with rescore_graded.py, or opt back in explicitly with approx_logprobs=True.
+  warnings.warn(
+[00:45:22]   natural CoT median = 112 tok -> budgets (28, 56, 112, None)
+/Users/ulysse/__projects__/LLM_Blink/overnight_sweep.py:118: FutureWarning: The behavior of DataFrame concatenation with empty or all-NA entries is deprecated. In a future version, this will no longer exclude empty or all-NA columns when determining the result dtypes. To retain the old behavior, exclude the relevant entries before the concat operation.
+  df = pd.concat([anchor_df, cot, direct], ignore_index=True)
+[01:18:26]   DONE mistral-nemo:12b: blink_v1=0.516 direct_ceiling=1.0 forced_close=0.778 in 36.9min -> /Users/ulysse/__projects__/LLM_Blink/results/ab_mistral-nemo_12b.csv
+[01:18:26] === qwen2.5:14b (14.0B, Qwen2.5) ===
+/Users/ulysse/__projects__/LLM_Blink/model.py:193: UserWarning: [OllamaBackend] Graded log-prob scoring is disabled on the Ollama backend (it cannot teacher-force; the old approximate path re-codes the report measure and has a -25 penalty floor). Returning NaN. Use a HuggingFace model for graded read-outs, re-score the saved CSV with rescore_graded.py, or opt back in explicitly with approx_logprobs=True.
+  warnings.warn(
+[01:19:35]   natural CoT median = 96 tok -> budgets (24, 48, 96, None)
+/Users/ulysse/__projects__/LLM_Blink/overnight_sweep.py:118: FutureWarning: The behavior of DataFrame concatenation with empty or all-NA entries is deprecated. In a future version, this will no longer exclude empty or all-NA columns when determining the result dtypes. To retain the old behavior, exclude the relevant entries before the concat operation.
+  df = pd.concat([anchor_df, cot, direct], ignore_index=True)
+[01:44:22]   DONE qwen2.5:14b: blink_v1=0.141 direct_ceiling=1.0 forced_close=0.762 in 25.9min -> /Users/ulysse/__projects__/LLM_Blink/results/ab_qwen2.5_14b.csv
+[01:44:22] Overnight sweep complete.

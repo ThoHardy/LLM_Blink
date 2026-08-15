@@ -1,0 +1,45 @@
+Model   : gemma3:4b
+Workers : 8
+Trials  : 360  (temp=0.0, max_tok=256)
+Output  : results/ab_gemma3_4b_TRUNC256_t0_s10.csv
+Loading model...
+Model ready.
+
+  10/360  26s  (2.62s/trial, 0.38 trial/s)
+  20/360  36s  (1.79s/trial, 0.56 trial/s)
+  30/360  59s  (1.96s/trial, 0.51 trial/s)
+  40/360  75s  (1.87s/trial, 0.54 trial/s)
+  50/360  93s  (1.86s/trial, 0.54 trial/s)
+  60/360  107s  (1.78s/trial, 0.56 trial/s)
+  70/360  127s  (1.81s/trial, 0.55 trial/s)
+  80/360  144s  (1.80s/trial, 0.56 trial/s)
+  90/360  165s  (1.83s/trial, 0.55 trial/s)
+  100/360  184s  (1.84s/trial, 0.54 trial/s)
+  110/360  208s  (1.89s/trial, 0.53 trial/s)
+  120/360  229s  (1.91s/trial, 0.52 trial/s)
+  130/360  252s  (1.94s/trial, 0.52 trial/s)
+  140/360  270s  (1.93s/trial, 0.52 trial/s)
+  150/360  292s  (1.95s/trial, 0.51 trial/s)
+  160/360  310s  (1.94s/trial, 0.52 trial/s)
+  170/360  334s  (1.96s/trial, 0.51 trial/s)
+  180/360  349s  (1.94s/trial, 0.52 trial/s)
+  190/360  370s  (1.95s/trial, 0.51 trial/s)
+  200/360  388s  (1.94s/trial, 0.52 trial/s)
+  210/360  410s  (1.95s/trial, 0.51 trial/s)
+  220/360  426s  (1.94s/trial, 0.52 trial/s)
+  230/360  448s  (1.95s/trial, 0.51 trial/s)
+  240/360  464s  (1.93s/trial, 0.52 trial/s)
+  250/360  484s  (1.94s/trial, 0.52 trial/s)
+  260/360  500s  (1.92s/trial, 0.52 trial/s)
+  270/360  522s  (1.93s/trial, 0.52 trial/s)
+  280/360  542s  (1.93s/trial, 0.52 trial/s)
+  290/360  562s  (1.94s/trial, 0.52 trial/s)
+  300/360  579s  (1.93s/trial, 0.52 trial/s)
+  310/360  599s  (1.93s/trial, 0.52 trial/s)
+  320/360  618s  (1.93s/trial, 0.52 trial/s)
+  330/360  639s  (1.94s/trial, 0.52 trial/s)
+  340/360  657s  (1.93s/trial, 0.52 trial/s)
+  350/360  678s  (1.94s/trial, 0.52 trial/s)
+  360/360  688s  (1.91s/trial, 0.52 trial/s)
+
+Saved 360 rows to results/ab_gemma3_4b_TRUNC256_t0_s10.csv in 688s (1.91s/trial wall).

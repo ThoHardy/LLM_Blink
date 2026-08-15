@@ -1,0 +1,2 @@
+gemma3:1b  exit=0  elapsed=237s
+gemma2:2b  exit=0  elapsed=393s

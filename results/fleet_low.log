@@ -1,0 +1,5 @@
+>>> 21:31:30 starting gemma3:1b
+>>> 21:35:27 done gemma3:1b exit=0 elapsed=237s
+>>> 21:35:27 starting gemma2:2b
+>>> 21:42:00 done gemma2:2b exit=0 elapsed=393s
+>>> 21:42:00 starting gemma3:4b
