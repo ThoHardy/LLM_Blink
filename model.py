@@ -352,14 +352,21 @@ def _load_hf(name: str, load_in_4bit: bool = False):
 
 
 def _build_prompt_ids(tok, system: str, user: str,
-                      add_generation_prompt: bool = True):
+                      add_generation_prompt: bool = True,
+                      enable_thinking: bool | None = None):
     msgs = []
     if system:
         msgs.append({"role": "system", "content": system})
     msgs.append({"role": "user", "content": user})
+    # enable_thinking (issue #14 Step 7): hard reasoning toggle for models whose
+    # chat template supports it (Qwen3's enable_thinking=False is the documented
+    # hard switch; the server-side name is chat_template_kwargs). Passed through
+    # ONLY when explicitly set, so templates that don't accept the kwarg (Gemma,
+    # Qwen2.5, ...) are byte-identical to before.
+    extra = {} if enable_thinking is None else {"enable_thinking": enable_thinking}
     out = tok.apply_chat_template(
         msgs, add_generation_prompt=add_generation_prompt,
-        return_tensors="pt", return_dict=True,
+        return_tensors="pt", return_dict=True, **extra,
     )
     # apply_chat_template may return a raw tensor, a BatchEncoding, or a plain
     # dict depending on the transformers version (e.g. v5 returns a dict-like

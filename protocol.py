@@ -50,6 +50,13 @@ THINKING_OPEN = "<Thinking>\n"
 STOP_THINKING = "</Thinking>"
 STOP_ANSWERS = "</Final_Answers>"
 
+# Native reasoning-model delimiters (issue #14 Step 7): Qwen3 / DeepSeek-R1 etc.
+# emit their own <think>...</think> block, then a free-form answer (no
+# <Final_Answers> scaffold). The fork points must re-anchor on these when our
+# scaffold delimiters are absent, or both probes break silently on native runs.
+NATIVE_THINK_OPEN = "<think>"
+NATIVE_THINK_CLOSE = "</think>"
+
 
 @dataclass
 class Trajectory:
@@ -92,22 +99,36 @@ class Trajectory:
         if at == "response":
             return 0
         if at == "pre_cot":
-            i = t.find(THINKING_OPEN.rstrip("\n"))    # "<Thinking>"
+            i = t.find(THINKING_OPEN.rstrip("\n"))    # "<Thinking>" (scaffold)
+            marker = THINKING_OPEN.rstrip("\n")
+            if i == -1:                               # native <think> (Step 7)
+                i = t.find(NATIVE_THINK_OPEN)
+                marker = NATIVE_THINK_OPEN
             if i == -1:
                 return None
-            o = i + len(THINKING_OPEN.rstrip("\n"))
+            o = i + len(marker)
             if o < len(t) and t[o] == "\n":
                 o += 1
             return o
         if at == "post_cot":
-            i = t.find(self._ANSWERS_OPEN)            # read-out transition
+            i = t.find(self._ANSWERS_OPEN)            # scaffold read-out transition
             if i != -1:
                 o = i + len(self._ANSWERS_OPEN)
                 if o < len(t) and t[o] == "\n":
                     o += 1
                 return o
-            j = t.find(STOP_THINKING)                 # fallback: clean template
-            return j + len(STOP_THINKING) if j != -1 else None
+            j = t.find(STOP_THINKING)                 # fallback: clean scaffold
+            if j != -1:
+                return j + len(STOP_THINKING)
+            # native reasoning models (Step 7): read-out transition = </think>,
+            # after which the model emits its free-form answer.
+            k = t.find(NATIVE_THINK_CLOSE)
+            if k != -1:
+                o = k + len(NATIVE_THINK_CLOSE)
+                if o < len(t) and t[o] == "\n":
+                    o += 1
+                return o
+            return None
         if at == "post_answers":
             i = t.find(STOP_ANSWERS)
             return i + len(STOP_ANSWERS) if i != -1 else None
