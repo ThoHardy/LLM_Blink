@@ -81,6 +81,29 @@ def _thinking_region(generated: str) -> str:
     return generated[start:j] if j != -1 else generated[start:]
 
 
+def t2_in_cot(generated: str, t2_phrase: str,
+              t2_task_name: str | None = None) -> bool:
+    """Binary access probe (#14 §3.2): is the passphrase task mentioned or
+    processed anywhere inside the model's own <Thinking> block, by name or
+    content? Generalises ``t2_echoed_in_cot`` (which was phrase-only).
+
+    Accepts either a full trajectory (the <Thinking> span is extracted) or a
+    bare CoT continuation (no tags — the whole string is searched). Used both
+    on the realized CoT and on each pre_cot-forked sample.
+    """
+    if not generated:
+        return False
+    think = _thinking_region(generated)
+    span = think if think else generated
+    up = span.upper()
+    if t2_phrase and t2_phrase.upper() in up:
+        return True
+    if t2_task_name:
+        if re.search(r"\b" + re.escape(str(t2_task_name).upper()) + r"\b", up):
+            return True
+    return False
+
+
 def cot_enumeration_stats(generated: str, task_packets) -> dict:
     """Compliance read-out for the anti-enumeration instruction (idea I1).
 
@@ -177,6 +200,29 @@ def task_rows(trial_or_tasks, reported: dict) -> list:
                             and nresp in others,
         ))
     return rows
+
+
+def report_order_respected(generated: str, trial, report_order: str = "none"):
+    """Kendall tau between the EMITTED report order and the INSTRUCTED order
+    (issue #14 Step 4/D4 manipulation check).
+
+    Emitted order = order the task lines appear in <Final_Answers>. Instructed
+    order = ascending stream rank for "stream" (and for "none", the reference is
+    stream order, i.e. spontaneous compliance), descending for "reverse".
+    Returns tau in [-1, 1] (+1 = fully compliant, -1 = fully anti-compliant), or
+    None when fewer than 2 tasks were reported (tau undefined). Without this a
+    null on D4 is uninterpretable.
+    """
+    from scipy.stats import kendalltau
+    parsed = parse_task_report(generated, trial)
+    emitted = list(parsed["reported"].keys())            # emission order (upper)
+    rank_by_name = {str(t["name"]).upper(): t["rank"] for t in trial.tasks}
+    ranks = [rank_by_name[n] for n in emitted if n in rank_by_name]
+    if len(ranks) < 2:
+        return None
+    target = [-r for r in ranks] if report_order == "reverse" else ranks
+    tau, _ = kendalltau(list(range(len(target))), target)
+    return float(tau)
 
 
 def t2_scoring_prefix_tasks(generated: str, task_name: str):

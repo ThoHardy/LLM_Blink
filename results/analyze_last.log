@@ -1,0 +1,40 @@
+/Users/ulysse/__projects__/LLM_Blink/analyze.py:41: UserWarning: No artists with labels found to put in legend.  Note that artists whose label start with an underscore are ignored when legend() is called with no argument.
+  ax.legend()
+/Users/ulysse/__projects__/LLM_Blink/analyze.py:41: UserWarning: No artists with labels found to put in legend.  Note that artists whose label start with an underscore are ignored when legend() is called with no argument.
+  ax.legend()
+
+=== gemma2:2b  (gated 240/240 = 100%) ===
+  figure -> results/fig_ab_gemma2_2b_t0_s10.png
+
+=== gemma2:9b  (gated 225/240 = 94%) ===
+  figure -> results/fig_ab_gemma2_9b_t0_s10.png
+
+=== gemma3:12b  (gated 240/240 = 100%) ===
+  figure -> results/fig_ab_gemma3_12b_t0_s10.png
+
+=== gemma3:1b  (gated 174/240 = 72%) ===
+  figure -> results/fig_ab_gemma3_1b_t0_s10.png
+
+=== gemma3:270m  (gated 1/240 = 0%) ===
+  figure -> results/fig_ab_gemma3_270m_t0_s10.png
+
+=== gemma3:4b  (gated 238/240 = 99%) ===
+  figure -> results/fig_ab_gemma3_4b_t0_s10.png
+
+
+================ BLINK LEADERBOARD (so far, gated) ================
+      model regime  LoadCost_report  BlinkScore_report  LoadCost_logp  BlinkScore_logp  gated_n  report_none  report_sem4
+  gemma2:2b    cot            0.000              0.000         -0.560            2.976      240        1.000        1.000
+  gemma2:2b direct            0.000              0.000         -0.797           -0.844      240        1.000        1.000
+  gemma2:9b    cot            0.000              0.000          0.981           -2.469      225        1.000        1.000
+  gemma2:9b direct            0.000              0.000         -1.013            0.894      225        1.000        1.000
+ gemma3:12b    cot            0.000              0.000         -0.709            3.816      240        1.000        1.000
+ gemma3:12b direct            0.000              0.000         -2.299            0.989      240        1.000        1.000
+  gemma3:1b    cot            0.046              0.214         -0.917            2.125      174        0.647        0.595
+  gemma3:1b direct            0.033             -0.067          1.030            2.618      174        0.967        0.933
+gemma3:270m    cot              NaN                NaN            NaN              NaN        1          NaN          NaN
+gemma3:270m direct              NaN                NaN            NaN              NaN        1        0.000          NaN
+  gemma3:4b    cot           -0.122              0.080         -4.985           -5.874      238        0.879        1.000
+  gemma3:4b direct            0.000              0.000          0.165           -0.929      238        1.000        1.000
+
+BlinkScore>0 = lag-selective deficit (blink-shaped); ~0 = flat/none.

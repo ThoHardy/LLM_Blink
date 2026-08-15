@@ -1,0 +1,16 @@
+======================================================================
+NESTED PROBE: results/nested_mistral_7b.csv
+======================================================================
+rows(CoTs): 400  trials: 50  loads: ['semantic_4', 'trivial']
+
+  semantic_4:  ICC=0.289   (1=ignition, 0=graded read-out)
+    between-CoT var=0.093  within-CoT var=0.135  n_CoTs=200
+    fraction of CoTs 'decided' (rr<=.1 or >=.9): 0.35   mean access(t2_in_CoT)=0.65
+    report_rate | passphrase NOT in CoT : 0.112 (n=70)
+    report_rate | passphrase IN CoT     : 0.478 (n=130)
+
+  trivial:  ICC=0.127   (1=ignition, 0=graded read-out)
+    between-CoT var=0.065  within-CoT var=0.172  n_CoTs=200
+    fraction of CoTs 'decided' (rr<=.1 or >=.9): 0.15   mean access(t2_in_CoT)=0.96
+    report_rate | passphrase NOT in CoT : 0.000 (n=8)
+    report_rate | passphrase IN CoT     : 0.641 (n=192)

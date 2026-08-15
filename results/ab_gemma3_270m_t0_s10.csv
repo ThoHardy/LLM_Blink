@@ -1,0 +1,423 @@
+lag,t1_load,regime,mask,n_pre,n_post,t2_abs_index,temperature,max_new_tokens,seed,t2_words,t2_phrase,t2_total_logprob,t2_mean_logprob,t2_joint_prob,t2_n_tokens,report_correct,t1_correct,output_truncated,t2_slot_missing,thinking_is_placeholder,raw_output
+0,none,cot,False,2,10,4,0.0,1024,28,3,DELTA XRAY ECHO,-16.069302082061768,-8.034651041030884,1.0500035749695621e-07,2,False,,False,True,False,"Okay, I understand. I will process the actual stream and output the correct template based on the provided example. Let's begin!
+"
+0,none,cot,False,1,11,3,0.0,1024,1028,3,OSCAR TANGO MIKE,-14.21971607208252,-7.10985803604126,6.67506925074405e-07,2,False,,False,True,False,"Okay, I understand. I will process the actual stream and output the correct template based on the provided example. Let's begin!
+"
+0,none,cot,False,6,6,8,0.0,1024,2028,3,LIMA FOXTROT WHISKEY,-13.64147162437439,-6.820735812187195,1.1901018998576713e-06,2,False,,False,True,False,"Okay, I understand. I will process the actual stream and output the correct template based on the provided example. Let's begin!
+"
+0,none,cot,False,5,7,7,0.0,1024,3028,3,VICTOR UNIFORM GOLF,-13.611387729644775,-6.805693864822388,1.226448786848438e-06,2,False,,False,True,False,"Okay, I understand. I will process the provided data stream and output the correct template based on the information given. Let's begin!
+"
+0,none,cot,False,5,7,7,0.0,1024,4028,3,WHISKEY INDIA PAPA,-14.099591732025146,-7.049795866012573,7.527055420607647e-07,2,False,,False,True,False,"Okay, I understand. I will process the actual stream and output the correct template based on the provided example. Let's begin!
+"
+0,none,cot,False,9,3,11,0.0,1024,5028,3,CHARLIE LIMA GOLF,-13.928970336914062,-6.964485168457031,8.927401026335811e-07,2,False,,False,True,False,"Okay, I understand. I will process the provided data stream and output the correct template based on the information given. Let's begin!
+"
+0,none,cot,False,4,8,6,0.0,1024,6028,3,XRAY FOXTROT INDIA,-13.212419033050537,-6.6062095165252686,1.8277606425119398e-06,2,False,,False,True,False,"Okay, I understand. I will process the provided data stream and output the correct template based on the information given. Let's begin!
+"
+0,none,cot,False,8,4,10,0.0,1024,7028,3,XRAY NOVEMBER FOXTROT,-15.558141469955444,-7.779070734977722,1.75059228807548e-07,2,False,,False,True,False,"Okay, I understand. I will process the provided data stream and output the correct template based on the information presented. Let's begin!
+"
+0,none,cot,False,5,7,7,0.0,1024,8028,3,WHISKEY DELTA PAPA,-13.689953088760376,-6.844976544380188,1.1337803245409356e-06,2,False,,False,True,False,"Okay, I understand. I will process the actual stream and output the correct template based on the provided example. Let's begin!
+"
+0,none,cot,False,3,9,5,0.0,1024,9028,3,MIKE TANGO LIMA,-13.676126718521118,-6.838063359260559,1.149565263820888e-06,2,False,,False,True,False,"Okay, I understand. I will process the actual stream and output the correct template based on the provided example. Let's begin!
+"
+0,none,direct,False,2,10,4,0.0,1024,28,3,DELTA XRAY ECHO,-63.04783535003662,-12.609567070007325,4.155975814476391e-28,5,False,,False,True,,"Okay, I understand. I will process the actual stream data and output the correct template based on the provided example. Let's begin!
+"
+0,none,direct,False,1,11,3,0.0,1024,1028,3,OSCAR TANGO MIKE,-61.044116497039795,-12.208823299407959,3.0823152335307472e-27,5,False,,False,True,,"Okay, I understand. I will process the actual stream data and output the correct template based on the provided example. Let's begin!
+"
+0,none,direct,False,6,6,8,0.0,1024,2028,3,LIMA FOXTROT WHISKEY,-135.06622236967087,-15.007358041074541,2.1952547894257465e-59,9,False,,False,True,,
+0,none,direct,False,5,7,7,0.0,1024,3028,3,VICTOR UNIFORM GOLF,-82.5240089893341,-10.315501123666763,1.4463662237661682e-36,8,False,,False,True,,"Okay, I understand. I will process the actual data stream and output the correct template based on the provided example. Let's begin!
+"
+0,none,direct,False,5,7,7,0.0,1024,4028,3,WHISKEY INDIA PAPA,-121.56872344017029,-12.156872344017028,1.5972549323376858e-53,10,False,,False,True,,"Okay, I understand. I will process the actual stream data and output the correct template based on the provided example. Let's begin!
+"
+0,none,direct,False,9,3,11,0.0,1024,5028,3,CHARLIE LIMA GOLF,-128.22704911231995,-12.822704911231995,2.049746435185434e-56,10,False,,False,True,,"Okay, I understand. I will process the actual stream data and output the correct template based on the provided example. Let's begin!
+"
+0,none,direct,False,4,8,6,0.0,1024,6028,3,XRAY FOXTROT INDIA,-125.3452832698822,-12.53452832698822,3.6579279191677316e-55,10,False,,False,True,,"Okay, I understand. I will process the actual stream data and output the correct template based on the provided example. Let's begin!
+"
+0,none,direct,False,8,4,10,0.0,1024,7028,3,XRAY NOVEMBER FOXTROT,-129.07229042053223,-12.907229042053222,8.80271221394373e-57,10,False,,False,True,,"Okay, I understand. I will process the actual stream data and output the correct template based on the provided example. Let's begin!
+"
+0,none,direct,False,5,7,7,0.0,1024,8028,3,WHISKEY DELTA PAPA,-131.19742894173078,-10.933119078477565,1.0511884265426274e-57,12,False,,False,True,,"Okay, I understand. I will process the actual stream data and output the correct template based on the provided example. Let's begin!
+"
+0,none,direct,False,3,9,5,0.0,1024,9028,3,MIKE TANGO LIMA,-132.48410737514496,-14.720456375016106,2.90324192713545e-58,9,False,,False,True,,
+0,semantic_4,cot,False,4,8,6,0.0,1024,70,3,DELTA JULIET WHISKEY,-14.038778305053711,-7.0193891525268555,7.999006495493992e-07,2,False,False,False,True,False,"Okay, I understand. I will process the actual stream data and output the correct template based on the provided example. Let's begin!
+"
+0,semantic_4,cot,False,11,1,13,0.0,1024,1070,3,LIMA XRAY CHARLIE,-14.54363489151001,-7.271817445755005,4.828137388551254e-07,2,False,False,False,True,False,"Okay, I understand. I will process the actual stream data and output the correct template based on the provided example. Let's begin!
+"
+0,semantic_4,cot,False,6,6,8,0.0,1024,2070,3,MIKE DELTA CHARLIE,-16.594932556152344,-8.297466278076172,6.207437611213012e-08,2,False,False,False,True,False,"Okay, I understand. I will process the actual stream data and output the correct template based on the provided example. Let's begin!
+"
+0,semantic_4,cot,False,11,1,13,0.0,1024,3070,3,TANGO KILO WHISKEY,-17.26729679107666,-8.63364839553833,3.168898188532474e-08,2,False,False,False,True,False,"Okay, I understand. I will process the actual stream data and output the correct template based on the provided example. Let's begin!
+"
+0,semantic_4,cot,False,8,4,10,0.0,1024,4070,3,ZULU DELTA SIERRA,-17.612142324447632,-8.806071162223816,2.2446248880489016e-08,2,False,False,False,True,False,"Okay, I understand. I will process the provided data stream and output the correct template based on the given information. Let's begin!
+"
+0,semantic_4,cot,False,9,3,11,0.0,1024,5070,3,KILO JULIET DELTA,-16.496329069137573,-8.248164534568787,6.850705740756489e-08,2,False,False,False,True,False,"Okay, I understand. I will process the actual stream data and output the correct template based on the provided example. Let's begin!
+"
+0,semantic_4,cot,False,6,6,8,0.0,1024,6070,3,GOLF DELTA HOTEL,-16.2664053440094,-8.1332026720047,8.621640673722357e-08,2,False,False,False,True,False,"Okay, I understand. I will process the actual stream data and output the correct template based on the provided example. Let's begin!
+"
+0,semantic_4,cot,False,9,3,11,0.0,1024,7070,3,UNIFORM LIMA TANGO,-14.33630633354187,-7.168153166770935,5.940476312304931e-07,2,False,False,False,True,False,"Okay, I understand. I will process the actual stream data and output the correct template based on the provided example. Let's begin!
+"
+0,semantic_4,cot,False,10,2,12,0.0,1024,8070,3,WHISKEY XRAY NOVEMBER,-14.155864953994751,-7.0779324769973755,7.115181188782788e-07,2,False,False,False,True,False,"Okay, I understand. I will process the actual stream data and output the correct template based on the provided example. Let's begin!
+"
+0,semantic_4,cot,False,11,1,13,0.0,1024,9070,3,MIKE WHISKEY UNIFORM,-16.007908582687378,-8.003954291343689,1.116486910200438e-07,2,False,False,False,True,False,"Okay, I understand. I will process the actual stream data and output the correct template based on the provided example. Let's begin!
+"
+0,semantic_4,direct,False,4,8,6,0.0,1024,70,3,DELTA JULIET WHISKEY,-14.645187139511108,-7.322593569755554,4.361903355149482e-07,2,False,False,False,True,,
+0,semantic_4,direct,False,11,1,13,0.0,1024,1070,3,LIMA XRAY CHARLIE,-135.93946534395218,-15.10438503821691,9.167276450737438e-60,9,False,False,False,True,,
+0,semantic_4,direct,False,6,6,8,0.0,1024,2070,3,MIKE DELTA CHARLIE,-92.08340668678284,-11.510425835847855,1.0201983130724365e-40,8,False,False,False,True,,
+0,semantic_4,direct,False,11,1,13,0.0,1024,3070,3,TANGO KILO WHISKEY,-166.04902946949005,-13.837419122457504,7.688166427068613e-73,12,False,False,False,True,,
+0,semantic_4,direct,False,8,4,10,0.0,1024,4070,3,ZULU DELTA SIERRA,-132.8344411253929,-14.759382347265879,2.045197308596347e-58,9,False,False,False,True,,
+0,semantic_4,direct,False,9,3,11,0.0,1024,5070,3,KILO JULIET DELTA,-124.51202703779563,-13.834669670866182,8.416155031566823e-55,9,False,False,False,True,,
+0,semantic_4,direct,False,6,6,8,0.0,1024,6070,3,GOLF DELTA HOTEL,-120.49299197457731,-13.388110219397479,4.683370083572967e-53,9,False,False,False,True,,
+0,semantic_4,direct,False,9,3,11,0.0,1024,7070,3,UNIFORM LIMA TANGO,-181.8372596874833,-12.988375691963094,1.0692555504071314e-79,14,False,False,False,True,,
+0,semantic_4,direct,False,10,2,12,0.0,1024,8070,3,WHISKEY XRAY NOVEMBER,-111.04744374752045,-12.338604860835606,5.9252673548688565e-49,9,False,False,False,True,,
+0,semantic_4,direct,False,11,1,13,0.0,1024,9070,3,MIKE WHISKEY UNIFORM,-120.28157687792554,-13.364619653102839,5.785952810762175e-53,9,False,False,False,True,,
+2,none,cot,False,9,1,13,0.0,1024,30,3,ROMEO ZULU JULIET,-15.871237754821777,-7.935618877410889,1.2799972073054678e-07,2,False,,False,True,False,"Okay, I understand. I will process the provided data stream and output the correct template based on the information given. Let's begin!
+"
+2,none,cot,False,7,3,11,0.0,1024,1030,3,BRAVO NOVEMBER YANKEE,-16.333648681640625,-8.166824340820312,8.060955213291257e-08,2,False,,False,True,False,"Okay, I understand. I will process the provided data stream and output the correct template based on the information given. Let's begin!
+"
+2,none,cot,False,1,9,5,0.0,1024,2030,3,JULIET MIKE LIMA,-13.929629564285278,-6.964814782142639,8.92151777863745e-07,2,False,,False,True,False,"Okay, I understand. I will process the actual stream and output the correct template based on the provided example. Let's begin!
+"
+2,none,cot,False,8,2,12,0.0,1024,3030,3,HOTEL JULIET YANKEE,-13.476454257965088,-6.738227128982544,1.4036223669263597e-06,2,False,,False,True,False,"Okay, I understand. I will process the actual stream data and output the correct template based on the provided example. Let's begin!
+"
+2,none,cot,False,1,9,5,0.0,1024,4030,3,PAPA ZULU WHISKEY,-14.212404727935791,-7.1062023639678955,6.724051825269418e-07,2,False,,False,True,False,"Okay, I understand. I will process the actual stream data and output the correct template based on the provided example. Let's begin!
+"
+2,none,cot,False,3,7,7,0.0,1024,5030,3,INDIA SIERRA QUEBEC,-13.343087196350098,-6.671543598175049,1.6038762596536564e-06,2,False,,False,True,False,"Okay, I understand. I will process the provided data stream and output the correct template based on the information given. Let's begin!
+"
+2,none,cot,False,4,6,8,0.0,1024,6030,3,CHARLIE LIMA PAPA,-13.438157558441162,-6.719078779220581,1.4584190397416195e-06,2,False,,False,True,False,"Okay, I understand. I will process the actual stream and output the correct template based on the provided example. Let's begin!
+"
+2,none,cot,False,9,1,13,0.0,1024,7030,3,HOTEL KILO BRAVO,-15.319307923316956,-7.659653961658478,2.2228446014134485e-07,2,False,,False,True,False,"Okay, I understand. I will process the provided data stream and output the correct template based on the information given. Let's begin!
+"
+2,none,cot,False,3,7,7,0.0,1024,8030,3,OSCAR CHARLIE PAPA,-13.898535251617432,-6.949267625808716,9.203284206687141e-07,2,False,,False,True,False,"Okay, I understand. I will process the actual stream and output the correct template based on the provided example. Let's begin!
+"
+2,none,cot,False,2,8,6,0.0,1024,9030,3,JULIET MIKE LIMA,-15.430821657180786,-7.715410828590393,1.9882880533266623e-07,2,False,,False,True,False,"Okay, I understand. I will process the provided data stream and output the correct template based on the information given. Let's begin!
+"
+2,none,direct,False,9,1,13,0.0,1024,30,3,ROMEO ZULU JULIET,-125.61198401451111,-12.561198401451112,2.801615178022764e-55,10,False,,False,True,,"Okay, I understand. I will process the actual stream data and output the correct template based on the provided example. Let's begin!
+"
+2,none,direct,False,7,3,11,0.0,1024,1030,3,BRAVO NOVEMBER YANKEE,-159.27801370620728,-13.273167808850607,6.705598693663768e-70,12,False,,False,True,,"Okay, I understand. I will process the actual stream data and output the correct template based on the provided example. Let's begin!
+"
+2,none,direct,False,1,9,5,0.0,1024,2030,3,JULIET MIKE LIMA,-126.14711391925812,-12.614711391925812,1.6406068361120665e-55,10,False,,False,True,,"Okay, I understand. I will process the actual stream data and output the correct template based on the provided example. Let's begin!
+"
+2,none,direct,False,8,2,12,0.0,1024,3030,3,HOTEL JULIET YANKEE,-135.0385012626648,-15.004277918073866,2.2569610132538952e-59,9,False,,False,True,,
+2,none,direct,False,1,9,5,0.0,1024,4030,3,PAPA ZULU WHISKEY,-126.6297242641449,-12.66297242641449,1.0125337477230828e-55,10,False,,False,True,,"Okay, I understand. I will process the actual stream data and output the correct template based on the provided example. Let's begin!
+"
+2,none,direct,False,3,7,7,0.0,1024,5030,3,INDIA SIERRA QUEBEC,-135.08607578277588,-15.009563975863987,2.1521012788888483e-59,9,False,,False,True,,
+2,none,direct,False,4,6,8,0.0,1024,6030,3,CHARLIE LIMA PAPA,-124.15778386592865,-12.415778386592866,1.199387675025981e-54,10,False,,False,True,,"Okay, I understand. I will process the actual stream data and output the correct template based on the provided example. Let's begin!
+"
+2,none,direct,False,9,1,13,0.0,1024,7030,3,HOTEL KILO BRAVO,-127.22198796272278,-12.722198796272277,5.600059624652405e-56,10,False,,False,True,,"Okay, I understand. I will process the actual stream data and output the correct template based on the provided example. Let's begin!
+"
+2,none,direct,False,3,7,7,0.0,1024,8030,3,OSCAR CHARLIE PAPA,-125.98787605762482,-12.598787605762482,1.9238031941095646e-55,10,False,,False,True,,"Okay, I understand. I will process the actual stream data and output the correct template based on the provided example. Let's begin!
+"
+2,none,direct,False,2,8,6,0.0,1024,9030,3,JULIET MIKE LIMA,-134.5186203122139,-13.45186203122139,3.795818911155868e-59,10,False,,False,True,,
+2,semantic_4,cot,False,7,3,11,0.0,1024,72,3,CHARLIE ZULU TANGO,-14.12715768814087,-7.063578844070435,7.322398679983881e-07,2,False,False,False,True,False,"Okay, I understand. I will process the actual stream data and output the correct template based on the provided example. Let's begin!
+"
+2,semantic_4,cot,False,3,7,7,0.0,1024,1072,3,PAPA MIKE ALPHA,-15.807077646255493,-7.903538823127747,1.3648137940317227e-07,2,False,False,False,True,False,"Okay, I understand. I will process the actual stream data and output the correct template based on the provided example. Let's begin!
+"
+2,semantic_4,cot,False,1,9,5,0.0,1024,2072,3,LIMA HOTEL YANKEE,-13.63771104812622,-6.81885552406311,1.1945857945248253e-06,2,False,False,False,True,False,"Okay, I understand. I will process the actual stream data and output the correct template based on the provided example. Let's begin!
+"
+2,semantic_4,cot,False,2,8,6,0.0,1024,3072,3,ECHO ZULU SIERRA,-13.781505107879639,-6.890752553939819,1.0345902453171525e-06,2,False,False,False,True,False,"Okay, I understand. I will process the provided data stream and output the correct template based on the given information. Let's begin!
+"
+2,semantic_4,cot,False,3,7,7,0.0,1024,4072,3,MIKE OSCAR GOLF,-12.907916784286499,-6.4539583921432495,2.478351877367728e-06,2,False,False,False,True,False,"Okay, I understand. I will process the provided data stream and output the correct template based on the given instructions. Let's begin!
+"
+2,semantic_4,cot,False,7,3,11,0.0,1024,5072,3,XRAY GOLF TANGO,-15.140666007995605,-7.570333003997803,2.6576164322196784e-07,2,False,False,False,True,False,"Okay, I understand. I will process the provided data stream and output the correct template based on the information presented. Let's begin!
+"
+2,semantic_4,cot,False,4,6,8,0.0,1024,6072,3,GOLF JULIET TANGO,-14.114307880401611,-7.057153940200806,7.417097221206743e-07,2,False,False,False,True,False,"Okay, I understand. I will process the provided data stream and output the correct template based on the information presented. Let's begin!
+"
+2,semantic_4,cot,False,6,4,10,0.0,1024,7072,3,WHISKEY TANGO CHARLIE,-14.139758825302124,-7.069879412651062,7.230707052550916e-07,2,False,False,False,True,False,"Okay, I understand. I will process the provided data stream and output the correct template based on the given instructions. Let's begin!
+"
+2,semantic_4,cot,False,1,9,5,0.0,1024,8072,3,ECHO KILO HOTEL,-15.427801609039307,-7.713900804519653,1.9943018553818625e-07,2,False,False,False,True,False,"Okay, I understand. I will process the actual stream and output the correct template based on the provided example. Let's begin!
+"
+2,semantic_4,cot,False,1,9,5,0.0,1024,9072,3,FOXTROT CHARLIE SIERRA,-13.56015944480896,-6.78007972240448,1.2909147984780602e-06,2,False,False,False,True,False,"Okay, I understand. I will process the provided data stream and output the correct template based on the given information. Let's begin!
+"
+2,semantic_4,direct,False,7,3,11,0.0,1024,72,3,CHARLIE ZULU TANGO,-132.09515726566315,-14.677239696184794,4.283532964098968e-58,9,False,False,False,True,,
+2,semantic_4,direct,False,3,7,7,0.0,1024,1072,3,PAPA MIKE ALPHA,-137.8891704082489,-11.490764200687408,1.304650477273342e-60,12,False,False,False,True,,
+2,semantic_4,direct,False,1,9,5,0.0,1024,2072,3,LIMA HOTEL YANKEE,-206.6294543147087,-13.775296954313914,1.8279663317005119e-90,15,False,False,False,True,,
+2,semantic_4,direct,False,2,8,6,0.0,1024,3072,3,ECHO ZULU SIERRA,-133.75172185897827,-13.375172185897828,8.172694246731334e-59,10,False,False,False,True,,
+2,semantic_4,direct,False,3,7,7,0.0,1024,4072,3,MIKE OSCAR GOLF,-129.31536483764648,-14.36837387084961,6.903202697785991e-57,9,False,False,False,True,,
+2,semantic_4,direct,False,7,3,11,0.0,1024,5072,3,XRAY GOLF TANGO,-61.59820079803467,-12.319640159606934,1.771092721367998e-27,5,False,False,False,True,,"Okay, I understand. I will process the actual stream data and output the correct template based on the provided example. Let's begin!
+"
+2,semantic_4,direct,False,4,6,8,0.0,1024,6072,3,GOLF JULIET TANGO,-124.47505283355713,-12.447505283355714,8.733160057129253e-55,10,False,False,False,True,,"Okay, I understand. I will process the actual stream data and output the correct template based on the provided example. Let's begin!
+"
+2,semantic_4,direct,False,6,4,10,0.0,1024,7072,3,WHISKEY TANGO CHARLIE,-132.99532836675644,-14.777258707417381,1.7412565833066456e-58,9,False,False,False,True,,
+2,semantic_4,direct,False,1,9,5,0.0,1024,8072,3,ECHO KILO HOTEL,-134.04412233829498,-14.893791370921665,6.100667237253724e-59,9,False,False,False,True,,
+2,semantic_4,direct,False,1,9,5,0.0,1024,9072,3,FOXTROT CHARLIE SIERRA,-135.7757773399353,-15.086197482215034,1.0797646996596923e-59,9,False,False,False,True,,
+4,none,cot,False,2,6,8,0.0,1024,32,3,CHARLIE GOLF ECHO,-15.93981385231018,-7.96990692615509,1.1951620688403688e-07,2,False,,False,True,False,"Okay, I understand. I will process the provided data stream and output the correct template based on the information given. Let's begin!
+"
+4,none,cot,False,1,7,7,0.0,1024,1032,3,MIKE UNIFORM ROMEO,-13.66556191444397,-6.832780957221985,1.1617745765437224e-06,2,False,,False,True,False,"Okay, I understand. I will process the actual stream and output the correct template based on the provided example. Let's begin!
+"
+4,none,cot,False,2,6,8,0.0,1024,2032,3,BRAVO SIERRA VICTOR,-13.67940068244934,-6.83970034122467,1.1458077828988197e-06,2,False,,False,True,False,"Okay, I understand. I will process the provided data stream and output the correct template based on the information presented. Let's begin!
+"
+4,none,cot,False,7,1,13,0.0,1024,3032,3,FOXTROT ECHO LIMA,-15.858176946640015,-7.929088473320007,1.2968246561358471e-07,2,False,,False,True,False,"Okay, I understand. I will process the provided data stream and output the correct template based on the information given. Let's begin!
+"
+4,none,cot,False,6,2,12,0.0,1024,4032,3,ZULU TANGO QUEBEC,-14.128429889678955,-7.0642149448394775,7.313089036247903e-07,2,False,,False,True,False,"Okay, I understand. I will process the provided data stream and output the correct template based on the information given. Let's begin!
+"
+4,none,cot,False,3,5,9,0.0,1024,5032,3,HOTEL YANKEE MIKE,-14.103535652160645,-7.051767826080322,7.497427778104822e-07,2,False,,False,True,False,"Okay, I understand. I will process the provided data stream and output the correct template based on the information given. Let's begin!
+"
+4,none,cot,False,7,1,13,0.0,1024,6032,3,LIMA KILO YANKEE,-14.511058568954468,-7.255529284477234,4.988010246290601e-07,2,False,,False,True,False,"Okay, I understand. I will process the provided data stream and output the correct template based on the information given. Let's begin!
+"
+4,none,cot,False,7,1,13,0.0,1024,7032,3,INDIA ROMEO GOLF,-13.610893726348877,-6.8054468631744385,1.2270548062668622e-06,2,False,,False,True,False,"Okay, I understand. I will process the provided data stream and output the correct template based on the information given. Let's begin!
+"
+4,none,cot,False,4,4,10,0.0,1024,8032,3,FOXTROT ALPHA QUEBEC,-15.97315263748169,-7.986576318740845,1.155973693469097e-07,2,False,,False,True,False,"Okay, I understand. I will process the provided data stream and output the correct template based on the information presented. Let's begin!
+"
+4,none,cot,False,7,1,13,0.0,1024,9032,3,XRAY ZULU OSCAR,-14.277018070220947,-7.138509035110474,6.303326946390251e-07,2,False,,False,True,False,"Okay, I understand. I will process the actual stream and output the correct template based on the provided example. Let's begin!
+"
+4,none,direct,False,2,6,8,0.0,1024,32,3,CHARLIE GOLF ECHO,-108.82938313484192,-12.092153681649101,5.445019452228368e-48,9,False,,False,True,,"Okay, I understand. I will process the actual stream data and output the correct template based on the provided example. Let's begin!
+"
+4,none,direct,False,1,7,7,0.0,1024,1032,3,MIKE UNIFORM ROMEO,-123.75283181667328,-12.375283181667328,1.798158714587138e-54,10,False,,False,True,,"Okay, I understand. I will process the actual stream data and output the correct template based on the provided example. Let's begin!
+"
+4,none,direct,False,2,6,8,0.0,1024,2032,3,BRAVO SIERRA VICTOR,-189.25660014152527,-13.518328581537519,6.41066222597271e-83,14,False,,False,True,,
+4,none,direct,False,7,1,13,0.0,1024,3032,3,FOXTROT ECHO LIMA,-88.32452607154846,-11.040565758943558,4.376689230948124e-39,8,False,,False,True,,"Okay, I understand. I will process the actual stream data and output the correct template based on the provided example. Let's begin!
+"
+4,none,direct,False,6,2,12,0.0,1024,4032,3,ZULU TANGO QUEBEC,-84.92851710319519,-10.616064637899399,1.3062119897929399e-37,8,False,,False,True,,"Okay, I understand. I will process the actual stream data and output the correct template based on the provided example. Let's begin!
+"
+4,none,direct,False,3,5,9,0.0,1024,5032,3,HOTEL YANKEE MIKE,-84.91992902755737,-10.614991128444672,1.3174781452131907e-37,8,False,,False,True,,"Okay, I understand. I will process the actual stream data and output the correct template based on the provided example. Let's begin!
+"
+4,none,direct,False,7,1,13,0.0,1024,6032,3,LIMA KILO YANKEE,-129.40338802337646,-12.940338802337646,6.321536383588501e-57,10,False,,False,True,,"Okay, I understand. I will process the actual stream data and output the correct template based on the provided example. Let's begin!
+"
+4,none,direct,False,7,1,13,0.0,1024,7032,3,INDIA ROMEO GOLF,-81.80527520179749,-10.225659400224686,2.9677026826799905e-36,8,False,,False,True,,"Okay, I understand. I will process the actual stream data and output the correct template based on the provided example. Let's begin!
+"
+4,none,direct,False,4,4,10,0.0,1024,8032,3,FOXTROT ALPHA QUEBEC,-129.47447800636292,-12.947447800636292,5.887740420707214e-57,10,False,,False,True,,"Okay, I understand. I will process the actual stream data and output the correct template based on the provided example. Let's begin!
+"
+4,none,direct,False,7,1,13,0.0,1024,9032,3,XRAY ZULU OSCAR,-129.34199678897858,-12.934199678897858,6.721783436640997e-57,10,False,,False,True,,"Okay, I understand. I will process the actual stream data and output the correct template based on the provided example. Let's begin!
+"
+4,semantic_4,cot,False,7,1,13,0.0,1024,74,3,TANGO QUEBEC DELTA,-15.606963634490967,-7.803481817245483,1.6671773994073338e-07,2,False,False,False,True,False,"Okay, I understand. I will process the actual stream data and output the correct template based on the provided example. Let's begin!
+"
+4,semantic_4,cot,False,6,2,12,0.0,1024,1074,3,ZULU UNIFORM MIKE,-14.051995515823364,-7.025997757911682,7.893977564449488e-07,2,False,False,False,True,False,"Okay, I understand. I will process the actual stream data and output the correct template based on the provided example. Let's begin!
+"
+4,semantic_4,cot,False,6,2,12,0.0,1024,2074,3,UNIFORM INDIA HOTEL,-14.990239143371582,-7.495119571685791,3.0890280904134775e-07,2,False,False,False,True,False,
+4,semantic_4,cot,False,5,3,11,0.0,1024,3074,3,JULIET GOLF CHARLIE,-14.281378746032715,-7.140689373016357,6.275900024460347e-07,2,False,False,False,True,False,"Okay, I understand. I will process the provided data stream and output the correct template based on the information presented. Let's begin!
+"
+4,semantic_4,cot,False,7,1,13,0.0,1024,4074,3,CHARLIE NOVEMBER INDIA,-14.182976484298706,-7.091488242149353,6.924869219744439e-07,2,False,False,False,True,False,"Okay, I understand. I will process the actual stream and output the correct template based on the provided example. Let's begin!
+"
+4,semantic_4,cot,False,1,7,7,0.0,1024,5074,3,ZULU OSCAR ROMEO,-15.974749565124512,-7.987374782562256,1.1541291603086075e-07,2,False,False,False,True,False,"Okay, I understand. I will process the actual stream and output the correct template based on the provided example. Let's begin!
+"
+4,semantic_4,cot,False,4,4,10,0.0,1024,6074,3,WHISKEY ROMEO ECHO,-13.469146490097046,-6.734573245048523,1.413917283974937e-06,2,False,False,False,True,False,"Okay, I understand. I will process the actual stream data and output the correct template based on the provided example. Let's begin!
+"
+4,semantic_4,cot,False,3,5,9,0.0,1024,7074,3,JULIET DELTA ECHO,-16.70035195350647,-8.350175976753235,5.586364905765605e-08,2,False,False,False,True,False,"Okay, I understand. I will process the actual stream data and output the correct template based on the provided example. Let's begin!
+"
+4,semantic_4,cot,False,6,2,12,0.0,1024,8074,3,KILO WHISKEY XRAY,-14.785151720046997,-7.3925758600234985,3.7921909188043396e-07,2,False,False,False,True,False,"Okay, I understand. I will process the actual stream data and output the correct template based on the provided example. Let's begin!
+"
+4,semantic_4,cot,False,2,6,8,0.0,1024,9074,3,GOLF BRAVO LIMA,-13.377426624298096,-6.688713312149048,1.5497349768990444e-06,2,False,False,False,True,False,"Okay, I understand. I will process the provided data stream and output the correct template based on the information presented. Let's begin!
+"
+4,semantic_4,direct,False,7,1,13,0.0,1024,74,3,TANGO QUEBEC DELTA,-93.14702999591827,-11.643378749489784,3.521752788097749e-41,8,False,False,False,True,,
+4,semantic_4,direct,False,6,2,12,0.0,1024,1074,3,ZULU UNIFORM MIKE,-134.8911383152008,-14.987904257244534,2.6153087815587416e-59,9,False,False,False,True,,
+4,semantic_4,direct,False,6,2,12,0.0,1024,2074,3,UNIFORM INDIA HOTEL,-172.05488312244415,-12.28963450874601,1.8945831715743835e-75,14,False,False,False,True,,
+4,semantic_4,direct,False,5,3,11,0.0,1024,3074,3,JULIET GOLF CHARLIE,-122.2363270521164,-12.223632705211639,8.192900360636712e-54,10,False,False,False,True,,"Okay, I understand. I will process the actual stream data and output the correct template based on the provided example. Let's begin!
+"
+4,semantic_4,direct,False,7,1,13,0.0,1024,4074,3,CHARLIE NOVEMBER INDIA,-132.88502824306488,-14.76500313811832,1.9443099849202053e-58,9,False,False,False,True,,
+4,semantic_4,direct,False,1,7,7,0.0,1024,5074,3,ZULU OSCAR ROMEO,-130.44655525684357,-13.044655525684357,2.227311034609951e-57,10,False,False,False,True,,
+4,semantic_4,direct,False,4,4,10,0.0,1024,6074,3,WHISKEY ROMEO ECHO,-131.67200362683297,-10.972666968902749,6.539964692941096e-58,12,False,False,False,True,,"Okay, I understand. I will process the actual stream data and output the correct template based on the provided example. Let's begin!
+"
+4,semantic_4,direct,False,3,5,9,0.0,1024,7074,3,JULIET DELTA ECHO,-133.2876688838005,-14.809740987088945,1.2998729252138222e-58,9,False,False,False,True,,
+4,semantic_4,direct,False,6,2,12,0.0,1024,8074,3,KILO WHISKEY XRAY,-137.75088798999786,-13.775088798999786,1.4981298890465788e-60,10,False,False,False,True,,
+4,semantic_4,direct,False,2,6,8,0.0,1024,9074,3,GOLF BRAVO LIMA,-104.49777042866617,-10.449777042866618,4.141855389094918e-46,10,False,False,False,True,,"Okay, I understand. I will process the actual stream data and output the correct template based on the provided example. Let's begin!
+"
+6,none,cot,False,4,2,12,0.0,1024,34,3,QUEBEC LIMA SIERRA,-13.802109956741333,-6.9010549783706665,1.0134907916980812e-06,2,False,,False,True,False,"Okay, I understand. I will process the provided data stream and output the correct template based on the information given. Let's begin!
+"
+6,none,cot,False,5,1,13,0.0,1024,1034,3,BRAVO UNIFORM CHARLIE,-14.317466259002686,-7.158733129501343,6.053456262349129e-07,2,False,,False,True,False,"Okay, I understand. I will process the actual stream and output the correct template based on the provided example. Let's begin!
+"
+6,none,cot,False,1,5,9,0.0,1024,2034,3,CHARLIE LIMA QUEBEC,-13.517715692520142,-6.758857846260071,1.346885466786987e-06,2,False,,False,True,False,"Okay, I understand. I will process the provided data stream and output the correct template based on the information given. Let's begin!
+"
+6,none,cot,False,3,3,11,0.0,1024,3034,3,SIERRA XRAY YANKEE,-14.563860416412354,-7.281930208206177,4.7314666789062296e-07,2,False,,False,True,False,"Okay, I understand. I will process the actual stream and output the correct template based on the provided example. Let's begin!
+"
+6,none,cot,False,5,1,13,0.0,1024,4034,3,KILO BRAVO DELTA,-13.530330896377563,-6.765165448188782,1.3300009567398984e-06,2,False,,False,True,False,"Okay, I understand. I will process the actual stream and output the correct template based on the provided example. Let's begin!
+"
+6,none,cot,False,2,4,10,0.0,1024,5034,3,OSCAR YANKEE ZULU,-16.014225959777832,-8.007112979888916,1.1094558736104864e-07,2,False,,False,True,False,"Okay, I understand. I will process the provided data stream and output the correct template based on the information given. Let's begin!
+"
+6,none,cot,False,4,2,12,0.0,1024,6034,3,CHARLIE VICTOR GOLF,-13.988964080810547,-6.994482040405273,8.407562262101984e-07,2,False,,False,True,False,"Okay, I understand. I will process the provided data stream and output the correct template based on the information presented. Let's begin!
+"
+6,none,cot,False,2,4,10,0.0,1024,7034,3,VICTOR TANGO WHISKEY,-15.82882285118103,-7.914411425590515,1.3354559909378052e-07,2,False,,False,True,False,"Okay, I understand. I will process the provided data stream and output the correct template based on the information given. Let's begin!
+"
+6,none,cot,False,4,2,12,0.0,1024,8034,3,WHISKEY PAPA JULIET,-14.156880140304565,-7.078440070152283,7.107961619472093e-07,2,False,,False,True,False,"Okay, I understand. I will process the actual stream data and output the correct template based on the provided example. Let's begin!
+"
+6,none,cot,False,5,1,13,0.0,1024,9034,3,ECHO DELTA SIERRA,-13.742239236831665,-6.8711196184158325,1.0760224449409787e-06,2,False,,False,True,False,"Okay, I understand. I will process the provided data stream and output the correct template based on the information given. Let's begin!
+"
+6,none,direct,False,4,2,12,0.0,1024,34,3,QUEBEC LIMA SIERRA,-112.75877296924841,-11.275877296924842,1.0702546250064394e-49,10,False,,False,True,,"Okay, I understand. I will process the actual stream data and output the correct template based on the provided example. Let's begin!
+"
+6,none,direct,False,5,1,13,0.0,1024,1034,3,BRAVO UNIFORM CHARLIE,-149.173193693161,-13.561199426651001,1.640231436098542e-65,11,False,,False,True,,"Okay, I understand. I will process the actual data stream and output the correct template based on the provided example. Let's begin!
+"
+6,none,direct,False,1,5,9,0.0,1024,2034,3,CHARLIE LIMA QUEBEC,-129.81224274635315,-12.981224274635315,4.2000967229898674e-57,10,False,,False,True,,"Okay, I understand. I will process the actual stream data and output the correct template based on the provided example. Let's begin!
+"
+6,none,direct,False,3,3,11,0.0,1024,3034,3,SIERRA XRAY YANKEE,-158.35601151548326,-12.181231655037173,1.6860017560141355e-69,13,False,,False,True,,"Okay, I understand. I will process the actual stream data and output the correct template based on the provided example. Let's begin!
+"
+6,none,direct,False,5,1,13,0.0,1024,4034,3,KILO BRAVO DELTA,-129.20658683776855,-12.920658683776855,7.696482935524274e-57,10,False,,False,True,,"Okay, I understand. I will process the actual stream data and output the correct template based on the provided example. Let's begin!
+"
+6,none,direct,False,2,4,10,0.0,1024,5034,3,OSCAR YANKEE ZULU,-128.83647465705872,-12.883647465705872,1.1143714796643734e-56,10,False,,False,True,,"Okay, I understand. I will process the actual stream data and output the correct template based on the provided example. Let's begin!
+"
+6,none,direct,False,4,2,12,0.0,1024,6034,3,CHARLIE VICTOR GOLF,-128.68759274482727,-12.868759274482727,1.2932681482241464e-56,10,False,,False,True,,"Okay, I understand. I will process the actual stream data and output the correct template based on the provided example. Let's begin!
+"
+6,none,direct,False,2,4,10,0.0,1024,7034,3,VICTOR TANGO WHISKEY,-123.0832588672638,-12.30832588672638,3.5125285207545566e-54,10,False,,False,True,,"Okay, I understand. I will process the actual stream data and output the correct template based on the provided example. Let's begin!
+"
+6,none,direct,False,4,2,12,0.0,1024,8034,3,WHISKEY PAPA JULIET,-107.25507628917944,-10.725507628917944,2.6285256024068747e-47,10,False,,False,True,,"Okay, I understand. I will process the actual stream data and output the correct template based on the provided example. Let's begin!
+"
+6,none,direct,False,5,1,13,0.0,1024,9034,3,ECHO DELTA SIERRA,-128.8851375579834,-12.88851375579834,1.0614412449707215e-56,10,False,,False,True,,"Okay, I understand. I will process the actual stream data and output the correct template based on the provided example. Let's begin!
+"
+6,semantic_4,cot,False,3,3,11,0.0,1024,76,3,LIMA OSCAR MIKE,-13.912974834442139,-6.956487417221069,9.071347470251947e-07,2,False,False,False,True,False,"Okay, I understand. I will process the provided data stream and output the correct template based on the given information. Let's begin!
+"
+6,semantic_4,cot,False,1,5,9,0.0,1024,1076,3,LIMA ECHO BRAVO,-14.318676710128784,-7.159338355064392,6.046133282348405e-07,2,False,False,False,True,False,"Okay, I understand. I will process the provided data stream and output the correct template based on the information presented. Let's begin!
+"
+6,semantic_4,cot,False,3,3,11,0.0,1024,2076,3,GOLF QUEBEC CHARLIE,-16.611929178237915,-8.305964589118958,6.102823700010697e-08,2,False,False,False,True,False,"Okay, I understand. I will process the provided data stream and output the correct template based on the given information. Let's begin!
+"
+6,semantic_4,cot,False,3,3,11,0.0,1024,3076,3,SIERRA TANGO WHISKEY,-13.683815479278564,-6.841907739639282,1.1407604240618037e-06,2,False,False,False,True,False,"Okay, I understand. I will process the actual stream data and output the correct template based on the provided example. Let's begin!
+"
+6,semantic_4,cot,False,1,5,9,0.0,1024,4076,3,FOXTROT SIERRA HOTEL,-13.192896842956543,-6.5964484214782715,1.8637931051424412e-06,2,False,False,False,True,False,"Okay, I understand. I will process the actual stream and output the correct template based on the provided example. Let's begin!
+"
+6,semantic_4,cot,False,2,4,10,0.0,1024,5076,3,KILO MIKE CHARLIE,-16.129295825958252,-8.064647912979126,9.888623134486476e-08,2,False,False,False,True,False,"Okay, I understand. I will process the provided data stream and output the correct template based on the given information. Let's begin!
+"
+6,semantic_4,cot,False,5,1,13,0.0,1024,6076,3,OSCAR ECHO ROMEO,-13.589426040649414,-6.794713020324707,1.2536816186047724e-06,2,False,False,False,True,False,"Okay, I understand. I will process the provided data stream and output the correct template based on the given instructions. Let's begin!
+"
+6,semantic_4,cot,False,4,2,12,0.0,1024,7076,3,FOXTROT VICTOR QUEBEC,-13.37018084526062,-6.68509042263031,1.5610047941042922e-06,2,False,False,False,True,False,"Okay, I understand. I will process the actual stream data and output the correct template based on the provided example. Let's begin!
+"
+6,semantic_4,cot,False,2,4,10,0.0,1024,8076,3,XRAY BRAVO HOTEL,-15.970850229263306,-7.985425114631653,1.1586382831106194e-07,2,False,False,False,True,False,"Okay, I understand. I will process the actual stream data and output the correct template based on the provided example. Let's begin!
+"
+6,semantic_4,cot,False,4,2,12,0.0,1024,9076,3,YANKEE JULIET ZULU,-13.58663272857666,-6.79331636428833,1.2571884381459014e-06,2,False,False,False,True,False,"Okay, I understand. I will process the actual stream data and output the correct template based on the provided example. Let's begin!
+"
+6,semantic_4,direct,False,3,3,11,0.0,1024,76,3,LIMA OSCAR MIKE,-131.23623019456863,-14.58180335495207,1.0111821642896434e-57,9,False,False,False,True,,
+6,semantic_4,direct,False,1,5,9,0.0,1024,1076,3,LIMA ECHO BRAVO,-154.83368623256683,-14.075789657506077,5.709320935009918e-68,11,False,False,False,True,,"Okay, I understand. I will process the actual data stream and output the correct template based on the provided example. Let's begin!
+"
+6,semantic_4,direct,False,3,3,11,0.0,1024,2076,3,GOLF QUEBEC CHARLIE,-123.23139237239957,-13.692376930266619,3.028909486453579e-54,9,False,False,False,True,,
+6,semantic_4,direct,False,3,3,11,0.0,1024,3076,3,SIERRA TANGO WHISKEY,-134.3874563574791,-13.43874563574791,4.327820770953992e-59,10,False,False,False,True,,
+6,semantic_4,direct,False,1,5,9,0.0,1024,4076,3,FOXTROT SIERRA HOTEL,-131.03117722272873,-14.559019691414303,1.2413172050239596e-57,9,False,False,False,True,,
+6,semantic_4,direct,False,2,4,10,0.0,1024,5076,3,KILO MIKE CHARLIE,-133.8377228975296,-14.870858099725512,7.499209306008943e-59,9,False,False,False,True,,
+6,semantic_4,direct,False,5,1,13,0.0,1024,6076,3,OSCAR ECHO ROMEO,-62.147621870040894,-12.429524374008178,1.0224233479537158e-27,5,False,False,False,True,,
+6,semantic_4,direct,False,4,2,12,0.0,1024,7076,3,FOXTROT VICTOR QUEBEC,-154.0734006166458,-12.839450051387152,1.2211592517718654e-67,12,False,False,False,True,,"Okay, I understand. I will process the actual stream data and output the correct template based on the provided example. Let's begin!
+"
+6,semantic_4,direct,False,2,4,10,0.0,1024,8076,3,XRAY BRAVO HOTEL,-133.3728485107422,-14.819205390082466,1.1937348037781916e-58,9,False,False,False,True,,
+6,semantic_4,direct,False,4,2,12,0.0,1024,9076,3,YANKEE JULIET ZULU,-133.6741987466812,-14.852688749631247,8.831472307586835e-59,9,False,False,False,True,,
+8,none,cot,False,2,2,12,0.0,1024,36,3,KILO BRAVO ALPHA,-13.92462420463562,-6.96231210231781,8.966285128618631e-07,2,False,,False,True,False,"Okay, I understand. I will process the provided data stream and output the correct template based on the information given. Let's begin!
+"
+8,none,cot,False,3,1,13,0.0,1024,1036,3,NOVEMBER WHISKEY XRAY,-14.179914712905884,-7.089957356452942,6.946104077772161e-07,2,False,,False,True,False,"Okay, I understand. I will process the actual stream and output the correct template based on the provided example. Let's begin!
+"
+8,none,cot,False,2,2,12,0.0,1024,2036,3,BRAVO TANGO SIERRA,-16.78939700126648,-8.39469850063324,5.110430987757263e-08,2,False,,False,True,False,"Okay, I understand. I will process the provided data stream and output the correct template based on the information given. Let's begin!
+"
+8,none,cot,False,1,3,11,0.0,1024,3036,3,UNIFORM JULIET DELTA,-14.075350046157837,-7.0376750230789185,7.711753586196933e-07,2,False,,False,True,False,"Okay, I understand. I will process the actual stream data and output the correct template based on the provided example. Let's begin!
+"
+8,none,cot,False,3,1,13,0.0,1024,4036,3,BRAVO WHISKEY SIERRA,-13.814663410186768,-6.907331705093384,1.0008475067085337e-06,2,False,,False,True,False,"Okay, I understand. I will process the provided data stream and output the correct template based on the information presented. Let's begin!
+"
+8,none,cot,False,3,1,13,0.0,1024,5036,3,UNIFORM BRAVO ECHO,-13.74436640739441,-6.872183203697205,1.0737359943685782e-06,2,False,,False,True,False,"Okay, I understand. I will process the provided data stream and output the correct template based on the information given. Let's begin!
+"
+8,none,cot,False,2,2,12,0.0,1024,6036,3,OSCAR BRAVO GOLF,-16.177308559417725,-8.088654279708862,9.425060802761463e-08,2,False,,False,True,False,"Okay, I understand. I will process the actual stream and output the correct template based on the provided example. Let's begin!
+"
+8,none,cot,False,2,2,12,0.0,1024,7036,3,OSCAR NOVEMBER QUEBEC,-13.361206531524658,-6.680603265762329,1.5750767896770736e-06,2,False,,False,True,False,"Okay, I understand. I will process the provided data stream and output the correct template based on the information given. Let's begin!
+"
+8,none,cot,False,2,2,12,0.0,1024,8036,3,XRAY INDIA SIERRA,-13.457395553588867,-6.728697776794434,1.4306301397451587e-06,2,False,,False,True,False,"Okay, I understand. I will process the actual stream and output the correct template based on the provided example. Let's begin!
+"
+8,none,cot,False,1,3,11,0.0,1024,9036,3,YANKEE UNIFORM ROMEO,-13.731031656265259,-6.865515828132629,1.088149885876005e-06,2,False,,False,True,False,"Okay, I understand. I will process the actual stream data and output the correct template based on the provided example. Let's begin!
+"
+8,none,direct,False,2,2,12,0.0,1024,36,3,KILO BRAVO ALPHA,-130.36473393440247,-13.036473393440247,2.4172157620152316e-57,10,False,,False,True,,"Okay, I understand. I will process the actual stream data and output the correct template based on the provided example. Let's begin!
+"
+8,none,direct,False,3,1,13,0.0,1024,1036,3,NOVEMBER WHISKEY XRAY,-158.25995421409607,-13.188329517841339,1.8559880624859517e-69,12,False,,False,True,,"Okay, I understand. I will process the actual stream data and output the correct template based on the provided example. Let's begin!
+"
+8,none,direct,False,2,2,12,0.0,1024,2036,3,BRAVO TANGO SIERRA,-112.8714308738738,-11.287143087387381,9.562256892552884e-50,10,False,,False,True,,"Okay, I understand. I will process the actual stream data and output the correct template based on the provided example. Let's begin!
+"
+8,none,direct,False,1,3,11,0.0,1024,3036,3,UNIFORM JULIET DELTA,-144.07153487205505,-13.097412261095913,2.694805380080483e-63,11,False,,False,True,,"Okay, I understand. I will process the actual stream data and output the correct template based on the provided example. Let's begin!
+"
+8,none,direct,False,3,1,13,0.0,1024,4036,3,BRAVO WHISKEY SIERRA,-129.71450090408325,-12.971450090408325,4.6313546049793465e-57,10,False,,False,True,,"Okay, I understand. I will process the actual stream data and output the correct template based on the provided example. Let's begin!
+"
+8,none,direct,False,3,1,13,0.0,1024,5036,3,UNIFORM BRAVO ECHO,-129.4737958908081,-12.94737958908081,5.89175791007108e-57,10,False,,False,True,,"Okay, I understand. I will process the actual stream data and output the correct template based on the provided example. Let's begin!
+"
+8,none,direct,False,2,2,12,0.0,1024,6036,3,OSCAR BRAVO GOLF,-207.81927017099224,-14.844233583642303,5.562086409979564e-91,14,False,,False,False,,"<Final_Answers>
+Target 2 Result: VICTOR XRAY ROMEO
+Target 1 Result: ANIMAL
+"
+8,none,direct,False,2,2,12,0.0,1024,7036,3,OSCAR NOVEMBER QUEBEC,-150.75059962272644,-13.704599965702403,3.387243673084155e-66,11,False,,False,True,,"Okay, I understand. I will process the actual stream data and output the correct template based on the provided example. Let's begin!
+"
+8,none,direct,False,2,2,12,0.0,1024,8036,3,XRAY INDIA SIERRA,-106.70151090622721,-10.67015109062272,4.572172452510321e-47,10,False,,False,True,,"Okay, I understand. I will process the actual data stream and output the correct template based on the provided example. Let's begin!
+"
+8,none,direct,False,1,3,11,0.0,1024,9036,3,YANKEE UNIFORM ROMEO,-130.41854667663574,-13.041854667663575,2.290576709396982e-57,10,False,,False,True,,"Okay, I understand. I will process the actual stream data and output the correct template based on the provided example. Let's begin!
+"
+8,semantic_4,cot,False,1,3,11,0.0,1024,78,3,GOLF DELTA JULIET,-16.408830642700195,-8.204415321350098,7.477138020969423e-08,2,False,False,False,True,False,"Okay, I understand. I will process the provided data stream and output the correct template based on the given information. Let's begin!
+"
+8,semantic_4,cot,False,1,3,11,0.0,1024,1078,3,DELTA ECHO OSCAR,-16.031174898147583,-8.015587449073792,1.0908102326480225e-07,2,False,False,False,True,False,"Okay, I understand. I will process the actual stream data and output the correct template based on the provided example. Let's begin!
+"
+8,semantic_4,cot,False,1,3,11,0.0,1024,2078,3,BRAVO GOLF PAPA,-15.738911390304565,-7.869455695152283,1.4610922327514641e-07,2,False,False,False,True,False,"Okay, I understand. I will process the provided data stream and output the correct template based on the given information. Let's begin!
+"
+8,semantic_4,cot,False,2,2,12,0.0,1024,3078,3,DELTA MIKE VICTOR,-16.073840379714966,-8.036920189857483,1.045249142883662e-07,2,False,False,False,True,False,"Okay, I understand. I will process the actual stream and output the correct template based on the provided example. Let's begin!
+"
+8,semantic_4,cot,False,3,1,13,0.0,1024,4078,3,CHARLIE ROMEO JULIET,-13.442431926727295,-6.7212159633636475,1.4521985235097574e-06,2,False,False,False,True,False,"Okay, I understand. I will process the provided data stream and output the correct template based on the given instructions. Let's begin!
+"
+8,semantic_4,cot,False,3,1,13,0.0,1024,5078,3,OSCAR ROMEO UNIFORM,-13.342726469039917,-6.6713632345199585,1.6044549259867639e-06,2,False,False,False,True,False,"Okay, I understand. I will process the provided data stream and output the correct template based on the given information. Let's begin!
+"
+8,semantic_4,cot,False,2,2,12,0.0,1024,6078,3,ROMEO UNIFORM KILO,-13.593389511108398,-6.796694755554199,1.2487225226515263e-06,2,False,False,False,True,False,"Okay, I understand. I will process the provided data stream and output the correct template based on the information presented. Let's begin!
+"
+8,semantic_4,cot,False,3,1,13,0.0,1024,7078,3,BRAVO INDIA SIERRA,-13.52700424194336,-6.76350212097168,1.3344327778016166e-06,2,False,False,False,True,False,"Okay, I understand. I will process the provided data stream and output the correct template based on the given instructions. Let's begin!
+"
+8,semantic_4,cot,False,1,3,11,0.0,1024,8078,3,ECHO DELTA OSCAR,-16.325610160827637,-8.162805080413818,8.126014509466963e-08,2,False,False,False,True,False,"Okay, I understand. I will process the actual stream data and output the correct template based on the provided example. Let's begin!
+"
+8,semantic_4,cot,False,1,3,11,0.0,1024,9078,3,JULIET HOTEL YANKEE,-13.99825930595398,-6.99912965297699,8.329774166978469e-07,2,False,False,False,True,False,"Okay, I understand. I will process the provided data stream and output the correct template based on the given instructions. Let's begin!
+"
+8,semantic_4,direct,False,1,3,11,0.0,1024,78,3,GOLF DELTA JULIET,-130.22204852104187,-14.469116502337986,2.787936676095782e-57,9,False,False,False,True,,
+8,semantic_4,direct,False,1,3,11,0.0,1024,1078,3,DELTA ECHO OSCAR,-56.879887104034424,-11.375977420806885,1.9832565598417543e-25,5,False,False,False,True,,
+8,semantic_4,direct,False,1,3,11,0.0,1024,2078,3,BRAVO GOLF PAPA,-128.90606927871704,-14.322896586524116,1.0394543676102372e-56,9,False,False,False,True,,
+8,semantic_4,direct,False,2,2,12,0.0,1024,3078,3,DELTA MIKE VICTOR,-110.59017503261583,-12.287797225846203,9.360460837867458e-49,9,False,False,False,True,,
+8,semantic_4,direct,False,3,1,13,0.0,1024,4078,3,CHARLIE ROMEO JULIET,-129.46066451072693,-14.384518278969658,5.969635020456189e-57,9,False,False,False,True,,
+8,semantic_4,direct,False,3,1,13,0.0,1024,5078,3,OSCAR ROMEO UNIFORM,-126.62777935899794,-11.511616305363448,1.0145049460960634e-55,11,False,False,False,True,,
+8,semantic_4,direct,False,2,2,12,0.0,1024,6078,3,ROMEO UNIFORM KILO,-114.68191036302596,-11.468191036302596,1.5641527235373968e-50,10,False,False,False,True,,
+8,semantic_4,direct,False,3,1,13,0.0,1024,7078,3,BRAVO INDIA SIERRA,-121.47352275531739,-12.14735227553174,1.75678805561706e-53,10,False,False,False,True,,
+8,semantic_4,direct,False,1,3,11,0.0,1024,8078,3,ECHO DELTA OSCAR,-131.35856354236603,-14.595395949151781,8.947479310098518e-58,9,False,False,False,True,,
+8,semantic_4,direct,False,1,3,11,0.0,1024,9078,3,JULIET HOTEL YANKEE,-61.15421998500824,-8.736317140715462,2.760957461277598e-27,7,False,False,False,True,,
+10,none,cot,False,1,1,13,0.0,1024,38,3,UNIFORM NOVEMBER YANKEE,-14.748079061508179,-7.374039530754089,3.93541598131615e-07,2,False,,False,True,False,"Okay, I understand. I will process the provided data stream and output the correct template based on the information given. Let's begin!
+"
+10,none,cot,False,1,1,13,0.0,1024,1038,3,DELTA CHARLIE INDIA,-13.650348424911499,-6.8251742124557495,1.1795843528204152e-06,2,False,,False,True,False,"Okay, I understand. I will process the actual stream and output the correct template based on the provided example. Let's begin!
+"
+10,none,cot,False,1,1,13,0.0,1024,2038,3,CHARLIE PAPA DELTA,-14.085902690887451,-7.042951345443726,7.630802067883312e-07,2,False,,False,True,False,"Okay, I understand. I will process the actual stream and output the correct template based on the provided example. Let's begin!
+"
+10,none,cot,False,1,1,13,0.0,1024,3038,3,ECHO CHARLIE QUEBEC,-15.358490228652954,-7.679245114326477,2.1374326708291296e-07,2,False,,False,True,False,"Okay, I understand. I will process the actual stream and output the correct template based on the provided example. Let's begin!
+"
+10,none,cot,False,1,1,13,0.0,1024,4038,3,INDIA LIMA ECHO,-13.545565366744995,-6.772782683372498,1.309892655146447e-06,2,False,,False,True,False,"Okay, I understand. I will process the provided data stream and output the correct template based on the information given. Let's begin!
+"
+10,none,cot,False,1,1,13,0.0,1024,5038,3,ZULU WHISKEY YANKEE,-13.571447849273682,-6.785723924636841,1.2764243708807525e-06,2,False,,False,True,False,"Okay, I understand. I will process the actual stream and output the correct template based on the provided example. Let's begin!
+"
+10,none,cot,False,1,1,13,0.0,1024,6038,3,HOTEL QUEBEC CHARLIE,-13.2320876121521,-6.61604380607605,1.7921624185768978e-06,2,False,,False,True,False,"Okay, I understand. I will process the actual stream and output the correct template based on the provided example. Let's begin!
+"
+10,none,cot,False,1,1,13,0.0,1024,7038,3,INDIA BRAVO LIMA,-16.926711320877075,-8.463355660438538,4.454743230789349e-08,2,False,,False,True,False,"Okay, I understand. I will process the provided data stream and output the correct template based on the information given. Let's begin!
+"
+10,none,cot,False,1,1,13,0.0,1024,8038,3,ALPHA MIKE UNIFORM,-13.652060508728027,-6.826030254364014,1.177566533370625e-06,2,False,,False,True,False,"Okay, I understand. I will process the provided data stream and output the correct template based on the information given. Let's begin!
+"
+10,none,cot,False,1,1,13,0.0,1024,9038,3,ALPHA TANGO FOXTROT,-13.944761514663696,-6.972380757331848,8.787534088165637e-07,2,False,,False,True,False,"Okay, I understand. I will process the actual stream data and output the correct template based on the provided example. Let's begin!
+"
+10,none,direct,False,1,1,13,0.0,1024,38,3,UNIFORM NOVEMBER YANKEE,-198.99873423576355,-13.266582282384237,3.7665853740942803e-87,15,False,,False,True,,"Okay, I understand. I will process the actual stream data and output the correct template based on the provided example. Let's begin!
+"
+10,none,direct,False,1,1,13,0.0,1024,1038,3,DELTA CHARLIE INDIA,-122.95135450363159,-12.295135450363158,4.0077922076779796e-54,10,False,,False,True,,"Okay, I understand. I will process the actual stream data and output the correct template based on the provided example. Let's begin!
+"
+10,none,direct,False,1,1,13,0.0,1024,2038,3,CHARLIE PAPA DELTA,-122.20318973064423,-12.220318973064423,8.468939473075973e-54,10,False,,False,True,,"Okay, I understand. I will process the actual stream data and output the correct template based on the provided example. Let's begin!
+"
+10,none,direct,False,1,1,13,0.0,1024,3038,3,ECHO CHARLIE QUEBEC,-128.99764788150787,-12.899764788150787,9.484912887938196e-57,10,False,,False,True,,"Okay, I understand. I will process the actual stream data and output the correct template based on the provided example. Let's begin!
+"
+10,none,direct,False,1,1,13,0.0,1024,4038,3,INDIA LIMA ECHO,-59.11990690231323,-11.823981380462646,2.1113034710223955e-26,5,False,,False,True,,"Okay, I understand. I will process the actual stream data and output the correct template based on the provided example. Let's begin!
+"
+10,none,direct,False,1,1,13,0.0,1024,5038,3,ZULU WHISKEY YANKEE,-130.73001372814178,-13.07300137281418,1.6775536517619213e-57,10,False,,False,True,,"Okay, I understand. I will process the actual stream data and output the correct template based on the provided example. Let's begin!
+"
+10,none,direct,False,1,1,13,0.0,1024,6038,3,HOTEL QUEBEC CHARLIE,-197.66665756702423,-13.177777171134949,1.4271228585282513e-86,15,False,,False,True,,"Okay, I understand. I will process the actual stream data and output the correct template based on the provided example. Let's begin!
+"
+10,none,direct,False,1,1,13,0.0,1024,7038,3,INDIA BRAVO LIMA,-113.39420497417836,-11.339420497417837,5.669209417758298e-50,10,False,,False,True,,"Okay, I understand. I will process the actual stream data and output the correct template based on the provided example. Let's begin!
+"
+10,none,direct,False,1,1,13,0.0,1024,8038,3,ALPHA MIKE UNIFORM,-124.17846584320068,-12.417846584320069,1.1748367226314704e-54,10,False,,False,True,,"Okay, I understand. I will process the actual stream data and output the correct template based on the provided example. Let's begin!
+"
+10,none,direct,False,1,1,13,0.0,1024,9038,3,ALPHA TANGO FOXTROT,-155.08624970912933,-12.923854142427444,4.435039909432827e-68,12,False,,False,True,,"Okay, I understand. I will process the actual stream data and output the correct template based on the provided example. Let's begin!
+"
+10,semantic_4,cot,False,1,1,13,0.0,1024,80,3,INDIA MIKE ROMEO,-14.5017831325531,-7.25089156627655,5.034491451585784e-07,2,False,False,False,True,False,"Okay, I understand. I will process the provided data stream and output the correct template based on the information given. Let's begin!
+"
+10,semantic_4,cot,False,1,1,13,0.0,1024,1080,3,ZULU PAPA ROMEO,-13.498346090316772,-6.749173045158386,1.3732284049990853e-06,2,False,False,False,True,False,"Okay, I understand. I will process the provided data stream and output the correct template based on the given information. Let's begin!
+"
+10,semantic_4,cot,False,1,1,13,0.0,1024,2080,3,BRAVO MIKE NOVEMBER,-14.040237426757812,-7.020118713378906,7.987343482452147e-07,2,False,False,False,True,False,"Okay, I understand. I will process the provided data stream and output the correct template based on the given information. Let's begin!
+"
+10,semantic_4,cot,False,1,1,13,0.0,1024,3080,3,PAPA TANGO DELTA,-13.990097999572754,-6.995048999786377,8.398034172569219e-07,2,False,False,False,True,False,"Okay, I understand. I will process the provided data stream and output the correct template based on the given information. Let's begin!
+"
+10,semantic_4,cot,False,1,1,13,0.0,1024,4080,3,PAPA MIKE SIERRA,-13.864351272583008,-6.932175636291504,9.52332810312715e-07,2,False,False,False,True,False,"Okay, I understand. I will process the provided data stream and output the correct template based on the given information. Let's begin!
+"
+10,semantic_4,cot,False,1,1,13,0.0,1024,5080,3,DELTA MIKE ZULU,-16.004417419433594,-8.002208709716797,1.1203915601940552e-07,2,False,False,False,True,False,"Okay, I understand. I will process the provided data stream and output the correct template based on the given instructions. Let's begin!
+"
+10,semantic_4,cot,False,1,1,13,0.0,1024,6080,3,JULIET TANGO KILO,-17.455769300460815,-8.727884650230408,2.6245552247361187e-08,2,False,False,False,True,False,"Okay, I understand. I will process the provided data stream and output the correct template based on the given instructions. Let's begin!
+"
+10,semantic_4,cot,False,1,1,13,0.0,1024,7080,3,TANGO YANKEE JULIET,-13.5773606300354,-6.7886803150177,1.2688994220265128e-06,2,False,False,False,True,False,"Okay, I understand. I will process the actual stream and output the correct template based on the provided example. Let's begin!
+"
+10,semantic_4,cot,False,1,1,13,0.0,1024,8080,3,DELTA ROMEO HOTEL,-14.203382015228271,-7.101691007614136,6.784995538478687e-07,2,False,False,False,True,False,"Okay, I understand. I will process the provided data stream and output the correct template based on the information given. Let's begin!
+"
+10,semantic_4,cot,False,1,1,13,0.0,1024,9080,3,PAPA VICTOR LIMA,-13.927891731262207,-6.9639458656311035,8.937035366431996e-07,2,False,False,False,True,False,"Okay, I understand. I will process the provided data stream and output the correct template based on the information given. Let's begin!
+"
+10,semantic_4,direct,False,1,1,13,0.0,1024,80,3,INDIA MIKE ROMEO,-16.285634756088257,-8.142817378044128,8.457435437310044e-08,2,False,False,False,True,,
+10,semantic_4,direct,False,1,1,13,0.0,1024,1080,3,ZULU PAPA ROMEO,-132.60488015413284,-14.733875572681427,2.5729555034944768e-58,9,False,False,False,True,,
+10,semantic_4,direct,False,1,1,13,0.0,1024,2080,3,BRAVO MIKE NOVEMBER,-129.0121874809265,-12.901218748092651,9.348003767782071e-57,10,False,False,False,True,,
+10,semantic_4,direct,False,1,1,13,0.0,1024,3080,3,PAPA TANGO DELTA,-131.0593705177307,-14.562152279747856,1.2068091169584486e-57,9,False,False,False,True,,
+10,semantic_4,direct,False,1,1,13,0.0,1024,4080,3,PAPA MIKE SIERRA,-134.81828367710114,-13.481828367710113,2.812958593056826e-59,10,False,False,False,True,,
+10,semantic_4,direct,False,1,1,13,0.0,1024,5080,3,DELTA MIKE ZULU,-80.8069112896925,-11.54384446995607,8.05386465901412e-36,7,False,False,False,True,,
+10,semantic_4,direct,False,1,1,13,0.0,1024,6080,3,JULIET TANGO KILO,-41.763901710510254,-10.440975427627563,7.280612959346621e-19,4,False,False,False,True,,
+10,semantic_4,direct,False,1,1,13,0.0,1024,7080,3,TANGO YANKEE JULIET,-131.4064181447029,-13.14064181447029,8.52938490211113e-58,10,False,False,False,True,,
+10,semantic_4,direct,False,1,1,13,0.0,1024,8080,3,DELTA ROMEO HOTEL,-110.60090327262913,-12.288989252514348,9.260576317932202e-49,9,False,False,False,True,,
+10,semantic_4,direct,False,1,1,13,0.0,1024,9080,3,PAPA VICTOR LIMA,-146.93730005295947,-12.24477500441329,1.5344099329896004e-64,12,False,False,False,True,,

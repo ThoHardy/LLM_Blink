@@ -74,12 +74,23 @@ def _rebuild(row):
             anti = (_as_bool(row["anti_enumeration"])
                     if "anti_enumeration" in row.index
                     and pd.notna(row["anti_enumeration"]) else False)
+            # report_order (2026-08-15, Step 4): CSVs predating the column get
+            # "none" -> byte-exact old prompt (same pattern as anti_enumeration).
+            r_order = (str(row["report_order"])
+                       if "report_order" in row.index
+                       and pd.notna(row["report_order"]) else "none")
+            # load_engagement (2026-08-15, Step 5): default "solve" for
+            # pre-column CSVs -> byte-exact old prompt.
+            l_eng = (str(row["load_engagement"])
+                     if "load_engagement" in row.index
+                     and pd.notna(row["load_engagement"]) else "solve")
             tr = build_trial(TrialConfig(
                 t1_load=str(row["t1_load"]), regime=str(row["regime"]),
                 t2_words=int(row["t2_words"]), seed=int(row["seed"]),
                 n_tasks=int(row["n_tasks"]), naming=str(row["naming"]),
                 passphrase_last=_as_bool(row["passphrase_last"]),
-                anti_enumeration=anti,
+                anti_enumeration=anti, report_order=r_order,
+                load_engagement=l_eng,
             ))
         except (ValueError, TypeError):
             return None

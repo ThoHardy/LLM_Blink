@@ -4,3 +4,9 @@ __pycache__/
 .venv/
 blink_venv/
 venv/
+
+# server/pull noise (not experiment trails)
+results/ollama_serve.log
+results/pull_*.log
+results/confirm_*.log
+results/confirm_driver.log

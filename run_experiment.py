@@ -111,6 +111,21 @@ def main():
              "anti-LITM headline, random = rank/lag deconfound.",
     )
     parser.add_argument(
+        "--report-order", choices=["none", "stream", "reverse", "all"],
+        default="none",
+        help="Design D4 axis: order to list tasks in <Final_Answers>. 'none' "
+             "(default, byte-exact/spontaneous), 'stream', 'reverse', or 'all' "
+             "to sweep the three arms (paired: identical stimulus, prompt text "
+             "differs by one sentence).",
+    )
+    parser.add_argument(
+        "--load-engagement", choices=["solve", "ignore"], default="solve",
+        help="Design D3 axis: 'solve' (default, byte-exact) or 'ignore' — append "
+             "a uniform rule to answer UNKNOWN for any determine/deduce/compute "
+             "task (the copy-paste passphrase is untouched). Run two sweeps with "
+             "the same seeds for a paired solve-vs-ignore contrast.",
+    )
+    parser.add_argument(
         "--no-anti-enumeration", action="store_true",
         help="Drop the anti-enumeration instruction from the cot template "
              "(restores the pre-2026-07-22 prompt; compliance flags are "
@@ -291,6 +306,9 @@ def main():
         passphrase_last=((True, False) if args.passphrase_rank == "both"
                          else args.passphrase_rank == "last"),
         anti_enumeration=not args.no_anti_enumeration,
+        report_order=(("none", "stream", "reverse") if args.report_order == "all"
+                      else args.report_order),
+        load_engagement=args.load_engagement,
         lags=tuple(args.lags),
         n_pres=tuple(n_pres),
         n_posts=tuple(n_posts),

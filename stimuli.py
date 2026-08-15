@@ -17,6 +17,7 @@ Key design choices (see ../PROMPTS.md and ../LITERATURE.md §C):
 """
 from __future__ import annotations
 import random
+import re
 from dataclasses import dataclass, field
 
 NATO = ["ALPHA", "BRAVO", "CHARLIE", "DELTA", "ECHO", "FOXTROT", "GOLF", "HOTEL",
@@ -439,6 +440,7 @@ T1_MATH_BANKS = {
 # ---------------------------------------------------------------------------
 
 from . import _t1_generators as _gen
+from ._math_bench import MATH_BENCH_BANKS   # Hendrycks MATH Algebra, Levels 1-5
 
 
 def _extend_to_100(pool: list, generator, *, target: int = 100, seed: int,
@@ -508,6 +510,8 @@ _MATH_ALIASES = {
     "math_3": 3,
     "math_4": 4,
 }
+# Hendrycks MATH Algebra (Step 6): math_bench_<L> -> MATH difficulty Level L.
+_MATH_BENCH_ALIASES = {f"math_bench_{lvl}": lvl for lvl in range(1, 6)}
 # ---------------------------------------------------------------------------
 # Trivial T1 baseline (added 2026-07-20)
 # ---------------------------------------------------------------------------
@@ -547,6 +551,7 @@ _VALID_LOADS = (
     "trivial",
     *_SEMANTIC_ALIASES,
     *_MATH_ALIASES,
+    *_MATH_BENCH_ALIASES,
 )
 
 
@@ -561,6 +566,8 @@ def _get_t1(load: str, rng: random.Random):
         task, ans = rng.choice(T1_SEMANTIC_BANKS[_SEMANTIC_ALIASES[load]])
     elif load in _MATH_ALIASES:
         task, ans = rng.choice(T1_MATH_BANKS[_MATH_ALIASES[load]])
+    elif load in _MATH_BENCH_ALIASES:
+        task, ans = rng.choice(MATH_BENCH_BANKS[_MATH_BENCH_ALIASES[load]])
     else:
         raise ValueError(
             f"Unknown t1_load: {load!r}. "
@@ -617,6 +624,28 @@ class TrialConfig:
     # Default True for new runs; rescore_graded defaults it to False for CSVs
     # predating the column, which reproduces the old prompt byte-exactly.
     anti_enumeration: bool = True
+    # Report-order axis (2026-08-15, issue #14 Step 4 / D4): instructs the
+    # order in which the model must list tasks in <Final_Answers>.
+    #   "none"    -> no ordering instruction (today's prompt, byte-exact);
+    #                measures the model's SPONTANEOUS report order.
+    #   "stream"  -> "...in the order in which they appeared in the stream."
+    #   "reverse" -> "...in reverse order of their appearance in the stream."
+    # Both experimental arms carry a length-matched, syntactically parallel
+    # sentence so the arms differ by ONE word, not by instruction count. Pure
+    # prompt text: NO effect on any RNG draw (7.2.2). rescore_graded defaults it
+    # to "none" for CSVs predating the column (byte-exact old prompt).
+    report_order: str = "none"
+    # T1-engagement axis (2026-08-15, issue #14 Step 5 / D3): whether the model
+    # is asked to SOLVE the load tasks or IGNORE them.
+    #   "solve"  -> today's prompt, byte-exact.
+    #   "ignore" -> append a uniform, content-defined rule that does NOT name the
+    #               passphrase: load tasks (determine/deduce/compute) get UNKNOWN,
+    #               while the copy-paste passphrase task is untouched. Dissociates
+    #               consolidation from detection (the model must still DETECT the
+    #               load tasks to answer UNKNOWN) — see the paper caveat. Pure
+    #               prompt text, NO RNG draw. rescore_graded defaults it to
+    #               "solve" for CSVs predating the column.
+    load_engagement: str = "solve"
 
 
 @dataclass
@@ -808,6 +837,15 @@ def _build_trial_legacy(cfg: TrialConfig) -> Trial:
 
 _VALID_NAMINGS = ("ordered", "non-ordered")
 
+_VALID_REPORT_ORDERS = ("none", "stream", "reverse")
+# Length-matched, syntactically parallel; differ in one content word
+# ("in the order in which" vs "in reverse order of"). See TrialConfig.report_order.
+_REPORT_ORDER_SENTENCE = {
+    "none": "",
+    "stream": " List the tasks in the order in which they appeared in the stream.",
+    "reverse": " List the tasks in reverse order of their appearance in the stream.",
+}
+
 # 100 task names: unique, uppercase, disjoint from the NATO alphabet (reserved
 # for passphrases / the mask decoy), from _TRIVIAL_WORDS (trivial-task
 # answers), and from the reserved worked-example names.
@@ -848,6 +886,14 @@ RULES_TASKS = (
     "end. Do not add conversational text, introductory phrases, or extra punctuation."
 )
 
+_VALID_LOAD_ENGAGEMENTS = ("solve", "ignore")
+# Uniform, content-defined (does NOT name the passphrase). Only tasks that
+# ask to determine/deduce/compute are affected; the copy-paste passphrase is not.
+_LOAD_IGNORE_RULE = (
+    " For any task that asks you to determine, deduce, or compute something, "
+    "answer UNKNOWN."
+)
+
 
 def _passphrase_task_line(t2: str, n_words: int) -> str:
     num = _NUM_WORDS.get(n_words, str(n_words))
@@ -871,20 +917,29 @@ def _sample_load_items(load: str, rng: random.Random, k: int) -> list:
         bank = T1_SEMANTIC_BANKS[_SEMANTIC_ALIASES[load]]
     elif load in _MATH_ALIASES:
         bank = T1_MATH_BANKS[_MATH_ALIASES[load]]
+    elif load in _MATH_BENCH_ALIASES:
+        bank = MATH_BENCH_BANKS[_MATH_BENCH_ALIASES[load]]
     else:
         raise ValueError(
             f"Unknown t1_load: {load!r}. Valid values: {', '.join(_VALID_LOADS)}"
         )
-    return [tuple(item) for item in rng.sample(bank, k)]
+    return [tuple(item) for item in rng.sample(list(bank), k)]
 
 
-def _worked_example_tasks(naming: str, regime: str) -> str:
+def _worked_example_tasks(naming: str, regime: str,
+                          report_order: str = "none") -> str:
     """Fixed worked example for the task-stream template.
 
     Shows 2 tasks; live test streams draw their own n_tasks, and the reserved
     example names never appear in TASK_NAME_BANK, so nothing leaks. The
     example demonstrates the '- Task <NAME>: <result>' line format and (cot)
     counting the tasks found, without any copyable placeholder text.
+
+    report_order (2026-08-15, Step 4/D4): the <Final_Answers> lines are shown in
+    the instructed order. "none"/"stream" -> stream order (Task n1 then n2);
+    "reverse" -> reverse order (Task n2 then n1). Without a matching example
+    models generally will not comply with "reverse" at all. The <Thinking>
+    reasoning stays in stream order (natural scan) in every arm.
     """
     n1, n2 = ("1", "2") if naming == "ordered" else _RESERVED_EXAMPLE_NAMES
     stream = (
@@ -904,12 +959,10 @@ def _worked_example_tasks(naming: str, regime: str) -> str:
         "ROMEO. I found 2 tasks in this stream.\n"
         "</Thinking>\n"
     )
-    answers = (
-        "<Final_Answers>\n"
-        f"- Task {n1}: ANIMAL\n"
-        f"- Task {n2}: VICTOR XRAY ROMEO\n"
-        "</Final_Answers>"
-    )
+    ans_lines = [f"- Task {n1}: ANIMAL", f"- Task {n2}: VICTOR XRAY ROMEO"]
+    if report_order == "reverse":
+        ans_lines = ans_lines[::-1]
+    answers = "<Final_Answers>\n" + "\n".join(ans_lines) + "\n</Final_Answers>"
     body = (thinking + answers) if regime == "cot" else answers
     return ("EXAMPLE (illustration only - not part of the real stream):\n"
             "DATA STREAM:\n"
@@ -919,7 +972,8 @@ def _worked_example_tasks(naming: str, regime: str) -> str:
             "Now process the following ACTUAL stream:")
 
 
-def _output_format_tasks(regime: str, anti_enumeration: bool = False) -> str:
+def _output_format_tasks(regime: str, anti_enumeration: bool = False,
+                         report_order: str = "none") -> str:
     """Answer-format spec. Prose instructions, no fill-in-the-blank placeholder
     (CoT-skip fix 1): the only literal-looking line is the per-task line format
     itself, which the worked example shows correctly instantiated.
@@ -927,13 +981,17 @@ def _output_format_tasks(regime: str, anti_enumeration: bool = False) -> str:
     anti_enumeration=True (cot only) appends an explicit prohibition on
     re-enumerating the stream packet by packet inside <Thinking> (idea I1).
     False reproduces the pre-2026-07-22 prompt byte-exactly.
+
+    report_order (2026-08-15, Step 4/D4) appends a length-matched ordering
+    sentence to the <Final_Answers> instruction ("" for "none" -> byte-exact).
     """
+    order = _REPORT_ORDER_SENTENCE[report_order]
     if regime == "direct":
         return (
             "OUTPUT FORMAT:\n"
             "A <Final_Answers> block with EXACTLY one line per task you found "
             "in the stream, each line in the form:\n"
-            "- Task <NAME>: <result>"
+            f"- Task <NAME>: <result>{order}"
         )
     anti = (
         " Do NOT list or summarize the stream packet by packet: skip filler "
@@ -947,7 +1005,7 @@ def _output_format_tasks(regime: str, anti_enumeration: bool = False) -> str:
         f"copy instruction text into it.{anti}\n"
         "Then a <Final_Answers> block with EXACTLY one line per task you "
         "found in the stream, each line in the form:\n"
-        "- Task <NAME>: <result>"
+        f"- Task <NAME>: <result>{order}"
     )
 
 
@@ -964,6 +1022,13 @@ def _build_trial_tasks(cfg: TrialConfig) -> Trial:
         raise ValueError(f"n_tasks={n} out of range [1, {total}]")
     if cfg.naming not in _VALID_NAMINGS:
         raise ValueError(f"naming={cfg.naming!r}; valid: {_VALID_NAMINGS}")
+    if cfg.report_order not in _VALID_REPORT_ORDERS:
+        raise ValueError(
+            f"report_order={cfg.report_order!r}; valid: {_VALID_REPORT_ORDERS}")
+    if cfg.load_engagement not in _VALID_LOAD_ENGAGEMENTS:
+        raise ValueError(
+            f"load_engagement={cfg.load_engagement!r}; "
+            f"valid: {_VALID_LOAD_ENGAGEMENTS}")
 
     rng = random.Random(cfg.seed)
     t2 = random_passphrase(rng, cfg.t2_words)
@@ -995,9 +1060,12 @@ def _build_trial_tasks(cfg: TrialConfig) -> Trial:
     lines.append("End of stream.")   # unnumbered: does not consume a packet slot
     stream = "\n".join(lines)
 
-    header = (f"{RULES_TASKS}\n{_worked_example_tasks(cfg.naming, cfg.regime)}\n"
+    rules = RULES_TASKS + (_LOAD_IGNORE_RULE
+                           if cfg.load_engagement == "ignore" else "")
+    header = (f"{rules}\n"
+              f"{_worked_example_tasks(cfg.naming, cfg.regime, cfg.report_order)}\n"
               f"DATA STREAM:\n{stream}\n"
-              f"{_output_format_tasks(cfg.regime, cfg.anti_enumeration)}")
+              f"{_output_format_tasks(cfg.regime, cfg.anti_enumeration, cfg.report_order)}")
     pp = tasks[pp_rank]
     return Trial(
         system=SYSTEM,
@@ -1119,6 +1187,30 @@ def _validate_t1_pools(verbose: bool = False) -> None:
 
         if verbose:
             print(f"  {name}: OK (100 items, no dups, deterministic)")
+
+    # (5b) MATH-bench pools (Step 6): static JSON from the Hendrycks MATH
+    # Algebra subset (not programmatic, so no regen check). 100 items/level, no
+    # duplicate instructions, (str, str) tuples, integer answers, distinct
+    # levels. Distinctness across levels guards against a build regression that
+    # would collapse the difficulty axis.
+    _mb_seen = set()
+    for lvl in range(1, 6):
+        pool = MATH_BENCH_BANKS[lvl]
+        assert len(pool) == expected_size, (
+            f"math_bench_{lvl}: expected {expected_size}, got {len(pool)}")
+        qs = [q for q, _ in pool]
+        assert len(set(qs)) == len(qs), f"math_bench_{lvl}: duplicate instructions"
+        for i, item in enumerate(pool):
+            assert (isinstance(item, tuple) and len(item) == 2
+                    and isinstance(item[0], str) and isinstance(item[1], str)), (
+                f"math_bench_{lvl}[{i}] not a (str, str): {item!r}")
+            assert re.fullmatch(r"-?\d+", item[1]), (
+                f"math_bench_{lvl}[{i}]: non-integer answer {item[1]!r}")
+        assert not (_mb_seen & set(qs)), (
+            f"math_bench_{lvl}: shares problems with a lower level")
+        _mb_seen |= set(qs)
+        if verbose:
+            print(f"  math_bench_{lvl}: OK (100 items, no dups, integer answers)")
 
     # (6) trivial baseline pool (2026-07-20): 100 items, no dups, (str, str),
     # answer appears in its instruction, and no NATO word (reserved for T2/mask).

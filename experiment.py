@@ -41,7 +41,8 @@ from .stimuli import TrialConfig, build_trial
 from .model import sequence_logprob, DEFAULT_MAX_NEW_TOKENS, OllamaBackend
 from .protocol import generate_trajectory, DEFAULT_ANSWER_BUDGET
 from .readout import (parse_task_report, task_rows,
-                      t2_scoring_prefix_tasks, cot_enumeration_stats)
+                      t2_scoring_prefix_tasks, cot_enumeration_stats,
+                      report_order_respected)
 
 
 # ---------------------------------------------------------------------------
@@ -119,6 +120,8 @@ def run_trial(model, tok, cfg: TrialConfig, temperature: float = 0.0,
         enum_stats = {"n_packets_in_cot": None,
                       "n_filler_packets_in_cot": None,
                       "enumerated_fillers_in_cot": None}
+        # report-order axis (Step 4/D4): task-design only
+        rank_instructed = rank_emitted = order_respected = None
     else:
         parsed = parse_task_report(out, tr)
         rows_t = task_rows(tr, parsed["reported"])
@@ -146,6 +149,22 @@ def run_trial(model, tok, cfg: TrialConfig, temperature: float = 0.0,
                       {"n_packets_in_cot": None,
                        "n_filler_packets_in_cot": None,
                        "enumerated_fillers_in_cot": None})
+        # report-order axis (Step 4/D4). Instructed rank of the passphrase in
+        # the requested output order (NaN for the "none"/spontaneous arm);
+        # emitted rank = its realized position in <Final_Answers> (NaN if
+        # absent). D4 runs on the EMITTED rank; the discrepancy is the
+        # manipulation check, quantified by report_order_respected (Kendall tau).
+        _n = len([r for r in rows_t])
+        if cfg.report_order == "reverse":
+            rank_instructed = _n - tr.t2_rank + 1
+        elif cfg.report_order == "stream":
+            rank_instructed = tr.t2_rank
+        else:
+            rank_instructed = None
+        _emit = [n for n in parsed["reported"].keys()]
+        _pp = str(tr.t2_task_name).upper()
+        rank_emitted = (_emit.index(_pp) + 1) if _pp in _emit else None
+        order_respected = report_order_respected(out, tr, cfg.report_order)
 
     # -- 3. graded measure: P(correct passphrase | model's own prefix) ------
     # Rehearsal confound gate (2026-07-20): if the passphrase already appears
@@ -166,6 +185,12 @@ def run_trial(model, tok, cfg: TrialConfig, temperature: float = 0.0,
         "naming": None if legacy else cfg.naming,
         "passphrase_last": None if legacy else cfg.passphrase_last,
         "anti_enumeration": None if legacy else cfg.anti_enumeration,
+        # report-order axis (Step 4/D4)
+        "report_order": None if legacy else cfg.report_order,
+        "load_engagement": None if legacy else cfg.load_engagement,
+        "t2_output_rank_instructed": rank_instructed,
+        "t2_output_rank_emitted": rank_emitted,
+        "report_order_respected": order_respected,
         "finite_budget": traj.finite_budget,   # APPLIED value (None = single pass)
         # legacy geometry (None on task-design rows)
         "lag": cfg.lag if legacy else None,
@@ -250,6 +275,8 @@ def run_sweep(model, tok,
               regimes=("cot",),
               passphrase_last=(True, False),
               anti_enumeration: bool = True,
+              report_order="none",
+              load_engagement: str = "solve",
               lags=(0,), masks=(False,),
               n_pres: tuple[int | None, ...] = (None,),
               n_posts: tuple[int | None, ...] = (None,),
@@ -312,30 +339,39 @@ def run_sweep(model, tok,
     if isinstance(passphrase_last, bool):
         passphrase_last = (passphrase_last,)
     pp_arms = tuple(passphrase_last)
+    # report_order is a sweep AXIS (Step 4/D4): str or tuple of str. The arms
+    # share every RNG draw (pure prompt text), so contrasts are exactly paired
+    # (input position held constant -> not Lost-in-the-Middle).
+    if isinstance(report_order, str):
+        report_order = (report_order,)
+    ro_arms = tuple(report_order)
 
     cells = []
     for nt in n_tasks_list:
         geoms = (list(itertools.product(lags, masks, n_pres, n_posts))
                  if nt is None else [(0, False, None, None)])
         cell_loads = tuple(loads) if (nt is None or nt > 1) else ("none",)
-        # passphrase_last only changes the stimulus for task-design cells
-        # (legacy path ignores it) -> collapse the axis on legacy cells.
+        # passphrase_last / report_order only change the stimulus for
+        # task-design cells (legacy path ignores them) -> collapse on legacy.
         cell_arms = pp_arms if nt is not None else (pp_arms[0],)
-        for fb, load, regime, pp, geom, seed in itertools.product(
-                finite_budgets, cell_loads, regimes, cell_arms, geoms,
+        cell_ro = ro_arms if nt is not None else (ro_arms[0],)
+        for fb, load, regime, pp, ro, geom, seed in itertools.product(
+                finite_budgets, cell_loads, regimes, cell_arms, cell_ro, geoms,
                 range(n_seeds)):
-            cells.append((nt, fb, load, regime, pp, *geom, seed))
+            cells.append((nt, fb, load, regime, pp, ro, *geom, seed))
 
     rows = []
     pbar = tqdm(enumerate(cells), total=len(cells), disable=not verbose)
-    for k, (nt, fb, load, regime, pp, lag, mask, n_pre, n_post_, seed) in pbar:
+    for k, (nt, fb, load, regime, pp, ro, lag, mask, n_pre, n_post_, seed) in pbar:
         cfg = TrialConfig(lag=lag, t1_load=load, regime=regime, mask=mask,
                           n_pre=n_pre, n_post=n_post_,
                           seed=1000 * seed + lag + 7 * len(load)
                                + 13 * (nt or 0),
                           n_tasks=nt, naming=naming,
                           passphrase_last=pp,
-                          anti_enumeration=anti_enumeration)
+                          anti_enumeration=anti_enumeration,
+                          report_order=ro,
+                          load_engagement=load_engagement)
         rows.append(run_trial(model, tok, cfg, temperature=temperature,
                               encoding_baseline=encoding_baseline,
                               max_new_tokens=max_new_tokens,

@@ -1,0 +1,33 @@
+Model   : gemma3:12b
+Workers : 8
+Trials  : 240  (temp=0.0, max_tok=1024)
+Output  : LLM_Blink/results/ab_gemma3_12b_t0_s10.csv
+Loading model...
+Model ready.
+
+  10/240  73s  (7.28s/trial, 0.14 trial/s)
+  20/240  107s  (5.33s/trial, 0.19 trial/s)
+  30/240  171s  (5.69s/trial, 0.18 trial/s)
+  40/240  219s  (5.48s/trial, 0.18 trial/s)
+  50/240  254s  (5.07s/trial, 0.20 trial/s)
+  60/240  288s  (4.79s/trial, 0.21 trial/s)
+  70/240  358s  (5.11s/trial, 0.20 trial/s)
+  80/240  397s  (4.96s/trial, 0.20 trial/s)
+  90/240  431s  (4.79s/trial, 0.21 trial/s)
+  100/240  470s  (4.70s/trial, 0.21 trial/s)
+  110/240  538s  (4.90s/trial, 0.20 trial/s)
+  120/240  569s  (4.75s/trial, 0.21 trial/s)
+  130/240  611s  (4.70s/trial, 0.21 trial/s)
+  140/240  642s  (4.59s/trial, 0.22 trial/s)
+  150/240  707s  (4.71s/trial, 0.21 trial/s)
+  160/240  746s  (4.66s/trial, 0.21 trial/s)
+  170/240  786s  (4.62s/trial, 0.22 trial/s)
+  180/240  823s  (4.57s/trial, 0.22 trial/s)
+  190/240  894s  (4.70s/trial, 0.21 trial/s)
+  200/240  936s  (4.68s/trial, 0.21 trial/s)
+  210/240  971s  (4.63s/trial, 0.22 trial/s)
+  220/240  1006s  (4.57s/trial, 0.22 trial/s)
+  230/240  1080s  (4.70s/trial, 0.21 trial/s)
+  240/240  1102s  (4.59s/trial, 0.22 trial/s)
+
+Saved 240 rows to LLM_Blink/results/ab_gemma3_12b_t0_s10.csv in 1102s (4.59s/trial wall).

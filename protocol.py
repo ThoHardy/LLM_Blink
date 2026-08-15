@@ -34,6 +34,10 @@ Because stage 1 starts from the prefilled opener, the <Thinking> block is
 guaranteed open by construction, and ``cot_tokens_used`` counts pure
 Thinking-span tokens (including the closing tag when the model closed
 naturally).
+
+``continue_generate`` works on BOTH backends (HF and, since PR #11 / 2026-07-22,
+Ollama via the native /api/chat prefill path) — the forked-resampling probes of
+issue #14 rely on it on Ollama.
 """
 from __future__ import annotations
 from dataclasses import dataclass
@@ -46,6 +50,13 @@ THINKING_OPEN = "<Thinking>\n"
 STOP_THINKING = "</Thinking>"
 STOP_ANSWERS = "</Final_Answers>"
 
+# Native reasoning-model delimiters (issue #14 Step 7): Qwen3 / DeepSeek-R1 etc.
+# emit their own <think>...</think> block, then a free-form answer (no
+# <Final_Answers> scaffold). The fork points must re-anchor on these when our
+# scaffold delimiters are absent, or both probes break silently on native runs.
+NATIVE_THINK_OPEN = "<think>"
+NATIVE_THINK_CLOSE = "</think>"
+
 
 @dataclass
 class Trajectory:
@@ -55,6 +66,73 @@ class Trajectory:
     finite_budget: int | None       # budget actually APPLIED (None = single pass)
     cot_tokens_used: int | None     # stage-1 generated tokens (None = single pass)
     cot_forced_closed: bool | None  # True = cap hit, close injected
+
+    # -- fork points (issue #14, Step 1) -----------------------------------
+    # Character offsets into ``text`` for the forked-resampling probes. A fork
+    # at offset O rebuilds ``prompt + text[:O]`` and resamples the continuation.
+    #
+    # The read-out transition is defined by the ANSWER-BLOCK OPENER
+    # ``<Final_Answers>``, not by ``</Thinking>``: small non-ceiling models
+    # (gemma2:2b) frequently jump straight from reasoning into <Final_Answers>
+    # WITHOUT closing </Thinking> (</Thinking> present in only ~19% of gemma2:2b
+    # cot trials vs <Final_Answers> in ~99%). Forking on </Thinking> alone would
+    # leave the primary probe undefined on 80% of the very trials that carry the
+    # effect. ``<Final_Answers>`` gives ~99% fork coverage on every model tried.
+    _ANSWERS_OPEN = "<Final_Answers>"
+
+    def offset(self, at: str) -> int | None:
+        """Char offset into ``text`` of a fork point, or None if absent.
+
+        at="pre_cot"   -> just after the ``<Thinking>`` opener (resample the
+                          whole CoT; the access probe). Stops at the answer opener.
+        at="post_cot"  -> just after the read-out transition = the ``<Final_Answers>``
+                          opener if present, else after ``</Thinking>`` (resample
+                          the report; the primary report probe).
+        at="post_answers" -> just after ``</Final_Answers>`` (end of report).
+        at="response"  -> 0: resample the whole assistant turn from the prompt.
+                          Used for the report probe in the DIRECT regime, whose
+                          output carries no <Thinking>/<Final_Answers> scaffold
+                          (small models emit the report lines directly, e.g. in a
+                          ``` fence) so there is nothing to fork "after the CoT".
+        """
+        t = self.text
+        if at == "response":
+            return 0
+        if at == "pre_cot":
+            i = t.find(THINKING_OPEN.rstrip("\n"))    # "<Thinking>" (scaffold)
+            marker = THINKING_OPEN.rstrip("\n")
+            if i == -1:                               # native <think> (Step 7)
+                i = t.find(NATIVE_THINK_OPEN)
+                marker = NATIVE_THINK_OPEN
+            if i == -1:
+                return None
+            o = i + len(marker)
+            if o < len(t) and t[o] == "\n":
+                o += 1
+            return o
+        if at == "post_cot":
+            i = t.find(self._ANSWERS_OPEN)            # scaffold read-out transition
+            if i != -1:
+                o = i + len(self._ANSWERS_OPEN)
+                if o < len(t) and t[o] == "\n":
+                    o += 1
+                return o
+            j = t.find(STOP_THINKING)                 # fallback: clean scaffold
+            if j != -1:
+                return j + len(STOP_THINKING)
+            # native reasoning models (Step 7): read-out transition = </think>,
+            # after which the model emits its free-form answer.
+            k = t.find(NATIVE_THINK_CLOSE)
+            if k != -1:
+                o = k + len(NATIVE_THINK_CLOSE)
+                if o < len(t) and t[o] == "\n":
+                    o += 1
+                return o
+            return None
+        if at == "post_answers":
+            i = t.find(STOP_ANSWERS)
+            return i + len(STOP_ANSWERS) if i != -1 else None
+        raise ValueError(f"unknown fork point {at!r}")
 
 
 def generate_trajectory(model, tok, trial, finite_budget: int | None = None,

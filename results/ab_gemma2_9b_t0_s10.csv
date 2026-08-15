@@ -1,0 +1,1372 @@
+lag,t1_load,regime,mask,n_pre,n_post,t2_abs_index,temperature,max_new_tokens,seed,t2_words,t2_phrase,t2_total_logprob,t2_mean_logprob,t2_joint_prob,t2_n_tokens,report_correct,t1_correct,output_truncated,t2_slot_missing,thinking_is_placeholder,raw_output
+0,none,cot,False,2,10,4,0.0,1024,28,3,DELTA XRAY ECHO,-30.345732765767707,-6.069146553153542,6.622404596851826e-14,5,True,,False,False,False,"<Thinking>
+The sum of all packet numbers is 15. The passphrases are ""DELTA XRAY ECHO"".
+</Thinking>
+<Final_Answers>
+Target 1 Result: 15
+Target 2 Result: DELTA XRAY ECHO
+"
+0,none,cot,False,1,11,3,0.0,1024,1028,3,OSCAR TANGO MIKE,-213.81531715393066,-17.81794309616089,1.384164203791184e-93,12,True,,False,False,False,"<Thinking>
+The T2 packet contains the passphrase ""OSCAR TANGO MIKE"".  There are a total of 50 + 54 + 52 + 5 + 5 = 166 stale entries across all dead-letter queues. 
+</Thinking>
+<Final_Answers>
+Target 1 Result: 166
+Target 2 Result: OSCAR TANGO MIKE 
+"
+0,none,cot,False,6,6,8,0.0,1024,2028,3,LIMA FOXTROT WHISKEY,-119.15827965746212,-13.239808850829125,1.7791668238411485e-52,9,True,,False,False,False,"<Thinking>
+The provided data stream does not contain a Target 1 calculation or any other numerical target.  
+</Thinking>
+<Final_Answers>
+Target 1 Result: N/A
+Target 2 Result: LIMA FOXTROT WHISKEY
+"
+0,none,cot,False,5,7,7,0.0,1024,3028,3,VICTOR UNIFORM GOLF,-114.7634687423706,-19.1272447903951,1.441646563653151e-50,6,True,,False,False,False,"<Thinking>
+There is no mathematical calculation to be done in this data stream.  The T2 packet contains the passphrase ""VICTOR UNIFORM GOLF"".
+</Thinking>
+<Final_Answers>
+Target 1 Result: 
+Target 2 Result: VICTOR UNIFORM GOLF
+"
+0,none,cot,False,5,7,7,0.0,1024,4028,3,WHISKEY INDIA PAPA,-198.78632104398685,-13.252421402932457,4.657980785943249e-87,15,True,,False,False,False,"<Thinking>
+</Thinking>
+<Final_Answers>
+Target 1 Result:  
+Target 2 Result: WHISKEY INDIA PAPA 
+"
+0,none,cot,False,9,3,11,0.0,1024,5028,3,CHARLIE LIMA GOLF,-94.5567455291748,-15.7594575881958,8.600569109344325e-42,6,True,,False,False,True,"<Thinking>
+[process the stream, do the math]
+</Thinking>
+<Final_Answers>
+Target 1 Result: 73
+Target 2 Result: CHARLIE LIMA GOLF
+"
+0,none,cot,False,4,8,6,0.0,1024,6028,3,XRAY FOXTROT INDIA,-18.280024857873315,-2.611432122553331,1.1510284948992536e-08,7,True,,False,False,False,"<Thinking>
+The cache hit ratio is 14 percent. The replication lag on billing is 52 seconds.  
+</Thinking>
+<Final_Answers>
+Target 1 Result: 66
+Target 2 Result: XRAY FOXTROT INDIA
+"
+0,none,cot,False,8,4,10,0.0,1024,7028,3,XRAY NOVEMBER FOXTROT,-16.510610351806463,-2.3586586216866374,6.75356417967464e-08,7,True,,False,False,True,"<Thinking>
+[process the stream, do the math]
+</Thinking>
+<Final_Answers>
+Target 1 Result:  
+Target 2 Result: XRAY NOVEMBER FOXTROT
+"
+0,none,cot,False,5,7,7,0.0,1024,8028,3,WHISKEY DELTA PAPA,-117.23270320892334,-16.74752902984619,1.2203485733209223e-51,7,True,,False,False,False,"<Thinking>
+The stream contains various operational updates and logs. There isn't a clear target 1 calculation to be made from the provided data. The T2 packet reveals the secure operational passphrase ""WHISKEY DELTA PAPA"".
+</Thinking>
+<Final_Answers>
+Target 1 Result:  
+Target 2 Result: WHISKEY DELTA PAPA 
+"
+0,none,cot,False,3,9,5,0.0,1024,9028,3,MIKE TANGO LIMA,-28.72054875214326,-4.78675812535721,3.363753477178647e-13,6,True,,False,False,False,"<Thinking>
+The T2 packet contains the passphrase ""MIKE TANGO LIMA"".  There are no numerical calculations to be made from this data stream.
+</Thinking>
+<Final_Answers>
+Target 1 Result: 
+Target 2 Result: MIKE TANGO LIMA
+"
+0,none,direct,False,2,10,4,0.0,1024,28,3,DELTA XRAY ECHO,-28.89338994045829,-5.778677988091658,2.829828950939339e-13,5,True,,False,False,,"<Final_Answers>
+Target 2 Result: DELTA XRAY ECHO
+Target 1 Result: 71
+"
+0,none,direct,False,1,11,3,0.0,1024,1028,3,OSCAR TANGO MIKE,-84.90490078936637,-14.150816798227728,1.3374270435386853e-37,6,True,,False,False,,"<Final_Answers>
+Target 2 Result: OSCAR TANGO MIKE
+Target 1 Result: 5
+"
+0,none,direct,False,6,6,8,0.0,1024,2028,3,LIMA FOXTROT WHISKEY,-115.21522521973361,-12.801691691081512,9.176212363870091e-51,9,True,,False,False,,"<Final_Answers>
+Target 2 Result: LIMA FOXTROT WHISKEY
+Target 1 Result: 269
+"
+0,none,direct,False,5,7,7,0.0,1024,3028,3,VICTOR UNIFORM GOLF,-102.89108180999756,-17.148513634999592,2.0652419254542037e-45,6,True,,False,False,,"<Final_Answers>
+Target 2 Result: VICTOR UNIFORM GOLF
+Target 1 Result: 823
+"
+0,none,direct,False,5,7,7,0.0,1024,4028,3,WHISKEY INDIA PAPA,-114.19809675216675,-16.314013821738108,2.5374455792464407e-50,7,True,,False,False,,"<Final_Answers>
+Target 2 Result: WHISKEY INDIA PAPA
+Target 1 Result: 83
+"
+0,none,direct,False,9,3,11,0.0,1024,5028,3,CHARLIE LIMA GOLF,-89.10006999969482,-14.850011666615805,2.0152608217026678e-39,6,True,,False,False,,"<Final_Answers>
+Target 2 Result: CHARLIE LIMA GOLF
+Target 1 Result: 73
+"
+0,none,direct,False,4,8,6,0.0,1024,6028,3,XRAY FOXTROT INDIA,-53.20175099554763,-7.60025014222109,7.848255174384558e-24,7,True,,False,False,,"<Final_Answers>
+Target 2 Result: XRAY FOXTROT INDIA
+Target 1 Result: 52
+"
+0,none,direct,False,8,4,10,0.0,1024,7028,3,XRAY NOVEMBER FOXTROT,-40.150328757998125,-5.7357612511425895,3.655390457797259e-18,7,True,,False,False,,"<Final_Answers>
+Target 2 Result: XRAY NOVEMBER FOXTROT
+Target 1 Result: 57
+"
+0,none,direct,False,5,7,7,0.0,1024,8028,3,WHISKEY DELTA PAPA,-114.90921401977539,-16.415602002825057,1.2461273596223685e-50,7,True,,False,False,,"<Final_Answers>
+Target 2 Result: WHISKEY DELTA PAPA
+Target 1 Result: 412
+"
+0,none,direct,False,3,9,5,0.0,1024,9028,3,MIKE TANGO LIMA,-82.77679967880249,-16.5553599357605,1.1232920103524626e-36,5,True,,False,False,,"<Final_Answers>
+Target 2 Result: MIKE TANGO LIMA
+Target 1 Result: 417
+"
+0,semantic_4,cot,False,4,8,6,0.0,1024,70,3,DELTA JULIET WHISKEY,-33.42310120287402,-4.774728743267717,3.0516279186141085e-15,7,True,True,False,False,False,"<Thinking>
+T follows R, and R follows Q.  Therefore the order is T, R, Q, P, U. The first place finisher is T.
+</Thinking>
+<Final_Answers>
+Target 1 Result: T
+Target 2 Result: DELTA JULIET WHISKEY 
+"
+0,semantic_4,cot,False,11,1,13,0.0,1024,1070,3,LIMA XRAY CHARLIE,-88.83787047870555,-12.691124354100793,2.6194075023627976e-39,7,True,True,False,False,False,"<Thinking>
+All snicks are yarps. All yarps are grebs. All grebs are vorps. No vorps are knifs. All knifs are ralks. Therefore, some snicks are not knifs because all snicks are part of the chain that leads to ralks, and no vorps are knifs.
+</Thinking>
+<Final_Answers>
+Target 1 Result: VALID
+Target 2 Result: LIMA XRAY CHARLIE 
+"
+0,semantic_4,cot,False,6,6,8,0.0,1024,2070,3,MIKE DELTA CHARLIE,-30.973510268439895,-6.194702053687979,3.534885941983317e-14,5,True,False,False,False,False,"<Thinking>
+The logic puzzle in T1 is a complex syllogism.  Careful analysis reveals that the statement ""Some smegs are not skrans"" is indeed valid. The provided information does not establish a direct link between smegs and skrans, allowing for the possibility of some smegs belonging to a category separate from skrans. 
+</Thinking>
+<Final_Answers>
+Target 1 Result: VALID
+Target 2 Result: MIKE DELTA CHARLIE 
+"
+0,semantic_4,cot,False,11,1,13,0.0,1024,3070,3,TANGO KILO WHISKEY,-134.8601589202881,-19.265736988612584,2.6975975115601307e-59,7,True,True,False,False,False,"<Thinking>
+The T1 packet presents a complex syllogism. Analyzing the relationships between drabs, blorgs, gleeps, skrans, and snools, we can deduce that the statement ""no drabs are skrans"" is indeed valid. The T2 packet contains the passphrase ""TANGO KILO WHISKEY"". 
+</Thinking>
+<Final_Answers>
+Target 1 Result: VALID
+Target 2 Result: TANGO KILO WHISKEY 
+"
+0,semantic_4,cot,False,8,4,10,0.0,1024,4070,3,ZULU DELTA SIERRA,-60.21591818895649,-10.035986364826082,7.056007078429282e-27,6,True,True,False,False,False,"<Thinking>
+The logic statement in T1 can be broken down to determine if some snicks are not knifs.  Since all knifs are ralks, and no vorps are knifs, and all grebs are vorps, then it follows that some snicks are not knifs. 
+</Thinking>
+<Final_Answers>
+Target 1 Result: VALID
+Target 2 Result: ZULU DELTA SIERRA 
+"
+0,semantic_4,cot,False,9,3,11,0.0,1024,5070,3,KILO JULIET DELTA,-89.94109924485383,-14.990183207475638,8.69114311980959e-40,6,True,True,False,False,False,"<Thinking>
+All snicks are yarps. All yarps are grebs. All grebs are vorps. No vorps are knifs. All knifs are ralks. Therefore, some snicks are not knifs is a valid statement. 
+</Thinking>
+<Final_Answers>
+Target 1 Result: VALID
+Target 2 Result: KILO JULIET DELTA 
+"
+0,semantic_4,cot,False,6,6,8,0.0,1024,6070,3,GOLF DELTA HOTEL,-57.489684104919434,-14.372421026229858,1.0778229502864376e-25,4,True,True,False,False,False,"<Thinking>
+T1:  R finished before T, and T finished before W. Q finished before P, and W finished before Q. Therefore the order is R, T, W, Q, P. The second place finisher is T. 
+</Thinking>
+<Final_Answers>
+Target 1 Result: T
+Target 2 Result: GOLF DELTA HOTEL 
+"
+0,semantic_4,cot,False,9,3,11,0.0,1024,7070,3,UNIFORM LIMA TANGO,-105.1072416305542,-17.517873605092365,2.2516710899077196e-46,6,True,False,False,False,False,"<Thinking>
+T is before P, Q, W.  W is before Q, so T is before Q and W. R is before T, so the order is R, T, W, Q, P.
+</Thinking>
+<Final_Answers>
+Target 1 Result: P
+Target 2 Result: UNIFORM LIMA TANGO 
+"
+0,semantic_4,cot,False,10,2,12,0.0,1024,8070,3,WHISKEY XRAY NOVEMBER,-222.40514969825745,-14.82700997988383,2.5743686566365427e-97,15,True,True,False,False,False,"<Thinking>
+The logic presented in T1 is a complex series of statements about relationships between various entities (wugs, wozzles, torps, smegs, and gleeps).  To determine if ""no wugs are smegs"" follows from the given information, we need to analyze the relationships carefully.
+
+* All wugs are wozzles.
+* All wozzles are torps.
+* No torps are smegs.
+* All smegs are gleeps.
+* Some gleeps are wugs.
+
+Since all wugs are wozzles, and all wozzles are torps, then no wugs can be smegs because no torps are smegs. Therefore, the statement ""no wugs are smegs"" is a valid conclusion. 
+</Thinking>
+<Final_Answers>
+Target 1 Result: VALID
+Target 2 Result: WHISKEY XRAY NOVEMBER
+"
+0,semantic_4,cot,False,11,1,13,0.0,1024,9070,3,MIKE WHISKEY UNIFORM,-105.84683883195521,-15.120976975993601,1.0747364253232692e-46,7,True,True,False,False,False,"<Thinking>
+The T1 packet presents a complex syllogism. Analyzing the statements, we can deduce that while some yarps are trens and all vorps are knifs, there's no direct link between snorfs and vorps. Therefore, it cannot be concluded that no snorfs are vorps. 
+</Thinking>
+<Final_Answers>
+Target 1 Result: INVALID
+Target 2 Result: MIKE WHISKEY UNIFORM 
+"
+0,semantic_4,direct,False,4,8,6,0.0,1024,70,3,DELTA JULIET WHISKEY,-31.738720540710347,-4.534102934387192,1.6445565299343894e-14,7,True,True,False,False,,"<Final_Answers>
+Target 2 Result: DELTA JULIET WHISKEY
+Target 1 Result: T
+"
+0,semantic_4,direct,False,11,1,13,0.0,1024,1070,3,LIMA XRAY CHARLIE,-83.17078411579337,-11.88154058797048,7.575083125407086e-37,7,True,True,False,False,,"<Final_Answers>
+Target 2 Result: LIMA XRAY CHARLIE
+Target 1 Result: VALID
+"
+0,semantic_4,direct,False,6,6,8,0.0,1024,2070,3,MIKE DELTA CHARLIE,-54.79360914230347,-13.698402285575867,1.5974891087359395e-24,4,True,False,False,False,,"<Final_Answers>
+Target 2 Result: MIKE DELTA CHARLIE
+Target 1 Result: VALID
+"
+0,semantic_4,direct,False,11,1,13,0.0,1024,3070,3,TANGO KILO WHISKEY,-92.91893076902431,-11.61486634612804,4.4240609609789933e-41,8,True,True,False,False,,"<Final_Answers>
+Target 2 Result: TANGO KILO WHISKEY
+Target 1 Result: VALID
+"
+0,semantic_4,direct,False,8,4,10,0.0,1024,4070,3,ZULU DELTA SIERRA,-54.210471636343755,-9.035078606057292,2.862142858518252e-24,6,True,True,False,False,,"<Final_Answers>
+Target 2 Result: ZULU DELTA SIERRA
+Target 1 Result: VALID
+"
+0,semantic_4,direct,False,9,3,11,0.0,1024,5070,3,KILO JULIET DELTA,-43.01013235113351,-7.1683553918555845,2.0938079959239079e-19,6,True,True,False,False,,"<Final_Answers>
+Target 2 Result: KILO JULIET DELTA
+Target 1 Result: VALID
+"
+0,semantic_4,direct,False,6,6,8,0.0,1024,6070,3,GOLF DELTA HOTEL,-58.600406646728516,-14.650101661682129,3.5494965307891446e-26,4,True,False,False,False,,"<Final_Answers>
+Target 2 Result: GOLF DELTA HOTEL
+Target 1 Result: R
+"
+0,semantic_4,direct,False,9,3,11,0.0,1024,7070,3,UNIFORM LIMA TANGO,-103.10492420196533,-17.18415403366089,1.667632544769291e-45,6,True,False,False,False,,"<Final_Answers>
+Target 2 Result: UNIFORM LIMA TANGO
+Target 1 Result: R
+"
+0,semantic_4,direct,False,10,2,12,0.0,1024,8070,3,WHISKEY XRAY NOVEMBER,-119.73673868179321,-17.105248383113317,9.97688828775573e-53,7,True,False,False,False,,"<Final_Answers>
+Target 2 Result: WHISKEY XRAY NOVEMBER
+Target 1 Result: INVALID
+"
+0,semantic_4,direct,False,11,1,13,0.0,1024,9070,3,MIKE WHISKEY UNIFORM,-98.17097508907841,-14.024425012725487,2.3167930182324607e-43,7,True,False,False,False,,"<Final_Answers>
+Target 2 Result: MIKE WHISKEY UNIFORM
+Target 1 Result: VALID
+"
+2,none,cot,False,9,1,13,0.0,1024,30,3,ROMEO ZULU JULIET,-86.24478900795759,-12.320684143993942,3.5023862637180944e-38,7,True,,False,False,False,"<Thinking>
+The stream contains no numerical calculations to be performed.
+</Thinking>
+<Final_Answers>
+Target 1 Result:  
+Target 2 Result: ROMEO ZULU JULIET 
+"
+2,none,cot,False,7,3,11,0.0,1024,1030,3,BRAVO NOVEMBER YANKEE,-51.366866809424664,-7.3381238299178095,4.916467719351812e-23,7,True,,False,False,False,"<Thinking>
+The provided data stream does not contain a Target 1 to process. The secure operational passphrase is ""BRAVO NOVEMBER YANKEE"".
+</Thinking>
+<Final_Answers>
+Target 1 Result:  
+Target 2 Result: BRAVO NOVEMBER YANKEE 
+"
+2,none,cot,False,1,9,5,0.0,1024,2030,3,JULIET MIKE LIMA,-42.23127725039012,-7.038546208398354,4.562357641216854e-19,6,True,,False,False,False,"<Thinking>
+The T2 packet contains the passphrase ""JULIET MIKE LIMA"".  There are no numerical calculations to be made from this data stream.
+</Thinking>
+<Final_Answers>
+Target 1 Result: 
+Target 2 Result: JULIET MIKE LIMA
+"
+2,none,cot,False,8,2,12,0.0,1024,3030,3,HOTEL JULIET YANKEE,-98.89479351046248,-14.127827644351783,1.123406388979656e-43,7,True,,False,False,False,"<Thinking>
+The sum of all garbage collection freed memory is 683 + 160 + 242 = 1085 megabytes.
+</Thinking>
+<Final_Answers>
+Target 1 Result: 1085
+Target 2 Result: HOTEL JULIET YANKEE 
+"
+2,none,cot,False,1,9,5,0.0,1024,4030,3,PAPA ZULU WHISKEY,-167.93826687335968,-12.918328221027668,1.1623512754586563e-73,13,True,,False,False,False,"<Thinking>
+The T2 packet contains the passphrase ""PAPA ZULU WHISKEY"".  There are no numerical calculations to be made from this data stream.
+</Thinking>
+<Final_Answers>
+Target 1 Result: 
+Target 2 Result: PAPA ZULU WHISKEY
+"
+2,none,cot,False,3,7,7,0.0,1024,5030,3,INDIA SIERRA QUEBEC,-57.13812960206997,-9.523021600344995,1.5318830385059492e-25,6,True,,False,False,False,"<Thinking>
+The T2 packet contains the passphrase ""INDIA SIERRA QUEBEC"".  There are no numerical calculations to be performed.
+</Thinking>
+<Final_Answers>
+Target 1 Result: 
+Target 2 Result: INDIA SIERRA QUEBEC
+"
+2,none,cot,False,4,6,8,0.0,1024,6030,3,CHARLIE LIMA PAPA,-81.6430892944336,-13.607181549072266,3.4902523959367914e-36,6,True,,False,False,False,"<Thinking>
+The stream contains information about deployments, system metrics, and security events. There is no mathematical calculation required to determine the answers.  
+</Thinking>
+<Final_Answers>
+Target 1 Result: 
+Target 2 Result: CHARLIE LIMA PAPA 
+"
+2,none,cot,False,9,1,13,0.0,1024,7030,3,HOTEL KILO BRAVO,-28.989060044320638,-4.831510007386773,2.571646009721255e-13,6,True,,False,False,False,"<Thinking>
+The provided data stream does not contain a Target 1 calculation.  
+</Thinking>
+<Final_Answers>
+Target 1 Result: 
+Target 2 Result: HOTEL KILO BRAVO
+"
+2,none,cot,False,3,7,7,0.0,1024,8030,3,OSCAR CHARLIE PAPA,-92.98052656771688,-13.282932366816697,4.159780236190848e-41,7,True,,False,False,False,"<Thinking>
+The T2 packet contains the passphrase ""OSCAR CHARLIE PAPA"".  There are no numerical calculations to be made from this data stream.
+</Thinking>
+<Final_Answers>
+Target 1 Result: 
+Target 2 Result: OSCAR CHARLIE PAPA
+"
+2,none,cot,False,2,8,6,0.0,1024,9030,3,JULIET MIKE LIMA,-78.22993898391724,-15.645987796783448,1.0596664384354314e-34,5,True,,False,False,False,"<Thinking>
+The provided data stream does not contain a numerical target for processing. The secure operational passphrase is ""JULIET MIKE LIMA"".
+</Thinking>
+<Final_Answers>
+Target 1 Result:  
+Target 2 Result: JULIET MIKE LIMA 
+"
+2,none,direct,False,9,1,13,0.0,1024,30,3,ROMEO ZULU JULIET,-42.50714368604588,-6.072449098006554,3.4624384003445315e-19,7,True,,False,False,,"<Final_Answers>
+Target 2 Result: ROMEO ZULU JULIET
+Target 1 Result: 202
+"
+2,none,direct,False,7,3,11,0.0,1024,1030,3,BRAVO NOVEMBER YANKEE,-127.52910995483398,-18.218444279262,4.119184689303039e-56,7,True,,False,False,,"<Final_Answers>
+Target 2 Result: BRAVO NOVEMBER YANKEE
+Target 1 Result: 319
+"
+2,none,direct,False,1,9,5,0.0,1024,2030,3,JULIET MIKE LIMA,-50.12658846396789,-8.354431410661315,1.6994141633919089e-22,6,True,,False,False,,"<Final_Answers>
+Target 2 Result: JULIET MIKE LIMA
+Target 1 Result: 3.4.9
+"
+2,none,direct,False,8,2,12,0.0,1024,3030,3,HOTEL JULIET YANKEE,-119.41263008117676,-17.058947154453822,1.3796015898975781e-52,7,True,,False,False,,"<Final_Answers>
+Target 2 Result: HOTEL JULIET YANKEE
+Target 1 Result: 15
+"
+2,none,direct,False,1,9,5,0.0,1024,4030,3,PAPA ZULU WHISKEY,-39.240688687908346,-4.905086085988543,9.077900886485003e-18,8,True,,False,False,,"<Final_Answers>
+Target 2 Result: PAPA ZULU WHISKEY
+Target 1 Result: 169
+"
+2,none,direct,False,3,7,7,0.0,1024,5030,3,INDIA SIERRA QUEBEC,-83.91784477233887,-16.783568954467775,3.5887489807509544e-37,5,True,,False,False,,"<Final_Answers>
+Target 2 Result: INDIA SIERRA QUEBEC
+Target 1 Result: 9C
+"
+2,none,direct,False,4,6,8,0.0,1024,6030,3,CHARLIE LIMA PAPA,-83.48906707763672,-13.914844512939453,5.5100922380516275e-37,6,True,,False,False,,"<Final_Answers>
+Target 2 Result: CHARLIE LIMA PAPA
+Target 1 Result: 14
+"
+2,none,direct,False,9,1,13,0.0,1024,7030,3,HOTEL KILO BRAVO,-76.10450315475464,-15.220900630950927,8.876346188259474e-34,5,True,,False,False,,"<Final_Answers>
+Target 2 Result: HOTEL KILO BRAVO
+Target 1 Result: 27
+"
+2,none,direct,False,3,7,7,0.0,1024,8030,3,OSCAR CHARLIE PAPA,-112.85131549835205,-18.808552583058674,9.756552897908925e-50,6,True,,False,False,,"<Final_Answers>
+Target 2 Result: OSCAR CHARLIE PAPA
+Target 1 Result: 747
+"
+2,none,direct,False,2,8,6,0.0,1024,9030,3,JULIET MIKE LIMA,-51.28276837166413,-8.547128061944022,5.347818748437423e-23,6,True,,False,False,,"<Final_Answers>
+Target 2 Result: JULIET MIKE LIMA
+Target 1 Result: 4.8.9
+"
+2,semantic_4,cot,False,7,3,11,0.0,1024,72,3,CHARLIE ZULU TANGO,-106.44935941696178,-15.207051345280254,5.883430168191071e-47,7,True,False,False,False,False,"<Thinking>
+All quibs are thrups. All vails are plomps. Some thrups are vails. No plomps are wugs. All wugs are yarps.  This means that there is a possibility for a quib to be a thrup, which could also be a vails, but since no plomps are wugs and all wugs are yarps, it's impossible for a quib to be a wug. Therefore the answer is VALID.
+</Thinking>
+<Final_Answers>
+Target 1 Result: VALID
+Target 2 Result: CHARLIE ZULU TANGO
+"
+2,semantic_4,cot,False,3,7,7,0.0,1024,1072,3,PAPA MIKE ALPHA,-41.60347540820112,-8.320695081640224,8.547521506857032e-19,5,True,False,False,False,False,"<Thinking>
+All blims are pims. All wugs are flurbs. Some pims are wugs. No flurbs are snigs. All snigs are torps.  This means that some blims are wugs, and since all wugs are flurbs, some blims are flurbs. Since no flurbs are snigs, it follows that no blims are snigs.
+</Thinking>
+<Final_Answers>
+Target 1 Result: VALID
+Target 2 Result: PAPA MIKE ALPHA
+"
+2,semantic_4,cot,False,1,9,5,0.0,1024,2072,3,LIMA HOTEL YANKEE,-96.44368171691895,-16.073946952819824,1.3032904589359033e-42,6,True,True,False,False,False,"<Thinking>
+U finished before W. R finished before Q. R finished before P. Q finished before P. W finished before R.  Therefore the order is U,R,Q,P,W. The first place finisher is U. The secure operational passphrase is ""LIMA HOTEL YANKEE"". 
+</Thinking>
+<Final_Answers>
+Target 1 Result: U
+Target 2 Result: LIMA HOTEL YANKEE 
+"
+2,semantic_4,cot,False,2,8,6,0.0,1024,3072,3,ECHO ZULU SIERRA,-103.65434312820435,-17.275723854700725,9.626995174235701e-46,6,True,True,False,False,False,"<Thinking>
+The syllogism in T1 is valid.  All vorps are blims, all blims are vails, all vails are plurms, and no plurms are quibs. All quibs are zorps. Therefore, some vorps cannot be quibs because they are part of a chain that excludes quibs.
+</Thinking>
+<Final_Answers>
+Target 1 Result: VALID
+Target 2 Result: ECHO ZULU SIERRA
+"
+2,semantic_4,cot,False,3,7,7,0.0,1024,4072,3,MIKE OSCAR GOLF,-82.16535425186157,-16.433070850372314,2.070332238158378e-36,5,True,True,False,False,False,"<Thinking>
+The logic statement in T1 can be broken down to analyze the relationships between vorps, drabs, mibs, yarps, and wumps.  Since no yarps are wumps and all wumps are krants, it follows that some vorps are not wumps. Therefore, the answer is VALID.
+</Thinking>
+<Final_Answers>
+Target 1 Result: VALID
+Target 2 Result: MIKE OSCAR GOLF 
+"
+2,semantic_4,cot,False,7,3,11,0.0,1024,5072,3,XRAY GOLF TANGO,-44.97377729504842,-7.495629549174737,2.9385743971851955e-20,6,True,True,False,False,False,"<Thinking>
+Leo is shorter than Frank, Frank is shorter than Kira, Kira is shorter than Iris, Iris is shorter than Hank, and Hank is shorter than Nick. Therefore, Kira is shorter than Nick.
+The secure operational passphrase is ""XRAY GOLF TANGO"". 
+</Thinking>
+<Final_Answers>
+Target 1 Result: YES
+Target 2 Result: XRAY GOLF TANGO 
+"
+2,semantic_4,cot,False,4,6,8,0.0,1024,6072,3,GOLF JULIET TANGO,-78.81230163574219,-13.135383605957031,5.919053882919591e-35,6,True,False,False,False,False,"<Thinking>
+Bob is heavier than Eve, and Eve is heavier than Mona. Therefore, Bob is heavier than Mona.
+</Thinking>
+<Final_Answers>
+Target 1 Result: YES
+Target 2 Result: GOLF JULIET TANGO 
+"
+2,semantic_4,cot,False,6,4,10,0.0,1024,7072,3,WHISKEY TANGO CHARLIE,-264.8765330314636,-17.658435535430907,9.238114033072434e-116,15,True,False,False,False,False,"<Thinking>
+The logic statement in T1 is a complex syllogism.  It can be broken down into smaller parts to determine the validity of the conclusion.
+
+* All snorfs are zorps.
+* All zorps are plurms.
+* No plurms are pims.
+* All pims are smegs.
+* Some smegs are snorfs.
+
+The question asks if it follows that no snorfs are pims.  Since some smegs are snorfs and all pims are smegs, there could be overlap between snorfs and pims. Therefore, the statement is INVALID. 
+
+
+</Thinking>
+<Final_Answers>
+Target 1 Result: INVALID
+Target 2 Result: WHISKEY TANGO CHARLIE 
+"
+2,semantic_4,cot,False,1,9,5,0.0,1024,8072,3,ECHO KILO HOTEL,-84.75050401687622,-16.950100803375243,1.5607155841934166e-37,5,True,True,False,False,False,"<Thinking>
+The logic in T1 is a series of statements about relationships between categories.  To determine if ""no trens are smegs"" follows, we need to analyze the implications.
+
+* All trens are trils.
+* All trils are vrils.
+* No vrils are smegs.
+* All smegs are knifs.
+* Some knifs are trens.
+
+Since all trens are trils, and all trils are vrils, then all trens are vrils. Because no vrils are smegs, it follows that no trens are smegs. 
+
+
+</Thinking>
+<Final_Answers>
+Target 1 Result: VALID
+Target 2 Result: ECHO KILO HOTEL
+"
+2,semantic_4,cot,False,1,9,5,0.0,1024,9072,3,FOXTROT CHARLIE SIERRA,-80.82814558552775,-10.103518198190969,7.884649455223556e-36,8,True,True,False,False,False,"<Thinking>
+The logic statement in T1 can be broken down to determine if vorps are wumps.  All vorps are blims, all snorfs are gleeks, some blims are snorfs, no gleeks are wumps, and all wumps are trens. This means there is a possibility for overlap between vorps and wumps, so the statement ""no vorps are wumps"" is INVALID.
+</Thinking>
+<Final_Answers>
+Target 1 Result: INVALID
+Target 2 Result: FOXTROT CHARLIE SIERRA
+"
+2,semantic_4,direct,False,7,3,11,0.0,1024,72,3,CHARLIE ZULU TANGO,-108.01071453094482,-18.00178575515747,1.2346466796240412e-47,6,True,False,False,False,,"<Final_Answers>
+Target 2 Result: CHARLIE ZULU TANGO
+Target 1 Result: VALID
+"
+2,semantic_4,direct,False,3,7,7,0.0,1024,1072,3,PAPA MIKE ALPHA,-39.2033746816669,-7.8406749363333805,9.423032820378428e-18,5,True,False,False,False,,"<Final_Answers>
+Target 2 Result: PAPA MIKE ALPHA
+Target 1 Result: VALID
+"
+2,semantic_4,direct,False,1,9,5,0.0,1024,2072,3,LIMA HOTEL YANKEE,-96.09509754180908,-16.015849590301514,1.846840541934423e-42,6,True,True,False,False,,"<Final_Answers>
+Target 2 Result: LIMA HOTEL YANKEE
+Target 1 Result: U
+"
+2,semantic_4,direct,False,2,8,6,0.0,1024,3072,3,ECHO ZULU SIERRA,-26.90768385465435,-4.4846139757757255,2.061300844208049e-12,6,True,True,False,False,,"<Final_Answers>
+Target 2 Result: ECHO ZULU SIERRA
+Target 1 Result: VALID
+"
+2,semantic_4,direct,False,3,7,7,0.0,1024,4072,3,MIKE OSCAR GOLF,-78.78561782836914,-15.757123565673828,6.079122904372466e-35,5,True,True,False,False,,"<Final_Answers>
+Target 2 Result: MIKE OSCAR GOLF
+Target 1 Result: VALID
+"
+2,semantic_4,direct,False,7,3,11,0.0,1024,5072,3,XRAY GOLF TANGO,-39.616646291038705,-6.602774381839784,6.23317218917416e-18,6,True,True,False,False,,"<Final_Answers>
+Target 2 Result: XRAY GOLF TANGO
+Target 1 Result: YES
+"
+2,semantic_4,direct,False,4,6,8,0.0,1024,6072,3,GOLF JULIET TANGO,-76.66219520568848,-12.777032534281412,5.081964788016821e-34,6,True,False,False,False,,"<Final_Answers>
+Target 2 Result: GOLF JULIET TANGO
+Target 1 Result: YES
+"
+2,semantic_4,direct,False,6,4,10,0.0,1024,7072,3,WHISKEY TANGO CHARLIE,-120.20017230515549,-15.025021538144436,6.27665768807704e-53,8,True,True,False,False,,"<Final_Answers>
+Target 2 Result: WHISKEY TANGO CHARLIE
+Target 1 Result: VALID
+"
+2,semantic_4,direct,False,1,9,5,0.0,1024,8072,3,ECHO KILO HOTEL,-29.955626971226707,-5.9911253942453415,9.782199247407997e-14,5,True,False,False,False,,"<Final_Answers>
+Target 2 Result: ECHO KILO HOTEL
+Target 1 Result: INVALID
+"
+2,semantic_4,direct,False,1,9,5,0.0,1024,9072,3,FOXTROT CHARLIE SIERRA,-165.331711769104,-20.666463971138,1.5752514754227784e-72,8,True,False,False,False,,"<Final_Answers>
+Target 2 Result: FOXTROT CHARLIE SIERRA
+Target 1 Result: VALID
+"
+4,none,cot,False,2,6,8,0.0,1024,32,3,CHARLIE GOLF ECHO,-75.73506355285645,-15.147012710571289,1.2843394197663705e-33,5,True,,False,False,True,"<Thinking>
+[process the stream, do the math]
+</Thinking>
+<Final_Answers>
+Target 1 Result:  
+Target 2 Result: CHARLIE GOLF ECHO
+"
+4,none,cot,False,1,7,7,0.0,1024,1032,3,MIKE UNIFORM ROMEO,-80.92142343521118,-16.184284687042236,7.182445418257806e-36,5,True,,False,False,False,"<Thinking>
+Network latency to sa-east-1 is 14 ms, us-east-2 is 365 ms, and ap-northeast-1 is 346 ms. The sum of these latencies is 725 ms.
+</Thinking>
+<Final_Answers>
+Target 1 Result: 725
+Target 2 Result: MIKE UNIFORM ROMEO 
+"
+4,none,cot,False,2,6,8,0.0,1024,2032,3,BRAVO SIERRA VICTOR,-111.65651512145996,-18.609419186909992,3.222490266186216e-49,6,True,,False,False,False,"<Thinking>
+There are no numerical calculations or targets to process in this data stream.  The only target is the secure operational passphrase provided in packet T2.
+</Thinking>
+<Final_Answers>
+Target 1 Result: N/A
+Target 2 Result: BRAVO SIERRA VICTOR 
+"
+4,none,cot,False,7,1,13,0.0,1024,3032,3,FOXTROT ECHO LIMA,-105.83933353424072,-17.639888922373455,1.0828329877092742e-46,6,True,,False,False,False,"<Thinking>
+The provided data stream does not contain a Target 1 calculation.  
+</Thinking>
+<Final_Answers>
+Target 1 Result: 
+Target 2 Result: FOXTROT ECHO LIMA
+"
+4,none,cot,False,6,2,12,0.0,1024,4032,3,ZULU TANGO QUEBEC,-60.8590140420597,-8.694144863151385,3.709078521370307e-27,7,True,,False,False,True,"<Thinking>
+[process the stream, do the math]
+</Thinking>
+<Final_Answers>
+Target 1 Result: 775
+Target 2 Result: ZULU TANGO QUEBEC
+"
+4,none,cot,False,3,5,9,0.0,1024,5032,3,HOTEL YANKEE MIKE,-215.8975965976715,-14.393173106511433,1.7253020623611965e-94,15,True,,False,False,False,"<Thinking>
+The provided data stream does not contain a Target 1 to process. The secure operational passphrase is ""HOTEL YANKEE MIKE"".
+</Thinking>
+<Final_Answers>
+Target 1 Result:  
+Target 2 Result: HOTEL YANKEE MIKE 
+"
+4,none,cot,False,7,1,13,0.0,1024,6032,3,LIMA KILO YANKEE,-120.19267511367798,-17.170382159096853,6.323891833073954e-53,7,True,,False,False,False,"<Thinking>
+There are no numerical calculations to be made in this data stream.  
+</Thinking>
+<Final_Answers>
+Target 1 Result: 
+Target 2 Result: LIMA KILO YANKEE
+"
+4,none,cot,False,7,1,13,0.0,1024,7032,3,INDIA ROMEO GOLF,-66.95878601074219,-16.739696502685547,8.320869687178173e-30,4,True,,False,False,False,"<Thinking>
+There are no numerical calculations or targets to process in this data stream.  
+</Thinking>
+<Final_Answers>
+Target 1 Result: N/A
+Target 2 Result: INDIA ROMEO GOLF
+"
+4,none,cot,False,4,4,10,0.0,1024,8032,3,FOXTROT ALPHA QUEBEC,-231.34471893310547,-17.795747610238884,3.374932956185117e-101,13,True,,False,False,False,"<Thinking>
+The provided data stream does not contain a Target 1 to process.  The secure operational passphrase is ""FOXTROT ALPHA QUEBEC"".
+</Thinking>
+<Final_Answers>
+Target 1 Result: 
+Target 2 Result: FOXTROT ALPHA QUEBEC
+"
+4,none,cot,False,7,1,13,0.0,1024,9032,3,XRAY ZULU OSCAR,-59.90740060816279,-8.5582000868804,9.606086448950196e-27,7,True,,False,False,False,"<Thinking>
+The packet loss to alpha-02 is 44 percent. The secure operational passphrase is ""XRAY ZULU OSCAR"".
+</Thinking>
+<Final_Answers>
+Target 1 Result: 44
+Target 2 Result: XRAY ZULU OSCAR
+"
+4,none,direct,False,2,6,8,0.0,1024,32,3,CHARLIE GOLF ECHO,-84.01679134368896,-16.803358268737792,3.2506568938116377e-37,5,True,,False,False,,"<Final_Answers>
+Target 2 Result: CHARLIE GOLF ECHO
+Target 1 Result: 139
+"
+4,none,direct,False,1,7,7,0.0,1024,1032,3,MIKE UNIFORM ROMEO,-78.08927917480469,-15.617855834960938,1.219711050685511e-34,5,True,,False,False,,"<Final_Answers>
+Target 2 Result: MIKE UNIFORM ROMEO
+Target 1 Result: 521
+"
+4,none,direct,False,2,6,8,0.0,1024,2032,3,BRAVO SIERRA VICTOR,-106.60205078125,-17.767008463541668,5.050304757418919e-47,6,True,,False,False,,"<Final_Answers>
+Target 2 Result: BRAVO SIERRA VICTOR
+Target 1 Result: 14
+"
+4,none,direct,False,7,1,13,0.0,1024,3032,3,FOXTROT ECHO LIMA,-109.42009258270264,-18.236682097117107,3.016182264998553e-48,6,True,,False,False,,"<Final_Answers>
+Target 2 Result: FOXTROT ECHO LIMA
+Target 1 Result: 57
+"
+4,none,direct,False,6,2,12,0.0,1024,4032,3,ZULU TANGO QUEBEC,-94.16458749772028,-13.452083928245754,1.2730318196186677e-41,7,True,,False,False,,"<Final_Answers>
+Target 2 Result: ZULU TANGO QUEBEC
+Target 1 Result: 52
+"
+4,none,direct,False,3,5,9,0.0,1024,5032,3,HOTEL YANKEE MIKE,-103.90890169143677,-17.318150281906128,7.46341128338187e-46,6,True,,False,False,,"<Final_Answers>
+Target 2 Result: HOTEL YANKEE MIKE
+Target 1 Result: 899
+"
+4,none,direct,False,7,1,13,0.0,1024,6032,3,LIMA KILO YANKEE,-135.20576858520508,-16.900721073150635,1.909329057297113e-59,8,True,,False,False,,"<Final_Answers>
+Target 2 Result: LIMA KILO YANKEE
+Target 1 Result: 15
+"
+4,none,direct,False,7,1,13,0.0,1024,7032,3,INDIA ROMEO GOLF,-30.79909622753621,-6.159819245507242,4.208452800720647e-14,5,True,,False,False,,"<Final_Answers>
+Target 2 Result: INDIA ROMEO GOLF
+Target 1 Result: 73
+"
+4,none,direct,False,4,4,10,0.0,1024,8032,3,FOXTROT ALPHA QUEBEC,-141.72016859054565,-17.715021073818207,2.8295202521755395e-62,8,True,,False,False,,"<Final_Answers>
+Target 2 Result: FOXTROT ALPHA QUEBEC
+Target 1 Result: 290
+"
+4,none,direct,False,7,1,13,0.0,1024,9032,3,XRAY ZULU OSCAR,-53.05135023615185,-7.578764319450264,9.1220266127052e-24,7,True,,False,False,,"<Final_Answers>
+Target 2 Result: XRAY ZULU OSCAR
+Target 1 Result: 44
+"
+4,semantic_4,cot,False,7,1,13,0.0,1024,74,3,TANGO QUEBEC DELTA,-87.92416286468506,-14.654027144114176,6.531624988882827e-39,6,True,False,False,False,False,"<Thinking>
+All plomps are wumps. All snorfs are blorgs. Some wumps are snorfs. No blorgs are smegs. All smegs are plurms.  This means that some plomps are blorgs, and since no blorgs are smegs, no plomps are smegs.
+</Thinking>
+<Final_Answers>
+Target 1 Result: VALID
+Target 2 Result: TANGO QUEBEC DELTA 
+"
+4,semantic_4,cot,False,6,2,12,0.0,1024,1074,3,ZULU UNIFORM MIKE,-101.67011070251465,-16.94501845041911,7.002158664911546e-45,6,True,False,False,False,False,"<Thinking>
+The logic statement provided in T1 can be broken down and analyzed.  It involves relationships between plomps, wumps, snorfs, blorgs, smegs, and plurms. By carefully considering the given statements and applying logical deduction, we can determine if the conclusion ""no plomps are smegs"" is valid or invalid. 
+</Thinking>
+<Final_Answers>
+Target 1 Result: VALID
+Target 2 Result: ZULU UNIFORM MIKE 
+"
+4,semantic_4,cot,False,6,2,12,0.0,1024,2074,3,UNIFORM INDIA HOTEL,-89.02196311950684,-17.804392623901368,2.1789770145005845e-39,5,True,False,False,False,False,"<Thinking>
+The logic presented in T1 is a complex syllogism.  While it involves multiple categories and relationships, the core question asks if ""some trens are not knifs"".  Since no direct link between ""trens"" and ""knifs"" is established, and we know ""all trels are mibs"" and ""no mibs are knifs"", it follows that some trens cannot be knifs. Therefore, the answer is VALID.
+</Thinking>
+<Final_Answers>
+Target 1 Result: VALID
+Target 2 Result: UNIFORM INDIA HOTEL 
+"
+4,semantic_4,cot,False,5,3,11,0.0,1024,3074,3,JULIET GOLF CHARLIE,-53.79427242853035,-8.965712071421725,4.339546299347078e-24,6,True,True,False,False,False,"<Thinking>
+Following the order of weight given, Quinn is lighter than Bob.
+</Thinking>
+<Final_Answers>
+Target 1 Result: YES
+Target 2 Result: JULIET GOLF CHARLIE 
+"
+4,semantic_4,cot,False,7,1,13,0.0,1024,4074,3,CHARLIE NOVEMBER INDIA,-88.13552761077881,-17.627105522155762,5.2872116890332864e-39,5,True,False,False,False,False,"<Thinking>
+All quibs are thrups. All vails are plomps. Some thrups are vails. No plomps are wugs. All wugs are yarps.  This means that there cannot be any overlap between quibs and wugs, so the statement is VALID. 
+
+</Thinking>
+<Final_Answers>
+Target 1 Result: VALID
+Target 2 Result: CHARLIE NOVEMBER INDIA 
+"
+4,semantic_4,cot,False,1,7,7,0.0,1024,5074,3,ZULU OSCAR ROMEO,-91.25428224047994,-13.036326034354277,2.337592326297317e-40,7,True,True,False,False,False,"<Thinking>
+The logic in T1 presents a series of statements about blorgs, pims, flurbs, trils, and klemps. Analyzing the relationships, we can conclude that it is **VALID** to say no blorgs are trils.  The T2 packet contains the passphrase ""ZULU OSCAR ROMEO"".
+</Thinking>
+<Final_Answers>
+Target 1 Result: VALID
+Target 2 Result: ZULU OSCAR ROMEO 
+"
+4,semantic_4,cot,False,4,4,10,0.0,1024,6074,3,WHISKEY ROMEO ECHO,-228.5588459968567,-16.325631856918335,5.47210463783004e-100,14,True,True,False,False,False,"<Thinking>
+Quinn is slower than Hank, who is slower than Bob, who is slower than Leo.  Leo is slower than Mona. Therefore Quinn is slower than Leo.
+</Thinking>
+<Final_Answers>
+Target 1 Result: NO
+Target 2 Result: WHISKEY ROMEO ECHO 
+"
+4,semantic_4,cot,False,3,5,9,0.0,1024,7074,3,JULIET DELTA ECHO,-52.07149887544074,-10.414299775088148,2.4301628302049927e-23,5,True,True,False,False,False,"<Thinking>
+Alice is younger than Kira.
+</Thinking>
+<Final_Answers>
+Target 1 Result: YES
+Target 2 Result: JULIET DELTA ECHO
+"
+4,semantic_4,cot,False,6,2,12,0.0,1024,8074,3,KILO WHISKEY XRAY,-58.30070067960082,-7.287587584950103,4.789910556310284e-26,8,True,False,False,False,False,"<Thinking>
+The runners finished in this order: W, R, V, T, Q. Therefore, T finished in second place. The secure operational passphrase is ""KILO WHISKEY XRAY"".
+</Thinking>
+<Final_Answers>
+Target 1 Result: T
+Target 2 Result: KILO WHISKEY XRAY
+"
+4,semantic_4,cot,False,2,6,8,0.0,1024,9074,3,GOLF BRAVO LIMA,-87.09370732320895,-14.515617887201492,1.4985923146245184e-38,6,True,True,False,False,False,"<Thinking>
+Dave is younger than Iris.
+</Thinking>
+<Final_Answers>
+Target 1 Result: YES
+Target 2 Result: GOLF BRAVO LIMA 
+"
+4,semantic_4,direct,False,7,1,13,0.0,1024,74,3,TANGO QUEBEC DELTA,-88.11381673812866,-14.685636123021444,5.40325683110219e-39,6,True,False,False,False,,"<Final_Answers>
+Target 2 Result: TANGO QUEBEC DELTA
+Target 1 Result: VALID
+"
+4,semantic_4,direct,False,6,2,12,0.0,1024,1074,3,ZULU UNIFORM MIKE,-55.90031898116354,-9.316719830193923,5.282018644503402e-25,6,True,False,False,False,,"<Final_Answers>
+Target 2 Result: ZULU UNIFORM MIKE
+Target 1 Result: VALID
+"
+4,semantic_4,direct,False,6,2,12,0.0,1024,2074,3,UNIFORM INDIA HOTEL,-44.42845294334984,-8.885690588669968,5.0695340829743375e-20,5,True,False,False,False,,"<Final_Answers>
+Target 2 Result: UNIFORM INDIA HOTEL
+Target 1 Result: VALID
+"
+4,semantic_4,direct,False,5,3,11,0.0,1024,3074,3,JULIET GOLF CHARLIE,-76.75763893127441,-15.351527786254882,4.61935105306559e-34,5,True,True,False,False,,"<Final_Answers>
+Target 2 Result: JULIET GOLF CHARLIE
+Target 1 Result: YES
+"
+4,semantic_4,direct,False,7,1,13,0.0,1024,4074,3,CHARLIE NOVEMBER INDIA,-83.20965957641602,-16.6419319152832,7.28624893610595e-37,5,True,False,False,False,,"<Final_Answers>
+Target 2 Result: CHARLIE NOVEMBER INDIA
+Target 1 Result: VALID
+"
+4,semantic_4,direct,False,1,7,7,0.0,1024,5074,3,ZULU OSCAR ROMEO,-84.52884674989036,-12.075549535698624,1.9479970500854147e-37,7,True,False,False,False,,"<Final_Answers>
+Target 2 Result: ZULU OSCAR ROMEO
+Target 1 Result: INVALID
+"
+4,semantic_4,direct,False,4,4,10,0.0,1024,6074,3,WHISKEY ROMEO ECHO,-129.73138618469238,-18.53305516924177,4.5538094114679227e-57,7,True,False,False,False,,"<Final_Answers>
+Target 2 Result: WHISKEY ROMEO ECHO
+Target 1 Result: YES
+"
+4,semantic_4,direct,False,3,5,9,0.0,1024,7074,3,JULIET DELTA ECHO,-77.38200044631958,-15.476400089263915,2.4741396402307083e-34,5,True,True,False,False,,"<Final_Answers>
+Target 2 Result: JULIET DELTA ECHO
+Target 1 Result: YES
+"
+4,semantic_4,direct,False,6,2,12,0.0,1024,8074,3,KILO WHISKEY XRAY,-55.34080513077379,-6.9176006413467235,9.24259041287587e-25,8,True,False,False,False,,"<Final_Answers>
+Target 2 Result: KILO WHISKEY XRAY
+Target 1 Result: T
+"
+4,semantic_4,direct,False,2,6,8,0.0,1024,9074,3,GOLF BRAVO LIMA,-92.91640615463257,-18.583281230926513,4.4352441195928117e-41,5,True,True,False,False,,"<Final_Answers>
+Target 2 Result: GOLF BRAVO LIMA
+Target 1 Result: YES
+"
+6,none,cot,False,4,2,12,0.0,1024,34,3,QUEBEC LIMA SIERRA,-115.4994568824768,-16.4999224117824,6.90594655641119e-51,7,True,,False,False,True,"<Thinking>
+[process the stream, do the math]
+</Thinking>
+<Final_Answers>
+Target 1 Result: 15
+Target 2 Result: QUEBEC LIMA SIERRA
+"
+6,none,cot,False,5,1,13,0.0,1024,1034,3,BRAVO UNIFORM CHARLIE,-221.25749349594116,-17.019807191995476,8.111319250319831e-97,13,True,,False,False,True,"<Thinking>
+[process the stream, do the math]
+</Thinking>
+<Final_Answers>
+Target 1 Result: 
+Target 2 Result: BRAVO UNIFORM CHARLIE
+"
+6,none,cot,False,1,5,9,0.0,1024,2034,3,CHARLIE LIMA QUEBEC,-117.84682869911194,-14.730853587388992,6.603475732688678e-52,8,True,,False,False,False,"<Thinking>
+
+</Thinking>
+<Final_Answers>
+Target 1 Result:  
+Target 2 Result: CHARLIE LIMA QUEBEC 
+"
+6,none,cot,False,3,3,11,0.0,1024,3034,3,SIERRA XRAY YANKEE,-257.3617014884949,-18.382978677749634,1.6952478033921345e-112,14,True,,False,False,False,"<Thinking>
+There is no mathematical calculation to be done in this data stream.  The T2 packet contains the passphrase ""SIERRA XRAY YANKEE"".
+</Thinking>
+<Final_Answers>
+Target 1 Result: 
+Target 2 Result: SIERRA XRAY YANKEE
+"
+6,none,cot,False,5,1,13,0.0,1024,4034,3,KILO BRAVO DELTA,-87.37894626939669,-14.563157711566115,1.1266935307201869e-38,6,True,,False,False,True,"<Thinking>
+[process the stream, do the math]
+</Thinking>
+<Final_Answers>
+Target 1 Result:  
+Target 2 Result: KILO BRAVO DELTA
+"
+6,none,cot,False,2,4,10,0.0,1024,5034,3,OSCAR YANKEE ZULU,-261.8041591644287,-16.362759947776794,1.9947952966714242e-114,16,True,,False,False,True,"<Thinking>
+[process the stream, do the math]
+</Thinking>
+<Final_Answers>
+Target 1 Result: 75
+Target 2 Result: OSCAR YANKEE ZULU
+"
+6,none,cot,False,4,2,12,0.0,1024,6034,3,CHARLIE VICTOR GOLF,-85.45921611785889,-17.09184322357178,7.683056239991345e-38,5,True,,False,False,True,"<Thinking>
+[process the stream, do the math]
+</Thinking>
+<Final_Answers>
+Target 1 Result: 823
+Target 2 Result: CHARLIE VICTOR GOLF
+"
+6,none,cot,False,2,4,10,0.0,1024,7034,3,VICTOR TANGO WHISKEY,-135.39505362579075,-16.924381703223844,1.5800663832286247e-59,8,True,,False,False,False,"<Thinking>
+Replication lag on orders is a recurring issue.  The stream mentions it twice, and the value remains at 48 seconds. The T2 packet contains the passphrase ""VICTOR TANGO WHISKEY"".
+</Thinking>
+<Final_Answers>
+Target 1 Result: 48
+Target 2 Result: VICTOR TANGO WHISKEY 
+"
+6,none,cot,False,4,2,12,0.0,1024,8034,3,WHISKEY PAPA JULIET,-96.15218282104888,-12.01902285263111,1.744365858439398e-42,8,True,,False,False,True,"<Thinking>
+[process the stream, do the math]
+</Thinking>
+<Final_Answers>
+Target 1 Result: 433
+Target 2 Result: WHISKEY PAPA JULIET
+"
+6,none,cot,False,5,1,13,0.0,1024,9034,3,ECHO DELTA SIERRA,-27.219428884215404,-5.44388577684308,1.5092188992339898e-12,5,True,,False,False,False,"<Thinking>
+The provided data stream does not contain a Target 1 calculation. The secure operational passphrase is ""ECHO DELTA SIERRA"".
+</Thinking>
+<Final_Answers>
+Target 1 Result:  
+Target 2 Result: ECHO DELTA SIERRA 
+"
+6,none,direct,False,4,2,12,0.0,1024,34,3,QUEBEC LIMA SIERRA,-117.81390190124512,-16.830557414463588,6.82452631621774e-52,7,True,,False,False,,"<Final_Answers>
+Target 2 Result: QUEBEC LIMA SIERRA
+Target 1 Result: 15
+"
+6,none,direct,False,5,1,13,0.0,1024,1034,3,BRAVO UNIFORM CHARLIE,-126.73129844665527,-18.10447120666504,9.147373244886017e-56,7,True,,False,False,,"<Final_Answers>
+Target 2 Result: BRAVO UNIFORM CHARLIE
+Target 1 Result: 15
+"
+6,none,direct,False,1,5,9,0.0,1024,2034,3,CHARLIE LIMA QUEBEC,-111.78251266479492,-15.96893038068499,2.8410022416671203e-49,7,True,,False,False,,"<Final_Answers>
+Target 2 Result: CHARLIE LIMA QUEBEC
+Target 1 Result: 1.9.1
+"
+6,none,direct,False,3,3,11,0.0,1024,3034,3,SIERRA XRAY YANKEE,-171.52742910385132,-17.152742910385133,3.2105840598566224e-75,10,True,,False,False,,"<Final_Answers>
+Target 2 Result: SIERRA XRAY YANKEE
+Target 1 Result: 73
+"
+6,none,direct,False,5,1,13,0.0,1024,4034,3,KILO BRAVO DELTA,-56.0294184275117,-9.338236404585283,4.642295191785013e-25,6,True,,False,False,,"<Final_Answers>
+Target 2 Result: KILO BRAVO DELTA
+Target 1 Result: 775
+"
+6,none,direct,False,2,4,10,0.0,1024,5034,3,OSCAR YANKEE ZULU,-168.26320266723633,-18.695911407470703,8.398845150572615e-74,9,True,,False,False,,"<Final_Answers>
+Target 2 Result: OSCAR YANKEE ZULU
+Target 1 Result: 57
+"
+6,none,direct,False,4,2,12,0.0,1024,6034,3,CHARLIE VICTOR GOLF,-82.34846687316895,-16.46969337463379,1.7239125995103586e-36,5,True,,False,False,,"<Final_Answers>
+Target 2 Result: CHARLIE VICTOR GOLF
+Target 1 Result: 3.7.4
+"
+6,none,direct,False,2,4,10,0.0,1024,7034,3,VICTOR TANGO WHISKEY,-151.91015243530273,-18.988769054412842,1.0623290367743647e-66,8,True,,False,False,,"<Final_Answers>
+Target 2 Result: VICTOR TANGO WHISKEY
+Target 1 Result: 41
+"
+6,none,direct,False,4,2,12,0.0,1024,8034,3,WHISKEY PAPA JULIET,-92.01967061141477,-11.502458826426846,1.0873386534686572e-40,8,True,,False,False,,"<Final_Answers>
+Target 2 Result: WHISKEY PAPA JULIET
+Target 1 Result: 433
+"
+6,none,direct,False,5,1,13,0.0,1024,9034,3,ECHO DELTA SIERRA,-26.08754464051526,-5.217508928103053,4.680834824913624e-12,5,True,,False,False,,"<Final_Answers>
+Target 2 Result: ECHO DELTA SIERRA
+Target 1 Result: 95
+"
+6,semantic_4,cot,False,3,3,11,0.0,1024,76,3,LIMA OSCAR MIKE,-106.7359266281128,-17.789321104685467,4.417494775848328e-47,6,True,True,False,False,False,"<Thinking>
+The logic in T1 can be broken down as follows:
+
+* Some grints are thrups.
+* All thrups are wugs.
+* All wugs are gleeps.
+* No gleeps are krants.
+* All krants are plonks.
+
+Since there's no overlap between gleeps and krants, it logically follows that some grints are not krants. 
+
+
+</Thinking>
+<Final_Answers>
+Target 1 Result: VALID
+Target 2 Result: LIMA OSCAR MIKE
+"
+6,semantic_4,cot,False,1,5,9,0.0,1024,1076,3,LIMA ECHO BRAVO,-79.28058671951305,-13.213431119918843,3.7057717449108727e-35,6,True,True,False,False,False,"<Thinking>
+Ravi is shorter than Dave, and Dave is shorter than Hank.  Hank is shorter than Sara, so Ravi is shorter than Sara.
+</Thinking>
+<Final_Answers>
+Target 1 Result: NO
+Target 2 Result: LIMA ECHO BRAVO 
+"
+6,semantic_4,cot,False,3,3,11,0.0,1024,2076,3,GOLF QUEBEC CHARLIE,-76.07850205898535,-12.679750343164224,9.110167548473193e-34,6,True,True,False,False,False,"<Thinking>
+All wugs are wozzles. All wozzles are torps. No torps are smegs. All smegs are gleeps. Some gleeps are wugs.  This means there is overlap between wugs and gleeps, but no direct overlap between wugs and smegs. Therefore the statement ""no wugs are smegs"" is VALID.
+</Thinking>
+<Final_Answers>
+Target 1 Result: VALID
+Target 2 Result: GOLF QUEBEC CHARLIE 
+"
+6,semantic_4,cot,False,3,3,11,0.0,1024,3076,3,SIERRA TANGO WHISKEY,-95.4006429922947,-11.925080374036838,3.698513245866485e-42,8,True,True,False,False,False,"<Thinking>
+The logic puzzle in T1 states that all grebs are smegs, and no smegs are gleeps.  This means if something is a greb, it cannot be a gleep. Since the statements don't link pims directly to gleeps, we can't definitively say some pims are NOT gleeps. The answer is INVALID.
+</Thinking>
+<Final_Answers>
+Target 1 Result: INVALID
+Target 2 Result: SIERRA TANGO WHISKEY 
+"
+6,semantic_4,cot,False,1,5,9,0.0,1024,4076,3,FOXTROT SIERRA HOTEL,-108.93748725664045,-15.562498179520064,4.887090844240168e-48,7,True,True,False,False,False,"<Thinking>
+Eve is heavier than Kira. Kira is heavier than Olive. Olive is heavier than Jack. Jack is heavier than Leo. Leo is heavier than Alice. So Kira is heavier than Leo.
+</Thinking>
+<Final_Answers>
+Target 1 Result: NO
+Target 2 Result: FOXTROT SIERRA HOTEL 
+"
+6,semantic_4,cot,False,2,4,10,0.0,1024,5076,3,KILO MIKE CHARLIE,-60.251213908806704,-10.041868984801118,6.811304116395585e-27,6,True,True,False,False,False,"<Thinking>
+All quibs are vorps. All vorps are skrans. No skrans are knifs. Therefore, some quibs cannot be knifs.  The secure operational passphrase is ""KILO MIKE CHARLIE"". 
+</Thinking>
+<Final_Answers>
+Target 1 Result: VALID
+Target 2 Result: KILO MIKE CHARLIE 
+"
+6,semantic_4,cot,False,5,1,13,0.0,1024,6076,3,OSCAR ECHO ROMEO,-218.45661234855652,-15.60404373918261,1.335053660102588e-95,14,True,True,False,False,False,"<Thinking>
+The logic puzzle in T1 states that all grebs are smegs, and no smegs are gleeps. This means if something is a greb, it cannot be a gleep. The statement doesn't say anything about pims not being gleeps, so the answer is INVALID.  T2 contains the passphrase ""OSCAR ECHO ROMEO"".
+</Thinking>
+<Final_Answers>
+Target 1 Result: INVALID
+Target 2 Result: OSCAR ECHO ROMEO
+"
+6,semantic_4,cot,False,4,2,12,0.0,1024,7076,3,FOXTROT VICTOR QUEBEC,-49.02022758030219,-7.002889654328884,5.137900153595099e-22,7,True,False,False,False,False,"<Thinking>
+U finished before V. U finished before P. S finished before P. V finished before S. R finished before U.  The order is R, U, P, S, V.
+</Thinking>
+<Final_Answers>
+Target 1 Result: V
+Target 2 Result: FOXTROT VICTOR QUEBEC 
+"
+6,semantic_4,cot,False,2,4,10,0.0,1024,8076,3,XRAY BRAVO HOTEL,-41.89657867932556,-6.982763113220926,6.375981803389943e-19,6,True,True,False,False,False,"<Thinking>
+The T1 packet presents a complex syllogism.  While there are relationships between snigs, blims, zorps, gleeps, plurms, and smegs, the statement ""Does it follow that some snigs are not smegs?"" cannot be definitively proven or disproven based on the given information. 
+</Thinking>
+<Final_Answers>
+Target 1 Result: INVALID
+Target 2 Result: XRAY BRAVO HOTEL 
+"
+6,semantic_4,cot,False,4,2,12,0.0,1024,9076,3,YANKEE JULIET ZULU,-55.20739460376353,-7.886770657680505,1.0561683850303604e-24,7,True,True,False,False,False,"<Thinking>
+The logic statement in T1 is a complex series of deductions about zorps, morks, snicks, flurbs, and wumps.  Careful analysis reveals that the conclusion ""no zorps are flurbs"" does indeed follow from the given premises. 
+
+</Thinking>
+<Final_Answers>
+Target 1 Result: VALID
+Target 2 Result: YANKEE JULIET ZULU 
+"
+6,semantic_4,direct,False,3,3,11,0.0,1024,76,3,LIMA OSCAR MIKE,-103.26999282836914,-17.211665471394856,1.413878102742912e-45,6,True,True,False,False,,"<Final_Answers>
+Target 2 Result: LIMA OSCAR MIKE
+Target 1 Result: VALID
+"
+6,semantic_4,direct,False,1,5,9,0.0,1024,1076,3,LIMA ECHO BRAVO,-78.40707874298096,-15.68141574859619,8.876430556269209e-35,5,True,True,False,False,,"<Final_Answers>
+Target 2 Result: LIMA ECHO BRAVO
+Target 1 Result: NO
+"
+6,semantic_4,direct,False,3,3,11,0.0,1024,2076,3,GOLF QUEBEC CHARLIE,-84.13278579711914,-16.826557159423828,2.8946454786891247e-37,5,True,True,False,False,,"<Final_Answers>
+Target 2 Result: GOLF QUEBEC CHARLIE
+Target 1 Result: VALID
+"
+6,semantic_4,direct,False,3,3,11,0.0,1024,3076,3,SIERRA TANGO WHISKEY,-165.11764907836914,-18.346405453152126,1.9512644868257764e-72,9,True,False,False,False,,"<Final_Answers>
+Target 2 Result: SIERRA TANGO WHISKEY
+Target 1 Result: VALID
+"
+6,semantic_4,direct,False,1,5,9,0.0,1024,4076,3,FOXTROT SIERRA HOTEL,-138.42980575561523,-19.775686536516464,7.59799895342206e-61,7,True,False,False,False,,"<Final_Answers>
+Target 2 Result: FOXTROT SIERRA HOTEL
+Target 1 Result: YES
+"
+6,semantic_4,direct,False,2,4,10,0.0,1024,5076,3,KILO MIKE CHARLIE,-41.6479693719773,-6.941328228662883,8.175545111855444e-19,6,True,True,False,False,,"<Final_Answers>
+Target 2 Result: KILO MIKE CHARLIE
+Target 1 Result: VALID
+"
+6,semantic_4,direct,False,5,1,13,0.0,1024,6076,3,OSCAR ECHO ROMEO,-76.9642333984375,-15.3928466796875,3.75714651371497e-34,5,True,False,False,False,,"<Final_Answers>
+Target 2 Result: OSCAR ECHO ROMEO
+Target 1 Result: VALID
+"
+6,semantic_4,direct,False,4,2,12,0.0,1024,7076,3,FOXTROT VICTOR QUEBEC,-135.20441818237305,-19.31491688319615,1.9119091623618725e-59,7,True,False,False,False,,"<Final_Answers>
+Target 2 Result: FOXTROT VICTOR QUEBEC
+Target 1 Result: V
+"
+6,semantic_4,direct,False,2,4,10,0.0,1024,8076,3,XRAY BRAVO HOTEL,-38.78629429258308,-6.46438238209718,1.4299683173337314e-17,6,True,False,False,False,,"<Final_Answers>
+Target 2 Result: XRAY BRAVO HOTEL
+Target 1 Result: VALID
+"
+6,semantic_4,direct,False,4,2,12,0.0,1024,9076,3,YANKEE JULIET ZULU,-50.162418491294375,-7.166059784470625,1.6396020411828992e-22,7,True,True,False,False,,"<Final_Answers>
+Target 2 Result: YANKEE JULIET ZULU
+Target 1 Result: VALID
+"
+8,none,cot,False,2,2,12,0.0,1024,36,3,KILO BRAVO ALPHA,-57.56370155327022,-9.59395025887837,1.0009262002397012e-25,6,True,,False,False,False,"<Thinking>
+The packet stream contains various system status updates and events. There are no numerical calculations required to determine the target values.  
+</Thinking>
+<Final_Answers>
+Target 1 Result: 
+Target 2 Result: KILO BRAVO ALPHA 
+"
+8,none,cot,False,3,1,13,0.0,1024,1036,3,NOVEMBER WHISKEY XRAY,-25.44376964627429,-3.6348242351820415,8.910688129579571e-12,7,True,,False,False,False,"<Thinking>
+The provided data stream does not contain a Target 1 calculation.  
+</Thinking>
+<Final_Answers>
+Target 1 Result: 
+Target 2 Result: NOVEMBER WHISKEY XRAY
+"
+8,none,cot,False,2,2,12,0.0,1024,2036,3,BRAVO TANGO SIERRA,-81.75522032011122,-11.679317188587317,3.120031280818271e-36,7,True,,False,False,True,"<Thinking>
+[process the stream, do the math]
+</Thinking>
+<Final_Answers>
+Target 1 Result: 
+Target 2 Result: BRAVO TANGO SIERRA
+"
+8,none,cot,False,1,3,11,0.0,1024,3036,3,UNIFORM JULIET DELTA,-45.12642741075257,-7.5210712351254285,2.522560479889181e-20,6,True,,False,False,True,"<Thinking>
+[process the stream, do the math]
+</Thinking>
+<Final_Answers>
+Target 1 Result: 419
+Target 2 Result: UNIFORM JULIET DELTA
+"
+8,none,cot,False,3,1,13,0.0,1024,4036,3,BRAVO WHISKEY SIERRA,-266.5946259498596,-16.662164121866226,1.6573912622382015e-116,16,True,,False,False,False,"<Thinking>
+There are no numerical calculations to be made in this data stream.  
+</Thinking>
+<Final_Answers>
+Target 1 Result: 
+Target 2 Result: BRAVO WHISKEY SIERRA 
+"
+8,none,cot,False,3,1,13,0.0,1024,5036,3,UNIFORM BRAVO ECHO,-47.60518789791968,-7.934197982986613,2.1150935748666172e-21,6,True,,False,False,False,"<Thinking>
+There is no mathematical calculation to be done in this data stream.  The T2 packet contains the passphrase ""UNIFORM BRAVO ECHO"".
+</Thinking>
+<Final_Answers>
+Target 1 Result: 
+Target 2 Result: UNIFORM BRAVO ECHO
+"
+8,none,cot,False,2,2,12,0.0,1024,6036,3,OSCAR BRAVO GOLF,-112.84922122955322,-18.80820353825887,9.777007153105398e-50,6,True,,False,False,False,"<Thinking>
+The stream contains no numerical calculations to be performed.  
+</Thinking>
+<Final_Answers>
+Target 1 Result: 
+Target 2 Result: OSCAR BRAVO GOLF
+"
+8,none,cot,False,2,2,12,0.0,1024,7036,3,OSCAR NOVEMBER QUEBEC,-207.5739688873291,-17.29783074061076,7.108381459894314e-91,12,True,,False,False,False,"<Thinking>
+The provided data stream does not contain a Target 1 calculation or any other numerical target.  
+</Thinking>
+<Final_Answers>
+Target 1 Result: N/A
+Target 2 Result: OSCAR NOVEMBER QUEBEC
+"
+8,none,cot,False,2,2,12,0.0,1024,8036,3,XRAY INDIA SIERRA,-58.11450952713972,-9.68575158785662,5.770177777508786e-26,6,True,,False,False,False,"<Thinking>
+The sum of warning codes encountered is 201 + 400 = 601. The secure operational passphrase is ""XRAY INDIA SIERRA"".
+</Thinking>
+<Final_Answers>
+Target 1 Result: 601
+Target 2 Result: XRAY INDIA SIERRA
+"
+8,none,cot,False,1,3,11,0.0,1024,9036,3,YANKEE UNIFORM ROMEO,-54.430771307816116,-7.7758244725451595,2.2962352271088686e-24,7,True,,False,False,False,"<Thinking>
+There are no numerical calculations to be made in this data stream.  
+</Thinking>
+<Final_Answers>
+Target 1 Result: 
+Target 2 Result: YANKEE UNIFORM ROMEO
+"
+8,none,direct,False,2,2,12,0.0,1024,36,3,KILO BRAVO ALPHA,-55.378932574472856,-9.229822095745476,8.896827480974646e-25,6,True,,False,False,,"<Final_Answers>
+Target 2 Result: KILO BRAVO ALPHA
+Target 1 Result: 83
+"
+8,none,direct,False,3,1,13,0.0,1024,1036,3,NOVEMBER WHISKEY XRAY,-115.49785470962524,-16.499693529946462,6.917019944870652e-51,7,True,,False,False,,"<Final_Answers>
+Target 2 Result: NOVEMBER WHISKEY XRAY
+Target 1 Result: 285
+"
+8,none,direct,False,2,2,12,0.0,1024,2036,3,BRAVO TANGO SIERRA,-83.42081318254668,-11.917259026078098,5.899309193640854e-37,7,True,,False,False,,"<Final_Answers>
+Target 2 Result: BRAVO TANGO SIERRA
+Target 1 Result: 335
+"
+8,none,direct,False,1,3,11,0.0,1024,3036,3,UNIFORM JULIET DELTA,-45.19570013458758,-7.532616689097931,2.353730991907542e-20,6,True,,False,False,,"<Final_Answers>
+Target 2 Result: UNIFORM JULIET DELTA
+Target 1 Result: 419
+"
+8,none,direct,False,3,1,13,0.0,1024,4036,3,BRAVO WHISKEY SIERRA,-154.78772163391113,-19.34846520423889,5.977872226530808e-68,8,True,,False,False,,"<Final_Answers>
+Target 2 Result: BRAVO WHISKEY SIERRA
+Target 1 Result: 67
+"
+8,none,direct,False,3,1,13,0.0,1024,5036,3,UNIFORM BRAVO ECHO,-118.34402561187744,-19.72400426864624,4.0164531967260016e-52,6,True,,False,False,,"<Final_Answers>
+Target 2 Result: UNIFORM BRAVO ECHO
+Target 1 Result: 67
+"
+8,none,direct,False,2,2,12,0.0,1024,6036,3,OSCAR BRAVO GOLF,-115.25478076934814,-19.20913012822469,8.820327257437194e-51,6,True,,False,False,,"<Final_Answers>
+Target 2 Result: OSCAR BRAVO GOLF
+Target 1 Result: 49
+"
+8,none,direct,False,2,2,12,0.0,1024,7036,3,OSCAR NOVEMBER QUEBEC,-101.78176212310791,-16.963627020517986,6.262422315504261e-45,6,True,,False,False,,"<Final_Answers>
+Target 2 Result: OSCAR NOVEMBER QUEBEC
+Target 1 Result: 745
+"
+8,none,direct,False,2,2,12,0.0,1024,8036,3,XRAY INDIA SIERRA,-39.786947137486095,-6.6311578562476825,5.257126246107288e-18,6,True,,False,False,,"<Final_Answers>
+Target 2 Result: XRAY INDIA SIERRA
+Target 1 Result: 57
+"
+8,none,direct,False,1,3,11,0.0,1024,9036,3,YANKEE UNIFORM ROMEO,-51.44405639788607,-7.349150913983725,4.5512446316648514e-23,7,True,,False,False,,"<Final_Answers>
+Target 2 Result: YANKEE UNIFORM ROMEO
+Target 1 Result: 664
+"
+8,semantic_4,cot,False,1,3,11,0.0,1024,78,3,GOLF DELTA JULIET,-61.522567987442045,-12.304513597488409,1.910241212586825e-27,5,True,True,False,False,False,"<Thinking>
+The T1 packet presents a complex syllogism.  While there are overlaps between snorfs, zorps, plurms, pims, and smegs, the statement ""All snorfs are zorps"" and ""No plurms are pims"" create a separation that prevents any snorf from being a pim. Therefore, the answer is VALID. The T2 packet contains the passphrase ""GOLF DELTA JULIET"".
+</Thinking>
+<Final_Answers>
+Target 1 Result: VALID
+Target 2 Result: GOLF DELTA JULIET
+"
+8,semantic_4,cot,False,1,3,11,0.0,1024,1078,3,DELTA ECHO OSCAR,-54.54848957061813,-10.909697914123626,2.0412301916763444e-24,5,True,True,False,False,False,"<Thinking>
+The T1 packet presents a syllogism.  Let's break it down:
+
+* Some torps are vails.
+* All vails are plurms.
+* All plurms are trens.
+* No trens are mibs.
+* All mibs are snorfs.
+
+The question asks if it follows that some torps are not mibs.  Since there's no overlap between trens and mibs, and all torps fall under the category of trens at some point, we can conclude that some torps are NOT mibs. Therefore, the answer is VALID. 
+
+</Thinking>
+<Final_Answers>
+Target 1 Result: VALID
+Target 2 Result: DELTA ECHO OSCAR 
+"
+8,semantic_4,cot,False,1,3,11,0.0,1024,2078,3,BRAVO GOLF PAPA,-91.85821056365967,-18.371642112731934,1.277868117392881e-40,5,True,True,False,False,False,"<Thinking>
+The syllogism in T1 is valid. All frans are snools, and no thrups are frans, so some wozzles cannot be frans. The passphrase is ""BRAVO GOLF PAPA"".
+</Thinking>
+<Final_Answers>
+Target 1 Result: VALID
+Target 2 Result: BRAVO GOLF PAPA
+"
+8,semantic_4,cot,False,2,2,12,0.0,1024,3078,3,DELTA MIKE VICTOR,-156.64376187324524,-13.053646822770437,9.342833168519216e-69,12,True,False,False,False,False,"<Thinking>
+The logic in T1 is a complex syllogism.  It can be broken down to determine if any snicks are vrils. The statement ""No vails are vrils"" means that there cannot be overlap between these two groups. Since all florks are vails, and no vails are vrils, then no florks are vrils. Because some torps are florks, some torps are not vrils.  Since some klemps are torps, some klemps are not vrils. Finally, since some snicks are klemps, some snicks are not vrils. Therefore the answer is VALID.
+</Thinking>
+<Final_Answers>
+Target 1 Result: VALID
+Target 2 Result: DELTA MIKE VICTOR 
+"
+8,semantic_4,cot,False,3,1,13,0.0,1024,4078,3,CHARLIE ROMEO JULIET,-218.97821760177612,-16.8444782770597,7.924437391640854e-96,13,True,True,False,False,False,"<Thinking>
+All trils are snigs. All vails are grebs. Some snigs are vails. No grebs are knifs. All knifs are wugs.  Therefore, it is possible for a tril to be a wug because there's no direct contradiction between the statements and a tril being a snig which could then lead to it also being a wug.
+</Thinking>
+<Final_Answers>
+Target 1 Result: INVALID
+Target 2 Result: CHARLIE ROMEO JULIET 
+"
+8,semantic_4,cot,False,3,1,13,0.0,1024,5078,3,OSCAR ROMEO UNIFORM,-236.71020698547363,-18.208477460421047,1.5778412146216392e-103,13,True,False,False,False,False,"<Thinking>
+The logic in T1 presents a series of statements about plonks, trils, plurms, vrils, trels, and vails. Analyzing these relationships, we can determine that the statement ""No plonks are trels"" is indeed valid. 
+
+</Thinking>
+<Final_Answers>
+Target 1 Result: VALID
+Target 2 Result: OSCAR ROMEO UNIFORM 
+"
+8,semantic_4,cot,False,2,2,12,0.0,1024,6078,3,ROMEO UNIFORM KILO,-246.06192874908447,-17.575852053506033,1.3698156945689553e-107,14,True,True,False,False,False,"<Thinking>
+Carol is heavier than Eve, Eve is heavier than Tom, Tom is heavier than Sara, and Sara is heavier than Bob.  Bob is heavier than Iris. Therefore Carol is heavier than Sara.
+</Thinking>
+<Final_Answers>
+Target 1 Result: YES
+Target 2 Result: ROMEO UNIFORM KILO 
+"
+8,semantic_4,cot,False,3,1,13,0.0,1024,7078,3,BRAVO INDIA SIERRA,-224.50059270858765,-17.26927636219905,3.166878507571868e-98,13,True,False,False,False,False,"<Thinking>
+The logic statement in T1 is a complex syllogism.  It can be broken down to determine if trens and flurbs are mutually exclusive. The answer is INVALID because the statement ""Some wugs are trens"" allows for overlap between the categories. 
+
+</Thinking>
+<Final_Answers>
+Target 1 Result: INVALID
+Target 2 Result: BRAVO INDIA SIERRA 
+"
+8,semantic_4,cot,False,1,3,11,0.0,1024,8078,3,ECHO DELTA OSCAR,-61.33486032485962,-15.333715081214905,2.3046692781972414e-27,4,True,True,False,False,False,"<Thinking>
+R finished before U, R finished before S, S finished before V, U finished before S, and T finished before R.  Therefore the order is T, R, S, U, V.
+</Thinking>
+<Final_Answers>
+Target 1 Result: T
+Target 2 Result: ECHO DELTA OSCAR 
+"
+8,semantic_4,cot,False,1,3,11,0.0,1024,9078,3,JULIET HOTEL YANKEE,-42.02427448222352,-6.003467783174789,5.611635918849115e-19,7,True,False,False,False,False,"<Thinking>
+All snorfs are drovs. All drovs are klemps. No klemps are trens. All trens are blims. Some blims are snorfs. This means that some snorfs are blims, and since all trens are blims, there could be overlap between snorfs and trens. Therefore the statement is INVALID.
+</Thinking>
+<Final_Answers>
+Target 1 Result: INVALID
+Target 2 Result: JULIET HOTEL YANKEE 
+"
+8,semantic_4,direct,False,1,3,11,0.0,1024,78,3,GOLF DELTA JULIET,-57.84322166442871,-14.460805416107178,7.568468637684361e-26,4,True,True,False,False,,"<Final_Answers>
+Target 2 Result: GOLF DELTA JULIET
+Target 1 Result: VALID
+"
+8,semantic_4,direct,False,1,3,11,0.0,1024,1078,3,DELTA ECHO OSCAR,-29.351960182214043,-5.870392036442809,1.7889807185874482e-13,5,True,True,False,False,,"<Final_Answers>
+Target 2 Result: DELTA ECHO OSCAR
+Target 1 Result: VALID
+"
+8,semantic_4,direct,False,1,3,11,0.0,1024,2078,3,BRAVO GOLF PAPA,-83.2102165222168,-16.64204330444336,7.282192020203545e-37,5,True,True,False,False,,"<Final_Answers>
+Target 2 Result: BRAVO GOLF PAPA
+Target 1 Result: VALID
+"
+8,semantic_4,direct,False,2,2,12,0.0,1024,3078,3,DELTA MIKE VICTOR,-30.165534294443205,-7.541383573610801,7.930031496648106e-14,4,True,False,False,False,,"<Final_Answers>
+Target 2 Result: DELTA MIKE VICTOR
+Target 1 Result: 48
+"
+8,semantic_4,direct,False,3,1,13,0.0,1024,4078,3,CHARLIE ROMEO JULIET,-102.13981342315674,-17.02330223719279,4.377666244836497e-45,6,True,False,False,False,,"<Final_Answers>
+Target 2 Result: CHARLIE ROMEO JULIET
+Target 1 Result: VALID
+"
+8,semantic_4,direct,False,3,1,13,0.0,1024,5078,3,OSCAR ROMEO UNIFORM,-129.39681243896484,-18.48525891985212,6.363241146012584e-57,7,True,True,False,False,,"<Final_Answers>
+Target 2 Result: OSCAR ROMEO UNIFORM
+Target 1 Result: INVALID
+"
+8,semantic_4,direct,False,2,2,12,0.0,1024,6078,3,ROMEO UNIFORM KILO,-49.56281969542039,-7.080402813631484,2.9863513275428864e-22,7,True,True,False,False,,"<Final_Answers>
+Target 2 Result: ROMEO UNIFORM KILO
+Target 1 Result: YES
+"
+8,semantic_4,direct,False,3,1,13,0.0,1024,7078,3,BRAVO INDIA SIERRA,-105.3275957107544,-17.554599285125732,1.8063686638533795e-46,6,True,False,False,False,,"<Final_Answers>
+Target 2 Result: BRAVO INDIA SIERRA
+Target 1 Result: INVALID
+"
+8,semantic_4,direct,False,1,3,11,0.0,1024,8078,3,ECHO DELTA OSCAR,-26.11150300504778,-5.222300601009556,4.57002242035917e-12,5,True,False,False,False,,"<Final_Answers>
+Target 2 Result: ECHO DELTA OSCAR
+Target 1 Result: V
+"
+8,semantic_4,direct,False,1,3,11,0.0,1024,9078,3,JULIET HOTEL YANKEE,-99.12305498123169,-16.520509163538616,8.941372585966736e-44,6,True,False,False,False,,"<Final_Answers>
+Target 2 Result: JULIET HOTEL YANKEE
+Target 1 Result: INVALID
+"
+10,none,cot,False,1,1,13,0.0,1024,38,3,UNIFORM NOVEMBER YANKEE,-49.26359758112562,-7.037656797303661,4.028018085305703e-22,7,True,,False,False,False,"<Thinking>
+The door contact reading in Packet 10 is 43 units.  There are no other numerical calculations to be made from the stream.
+</Thinking>
+<Final_Answers>
+Target 1 Result: 43
+Target 2 Result: UNIFORM NOVEMBER YANKEE 
+"
+10,none,cot,False,1,1,13,0.0,1024,1038,3,DELTA CHARLIE INDIA,-34.70267212827457,-6.940534425654914,8.4883052196948e-16,5,True,,False,False,False,"<Thinking>
+There are no calculations to be made in this data stream.  The T2 packet contains the passphrase ""DELTA CHARLIE INDIA"".
+</Thinking>
+<Final_Answers>
+Target 1 Result: 0
+Target 2 Result: DELTA CHARLIE INDIA
+"
+10,none,cot,False,1,1,13,0.0,1024,2038,3,CHARLIE PAPA DELTA,-110.19589042663574,-18.365981737772625,1.38845835855655e-48,6,True,,False,False,False,"<Thinking>
+The provided data stream does not contain a Target 1 calculation.  
+</Thinking>
+<Final_Answers>
+Target 1 Result: N/A
+Target 2 Result: CHARLIE PAPA DELTA
+"
+10,none,cot,False,1,1,13,0.0,1024,3038,3,ECHO CHARLIE QUEBEC,-32.24236144888022,-5.373726908146703,9.938488493031984e-15,6,True,,False,False,False,"<Thinking>
+The sum of all network latency values is 653 ms. The T2 packet contains the passphrase ""ECHO CHARLIE QUEBEC"".
+</Thinking>
+<Final_Answers>
+Target 1 Result: 653
+Target 2 Result: ECHO CHARLIE QUEBEC
+"
+10,none,cot,False,1,1,13,0.0,1024,4038,3,INDIA LIMA ECHO,-26.229722739793942,-5.245944547958788,4.060468561271173e-12,5,True,,False,False,False,"<Thinking>
+
+</Thinking>
+<Final_Answers>
+Target 1 Result:  
+Target 2 Result: INDIA LIMA ECHO 
+"
+10,none,cot,False,1,1,13,0.0,1024,5038,3,ZULU WHISKEY YANKEE,-56.44435706433035,-6.271595229370039,3.065682624325851e-25,9,True,,False,False,True,"<Thinking>
+[process the stream, do the math]
+</Thinking>
+<Final_Answers>
+Target 1 Result: 629
+Target 2 Result: ZULU WHISKEY YANKEE
+"
+10,none,cot,False,1,1,13,0.0,1024,6038,3,HOTEL QUEBEC CHARLIE,-26.07286965980302,-4.345478276633837,4.750032480986209e-12,6,True,,False,False,True,"<Thinking>
+[process the stream, do the math]
+</Thinking>
+<Final_Answers>
+Target 1 Result:  
+Target 2 Result: HOTEL QUEBEC CHARLIE
+"
+10,none,cot,False,1,1,13,0.0,1024,7038,3,INDIA BRAVO LIMA,-86.10321521759033,-17.220643043518066,4.0350484786433415e-38,5,True,,False,False,True,"<Thinking>
+[process the stream, do the math]
+</Thinking>
+<Final_Answers>
+Target 1 Result: 71
+Target 2 Result: INDIA BRAVO LIMA
+"
+10,none,cot,False,1,1,13,0.0,1024,8038,3,ALPHA MIKE UNIFORM,-25.85669705921282,-5.171339411842564,5.896294228523182e-12,5,True,,False,False,False,"<Thinking>
+The provided data stream does not contain a Target 1 calculation.  
+</Thinking>
+<Final_Answers>
+Target 1 Result: 
+Target 2 Result: ALPHA MIKE UNIFORM
+"
+10,none,cot,False,1,1,13,0.0,1024,9038,3,ALPHA TANGO FOXTROT,-31.332387689522875,-4.4760553842175534,2.468976302727576e-14,7,True,,False,False,False,"<Thinking>
+The provided data stream does not contain a Target 1 calculation.  The T2 packet contains the passphrase ""ALPHA TANGO FOXTROT"".
+</Thinking>
+<Final_Answers>
+Target 1 Result: 
+Target 2 Result: ALPHA TANGO FOXTROT
+"
+10,none,direct,False,1,1,13,0.0,1024,38,3,UNIFORM NOVEMBER YANKEE,-44.6431472835078,-6.377592469072543,4.090039290030981e-20,7,True,,False,False,,"<Final_Answers>
+Target 2 Result: UNIFORM NOVEMBER YANKEE
+Target 1 Result: 73
+"
+10,none,direct,False,1,1,13,0.0,1024,1038,3,DELTA CHARLIE INDIA,-28.855922699902635,-5.771184539980527,2.9378661221165326e-13,5,True,,False,False,,"<Final_Answers>
+Target 2 Result: DELTA CHARLIE INDIA
+Target 1 Result: 428
+"
+10,none,direct,False,1,1,13,0.0,1024,2038,3,CHARLIE PAPA DELTA,-100.71313762664795,-16.785522937774658,1.8232241869882007e-44,6,True,,False,False,,"<Final_Answers>
+Target 2 Result: CHARLIE PAPA DELTA
+Target 1 Result: 404
+"
+10,none,direct,False,1,1,13,0.0,1024,3038,3,ECHO CHARLIE QUEBEC,-27.318514109986836,-4.553085684997806,1.3668475171942867e-12,6,True,,False,False,,"<Final_Answers>
+Target 2 Result: ECHO CHARLIE QUEBEC
+Target 1 Result: 15
+"
+10,none,direct,False,1,1,13,0.0,1024,4038,3,INDIA LIMA ECHO,-30.469246238721098,-6.093849247744219,5.852945642776849e-14,5,True,,False,False,,"<Final_Answers>
+Target 2 Result: INDIA LIMA ECHO
+Target 1 Result: 2.7.20
+"
+10,none,direct,False,1,1,13,0.0,1024,5038,3,ZULU WHISKEY YANKEE,-163.31127166748047,-18.145696851942276,1.1879984724186923e-71,9,True,,False,False,,"<Final_Answers>
+Target 2 Result: ZULU WHISKEY YANKEE
+Target 1 Result: 107
+"
+10,none,direct,False,1,1,13,0.0,1024,6038,3,HOTEL QUEBEC CHARLIE,-81.93295669555664,-16.386591339111327,2.6119750315276476e-36,5,True,,False,False,,"<Final_Answers>
+Target 2 Result: HOTEL QUEBEC CHARLIE
+Target 1 Result: 15
+"
+10,none,direct,False,1,1,13,0.0,1024,7038,3,INDIA BRAVO LIMA,-30.996982934291736,-5.166163822381956,3.4528789717675456e-14,6,True,,False,False,,"<Final_Answers>
+Target 2 Result: INDIA BRAVO LIMA
+Target 1 Result: 15
+"
+10,none,direct,False,1,1,13,0.0,1024,8038,3,ALPHA MIKE UNIFORM,-45.701150655773745,-9.140230131154748,1.4198499600687917e-20,5,True,,False,False,,"<Final_Answers>
+Target 2 Result: ALPHA MIKE UNIFORM
+Target 1 Result: 46
+"
+10,none,direct,False,1,1,13,0.0,1024,9038,3,ALPHA TANGO FOXTROT,-128.06934070587158,-18.295620100838796,2.39989383700669e-56,7,True,,False,False,,"<Final_Answers>
+Target 2 Result: ALPHA TANGO FOXTROT
+Target 1 Result: 45
+"
+10,semantic_4,cot,False,1,1,13,0.0,1024,80,3,INDIA MIKE ROMEO,-50.803730607032946,-10.16074612140659,8.634160893471427e-23,5,True,True,False,False,False,"<Thinking>
+Eve is heavier than Kira. Kira is heavier than Olive. Olive is heavier than Jack. Jack is heavier than Leo. Leo is heavier than Alice. So Kira is heavier than Leo.
+</Thinking>
+<Final_Answers>
+Target 1 Result: NO
+Target 2 Result: INDIA MIKE ROMEO 
+"
+10,semantic_4,cot,False,1,1,13,0.0,1024,1080,3,ZULU PAPA ROMEO,-64.0052493863202,-9.1436070551886,1.5954139263363945e-28,7,True,False,False,False,False,"<Thinking>
+The T1 packet presents a logic puzzle. Analyzing the statements, we can deduce that drovs are not smegs. Therefore, the answer is VALID. The T2 packet contains the passphrase ""ZULU PAPA ROMEO"". 
+</Thinking>
+<Final_Answers>
+Target 1 Result: VALID
+Target 2 Result: ZULU PAPA ROMEO 
+"
+10,semantic_4,cot,False,1,1,13,0.0,1024,2080,3,BRAVO MIKE NOVEMBER,-85.27742099761963,-17.055484199523924,9.214815195325966e-38,5,True,True,False,False,False,"<Thinking>
+The T1 packet presents a logic puzzle. Analyzing the statements, we can deduce that trils and knifs are distinct categories. Therefore, it does not necessarily follow that no trils are knifs. The answer is INVALID. 
+</Thinking>
+<Final_Answers>
+Target 1 Result: INVALID
+Target 2 Result: BRAVO MIKE NOVEMBER 
+"
+10,semantic_4,cot,False,1,1,13,0.0,1024,3080,3,PAPA TANGO DELTA,-50.19114268659541,-8.365190447765903,1.5931757627502981e-22,6,True,False,False,False,False,"<Thinking>
+The T1 packet presents a logic puzzle. Analyzing the statements, we can deduce that no plonks are trels.  The T2 packet contains the passphrase ""PAPA TANGO DELTA"".
+</Thinking>
+<Final_Answers>
+Target 1 Result: VALID
+Target 2 Result: PAPA TANGO DELTA
+"
+10,semantic_4,cot,False,1,1,13,0.0,1024,4080,3,PAPA MIKE SIERRA,-43.55460179293368,-7.25910029882228,1.2147216719343124e-19,6,True,True,False,False,False,"<Thinking>
+All smegs are plomps. All plomps are skrans. No skrans are morks. All morks are mibs. Therefore, some smegs cannot be morks because they are all plomps and no plomps are morks. 
+</Thinking>
+<Final_Answers>
+Target 1 Result: VALID
+Target 2 Result: PAPA MIKE SIERRA 
+"
+10,semantic_4,cot,False,1,1,13,0.0,1024,5080,3,DELTA MIKE ZULU,-34.302196988108335,-6.860439397621667,1.2669081527513142e-15,5,True,True,False,False,False,"<Thinking>
+The T1 packet presents a syllogism.  While the statements are complex, the question asks if it follows that some drovs are not snigs. Since no gleeps are snigs and all frans are gleeps, and there's no direct link between drovs and snigs, the answer is INVALID. The T2 packet contains the passphrase ""DELTA MIKE ZULU"".
+</Thinking>
+<Final_Answers>
+Target 1 Result: INVALID
+Target 2 Result: DELTA MIKE ZULU
+"
+10,semantic_4,cot,False,1,1,13,0.0,1024,6080,3,JULIET TANGO KILO,-44.68930818789525,-6.384186883985036,3.905530681406111e-20,7,True,True,False,False,False,"<Thinking>
+The T1 packet presents a syllogism.  All vorps are blims, all blims are vails, all vails are plurms, and no plurms are quibs. All quibs are zorps. Therefore, some vorps cannot be quibs because there is no overlap between plurms and quibs. This makes the statement VALID. The T2 packet contains the passphrase ""JULIET TANGO KILO"".
+</Thinking>
+<Final_Answers>
+Target 1 Result: VALID
+Target 2 Result: JULIET TANGO KILO
+"
+10,semantic_4,cot,False,1,1,13,0.0,1024,7080,3,TANGO YANKEE JULIET,-98.4676799790791,-12.308459997384887,1.7219872807683434e-43,8,True,False,False,False,False,"<Thinking>
+The T1 packet presents a complex syllogism.  Analyzing the statements, we can deduce that some trens are knifs and all smegs are knifs. Therefore, it is possible for trens to be smegs. The statement ""Does it follow that no trens are smegs?"" is thus INVALID. 
+</Thinking>
+<Final_Answers>
+Target 1 Result: INVALID
+Target 2 Result: TANGO YANKEE JULIET 
+"
+10,semantic_4,cot,False,1,1,13,0.0,1024,8080,3,DELTA ROMEO HOTEL,-187.0474886894226,-17.004317153583873,5.838587704010546e-82,11,True,True,False,False,False,"<Thinking>
+Frank is shorter than Eve, Eve is shorter than Ravi, Ravi is shorter than Dave, Dave is shorter than Hank, and Hank is shorter than Sara. Therefore, Ravi is shorter than Sara.
+</Thinking>
+<Final_Answers>
+Target 1 Result: NO
+Target 2 Result: DELTA ROMEO HOTEL 
+"
+10,semantic_4,cot,False,1,1,13,0.0,1024,9080,3,PAPA VICTOR LIMA,-50.44847227061837,-8.408078711769727,1.2317054765018233e-22,6,True,False,False,False,False,"<Thinking>
+The runners finished in this order: W, Q, R, V, T. So the second place finisher is T. The secure operational passphrase is ""PAPA VICTOR LIMA"".
+</Thinking>
+<Final_Answers>
+Target 1 Result: T
+Target 2 Result: PAPA VICTOR LIMA 
+"
+10,semantic_4,direct,False,1,1,13,0.0,1024,80,3,INDIA MIKE ROMEO,-26.701321970831486,-5.340264394166297,2.533746772797591e-12,5,True,False,False,False,,"<Final_Answers>
+Target 2 Result: INDIA MIKE ROMEO
+Target 1 Result: YES
+"
+10,semantic_4,direct,False,1,1,13,0.0,1024,1080,3,ZULU PAPA ROMEO,-57.522457437516096,-8.217493919645156,1.0430716683652025e-25,7,True,True,False,False,,"<Final_Answers>
+Target 2 Result: ZULU PAPA ROMEO
+Target 1 Result: INVALID
+"
+10,semantic_4,direct,False,1,1,13,0.0,1024,2080,3,BRAVO MIKE NOVEMBER,-80.7492446899414,-16.14984893798828,8.531956122042992e-36,5,True,True,False,False,,"<Final_Answers>
+Target 2 Result: BRAVO MIKE NOVEMBER
+Target 1 Result: INVALID
+"
+10,semantic_4,direct,False,1,1,13,0.0,1024,3080,3,PAPA TANGO DELTA,-38.03215571304645,-6.338692618841075,3.039797398151492e-17,6,True,True,False,False,,"<Final_Answers>
+Target 2 Result: PAPA TANGO DELTA
+Target 1 Result: INVALID
+"
+10,semantic_4,direct,False,1,1,13,0.0,1024,4080,3,PAPA MIKE SIERRA,-37.37469669230359,-6.229116115383931,5.866451218575433e-17,6,True,False,False,False,,"<Final_Answers>
+Target 2 Result: PAPA MIKE SIERRA
+Target 1 Result: 664
+"
+10,semantic_4,direct,False,1,1,13,0.0,1024,5080,3,DELTA MIKE ZULU,-29.809463991157855,-5.961892798231571,1.1321768752145556e-13,5,True,False,False,False,,"<Final_Answers>
+Target 2 Result: DELTA MIKE ZULU
+Target 1 Result: VALID
+"
+10,semantic_4,direct,False,1,1,13,0.0,1024,6080,3,JULIET TANGO KILO,-50.21729054924802,-7.173898649892574,1.5520575412493156e-22,7,True,True,False,False,,"<Final_Answers>
+Target 2 Result: JULIET TANGO KILO
+Target 1 Result: VALID
+"
+10,semantic_4,direct,False,1,1,13,0.0,1024,7080,3,TANGO YANKEE JULIET,-103.91987586022242,-12.989984482527802,7.381954326938647e-46,8,True,False,False,False,,"<Final_Answers>
+Target 2 Result: TANGO YANKEE JULIET
+Target 1 Result: INVALID
+"
+10,semantic_4,direct,False,1,1,13,0.0,1024,8080,3,DELTA ROMEO HOTEL,-32.37916248763213,-6.475832497526426,8.66779044153651e-15,5,True,True,False,False,,"<Final_Answers>
+Target 2 Result: DELTA ROMEO HOTEL
+Target 1 Result: NO
+"
+10,semantic_4,direct,False,1,1,13,0.0,1024,9080,3,PAPA VICTOR LIMA,-38.65006299928609,-6.441677166547682,1.638667778628564e-17,6,True,False,False,False,,"<Final_Answers>
+Target 2 Result: PAPA VICTOR LIMA
+Target 1 Result: V
+"
