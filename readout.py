@@ -202,6 +202,29 @@ def task_rows(trial_or_tasks, reported: dict) -> list:
     return rows
 
 
+def report_order_respected(generated: str, trial, report_order: str = "none"):
+    """Kendall tau between the EMITTED report order and the INSTRUCTED order
+    (issue #14 Step 4/D4 manipulation check).
+
+    Emitted order = order the task lines appear in <Final_Answers>. Instructed
+    order = ascending stream rank for "stream" (and for "none", the reference is
+    stream order, i.e. spontaneous compliance), descending for "reverse".
+    Returns tau in [-1, 1] (+1 = fully compliant, -1 = fully anti-compliant), or
+    None when fewer than 2 tasks were reported (tau undefined). Without this a
+    null on D4 is uninterpretable.
+    """
+    from scipy.stats import kendalltau
+    parsed = parse_task_report(generated, trial)
+    emitted = list(parsed["reported"].keys())            # emission order (upper)
+    rank_by_name = {str(t["name"]).upper(): t["rank"] for t in trial.tasks}
+    ranks = [rank_by_name[n] for n in emitted if n in rank_by_name]
+    if len(ranks) < 2:
+        return None
+    target = [-r for r in ranks] if report_order == "reverse" else ranks
+    tau, _ = kendalltau(list(range(len(target))), target)
+    return float(tau)
+
+
 def t2_scoring_prefix_tasks(generated: str, task_name: str):
     """Split the generated text at the passphrase task's answer slot.
 

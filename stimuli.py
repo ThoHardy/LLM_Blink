@@ -617,6 +617,17 @@ class TrialConfig:
     # Default True for new runs; rescore_graded defaults it to False for CSVs
     # predating the column, which reproduces the old prompt byte-exactly.
     anti_enumeration: bool = True
+    # Report-order axis (2026-08-15, issue #14 Step 4 / D4): instructs the
+    # order in which the model must list tasks in <Final_Answers>.
+    #   "none"    -> no ordering instruction (today's prompt, byte-exact);
+    #                measures the model's SPONTANEOUS report order.
+    #   "stream"  -> "...in the order in which they appeared in the stream."
+    #   "reverse" -> "...in reverse order of their appearance in the stream."
+    # Both experimental arms carry a length-matched, syntactically parallel
+    # sentence so the arms differ by ONE word, not by instruction count. Pure
+    # prompt text: NO effect on any RNG draw (7.2.2). rescore_graded defaults it
+    # to "none" for CSVs predating the column (byte-exact old prompt).
+    report_order: str = "none"
 
 
 @dataclass
@@ -808,6 +819,15 @@ def _build_trial_legacy(cfg: TrialConfig) -> Trial:
 
 _VALID_NAMINGS = ("ordered", "non-ordered")
 
+_VALID_REPORT_ORDERS = ("none", "stream", "reverse")
+# Length-matched, syntactically parallel; differ in one content word
+# ("in the order in which" vs "in reverse order of"). See TrialConfig.report_order.
+_REPORT_ORDER_SENTENCE = {
+    "none": "",
+    "stream": " List the tasks in the order in which they appeared in the stream.",
+    "reverse": " List the tasks in reverse order of their appearance in the stream.",
+}
+
 # 100 task names: unique, uppercase, disjoint from the NATO alphabet (reserved
 # for passphrases / the mask decoy), from _TRIVIAL_WORDS (trivial-task
 # answers), and from the reserved worked-example names.
@@ -878,13 +898,20 @@ def _sample_load_items(load: str, rng: random.Random, k: int) -> list:
     return [tuple(item) for item in rng.sample(bank, k)]
 
 
-def _worked_example_tasks(naming: str, regime: str) -> str:
+def _worked_example_tasks(naming: str, regime: str,
+                          report_order: str = "none") -> str:
     """Fixed worked example for the task-stream template.
 
     Shows 2 tasks; live test streams draw their own n_tasks, and the reserved
     example names never appear in TASK_NAME_BANK, so nothing leaks. The
     example demonstrates the '- Task <NAME>: <result>' line format and (cot)
     counting the tasks found, without any copyable placeholder text.
+
+    report_order (2026-08-15, Step 4/D4): the <Final_Answers> lines are shown in
+    the instructed order. "none"/"stream" -> stream order (Task n1 then n2);
+    "reverse" -> reverse order (Task n2 then n1). Without a matching example
+    models generally will not comply with "reverse" at all. The <Thinking>
+    reasoning stays in stream order (natural scan) in every arm.
     """
     n1, n2 = ("1", "2") if naming == "ordered" else _RESERVED_EXAMPLE_NAMES
     stream = (
@@ -904,12 +931,10 @@ def _worked_example_tasks(naming: str, regime: str) -> str:
         "ROMEO. I found 2 tasks in this stream.\n"
         "</Thinking>\n"
     )
-    answers = (
-        "<Final_Answers>\n"
-        f"- Task {n1}: ANIMAL\n"
-        f"- Task {n2}: VICTOR XRAY ROMEO\n"
-        "</Final_Answers>"
-    )
+    ans_lines = [f"- Task {n1}: ANIMAL", f"- Task {n2}: VICTOR XRAY ROMEO"]
+    if report_order == "reverse":
+        ans_lines = ans_lines[::-1]
+    answers = "<Final_Answers>\n" + "\n".join(ans_lines) + "\n</Final_Answers>"
     body = (thinking + answers) if regime == "cot" else answers
     return ("EXAMPLE (illustration only - not part of the real stream):\n"
             "DATA STREAM:\n"
@@ -919,7 +944,8 @@ def _worked_example_tasks(naming: str, regime: str) -> str:
             "Now process the following ACTUAL stream:")
 
 
-def _output_format_tasks(regime: str, anti_enumeration: bool = False) -> str:
+def _output_format_tasks(regime: str, anti_enumeration: bool = False,
+                         report_order: str = "none") -> str:
     """Answer-format spec. Prose instructions, no fill-in-the-blank placeholder
     (CoT-skip fix 1): the only literal-looking line is the per-task line format
     itself, which the worked example shows correctly instantiated.
@@ -927,13 +953,17 @@ def _output_format_tasks(regime: str, anti_enumeration: bool = False) -> str:
     anti_enumeration=True (cot only) appends an explicit prohibition on
     re-enumerating the stream packet by packet inside <Thinking> (idea I1).
     False reproduces the pre-2026-07-22 prompt byte-exactly.
+
+    report_order (2026-08-15, Step 4/D4) appends a length-matched ordering
+    sentence to the <Final_Answers> instruction ("" for "none" -> byte-exact).
     """
+    order = _REPORT_ORDER_SENTENCE[report_order]
     if regime == "direct":
         return (
             "OUTPUT FORMAT:\n"
             "A <Final_Answers> block with EXACTLY one line per task you found "
             "in the stream, each line in the form:\n"
-            "- Task <NAME>: <result>"
+            f"- Task <NAME>: <result>{order}"
         )
     anti = (
         " Do NOT list or summarize the stream packet by packet: skip filler "
@@ -947,7 +977,7 @@ def _output_format_tasks(regime: str, anti_enumeration: bool = False) -> str:
         f"copy instruction text into it.{anti}\n"
         "Then a <Final_Answers> block with EXACTLY one line per task you "
         "found in the stream, each line in the form:\n"
-        "- Task <NAME>: <result>"
+        f"- Task <NAME>: <result>{order}"
     )
 
 
@@ -964,6 +994,9 @@ def _build_trial_tasks(cfg: TrialConfig) -> Trial:
         raise ValueError(f"n_tasks={n} out of range [1, {total}]")
     if cfg.naming not in _VALID_NAMINGS:
         raise ValueError(f"naming={cfg.naming!r}; valid: {_VALID_NAMINGS}")
+    if cfg.report_order not in _VALID_REPORT_ORDERS:
+        raise ValueError(
+            f"report_order={cfg.report_order!r}; valid: {_VALID_REPORT_ORDERS}")
 
     rng = random.Random(cfg.seed)
     t2 = random_passphrase(rng, cfg.t2_words)
@@ -995,9 +1028,10 @@ def _build_trial_tasks(cfg: TrialConfig) -> Trial:
     lines.append("End of stream.")   # unnumbered: does not consume a packet slot
     stream = "\n".join(lines)
 
-    header = (f"{RULES_TASKS}\n{_worked_example_tasks(cfg.naming, cfg.regime)}\n"
+    header = (f"{RULES_TASKS}\n"
+              f"{_worked_example_tasks(cfg.naming, cfg.regime, cfg.report_order)}\n"
               f"DATA STREAM:\n{stream}\n"
-              f"{_output_format_tasks(cfg.regime, cfg.anti_enumeration)}")
+              f"{_output_format_tasks(cfg.regime, cfg.anti_enumeration, cfg.report_order)}")
     pp = tasks[pp_rank]
     return Trial(
         system=SYSTEM,
