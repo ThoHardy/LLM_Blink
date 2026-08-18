@@ -42,8 +42,8 @@ levels 1–4 for four candidates. Kept the models where **CoT clearly helps T1**
 | model | rows / 800 | state |
 |---|---|---|
 | qwen2.5:3b | 800 | ✅ done |
-| qwen2.5:7b | in progress | running |
-| llama3.1:8b | 0 | queued |
+| qwen2.5:7b | 800 | ✅ done |
+| llama3.1:8b | in progress | running |
 
 CSVs + figures are committed **per model as each finishes**, so this PR fills in
 progressively; figures are regenerated from all completed models at each step.
@@ -62,3 +62,18 @@ Read-out shape **U-shaped / all-or-none** (73% of cot trials at the extremes),
 ignition gap **+0.52** (report|in-CoT 0.84 vs |not-in-CoT 0.32), Tarone Z=182.
 Mixture (Mfull): the report mode **μ_high stays put** across load (0.88/0.89/0.84)
 while **π shifts** (0.75/0.52/0.71) — the ignition (all-or-none) signature.
+
+### qwen2.5:7b (n=100/cell) — done
+
+The strongest CoT-helps-the-load demonstration:
+
+| load | T1 acc Direct→CoT | passphrase report Direct→CoT |
+|---|---|---|
+| math_bench_2 | 0.29 → **0.71** (+0.42) | 0.99 → **0.76** (blink) |
+| math_bench_3 | 0.27 → **0.65** | 1.00 → **0.80** |
+| math_bench_4 | 0.17 → **0.45** | 1.00 → **0.74** |
+
+Read-out shape **U-shaped / all-or-none** (91% at extremes), ignition gap **+0.68**
+(report|in-CoT 0.93 vs |not-in-CoT 0.25), Tarone Z=212. Mixture: **μ_high fixed near
+ceiling** (0.95/1.00/0.99) while **π shifts** (0.80/0.73/0.69) — ignition signature,
+consistent with qwen2.5:3b.
