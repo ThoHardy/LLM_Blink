@@ -43,7 +43,7 @@ levels 1–4 for four candidates. Kept the models where **CoT clearly helps T1**
 |---|---|---|
 | qwen2.5:3b | 800 | ✅ done |
 | qwen2.5:7b | 800 | ✅ done |
-| llama3.1:8b | in progress | running |
+| llama3.1:8b | 800 | done |
 
 CSVs + figures are committed **per model as each finishes**, so this PR fills in
 progressively; figures are regenerated from all completed models at each step.

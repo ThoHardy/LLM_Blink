@@ -22,3 +22,15 @@
     math_bench_2: pi_hi=0.80 mu_lo=0.00 mu_hi=0.95
     math_bench_3: pi_hi=0.73 mu_lo=0.21 mu_hi=1.00
     math_bench_4: pi_hi=0.69 mu_lo=0.20 mu_hi=0.99
+
+===== llama3.1:8b =====
+  [trivial] direct: t1=0.96 report_rate=0.99 (n=100) | cot: t1=0.90 report_rate=0.97 (n=100)
+  [math_bench_2] direct: t1=0.12 report_rate=0.95 (n=100) | cot: t1=0.21 report_rate=0.83 (n=100)
+  [math_bench_3] direct: t1=0.12 report_rate=0.94 (n=100) | cot: t1=0.16 report_rate=0.86 (n=100)
+  [math_bench_4] direct: t1=0.10 report_rate=0.95 (n=100) | cot: t1=0.07 report_rate=0.91 (n=100)
+  report SHAPE: 77% at extremes -> U-shaped / all-or-none
+  read-out gap: |in-CoT=0.93 vs |not-in-CoT=0.44 (+0.50)
+  Tarone Z: 111.8
+    math_bench_2: pi_hi=0.80 mu_lo=0.41 mu_hi=0.94
+    math_bench_3: pi_hi=0.92 mu_lo=0.00 mu_hi=0.93
+    math_bench_4: pi_hi=0.95 mu_lo=0.24 mu_hi=0.94
