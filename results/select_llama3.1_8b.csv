@@ -1,0 +1,10 @@
+model,n_tasks,t1_load,regime,seed,cot_len_chars,base_output_truncated,realized_report_contains,realized_t2_in_cot,t1_correct
+llama3.1:8b,5,math_bench_1,cot,149,1579,0,1,1,0.75
+llama3.1:8b,5,math_bench_1,cot,149,3407,1,0,0,0.0
+llama3.1:8b,5,math_bench_1,direct,149,126,0,1,,0.25
+llama3.1:8b,5,math_bench_1,direct,149,131,0,1,,0.0
+llama3.1:8b,5,math_bench_2,cot,149,1033,0,1,1,0.5
+llama3.1:8b,5,math_bench_2,cot,149,1988,0,1,1,0.5
+llama3.1:8b,5,math_bench_2,direct,149,90,0,0,,0.5
+llama3.1:8b,5,math_bench_2,direct,149,517,0,0,,0.25
+llama3.1:8b,5,math_bench_3,cot,149,1464,0,1,1,0.25
