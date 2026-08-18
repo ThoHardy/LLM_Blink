@@ -12,3 +12,4 @@ results/confirm_*.log
 results/confirm_driver.log
 results/math_*.log
 results/select_*.log
+results/finalize_*.log
