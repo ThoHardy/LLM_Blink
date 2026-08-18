@@ -1,0 +1,33 @@
+
+===== gemma2:2b =====
+  [trivial] direct: t1=0.92 report_rate=0.88 (n=200) | cot: t1=0.83 report_rate=0.53 (n=200)
+  [semantic_2] direct: t1=0.51 report_rate=0.71 (n=200) | cot: t1=0.47 report_rate=0.54 (n=200)
+  [semantic_4] direct: t1=0.43 report_rate=0.75 (n=200) | cot: t1=0.41 report_rate=0.53 (n=200)
+  access/report level-2 (in CoT, not reported): 0.08 of 400 loaded cot trials
+  report_rate SHAPE: 60% of trials at the extremes (s<=1 or s>=k-1), 22% in the middle band -> graded / mixed
+  read-out: report_rate | in-CoT=0.84 vs | not-in-CoT=0.38 (gap +0.46 = ignition if large)
+  load -> pi (fraction in the reported mode): semantic_2: pi_hi=0.54 (n=197) | semantic_4: pi_hi=0.55 (n=196)
+  Tarone Z (overdispersion vs single rate/load): 184.1 (large = mixture/bimodal, not a single graded rate)
+  across-load mixture lens (pi-vs-mu; note a single U-Beta absorbs within-load bimodality): graded (no bimodality: Mfull does not beat M0)
+
+===== qwen2.5:3b =====
+  [trivial] direct: t1=0.98 report_rate=0.98 (n=200) | cot: t1=0.80 report_rate=0.88 (n=200)
+  [semantic_2] direct: t1=0.55 report_rate=0.96 (n=200) | cot: t1=0.49 report_rate=0.56 (n=200)
+  [semantic_4] direct: t1=0.47 report_rate=0.94 (n=200) | cot: t1=0.38 report_rate=0.51 (n=200)
+  access/report level-2 (in CoT, not reported): 0.12 of 400 loaded cot trials
+  report_rate SHAPE: 77% of trials at the extremes (s<=1 or s>=k-1), 11% in the middle band -> U-shaped / all-or-none
+  read-out: report_rate | in-CoT=0.83 vs | not-in-CoT=0.19 (gap +0.64 = ignition if large)
+  load -> pi (fraction in the reported mode): semantic_2: pi_hi=0.58 (n=197) | semantic_4: pi_hi=0.52 (n=193)
+  Tarone Z (overdispersion vs single rate/load): 224.5 (large = mixture/bimodal, not a single graded rate)
+  across-load mixture lens (pi-vs-mu; note a single U-Beta absorbs within-load bimodality): graded (no bimodality: Mfull does not beat M0)
+
+===== mistral:7b =====
+  [trivial] direct: t1=0.99 report_rate=0.98 (n=200) | cot: t1=0.85 report_rate=0.59 (n=200)
+  [semantic_2] direct: t1=0.56 report_rate=0.96 (n=200) | cot: t1=0.53 report_rate=0.39 (n=200)
+  [semantic_4] direct: t1=0.45 report_rate=0.88 (n=200) | cot: t1=0.38 report_rate=0.35 (n=200)
+  access/report level-2 (in CoT, not reported): 0.08 of 400 loaded cot trials
+  report_rate SHAPE: 31% of trials at the extremes (s<=1 or s>=k-1), 64% in the middle band -> graded / mixed
+  read-out: report_rate | in-CoT=0.50 vs | not-in-CoT=0.03 (gap +0.48 = ignition if large)
+  load -> pi (fraction in the reported mode): semantic_2: pi_hi=0.51 (n=200) | semantic_4: pi_hi=0.39 (n=199)
+  Tarone Z (overdispersion vs single rate/load): 79.5 (large = mixture/bimodal, not a single graded rate)
+  across-load mixture lens (pi-vs-mu; note a single U-Beta absorbs within-load bimodality): ambiguous

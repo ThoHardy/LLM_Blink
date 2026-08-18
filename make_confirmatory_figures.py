@@ -146,25 +146,46 @@ def stats(dfs, names, out):
                     (cot["realized_report_contains"] == 0)).mean()
             p(f"  access/report level-2 (in CoT, not reported): {lvl2:.2f} "
               f"of {len(cot)} loaded cot trials")
-        # mixture CV on report counts across loads (D2: pi vs mu with load)
-        cotp = cot[cot["report_k"].notna() & (cot["report_k"] > 0)]
-        conds = cotp["t1_load"].tolist()
-        if len(cotp) >= 60 and len(set(conds)) >= 2:
-            try:
-                cv = betabinom_mixture_cv(cotp["report_s"].values,
-                                          cotp["report_k"].values, conds,
-                                          strat=cotp["realized_report_contains"].values,
-                                          folds=5, seeds=3, boot=1000)
-                v = verdict_from_cv(cv)
-                z = overdispersion_z(cotp["report_s"].values,
-                                     cotp["report_k"].values, conds)
-                p(f"  report-stage mixture verdict: {v['call']}")
-                p(f"  Tarone Z (overdispersion): {z:.1f}")
-            except Exception as e:
-                p(f"  mixture: skipped ({e})")
-        else:
-            p(f"  mixture: need >=60 loaded cot trials over >=2 loads "
-              f"(have {len(cotp)})")
+        cotp = cot[cot["report_k"].notna() & (cot["report_k"] > 0)].copy()
+        if len(cotp):
+            k = cotp["report_k"].median()
+            s = cotp["report_s"].values
+            rr = s / cotp["report_k"].values
+            # (a) all-or-none signature: fraction of trials at the extremes
+            extreme = np.mean((s <= 1) | (s >= cotp["report_k"].values - 1))
+            middle = np.mean((s >= 0.25 * k) & (s <= 0.75 * k))
+            p(f"  report_rate SHAPE: {extreme:.0%} of trials at the extremes "
+              f"(s<=1 or s>=k-1), {middle:.0%} in the middle band "
+              f"-> {'U-shaped / all-or-none' if extreme > 0.6 else 'graded / mixed'}")
+            # (b) ignition gap: report_rate | in-CoT vs not-in-CoT (read-out locus)
+            inc = cotp["realized_t2_in_cot"] == 1
+            if inc.any() and (~inc).any():
+                p(f"  read-out: report_rate | in-CoT={rr[inc].mean():.2f} "
+                  f"vs | not-in-CoT={rr[~inc].mean():.2f} "
+                  f"(gap {rr[inc].mean() - rr[~inc].mean():+.2f} = ignition if large)")
+            # (c) does load move pi (the 'reported' pile fraction)?
+            pis = []
+            for load in LOADED:
+                sub = cotp[cotp["t1_load"] == load]
+                if len(sub):
+                    pi = np.mean(sub["report_s"].values >= sub["report_k"].values / 2)
+                    pis.append(f"{load}: pi_hi={pi:.2f} (n={len(sub)})")
+            p("  load -> pi (fraction in the reported mode): " + " | ".join(pis))
+            # (d) overdispersion + across-load mixture lens (pi-vs-mu, secondary)
+            conds = cotp["t1_load"].tolist()
+            if len(cotp) >= 60 and len(set(conds)) >= 2:
+                try:
+                    z = overdispersion_z(s, cotp["report_k"].values, conds)
+                    p(f"  Tarone Z (overdispersion vs single rate/load): {z['Z']:.1f} "
+                      f"(large = mixture/bimodal, not a single graded rate)")
+                    cv = betabinom_mixture_cv(s, cotp["report_k"].values, conds,
+                                              strat=cotp["realized_report_contains"].values,
+                                              folds=5, seeds=3, boot=1000)
+                    v = verdict_from_cv(cv)
+                    p(f"  across-load mixture lens (pi-vs-mu; note a single "
+                      f"U-Beta absorbs within-load bimodality): {v['call']}")
+                except Exception as e:
+                    p(f"  overdispersion/mixture: skipped ({e})")
     with open(out, "w") as f:
         f.write("\n".join(lines) + "\n")
     print("\nwrote", out)
