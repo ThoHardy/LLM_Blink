@@ -1,0 +1,12 @@
+
+===== qwen2.5:3b =====
+  [trivial] direct: t1=0.99 report_rate=0.98 (n=100) | cot: t1=0.81 report_rate=0.85 (n=100)
+  [math_bench_2] direct: t1=0.15 report_rate=0.91 (n=100) | cot: t1=0.33 report_rate=0.69 (n=100)
+  [math_bench_3] direct: t1=0.14 report_rate=0.89 (n=100) | cot: t1=0.30 report_rate=0.57 (n=100)
+  [math_bench_4] direct: t1=0.07 report_rate=0.88 (n=100) | cot: t1=0.19 report_rate=0.61 (n=100)
+  report SHAPE: 73% at extremes -> U-shaped / all-or-none
+  read-out gap: |in-CoT=0.84 vs |not-in-CoT=0.32 (+0.52)
+  Tarone Z: 182.2
+    math_bench_2: pi_hi=0.75 mu_lo=0.14 mu_hi=0.88
+    math_bench_3: pi_hi=0.52 mu_lo=0.22 mu_hi=0.89
+    math_bench_4: pi_hi=0.71 mu_lo=0.03 mu_hi=0.84

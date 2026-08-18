@@ -41,11 +41,24 @@ levels 1–4 for four candidates. Kept the models where **CoT clearly helps T1**
 
 | model | rows / 800 | state |
 |---|---|---|
-| qwen2.5:3b | in progress | running |
-| qwen2.5:7b | 0 | queued |
+| qwen2.5:3b | 800 | ✅ done |
+| qwen2.5:7b | in progress | running |
 | llama3.1:8b | 0 | queued |
 
 CSVs + figures are committed **per model as each finishes**, so this PR fills in
-progressively. Early partial read (qwen2.5:3b, n≈15/cell) already shows the
-pattern: CoT raises MATH T1 (L2 0.22→0.38, L3 0.13→0.38) and drops passphrase
-report (L4 0.87→0.54), U-shaped/all-or-none (78% at extremes), read-out gap +0.42.
+progressively; figures are regenerated from all completed models at each step.
+
+### qwen2.5:3b (n=100/cell) — done
+
+The paradox holds cleanly on the standard MATH benchmark:
+
+| load | T1 acc Direct→CoT | passphrase report Direct→CoT |
+|---|---|---|
+| math_bench_2 | 0.15 → **0.33** (CoT helps) | 0.91 → **0.69** (blink) |
+| math_bench_3 | 0.14 → **0.30** | 0.89 → **0.57** |
+| math_bench_4 | 0.07 → **0.19** | 0.88 → **0.61** |
+
+Read-out shape **U-shaped / all-or-none** (73% of cot trials at the extremes),
+ignition gap **+0.52** (report|in-CoT 0.84 vs |not-in-CoT 0.32), Tarone Z=182.
+Mixture (Mfull): the report mode **μ_high stays put** across load (0.88/0.89/0.84)
+while **π shifts** (0.75/0.52/0.71) — the ignition (all-or-none) signature.
