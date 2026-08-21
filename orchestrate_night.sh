@@ -50,7 +50,7 @@ commit "#18 §3.2-3.4: pre-flight results — truncation gate, budget sizing, lo
   $R/preflight_llama3.1_8b.csv $R/preflight_report.txt
 
 LOADS="trivial math_bench_2 math_bench_4 math_bench_5"
-for M in qwen2.5:0.5b qwen2.5:1.5b qwen2.5:3b qwen2.5:7b; do
+for M in qwen2.5:0.5b qwen2.5:1.5b qwen2.5:3b qwen2.5:7b qwen2.5:14b qwen2.5:32b; do
   SLUG=${M//:/_}
   say "Campaign A: $M START"
   $PY -B LLM_Blink/probe_pilot.py --model "$M" \
@@ -70,4 +70,4 @@ for M in qwen2.5:0.5b qwen2.5:1.5b qwen2.5:3b qwen2.5:7b; do
     "$R/scale_stats.txt" $R/fig2_slopegraph.png $R/fig3_blink_vs_size.png \
     $R/fig6_border_hists.png $R/fig7_leaderboards.png $R/campaignA_${SLUG}.log
 done
-say "Campaign A ladder (through 7b) COMPLETE"
+say "Campaign A ladder COMPLETE (all requested models)"
