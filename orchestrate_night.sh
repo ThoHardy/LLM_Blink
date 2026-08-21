@@ -17,10 +17,13 @@ LOG=$R/orchestrate.log
 
 say() { echo "[$(date '+%H:%M:%S')] $*" | tee -a $LOG; }
 
-commit() {   # commit "<message>" file...
+REPO=/Users/ulysse/__projects__/LLM_Blink
+commit() {   # commit "<message>" file...   (paths are LLM_Blink/-prefixed; git runs in REPO)
   local msg="$1"; shift
-  git add "$@" 2>/dev/null
-  git commit -q -m "$msg
+  local rel=(); local p
+  for p in "$@"; do rel+=("${p#LLM_Blink/}"); done
+  git -C "$REPO" add "${rel[@]}" 2>/dev/null
+  git -C "$REPO" commit -q -m "$msg
 
 Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>" 2>&1 | tail -1 | tee -a $LOG
 }
