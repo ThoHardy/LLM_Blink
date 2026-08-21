@@ -18,6 +18,15 @@
     math_bench_4     direct  trunc= 0.00% (trials=100)
     math_bench_5     cot     trunc= 0.00% (trials=100)
     math_bench_5     direct  trunc= 0.00% (trials=100)
+[qwen2.5:3b]  quant=Q4_K_M
+    trivial          cot     trunc= 0.00% (trials=100)
+    trivial          direct  trunc= 0.00% (trials=100)
+    math_bench_2     cot     trunc= 0.05% (trials=100)
+    math_bench_2     direct  trunc= 0.00% (trials=100)
+    math_bench_4     cot     trunc= 0.10% (trials=100)
+    math_bench_4     direct  trunc= 0.00% (trials=100)
+    math_bench_5     cot     trunc= 0.05% (trials=100)
+    math_bench_5     direct  trunc= 0.00% (trials=100)
 
 worst cell truncation across all models: 1.15%
 
@@ -33,3 +42,7 @@ qwen2.5:1.5b qwen2.5       1.5      trivial       100    100         0.4895     
 qwen2.5:1.5b qwen2.5       1.5 math_bench_2       100    100         0.4395      0.3255  0.1140      0.5565          0.384500          0.495000       0.300000       0.351500      1
 qwen2.5:1.5b qwen2.5       1.5 math_bench_4       100    100         0.4090      0.2730  0.1360      0.5400          0.354000          0.464012       0.247500       0.300012      1
 qwen2.5:1.5b qwen2.5       1.5 math_bench_5       100    100         0.3930      0.2735  0.1195      0.5355          0.343488          0.444012       0.248000       0.300012      1
+  qwen2.5:3b qwen2.5       3.0      trivial       100    100         0.9805      0.8820  0.0985      0.8770          0.966500          0.993000       0.850987       0.910500      0
+  qwen2.5:3b qwen2.5       3.0 math_bench_2       100    100         0.9065      0.6520  0.2545      0.6345          0.857488          0.949500       0.606500       0.696000      0
+  qwen2.5:3b qwen2.5       3.0 math_bench_4       100    100         0.8830      0.6250  0.2580      0.6230          0.829500          0.930500       0.581500       0.669500      0
+  qwen2.5:3b qwen2.5       3.0 math_bench_5       100    100         0.9095      0.5470  0.3625      0.5865          0.866988          0.948000       0.505000       0.589013      0
