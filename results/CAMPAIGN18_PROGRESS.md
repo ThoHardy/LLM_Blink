@@ -84,7 +84,38 @@ Qwen2.5 ladder, ascending, 8 cells {trivial, math_bench_2/4/5} × {direct, cot},
 `--keep-logs`. Committed per model as it lands. See `scale_stats.txt` (truncation
 gate first) and `fig3_blink_vs_size.png` / `fig2` / `fig6` / `fig7`.
 
-*(This section is updated by the orchestrator as each model finishes.)*
+**Pace reality (important).** On this Mac each trial costs base + 20 resamples,
+batched 8-wide (server `OLLAMA_NUM_PARALLEL=8`): ≈ 13 s/trial for `0.5b`, ≈ 30
+s/trial for `1.5b` (it rambles longer on MATH). So a single model is 3–7 h of
+wall-clock and **the full Qwen ladder is a multi-night job** — exactly the §9
+expectation (~96 k generations for Qwen alone). The orchestrator runs ascending
+and commits each model as it finishes, so the ladder is readable as it fills and
+resumes across nights. **The scientifically informative MATH points are 7B+**
+(sub-7B is math-floored, §3.4), so the first night yields the floor anchors and
+the pipeline proof; the rising/peak region lands on subsequent runs. *If you want
+to reach 7B/14B in one night, the lever is server parallelism (`OLLAMA_NUM_PARALLEL`
+↑) — I left it untouched rather than restart a shared server unsupervised.*
+
+### Completed
+
+**`qwen2.5:0.5b`** (committed) — truncation gate **PASSED** (worst cell 1.16 % at
+8192, all < 2 %). Report rates and blink (`report_direct − report_cot`):
+
+| load | report direct | report cot | blink | access cot | flag |
+|---|---|---|---|---|---|
+| trivial | 0.43 | 0.11 | 0.32 | 0.18 | **floor** |
+| math_bench_2 | 0.34 | 0.09 | 0.25 | 0.31 | **floor** |
+| math_bench_4 | 0.28 | 0.08 | 0.21 | 0.32 | **floor** |
+| math_bench_5 | 0.28 | 0.07 | 0.21 | 0.30 | **floor** |
+
+Every cell is floor-flagged (`report_direct < 0.8`): `0.5b` follows the copy
+instruction only ~40 % of the time even in `direct`, so its large apparent blink
+is the compressed-ceiling artefact the issue calls out — **annotated, not read as
+a real effect.** C1 and the §8.3 rank-2 check run clean on it but are (correctly)
+null/degenerate at floor. This model's value is the fig-3 left anchor and the
+end-to-end pipeline proof.
+
+*(Updated as each model finishes; `scale_stats.txt` has the authoritative live table.)*
 
 ---
 
