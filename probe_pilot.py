@@ -188,6 +188,7 @@ def run_full(args):
         cfg = TrialConfig(n_tasks=args.n_tasks, naming=args.naming,
                           t1_load=eff_load, regime=regime,
                           passphrase_last=args.passphrase_last,
+                          passphrase_rank=args.passphrase_rank,
                           anti_enumeration=args.anti_enumeration,
                           report_order=args.report_order,
                           load_engagement=args.load_engagement, seed=seed)
@@ -370,6 +371,11 @@ def main():
     p.add_argument("--naming", default="non-ordered")
     p.add_argument("--passphrase-last", dest="passphrase_last",
                    action="store_true", default=True)
+    p.add_argument("--passphrase-rank", dest="passphrase_rank", type=int,
+                   default=None,
+                   help="issue #18 §5 (Campaign B): fix the passphrase's 1-indexed "
+                        "stream rank (1..n_tasks); overrides --passphrase-last. Use "
+                        "a distinct --out per rank so resume keys don't collide.")
     p.add_argument("--anti-enumeration", dest="anti_enumeration",
                    action="store_true", default=True)
     p.add_argument("--report-order", dest="report_order", default="none",
