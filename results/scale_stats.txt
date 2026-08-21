@@ -1,0 +1,22 @@
+## §2.1 truncation gate (a cell > 2% is FAILED — re-run bigger)
+
+[qwen2.5:0.5b]  quant=Q4_K_M
+    trivial          cot     trunc= 0.10% (trials=100)
+    trivial          direct  trunc= 0.05% (trials=100)
+    math_bench_2     cot     trunc= 0.60% (trials=100)
+    math_bench_2     direct  trunc= 0.10% (trials=100)
+    math_bench_4     cot     trunc= 1.15% (trials=100)
+    math_bench_4     direct  trunc= 0.20% (trials=100)
+    math_bench_5     cot     trunc= 0.95% (trials=100)
+    math_bench_5     direct  trunc= 0.60% (trials=100)
+
+worst cell truncation across all models: 1.15%
+
+
+## per model x load (report rates, blink, access)
+
+       model  family  params_b         load  n_direct  n_cot  report_direct  report_cot  blink  access_cot  report_direct_lo  report_direct_hi  report_cot_lo  report_cot_hi  floor
+qwen2.5:0.5b qwen2.5       0.5      trivial       100    100         0.4270      0.1050 0.3220      0.1835          0.395487          0.460000       0.090000         0.1210      1
+qwen2.5:0.5b qwen2.5       0.5 math_bench_2       100    100         0.3385      0.0885 0.2500      0.3115          0.307000          0.372012       0.074500         0.1040      1
+qwen2.5:0.5b qwen2.5       0.5 math_bench_4       100    100         0.2810      0.0750 0.2060      0.3170          0.253000          0.308000       0.064000         0.0865      1
+qwen2.5:0.5b qwen2.5       0.5 math_bench_5       100    100         0.2750      0.0655 0.2095      0.3035          0.244500          0.303512       0.054487         0.0780      1
