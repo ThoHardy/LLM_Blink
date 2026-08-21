@@ -26,10 +26,17 @@ Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>" 2>&1 | tail -1 | tee -a
 }
 
 say "orchestrator start; waiting for pre-flight to finish"
-while ! grep -q "preflight ALL DONE" $R/preflight_run.log 2>/dev/null; do
+while true; do
+  grep -q "preflight ALL DONE" $R/preflight_run.log 2>/dev/null && { say "pre-flight ALL DONE"; break; }
+  # robustness: if the pre-flight driver process is gone, proceed anyway — Campaign A
+  # has its own per-cell truncation gate, and we must not hang the night on a partial
+  # pre-flight (a model that died mid-scan still leaves usable titration for the rest).
+  if ! pgrep -f preflight_driver.sh >/dev/null 2>&1; then
+    say "pre-flight process gone (no ALL DONE) — proceeding; Campaign A self-gates truncation"
+    break
+  fi
   sleep 60
 done
-say "pre-flight done"
 
 # §3 report
 $PY -B LLM_Blink/preflight_analyze.py > $R/preflight_report.txt 2>&1 || true
