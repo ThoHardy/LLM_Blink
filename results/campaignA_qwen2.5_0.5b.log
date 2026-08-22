@@ -170,3 +170,7 @@
     trivial          cot     trunc= 0.10% (n_samples=1960)
     trivial          direct  trunc= 0.05% (n_samples=1960)
 [probe_pilot:full] done: 788 new trials in 9998s; worst-cell truncation 1.16%
+[probe_pilot:full] qwen2.5:0.5b (quant='Q4_K_M'): 800 cells, 800 done, K=20, max_new_tokens=8192, report_order=none, load_engagement=solve
+
+[probe_pilot:full] per-cell truncation (>2% = FAILED cell, re-run bigger):
+[probe_pilot:full] done: 0 new trials in 0s; worst-cell truncation 0.00%
