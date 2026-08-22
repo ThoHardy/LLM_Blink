@@ -58,7 +58,7 @@ for M in qwen2.5:0.5b qwen2.5:1.5b qwen2.5:3b qwen2.5:7b qwen2.5:14b qwen2.5:32b
     --n-tasks 5 --n-seeds 100 \
     --resample-full 20 --report-forks 0 --access on \
     --base-temp 1.0 --budget none --max-new-tokens 8192 \
-    --n-workers 8 --keep-logs \
+    --n-workers 16 --keep-logs \
     --out "$R/scale_${SLUG}.csv" >> $R/campaignA_${SLUG}.log 2>&1
   say "Campaign A: $M DONE"
 
