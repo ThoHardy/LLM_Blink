@@ -20,7 +20,13 @@ regenerated as the ladder fills (`scale_stats.txt`, `fig{2,3,6,7}`).*
    `math_bench_2/4/5`), so the small end of the ladder is floor-compressed on the
    math loads — its blink there is an artefact to annotate (like `qwen2.5:0.5b`),
    and the real MATH titration window only opens at 7B+.
-4. **Campaign A is running**, Qwen2.5 ascending, committing per model.
+4. **Campaign A result (5/6 Qwen rungs in, 32b running):** the blink **shrinks
+   with scale and is gone by 14B** — clean-ladder blink at the hardest MATH load
+   falls 3b 0.36 → 7b 0.27 → 14b ≈ 0, while within each model it grows with load
+   hardness (position-clean, §8.2). This leans **monotone-decreasing**, not an
+   interior peak — a legitimate, reportable outcome — with the one nuance that 3b
+   could be the peak if the floor-compressed 0.5b/1.5b hide the left-hand rise.
+   See the "Result so far" section below.
 5. **Campaigns B/C/D:** the tooling for B (position × report-order) is in
    (`--passphrase-rank`, plus the already-wired `--report-order` / `load_engagement`
    T1-ignore arm). C2 (filler reasoning packets) and the 9 D mitigation arms are
