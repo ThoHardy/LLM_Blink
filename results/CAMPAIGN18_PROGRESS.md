@@ -92,30 +92,52 @@ expectation (~96 k generations for Qwen alone). The orchestrator runs ascending
 and commits each model as it finishes, so the ladder is readable as it fills and
 resumes across nights. **The scientifically informative MATH points are 7B+**
 (sub-7B is math-floored, §3.4), so the first night yields the floor anchors and
-the pipeline proof; the rising/peak region lands on subsequent runs. *If you want
-to reach 7B/14B in one night, the lever is server parallelism (`OLLAMA_NUM_PARALLEL`
-↑) — I left it untouched rather than restart a shared server unsupervised.*
+the pipeline proof; the rising/peak region lands on subsequent runs. *(Update: on
+day 3, with Ulysse's OK, the server was restarted at `OLLAMA_NUM_PARALLEL=16` with
+`OLLAMA_CONTEXT_LENGTH=12288` — the prompt is only ~971 tok so a 32k context was
+pure waste; shrinking it freed enough KV cache to double parallelism while cutting
+14b memory 60→47 GB. ~1.3× faster and much safer memory for the 32b rung.)*
 
-### Completed
+### Result so far — the blink shrinks with scale and is GONE by 14B
 
-**`qwen2.5:0.5b`** (committed) — truncation gate **PASSED** (worst cell 1.16 % at
-8192, all < 2 %). Report rates and blink (`report_direct − report_cot`):
+Five of six Qwen2.5 rungs are in (0.5b → 14b); **32b is running** (~half done).
+All passed the §2.1 truncation gate (worst cell ≤ 1.16 %, most 0.00 %). Blink =
+`report_direct − report_cot`, `passphrase_last` held fixed:
 
-| load | report direct | report cot | blink | access cot | flag |
+| model | blink trivial | blink math_2 | blink math_4 | **blink math_5** | clean? |
 |---|---|---|---|---|---|
-| trivial | 0.43 | 0.11 | 0.32 | 0.18 | **floor** |
-| math_bench_2 | 0.34 | 0.09 | 0.25 | 0.31 | **floor** |
-| math_bench_4 | 0.28 | 0.08 | 0.21 | 0.32 | **floor** |
-| math_bench_5 | 0.28 | 0.07 | 0.21 | 0.30 | **floor** |
+| 0.5b | 0.32 | 0.25 | 0.21 | 0.21 | **floor artefact** |
+| 1.5b | −0.02 | 0.11 | 0.14 | (floor) | **floor artefact** |
+| 3b | 0.10 | 0.25 | 0.26 | **0.36** | clean |
+| 7b | 0.02 | 0.22 | 0.24 | **0.27** | clean |
+| 14b | 0.007 | ~0 | ~0 | **−0.002** | clean |
 
-Every cell is floor-flagged (`report_direct < 0.8`): `0.5b` follows the copy
-instruction only ~40 % of the time even in `direct`, so its large apparent blink
-is the compressed-ceiling artefact the issue calls out — **annotated, not read as
-a real effect.** C1 and the §8.3 rank-2 check run clean on it but are (correctly)
-null/degenerate at floor. This model's value is the fig-3 left anchor and the
-end-to-end pipeline proof.
+**Two things to read off this:**
 
-*(Updated as each model finishes; `scale_stats.txt` has the authoritative live table.)*
+1. **Within-model, blink grows with load hardness** (e.g. 3b: 0.10 → 0.36 as MATH
+   gets harder, passphrase position identical) — the §8.2 position-clean evidence
+   for capacity competition. Holds at every clean size.
+2. **Across scale, the blink falls monotonically over the clean points**
+   (3b 0.36 → 7b 0.27 → 14b ≈ 0) and is **abolished by 14B**: CoT no longer costs
+   the passphrase at all (14b math_5 cot 0.994 vs direct 0.992).
+
+**Floor caveat (§3.4).** 0.5b and 1.5b report the passphrase < 0.8 even in `direct`
+(compressed ceiling), so their apparent blink is an artefact, annotated, *not* a
+real rise on the left of the curve.
+
+**What this says about the §4 headline prediction.** The prediction was an
+*interior peak* (capacity competition). The clean data are **monotone decreasing
+from the smallest clean model (3b) to zero at 14b** — which, per the issue's own
+falsification table, leans toward *"large models just follow instructions
+better"* rather than an interior peak, **unless** 3b is itself the intermediate
+peak with the true left-hand rise hidden under the floor-compressed 0.5b/1.5b
+(unmeasurable cleanly). Either reading is a legitimate, reportable outcome (the
+issue's "hard caveat" allows for it). **32b will confirm the tail** (expected ≈ 0);
+whether the peak is "interior at 3b" or "monotone" is the one open nuance, and it
+turns on the floor models we cannot de-confound on the report axis.
+
+*(`scale_stats.txt` is the authoritative live table; `fig3_blink_vs_size.png` the
+curve. Both auto-refresh per model.)*
 
 ---
 
