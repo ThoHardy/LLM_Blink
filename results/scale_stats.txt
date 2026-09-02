@@ -9,6 +9,15 @@
     math_bench_4     direct  trunc= 0.00% (trials=100)
     math_bench_5     cot     trunc= 0.10% (trials=100)
     math_bench_5     direct  trunc= 0.00% (trials=100)
+[gemma3:1b]  quant=Q4_K_M
+    trivial          cot     trunc= 0.00% (trials=100)
+    trivial          direct  trunc= 0.00% (trials=100)
+    math_bench_2     cot     trunc= 0.05% (trials=100)
+    math_bench_2     direct  trunc= 0.00% (trials=100)
+    math_bench_4     cot     trunc= 0.05% (trials=100)
+    math_bench_4     direct  trunc= 0.00% (trials=100)
+    math_bench_5     cot     trunc= 0.05% (trials=100)
+    math_bench_5     direct  trunc= 0.00% (trials=100)
 [qwen2.5:0.5b]  quant=Q4_K_M
     trivial          cot     trunc= 0.10% (trials=100)
     trivial          direct  trunc= 0.05% (trials=100)
@@ -78,6 +87,10 @@ qwen2.5:0.5b qwen2.5      0.50      trivial       100    100         0.4270     
 qwen2.5:0.5b qwen2.5      0.50 math_bench_2       100    100         0.3385      0.0885  0.2500      0.3115          0.307000          0.372012       0.074500       0.104000      1
 qwen2.5:0.5b qwen2.5      0.50 math_bench_4       100    100         0.2810      0.0750  0.2060      0.3170          0.253000          0.308000       0.064000       0.086500      1
 qwen2.5:0.5b qwen2.5      0.50 math_bench_5       100    100         0.2750      0.0655  0.2095      0.3035          0.244500          0.303512       0.054487       0.078000      1
+   gemma3:1b  gemma3      1.00      trivial       100    100         0.1930      0.1770  0.0160      0.3695          0.164500          0.225500       0.154988       0.199500      1
+   gemma3:1b  gemma3      1.00 math_bench_2       100    100         0.0450      0.1515 -0.1065      0.3830          0.029000          0.062000       0.134487       0.169500      1
+   gemma3:1b  gemma3      1.00 math_bench_4       100    100         0.0455      0.1475 -0.1020      0.3975          0.026500          0.068500       0.128500       0.166012      1
+   gemma3:1b  gemma3      1.00 math_bench_5       100    100         0.0545      0.1670 -0.1125      0.3840          0.034500          0.078000       0.145487       0.191000      1
 qwen2.5:1.5b qwen2.5      1.50      trivial       100    100         0.4895      0.5130 -0.0235      0.6105          0.436988          0.539000       0.486500       0.539013      1
 qwen2.5:1.5b qwen2.5      1.50 math_bench_2       100    100         0.4395      0.3255  0.1140      0.5565          0.384500          0.495000       0.300000       0.351500      1
 qwen2.5:1.5b qwen2.5      1.50 math_bench_4       100    100         0.4090      0.2730  0.1360      0.5400          0.354000          0.464012       0.247500       0.300012      1

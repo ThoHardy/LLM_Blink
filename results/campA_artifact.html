@@ -1,0 +1,393 @@
+<title>CoT-Induced Blindness</title>
+<meta name="description" content="Campaign A across model families — does chain-of-thought drop a bundled simple instruction, and does the trade vanish with scale?">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --bg:#F7F8FA; --surface:#FFFFFF; --surface-2:#F1F3F6;
+  --ink:#131922; --muted:#586373; --faint:#8B96A5; --line:#E1E6EC;
+  --accent:#25455E; --accent-soft:#EAF0F5;
+  --qwen:#2F6DB0; --gemma3:#3F9268; --gemma2:#8A5AA8; --mistral:#C25A3C;
+  --good:#2F7D57; --warn:#B8791C; --bad:#BD4B3B;
+  --shadow:0 1px 2px rgba(20,30,45,.05),0 6px 24px rgba(20,30,45,.06);
+}
+:root:not([data-theme="light"]){ @media (prefers-color-scheme:dark){
+  --bg:#0F1318; --surface:#161C24; --surface-2:#1D242E;
+  --ink:#E8EDF3; --muted:#98A4B3; --faint:#6C7887; --line:#28303A;
+  --accent:#8FB3CC; --accent-soft:#1A2531;
+  --qwen:#5192CE; --gemma3:#46A876; --gemma2:#A981C4; --mistral:#D67348;
+  --good:#4FB07E; --warn:#D6A34A; --bad:#E0785F;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 30px rgba(0,0,0,.35);
+}}
+:root[data-theme="dark"]{
+  --bg:#0F1318; --surface:#161C24; --surface-2:#1D242E;
+  --ink:#E8EDF3; --muted:#98A4B3; --faint:#6C7887; --line:#28303A;
+  --accent:#8FB3CC; --accent-soft:#1A2531;
+  --qwen:#5192CE; --gemma3:#46A876; --gemma2:#A981C4; --mistral:#D67348;
+  --good:#4FB07E; --warn:#D6A34A; --bad:#E0785F;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 30px rgba(0,0,0,.35);
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);
+  font-family:"IBM Plex Sans",system-ui,sans-serif;line-height:1.55;
+  -webkit-font-smoothing:antialiased;margin:0;}
+.wrap{max-width:1040px;margin:0 auto;padding:0 24px 96px;}
+.mono{font-family:"IBM Plex Mono",ui-monospace,monospace;font-variant-numeric:tabular-nums;}
+h1,h2,h3{font-family:"IBM Plex Serif",Georgia,serif;text-wrap:balance;letter-spacing:-.01em;}
+
+header{padding:60px 0 34px;border-bottom:1px solid var(--line);margin-bottom:40px;}
+.eyebrow{font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--accent);font-weight:500;}
+h1{font-size:clamp(34px,5.5vw,54px);font-weight:600;margin:.28em 0 .18em;line-height:1.03;}
+.lede{font-size:19px;color:var(--muted);max-width:64ch;margin:0;}
+.runbar{display:flex;flex-wrap:wrap;gap:8px 10px;margin-top:26px;}
+.chip{font-family:"IBM Plex Mono",monospace;font-size:12.5px;color:var(--muted);
+  background:var(--surface-2);border:1px solid var(--line);border-radius:999px;
+  padding:5px 12px;}
+.chip b{color:var(--ink);font-weight:500;}
+
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin:34px 0 4px;}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:14px;
+  padding:20px 22px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:6px;}
+.stat-num{font-family:"IBM Plex Mono",monospace;font-size:34px;font-weight:500;
+  color:var(--ink);letter-spacing:-.02em;}
+.stat-cap{font-size:13.5px;color:var(--muted);line-height:1.4;}
+
+section{margin-top:64px;}
+.kicker{font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--faint);margin-bottom:6px;}
+h2{font-size:27px;font-weight:600;margin:0 0 6px;}
+.sub{color:var(--muted);max-width:70ch;margin:0 0 22px;font-size:15.5px;}
+
+figure{margin:0;background:var(--surface);border:1px solid var(--line);border-radius:16px;
+  padding:22px 20px 16px;box-shadow:var(--shadow);}
+.legend{display:flex;flex-wrap:wrap;gap:16px;margin:4px 4px 14px;align-items:center;}
+.lg{display:inline-flex;align-items:center;gap:8px;font-size:13.5px;color:var(--muted);}
+.lg svg{overflow:visible;flex:none;}
+.lg-note{margin-left:auto;font-size:12.5px;color:var(--faint);}
+figcaption{font-size:13px;color:var(--muted);margin-top:14px;padding-top:12px;
+  border-top:1px solid var(--line);line-height:1.5;}
+.chartbox{width:100%;overflow-x:auto;}
+svg.chart{display:block;width:100%;height:auto;font-family:"IBM Plex Mono",monospace;}
+.axis line,.axis path{stroke:var(--line);}
+.grid line{stroke:var(--line);stroke-dasharray:2 4;opacity:.7;}
+.tick{fill:var(--faint);font-size:11px;}
+.axlabel{fill:var(--muted);font-size:12px;font-family:"IBM Plex Sans",sans-serif;}
+.ptlabel{font-size:11px;font-weight:500;font-family:"IBM Plex Sans",sans-serif;}
+.tip{position:fixed;pointer-events:none;z-index:10;background:var(--surface);
+  border:1px solid var(--line);border-radius:9px;padding:8px 11px;font-size:12.5px;
+  box-shadow:var(--shadow);opacity:0;transition:opacity .1s;max-width:240px;}
+.tip .tt{font-family:"IBM Plex Mono",monospace;color:var(--ink);font-weight:500;}
+.tip .td{color:var(--muted);}
+
+table{width:100%;border-collapse:collapse;font-size:13.5px;}
+.tablebox{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:var(--surface);box-shadow:var(--shadow);}
+th,td{padding:9px 12px;text-align:right;white-space:nowrap;border-bottom:1px solid var(--line);}
+th:first-child,td:first-child{text-align:left;}
+th:nth-child(2),td:nth-child(2){text-align:left;}
+thead th{position:sticky;top:0;background:var(--surface);cursor:pointer;user-select:none;
+  font-weight:600;color:var(--muted);font-size:11.5px;letter-spacing:.03em;
+  text-transform:uppercase;border-bottom:2px solid var(--line);}
+thead th:hover{color:var(--ink);}
+thead th.sorted::after{content:" ▾";color:var(--accent);}
+thead th.asc.sorted::after{content:" ▴";}
+tbody tr:last-child td{border-bottom:none;}
+tbody tr:hover{background:var(--surface-2);}
+td.num{font-family:"IBM Plex Mono",monospace;}
+.dot{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:7px;vertical-align:middle;}
+.flag{font-family:"IBM Plex Mono",monospace;font-size:10.5px;padding:1px 6px;border-radius:5px;
+  border:1px solid transparent;}
+.flag.floor{color:var(--warn);border-color:var(--warn);}
+.pos{color:var(--bad);}.neg{color:var(--good);}
+.controls{display:flex;gap:14px;align-items:center;margin-bottom:14px;font-size:14px;color:var(--muted);}
+.controls label{display:inline-flex;gap:7px;align-items:center;cursor:pointer;}
+.notes{columns:2;column-gap:34px;}
+.note{break-inside:avoid;margin-bottom:18px;}
+.note h3{font-size:15.5px;font-family:"IBM Plex Sans",sans-serif;font-weight:600;margin:0 0 3px;}
+.note p{margin:0;font-size:14px;color:var(--muted);}
+.note .tag{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--accent);
+  letter-spacing:.06em;text-transform:uppercase;}
+footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--line);
+  font-size:12.5px;color:var(--faint);font-family:"IBM Plex Mono",monospace;line-height:1.7;}
+@media (max-width:680px){.notes{columns:1;}.lg-note{margin-left:0;width:100%;}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;}}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px;}
+</style>
+
+<div class="wrap">
+<header>
+  <div class="eyebrow">LLM_Blink · Campaign A · resample-full read-out</div>
+  <h1>CoT-Induced Blindness</h1>
+  <p class="lede">Chain-of-thought buys accuracy on the reasoning tasks while it drops a
+  bundled simple instruction — the passphrase to copy. Campaign A measures the trade
+  within model families, both borders, twenty full regenerations per trial, and asks
+  whether it survives scale.</p>
+  <div class="runbar">
+    <span class="chip">families <b>Qwen2.5 · Gemma3</b></span>
+    <span class="chip">models <b>8</b></span>
+    <span class="chip">design <b>k=5 · passphrase last · T=1 · budget none</b></span>
+    <span class="chip">read-out <b>K=20 full regen · both borders</b></span>
+    <span class="chip">trials <b>6,400</b></span>
+    <span class="chip">worst-cell trunc <b>0.78%</b></span>
+    <span class="chip">updated <b>2026-09-02 09:00 UTC</b></span>
+  </div>
+</header>
+
+<div class="stats">
+  <div class="stat"><span class="stat-num">+0.270</span><span class="stat-cap">largest blink — qwen2.5:7b · report 0.99→0.72</span></div>
+  <div class="stat"><span class="stat-num">+0.46</span><span class="stat-cap">largest MATH gain from CoT — qwen2.5:7b · acc 0.30→0.76</span></div>
+  <div class="stat">
+    <span class="stat-num" id="scaleStat">—</span>
+    <span class="stat-cap">blink at each family's largest model (pooled MATH). The trade
+    thins toward the top of a ladder.</span>
+  </div>
+</div>
+
+<section id="finding">
+  <div class="kicker">Fig 1 — the finding</div>
+  <h2>Blink versus model size, within family</h2>
+  <p class="sub">Blink = passphrase report rate under Direct minus under CoT (pooled over the
+  three MATH loads). Hollow markers are models whose load tasks sit on the floor in Direct —
+  no reasoning demand for CoT to help with, so their apparent blink is a compressed range,
+  not a trade. Read the solid points.</p>
+  <figure>
+    <div class="legend" id="legend1"></div>
+    <div class="chartbox"><svg class="chart" id="chart1" viewBox="0 0 900 440" role="img"
+      aria-label="Blink versus model parameters on a log axis, one line per family"></svg></div>
+    <figcaption>x: parameters (billions, log scale). y: blink. Above zero = CoT suppresses the
+    passphrase. A line that descends to zero is a family whose largest members pay the CoT
+    cost on reasoning without dropping the instruction.</figcaption>
+  </figure>
+</section>
+
+<section id="dissociation">
+  <div class="kicker">Fig 2 — the dissociation</div>
+  <h2>The two effects move together, then come apart</h2>
+  <p class="sub">Each point is one model (pooled MATH). Horizontal: how much CoT lifts load
+  accuracy. Vertical: how much it drops the passphrase. Up-and-right is the trade in full
+  force; sliding down to the baseline while staying right is a model that still pays for CoT
+  on reasoning but no longer drops the instruction — the informative null.</p>
+  <figure>
+    <div class="legend" id="legend2"></div>
+    <div class="chartbox"><svg class="chart" id="chart2" viewBox="0 0 900 440" role="img"
+      aria-label="Passphrase report drop versus MATH accuracy gain under chain-of-thought, one point per model"></svg></div>
+    <figcaption>Marker size grows with parameter count. Hollow = load-floor model. The
+    baseline (y=0) is no blink; the right edge is where CoT does the most reasoning work.</figcaption>
+  </figure>
+</section>
+
+<section id="cells">
+  <div class="kicker">Every cell</div>
+  <h2>The full table</h2>
+  <p class="sub">One row per model × load. Click a heading to sort. Report and access are means
+  over trials of s/K (K=20). Load acc. is the fraction of the four MATH tasks answered,
+  averaged over the same regenerations. A cell is <span class="flag floor">floor</span>-flagged
+  when Direct load accuracy is below 0.10.</p>
+  <div class="controls">
+    <label><input type="checkbox" id="hideFloor"> Hide load-floor cells</label>
+  </div>
+  <div class="tablebox"><table id="cellTable"><thead></thead><tbody></tbody></table></div>
+</section>
+
+<section id="limits">
+  <div class="kicker">Reading &amp; limits</div>
+  <h2>What the run can and cannot settle</h2>
+  <div class="notes">
+    <div class="note"><span class="tag">Position</span>
+      <h3>The target is always last</h3>
+      <p>Every cell runs passphrase-last, so “the bundled simple task is dropped” and “the last
+      task is dropped” are the same number. The load axis is the only position-clean contrast
+      here.</p></div>
+    <div class="note"><span class="tag">Family</span>
+      <h3>Mistral is not one lineage</h3>
+      <p>The Mistral “ladder” pools Mistral-7B, Mistral-Nemo-12B and Mistral-Small-24B —
+      different architectures, not one family scaled. Its size axis is suggestive, not a clean
+      within-lineage sweep the way Qwen2.5 and Gemma3 are.</p></div>
+    <div class="note"><span class="tag">Read-out</span>
+      <h3>Both borders, full regeneration</h3>
+      <p>Every trial is regenerated K=20 times from the start of the assistant turn, so entry
+      (passphrase in the chain of thought) and report (passphrase in the answer) each get a
+      per-trial distribution, from the same trajectories.</p></div>
+    <div class="note"><span class="tag">Matcher</span>
+      <h3>Entry rests on a string match</h3>
+      <p>An allusive mention of the copy task that never quotes the phrase scores as non-entry.
+      A position-correlated false-negative rate would deform the entry column specifically.</p></div>
+  </div>
+</section>
+
+<footer>
+  Source: results/scale_&lt;family&gt;_&lt;size&gt;b.csv · figures results/fig{2,3,6,7}.png · stats
+  results/scale_stats.txt · generator LLM_Blink/make_campA_artifact.py<br>
+  Read-out: resample-full (issue #18 §2.3), K full regenerations, both borders on the same
+  trajectories. Budget none, no silent truncation (§2.1 gate). Generated 2026-09-02 09:00 UTC.
+</footer>
+</div>
+
+<div class="tip" id="tip"></div>
+<script type="application/json" id="payload">{"meta": {"families": ["Qwen2.5", "Gemma3"], "n_models": 8, "total_trials": 6400, "worst_trunc": 0.78, "n_seeds": 100, "K": 20, "generated": "2026-09-02 09:00 UTC"}, "families": [{"name": "qwen2.5", "label": "Qwen2.5", "cl": "#2F6DB0", "cd": "#5192CE", "marker": "circle", "dash": "", "points": [{"size": 0.5, "model": "qwen2.5:0.5b", "blink": 0.2218, "acc_gain": -0.0022, "floor": 1}, {"size": 1.5, "model": "qwen2.5:1.5b", "blink": 0.1232, "acc_gain": 0.0369, "floor": 1}, {"size": 3.0, "model": "qwen2.5:3b", "blink": 0.2917, "acc_gain": 0.1333, "floor": 0}, {"size": 7.0, "model": "qwen2.5:7b", "blink": 0.2447, "acc_gain": 0.3504, "floor": 0}, {"size": 14.0, "model": "qwen2.5:14b", "blink": -0.0018, "acc_gain": 0.2697, "floor": 0}, {"size": 32.0, "model": "qwen2.5:32b", "blink": 0.0008, "acc_gain": 0.2581, "floor": 0}]}, {"name": "gemma3", "label": "Gemma3", "cl": "#3F9268", "cd": "#46A876", "marker": "square", "dash": "5 3", "points": [{"size": 0.27, "model": "gemma3:0.27b", "blink": -0.0647, "acc_gain": 0.0, "floor": 1}, {"size": 1.0, "model": "gemma3:1b", "blink": -0.107, "acc_gain": -0.0048, "floor": 1}]}], "cells": [{"model": "gemma3:0.27b", "family": "gemma3", "size": 0.27, "load": "trivial", "n": 100, "report_direct": 0.012000000000000002, "report_cot": 0.1685, "report_cot_lo": 0.147, "report_cot_hi": 0.18950000000000003, "blink": -0.1565, "access_cot": 0.192, "load_acc_direct": 0.013375, "load_acc_cot": 0.18025000000000002, "trunc": 0.2, "floor": 1}, {"model": "gemma3:0.27b", "family": "gemma3", "size": 0.27, "load": "math_bench_2", "n": 100, "report_direct": 0.0030000000000000005, "report_cot": 0.06699999999999999, "report_cot_lo": 0.052000000000000005, "report_cot_hi": 0.08399999999999999, "blink": -0.06399999999999999, "access_cot": 0.111, "load_acc_direct": 0.0, "load_acc_cot": 0.0, "trunc": 0.075, "floor": 1}, {"model": "gemma3:0.27b", "family": "gemma3", "size": 0.27, "load": "math_bench_4", "n": 100, "report_direct": 0.009000000000000001, "report_cot": 0.077, "report_cot_lo": 0.0605, "report_cot_hi": 0.096, "blink": -0.068, "access_cot": 0.126, "load_acc_direct": 0.0, "load_acc_cot": 0.000125, "trunc": 0.1, "floor": 1}, {"model": "gemma3:0.27b", "family": "gemma3", "size": 0.27, "load": "math_bench_5", "n": 100, "report_direct": 0.003, "report_cot": 0.065, "report_cot_lo": 0.048999999999999995, "report_cot_hi": 0.08200000000000003, "blink": -0.062, "access_cot": 0.10000000000000002, "load_acc_direct": 0.0, "load_acc_cot": 0.0, "trunc": 0.05, "floor": 1}, {"model": "gemma3:1b", "family": "gemma3", "size": 1.0, "load": "trivial", "n": 100, "report_direct": 0.193, "report_cot": 0.177, "report_cot_lo": 0.15500000000000003, "report_cot_hi": 0.199, "blink": 0.016000000000000014, "access_cot": 0.36949999999999994, "load_acc_direct": 0.23375, "load_acc_cot": 0.10937500000000001, "trunc": 0.0, "floor": 0}, {"model": "gemma3:1b", "family": "gemma3", "size": 1.0, "load": "math_bench_2", "n": 100, "report_direct": 0.045, "report_cot": 0.1515, "report_cot_lo": 0.13449999999999998, "report_cot_hi": 0.169, "blink": -0.1065, "access_cot": 0.38299999999999995, "load_acc_direct": 0.00775, "load_acc_cot": 0.005750000000000001, "trunc": 0.025, "floor": 1}, {"model": "gemma3:1b", "family": "gemma3", "size": 1.0, "load": "math_bench_4", "n": 100, "report_direct": 0.0455, "report_cot": 0.1475, "report_cot_lo": 0.129, "report_cot_hi": 0.16550000000000004, "blink": -0.102, "access_cot": 0.3974999999999999, "load_acc_direct": 0.013125000000000003, "load_acc_cot": 0.006999999999999998, "trunc": 0.025, "floor": 1}, {"model": "gemma3:1b", "family": "gemma3", "size": 1.0, "load": "math_bench_5", "n": 100, "report_direct": 0.0545, "report_cot": 0.16700000000000004, "report_cot_lo": 0.1452375, "report_cot_hi": 0.19150000000000003, "blink": -0.11250000000000004, "access_cot": 0.38400000000000006, "load_acc_direct": 0.009000000000000001, "load_acc_cot": 0.0028750000000000004, "trunc": 0.025, "floor": 1}, {"model": "qwen2.5:0.5b", "family": "qwen2.5", "size": 0.5, "load": "trivial", "n": 100, "report_direct": 0.42699999999999994, "report_cot": 0.105, "report_cot_lo": 0.08999999999999998, "report_cot_hi": 0.12200000000000001, "blink": 0.32199999999999995, "access_cot": 0.18350000000000002, "load_acc_direct": 0.384625, "load_acc_cot": 0.110875, "trunc": 0.075, "floor": 0}, {"model": "qwen2.5:0.5b", "family": "qwen2.5", "size": 0.5, "load": "math_bench_2", "n": 100, "report_direct": 0.3385, "report_cot": 0.08850000000000004, "report_cot_lo": 0.0745, "report_cot_hi": 0.10376249999999994, "blink": 0.25, "access_cot": 0.3115, "load_acc_direct": 0.005999999999999998, "load_acc_cot": 0.007375, "trunc": 0.35000000000000003, "floor": 1}, {"model": "qwen2.5:0.5b", "family": "qwen2.5", "size": 0.5, "load": "math_bench_4", "n": 100, "report_direct": 0.281, "report_cot": 0.075, "report_cot_lo": 0.064, "report_cot_hi": 0.08600000000000003, "blink": 0.20600000000000002, "access_cot": 0.317, "load_acc_direct": 0.009625, "load_acc_cot": 0.004999999999999999, "trunc": 0.675, "floor": 1}, {"model": "qwen2.5:0.5b", "family": "qwen2.5", "size": 0.5, "load": "math_bench_5", "n": 100, "report_direct": 0.275, "report_cot": 0.0655, "report_cot_lo": 0.054000000000000006, "report_cot_hi": 0.0785, "blink": 0.20950000000000002, "access_cot": 0.3035, "load_acc_direct": 0.006750000000000001, "load_acc_cot": 0.003375000000000001, "trunc": 0.775, "floor": 1}, {"model": "qwen2.5:1.5b", "family": "qwen2.5", "size": 1.5, "load": "trivial", "n": 100, "report_direct": 0.48949999999999994, "report_cot": 0.513, "report_cot_lo": 0.4865, "report_cot_hi": 0.5395, "blink": -0.023500000000000076, "access_cot": 0.6104999999999999, "load_acc_direct": 0.815875, "load_acc_cot": 0.5773750000000001, "trunc": 0.0, "floor": 0}, {"model": "qwen2.5:1.5b", "family": "qwen2.5", "size": 1.5, "load": "math_bench_2", "n": 100, "report_direct": 0.4395, "report_cot": 0.32549999999999996, "report_cot_lo": 0.3, "report_cot_hi": 0.35100000000000003, "blink": 0.11400000000000005, "access_cot": 0.5565000000000001, "load_acc_direct": 0.0735, "load_acc_cot": 0.16649999999999995, "trunc": 0.075, "floor": 1}, {"model": "qwen2.5:1.5b", "family": "qwen2.5", "size": 1.5, "load": "math_bench_4", "n": 100, "report_direct": 0.409, "report_cot": 0.27299999999999996, "report_cot_lo": 0.24749999999999997, "report_cot_hi": 0.3005, "blink": 0.136, "access_cot": 0.54, "load_acc_direct": 0.03774999999999999, "load_acc_cot": 0.061125, "trunc": 0.0, "floor": 1}, {"model": "qwen2.5:1.5b", "family": "qwen2.5", "size": 1.5, "load": "math_bench_5", "n": 100, "report_direct": 0.393, "report_cot": 0.2735, "report_cot_lo": 0.248, "report_cot_hi": 0.29950000000000004, "blink": 0.1195, "access_cot": 0.5355000000000001, "load_acc_direct": 0.026874999999999996, "load_acc_cot": 0.02125, "trunc": 0.0, "floor": 1}, {"model": "qwen2.5:14b", "family": "qwen2.5", "size": 14.0, "load": "trivial", "n": 100, "report_direct": 0.9995, "report_cot": 0.992, "report_cot_lo": 0.9862375, "report_cot_hi": 0.9969999999999999, "blink": 0.007500000000000062, "access_cot": 0.9915, "load_acc_direct": 0.998, "load_acc_cot": 0.9843749999999999, "trunc": 0.0, "floor": 0}, {"model": "qwen2.5:14b", "family": "qwen2.5", "size": 14.0, "load": "math_bench_2", "n": 100, "report_direct": 1.0, "report_cot": 0.9990000000000001, "report_cot_lo": 0.9975, "report_cot_hi": 1.0, "blink": 0.0009999999999998899, "access_cot": 0.9935, "load_acc_direct": 0.508125, "load_acc_cot": 0.8370000000000002, "trunc": 0.0, "floor": 0}, {"model": "qwen2.5:14b", "family": "qwen2.5", "size": 14.0, "load": "math_bench_4", "n": 100, "report_direct": 0.991, "report_cot": 0.9954999999999999, "report_cot_lo": 0.991, "report_cot_hi": 0.9990000000000001, "blink": -0.0044999999999999485, "access_cot": 0.992, "load_acc_direct": 0.248375, "load_acc_cot": 0.5592499999999999, "trunc": 0.0, "floor": 0}, {"model": "qwen2.5:14b", "family": "qwen2.5", "size": 14.0, "load": "math_bench_5", "n": 100, "report_direct": 0.992, "report_cot": 0.9940000000000001, "report_cot_lo": 0.9902375, "report_cot_hi": 0.9975, "blink": -0.002000000000000113, "access_cot": 0.9915, "load_acc_direct": 0.16149999999999998, "load_acc_cot": 0.33075000000000004, "trunc": 0.0, "floor": 0}, {"model": "qwen2.5:32b", "family": "qwen2.5", "size": 32.0, "load": "trivial", "n": 100, "report_direct": 1.0, "report_cot": 1.0, "report_cot_lo": 1.0, "report_cot_hi": 1.0, "blink": 0.0, "access_cot": 0.9995, "load_acc_direct": 1.0, "load_acc_cot": 0.999875, "trunc": 0.0, "floor": 0}, {"model": "qwen2.5:32b", "family": "qwen2.5", "size": 32.0, "load": "math_bench_2", "n": 100, "report_direct": 1.0, "report_cot": 1.0, "report_cot_lo": 1.0, "report_cot_hi": 1.0, "blink": 0.0, "access_cot": 1.0, "load_acc_direct": 0.5976250000000001, "load_acc_cot": 0.9038749999999999, "trunc": 0.0, "floor": 0}, {"model": "qwen2.5:32b", "family": "qwen2.5", "size": 32.0, "load": "math_bench_4", "n": 100, "report_direct": 1.0, "report_cot": 0.998, "report_cot_lo": 0.996, "report_cot_hi": 0.9995, "blink": 0.0020000000000000018, "access_cot": 1.0, "load_acc_direct": 0.3975, "load_acc_cot": 0.680375, "trunc": 0.0, "floor": 0}, {"model": "qwen2.5:32b", "family": "qwen2.5", "size": 32.0, "load": "math_bench_5", "n": 100, "report_direct": 1.0, "report_cot": 0.9995, "report_cot_lo": 0.9984999999999999, "report_cot_hi": 1.0, "blink": 0.0004999999999999449, "access_cot": 1.0, "load_acc_direct": 0.2585, "load_acc_cot": 0.443625, "trunc": 0.0, "floor": 0}, {"model": "qwen2.5:3b", "family": "qwen2.5", "size": 3.0, "load": "trivial", "n": 100, "report_direct": 0.9804999999999999, "report_cot": 0.8819999999999999, "report_cot_lo": 0.8507374999999999, "report_cot_hi": 0.9107624999999999, "blink": 0.09850000000000003, "access_cot": 0.877, "load_acc_direct": 0.970875, "load_acc_cot": 0.8111249999999999, "trunc": 0.0, "floor": 0}, {"model": "qwen2.5:3b", "family": "qwen2.5", "size": 3.0, "load": "math_bench_2", "n": 100, "report_direct": 0.9065000000000001, "report_cot": 0.6520000000000001, "report_cot_lo": 0.6065, "report_cot_hi": 0.695, "blink": 0.25449999999999995, "access_cot": 0.6345000000000001, "load_acc_direct": 0.165125, "load_acc_cot": 0.40074999999999994, "trunc": 0.025, "floor": 0}, {"model": "qwen2.5:3b", "family": "qwen2.5", "size": 3.0, "load": "math_bench_4", "n": 100, "report_direct": 0.8829999999999998, "report_cot": 0.625, "report_cot_lo": 0.5812375, "report_cot_hi": 0.6692624999999999, "blink": 0.2579999999999998, "access_cot": 0.623, "load_acc_direct": 0.076625, "load_acc_cot": 0.20875, "trunc": 0.05, "floor": 1}, {"model": "qwen2.5:3b", "family": "qwen2.5", "size": 3.0, "load": "math_bench_5", "n": 100, "report_direct": 0.9095, "report_cot": 0.547, "report_cot_lo": 0.5065, "report_cot_hi": 0.5902624999999999, "blink": 0.36249999999999993, "access_cot": 0.5865, "load_acc_direct": 0.061625000000000006, "load_acc_cot": 0.09387500000000001, "trunc": 0.025, "floor": 1}, {"model": "qwen2.5:7b", "family": "qwen2.5", "size": 7.0, "load": "trivial", "n": 100, "report_direct": 0.9990000000000001, "report_cot": 0.978, "report_cot_lo": 0.9660000000000001, "report_cot_hi": 0.9875, "blink": 0.02100000000000013, "access_cot": 0.9890000000000001, "load_acc_direct": 1.0, "load_acc_cot": 0.85675, "trunc": 0.0, "floor": 0}, {"model": "qwen2.5:7b", "family": "qwen2.5", "size": 7.0, "load": "math_bench_2", "n": 100, "report_direct": 0.9945, "report_cot": 0.7725000000000002, "report_cot_lo": 0.7217375000000001, "report_cot_hi": 0.8202625000000001, "blink": 0.22199999999999986, "access_cot": 0.7705, "load_acc_direct": 0.29937500000000006, "load_acc_cot": 0.7625, "trunc": 0.0, "floor": 0}, {"model": "qwen2.5:7b", "family": "qwen2.5", "size": 7.0, "load": "math_bench_4", "n": 100, "report_direct": 0.998, "report_cot": 0.7565000000000002, "report_cot_lo": 0.7100000000000001, "report_cot_hi": 0.802, "blink": 0.24149999999999983, "access_cot": 0.7795000000000002, "load_acc_direct": 0.17974999999999997, "load_acc_cot": 0.535, "trunc": 0.0, "floor": 0}, {"model": "qwen2.5:7b", "family": "qwen2.5", "size": 7.0, "load": "math_bench_5", "n": 100, "report_direct": 0.9934999999999999, "report_cot": 0.723, "report_cot_lo": 0.6767375000000001, "report_cot_hi": 0.7652625000000001, "blink": 0.27049999999999996, "access_cot": 0.7939999999999999, "load_acc_direct": 0.10225000000000001, "load_acc_cot": 0.3349999999999999, "trunc": 0.0, "floor": 0}], "headline": {"largest_blink": {"model": "qwen2.5:7b", "load": "math_bench_5", "val": 0.27, "rd": 0.99, "rc": 0.72}, "largest_gain": {"model": "qwen2.5:7b", "load": "math_bench_2", "val": 0.463, "ad": 0.3, "ac": 0.76}}}</script>
+<script>
+const D=JSON.parse(document.getElementById("payload").textContent);
+const css=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const famColor=f=>css("--"+f.name);
+const tip=document.getElementById("tip");
+function showTip(html,e){tip.innerHTML=html;tip.style.opacity=1;
+  let x=e.clientX+14,y=e.clientY+14;
+  if(x+tip.offsetWidth>innerWidth)x=e.clientX-tip.offsetWidth-14;
+  if(y+tip.offsetHeight>innerHeight)y=e.clientY-tip.offsetHeight-14;
+  tip.style.left=x+"px";tip.style.top=y+"px";}
+function hideTip(){tip.style.opacity=0;}
+const SVGNS="http://www.w3.org/2000/svg";
+function el(t,a){const e=document.createElementNS(SVGNS,t);for(const k in a)e.setAttribute(k,a[k]);return e;}
+function marker(shape,cx,cy,r,attrs){
+  let e;
+  if(shape==="square")e=el("rect",{x:cx-r,y:cy-r,width:2*r,height:2*r,...attrs});
+  else if(shape==="triangle"){const p=`${cx},${cy-r*1.15} ${cx-r*1.1},${cy+r*0.85} ${cx+r*1.1},${cy+r*0.85}`;e=el("polygon",{points:p,...attrs});}
+  else if(shape==="diamond"){const p=`${cx},${cy-r*1.2} ${cx+r*1.2},${cy} ${cx},${cy+r*1.2} ${cx-r*1.2},${cy}`;e=el("polygon",{points:p,...attrs});}
+  else e=el("circle",{cx,cy,r,...attrs});
+  return e;
+}
+function legendItem(box,f){
+  const s=document.createElement("span");s.className="lg";
+  const svg=document.createElementNS(SVGNS,"svg");svg.setAttribute("width",34);svg.setAttribute("height",14);
+  svg.appendChild(el("line",{x1:1,y1:7,x2:33,y2:7,stroke:famColor(f),"stroke-width":2,"stroke-dasharray":f.dash}));
+  svg.appendChild(marker(f.marker,17,7,4.2,{fill:famColor(f),stroke:css("--surface"),"stroke-width":1.5}));
+  s.appendChild(svg);s.appendChild(document.createTextNode(f.label));box.appendChild(s);
+}
+function addLegendNote(box,txt){const n=document.createElement("span");n.className="lg-note";n.textContent=txt;box.appendChild(n);}
+
+// ---- Fig 1: blink vs size (log x) ----
+function drawChart1(){
+  const svg=document.getElementById("chart1");svg.innerHTML="";
+  const W=900,H=440,m={l:64,r:96,t:18,b:46};
+  const pts=D.families.flatMap(f=>f.points.map(p=>({...p,fam:f})));
+  if(!pts.length)return;
+  const sizes=pts.map(p=>p.size),blinks=pts.map(p=>p.blink);
+  const xmin=Math.min(...sizes)*0.8,xmax=Math.max(...sizes)*1.25;
+  const lx=v=>Math.log10(v);
+  const X=v=>m.l+(lx(v)-lx(xmin))/(lx(xmax)-lx(xmin))*(W-m.l-m.r);
+  const ymax=Math.max(0.3,...blinks)*1.12,ymin=Math.min(0,...blinks)-0.02;
+  const Y=v=>m.t+(ymax-v)/(ymax-ymin)*(H-m.t-m.b);
+  const g=el("g",{class:"grid"});
+  const yticks=[];for(let v=0;v<=ymax+1e-9;v+=0.1)yticks.push(+v.toFixed(2));
+  yticks.forEach(v=>{g.appendChild(el("line",{x1:m.l,y1:Y(v),x2:W-m.r,y2:Y(v)}));
+    svg.appendChild(txt(m.l-10,Y(v)+3,v.toFixed(1),"tick","end"));});
+  svg.appendChild(g);
+  // zero baseline emphasis
+  svg.appendChild(el("line",{x1:m.l,y1:Y(0),x2:W-m.r,y2:Y(0),stroke:css("--muted"),"stroke-width":1,opacity:.5}));
+  const xticks=[0.2,0.5,1,2,4,8,16,32,72].filter(v=>v>=xmin&&v<=xmax);
+  xticks.forEach(v=>svg.appendChild(txt(X(v),H-m.b+18,v+"","tick","middle")));
+  svg.appendChild(txt((m.l+W-m.r)/2,H-6,"parameters (B, log scale)","axlabel","middle"));
+  const yl=txt(16,(m.t+H-m.b)/2,"blink  (report Direct − CoT)","axlabel","middle");
+  yl.setAttribute("transform",`rotate(-90 16 ${(m.t+H-m.b)/2})`);svg.appendChild(yl);
+  D.families.forEach(f=>{
+    const P=f.points.filter(p=>isFinite(p.size));if(!P.length)return;
+    const col=famColor(f);
+    for(let i=0;i<P.length-1;i++)svg.appendChild(el("line",{x1:X(P[i].size),y1:Y(P[i].blink),
+      x2:X(P[i+1].size),y2:Y(P[i+1].blink),stroke:col,"stroke-width":2,"stroke-dasharray":f.dash,
+      "stroke-linecap":"round"}));
+    P.forEach(p=>{
+      const mk=marker(f.marker,X(p.size),Y(p.blink),5.5,
+        {fill:p.floor?css("--surface"):col,stroke:col,"stroke-width":2,style:"cursor:pointer"});
+      mk.addEventListener("mousemove",e=>showTip(
+        `<span class="tt">${p.model}</span><br><span class="td">blink ${p.blink>=0?"+":""}${p.blink.toFixed(3)} · acc gain +${p.acc_gain.toFixed(2)}${p.floor?" · load-floor":""}</span>`,e));
+      mk.addEventListener("mouseleave",hideTip);svg.appendChild(mk);
+    });
+    const last=P[P.length-1];
+    svg.appendChild(txt(X(last.size)+11,Y(last.blink)+4,f.label,"ptlabel","start",col));
+  });
+}
+// ---- Fig 2: report drop vs acc gain ----
+function drawChart2(){
+  const svg=document.getElementById("chart2");svg.innerHTML="";
+  const W=900,H=440,m={l:64,r:30,t:18,b:52};
+  const pts=D.families.flatMap(f=>f.points.map(p=>({...p,fam:f})));
+  if(!pts.length)return;
+  const gains=pts.map(p=>p.acc_gain),blinks=pts.map(p=>p.blink);
+  const xmax=Math.max(0.1,...gains)*1.12,xmin=Math.min(0,...gains)-0.01;
+  const ymax=Math.max(0.3,...blinks)*1.12,ymin=Math.min(0,...blinks)-0.02;
+  const X=v=>m.l+(v-xmin)/(xmax-xmin)*(W-m.l-m.r);
+  const Y=v=>m.t+(ymax-v)/(ymax-ymin)*(H-m.t-m.b);
+  const g=el("g",{class:"grid"});
+  for(let v=0;v<=ymax+1e-9;v+=0.1){g.appendChild(el("line",{x1:m.l,y1:Y(v),x2:W-m.r,y2:Y(v)}));
+    svg.appendChild(txt(m.l-10,Y(v)+3,v.toFixed(1),"tick","end"));}
+  svg.appendChild(g);
+  svg.appendChild(el("line",{x1:m.l,y1:Y(0),x2:W-m.r,y2:Y(0),stroke:css("--muted"),"stroke-width":1,opacity:.5}));
+  for(let v=0;v<=xmax+1e-9;v+=0.1)svg.appendChild(txt(X(+v.toFixed(2)),H-m.b+18,v.toFixed(1),"tick","middle"));
+  svg.appendChild(txt((m.l+W-m.r)/2,H-8,"MATH accuracy gain from CoT  (CoT − Direct)","axlabel","middle"));
+  const yl=txt(16,(m.t+H-m.b)/2,"passphrase report drop  (blink)","axlabel","middle");
+  yl.setAttribute("transform",`rotate(-90 16 ${(m.t+H-m.b)/2})`);svg.appendChild(yl);
+  const rsc=s=>isFinite(s)?4+Math.min(9,Math.sqrt(s)*1.7):5;
+  pts.forEach(p=>{const f=p.fam,col=famColor(f);
+    const mk=marker(f.marker,X(p.acc_gain),Y(p.blink),rsc(p.size),
+      {fill:p.floor?"none":col,"fill-opacity":p.floor?0:.55,stroke:col,"stroke-width":2,style:"cursor:pointer"});
+    mk.addEventListener("mousemove",e=>showTip(
+      `<span class="tt">${p.model}</span><br><span class="td">blink ${p.blink>=0?"+":""}${p.blink.toFixed(3)} · acc gain +${p.acc_gain.toFixed(2)}${p.floor?" · load-floor":""}</span>`,e));
+    mk.addEventListener("mouseleave",hideTip);svg.appendChild(mk);});
+}
+function txt(x,y,s,cls,anchor,fill){const t=el("text",{x,y,class:cls,"text-anchor":anchor||"start"});
+  if(fill)t.setAttribute("fill",fill);t.textContent=s;return t;}
+
+// ---- scale stat ----
+(function(){
+  const parts=D.families.map(f=>{const solid=f.points.filter(p=>!p.floor);
+    if(!solid.length)return null;const top=solid[solid.length-1];
+    return `${f.label} ${top.model.split(":")[1]} ${top.blink>=0?"+":""}${top.blink.toFixed(2)}`;}).filter(Boolean);
+  document.getElementById("scaleStat").textContent=parts.length?parts.join("  ·  "):"—";
+  document.getElementById("scaleStat").style.fontSize="18px";
+})();
+
+// ---- table ----
+const COLS=[
+  ["model","Model",0],["load","Load",0],
+  ["load_acc_direct","Load acc. direct",1],["load_acc_cot","Load acc. CoT",1],
+  ["report_direct","Report direct",1],["report_cot","Report CoT",1],
+  ["blink","Blink",2],["access_cot","Entry (CoT)",1],
+  ["n","n",3],["trunc","Trunc.",4]];
+let sortKey="blink",sortAsc=false;
+function fmt(r,key,kind){
+  const v=r[key];
+  if(kind===0){if(key==="model")return `<span class="dot" style="background:${famColor({name:r.family})}"></span>${v}`;return v;}
+  if(kind===3)return v;
+  if(kind===4)return (r.trunc).toFixed(2)+"%";
+  if(v!==v)return "—";
+  if(kind===2){const c=v>=0?"pos":"neg";return `<span class="${c}">${v>=0?"+":""}${v.toFixed(3)}</span>`;}
+  return v.toFixed(2);
+}
+function drawTable(){
+  const thead=document.querySelector("#cellTable thead");
+  const tbody=document.querySelector("#cellTable tbody");
+  thead.innerHTML="";tbody.innerHTML="";
+  const tr=document.createElement("tr");
+  COLS.forEach(([k,label])=>{const th=document.createElement("th");th.textContent=label;
+    if(k===sortKey){th.classList.add("sorted");if(sortAsc)th.classList.add("asc");}
+    th.onclick=()=>{if(sortKey===k)sortAsc=!sortAsc;else{sortKey=k;sortAsc=(k==="model"||k==="load");}drawTable();};
+    tr.appendChild(th);});
+  thead.appendChild(tr);
+  let rows=D.cells.slice();
+  if(document.getElementById("hideFloor").checked)rows=rows.filter(r=>!r.floor);
+  rows.sort((a,b)=>{let x=a[sortKey],y=b[sortKey];
+    if(typeof x==="string"){x=x+"";y=y+"";return sortAsc?x.localeCompare(y):y.localeCompare(x);}
+    x=x??-Infinity;y=y??-Infinity;return sortAsc?x-y:y-x;});
+  rows.forEach(r=>{const t=document.createElement("tr");
+    COLS.forEach(([k,,kind])=>{const td=document.createElement("td");
+      if(kind!==0&&k!=="load")td.className="num";
+      td.innerHTML=fmt(r,k,kind);
+      if(k==="load"&&r.floor)td.innerHTML=`${r.load} <span class="flag floor">floor</span>`;
+      t.appendChild(td);});
+    tbody.appendChild(t);});
+}
+document.getElementById("hideFloor").addEventListener("change",drawTable);
+
+function drawAll(){
+  const l1=document.getElementById("legend1");l1.innerHTML="";D.families.forEach(f=>legendItem(l1,f));
+  addLegendNote(l1,"hollow = load-floor (no demand for CoT to help)");
+  const l2=document.getElementById("legend2");l2.innerHTML="";D.families.forEach(f=>legendItem(l2,f));
+  addLegendNote(l2,"marker size ∝ parameters");
+  drawChart1();drawChart2();drawTable();
+}
+drawAll();
+matchMedia("(prefers-color-scheme:dark)").addEventListener?.("change",drawAll);
+new MutationObserver(drawAll).observe(document.documentElement,{attributes:true,attributeFilter:["data-theme"]});
+addEventListener("resize",()=>{clearTimeout(window._rt);window._rt=setTimeout(drawAll,150);});
+</script>
