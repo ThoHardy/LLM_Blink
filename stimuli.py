@@ -617,6 +617,12 @@ class TrialConfig:
     n_tasks: int | None = None
     naming: str = "ordered"        # "ordered" (Task 1..n, stream order) | "non-ordered"
     passphrase_last: bool = True   # passphrase = last task; False -> random rank
+    # Fixed passphrase rank (issue #18 §5, Campaign B): 1-indexed position of the
+    # passphrase among the n tasks in stream order (1 = first, n = last). None ->
+    # fall back to passphrase_last (default) or a random rank. When set it takes
+    # precedence over passphrase_last and, like passphrase_last=True, consumes NO
+    # extra RNG draw — so CSVs predating the field stay byte-exact (default None).
+    passphrase_rank: int | None = None
     # Anti-enumeration instruction (2026-07-22, idea I1): when True the cot
     # OUTPUT FORMAT explicitly forbids re-enumerating the stream packet by
     # packet inside <Thinking>. Task-design cot only; no effect on direct or
@@ -1033,7 +1039,15 @@ def _build_trial_tasks(cfg: TrialConfig) -> Trial:
     rng = random.Random(cfg.seed)
     t2 = random_passphrase(rng, cfg.t2_words)
     positions = sorted(rng.sample(range(1, total + 1), n))
-    pp_rank = (n - 1) if cfg.passphrase_last else rng.randrange(n)
+    if cfg.passphrase_rank is not None:
+        if not 1 <= cfg.passphrase_rank <= n:
+            raise ValueError(
+                f"passphrase_rank={cfg.passphrase_rank} out of range [1, {n}]")
+        pp_rank = cfg.passphrase_rank - 1          # 1-indexed -> 0-indexed; NO rng draw
+    elif cfg.passphrase_last:
+        pp_rank = n - 1                            # NO rng draw
+    else:
+        pp_rank = rng.randrange(n)                 # rng draw (random-rank arm)
     if cfg.naming == "non-ordered":
         names = rng.sample(TASK_NAME_BANK, n)
     else:
