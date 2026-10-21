@@ -129,6 +129,9 @@ All options are visible via `run_experiment.py --help`; the same names exist as 
 | `--finite-budgets` | `64 256 1024` | **A axis.** Max tokens generated *inside* `<Thinking>` (1..2000; budget 0 was removed 2026-07-21 — the zero point of the budget axis is `--regimes direct`, since a forced-empty `<Thinking></Thinking>` is an ambiguous stimulus). On cap the block is force-closed (`cot_forced_closed=True`, `cot_tokens_used` logged) and the answers finish uncut. `inf` = unlimited (single pass). Acts on the `cot` regime only; int budgets require the HF backend. The stimulus is identical across budgets for a given (n_tasks, load, seed): budget contrasts are paired. |
 | `--naming` | `non-ordered` | **H axis.** `ordered` = `Task 1..n` in stream order; `non-ordered` = per-trial random names (`Task WATERMELON`). The task count is never revealed either way (free report). |
 | `--passphrase-rank` | `both` | Sweeps BOTH arms by default (2026-07-22): `last` = position-stress / anti-LITM headline arm, `random` = rank/lag deconfound arm (`t2_rank` logged). Pick one to halve the grid. |
+| `--compute-order` | `none` | Instructed **processing** order, written into the rules so it acts on `<Thinking>` and `<Final_Answers>` alike (replaces the old `--report-order`, 2026-10-21): `none` (byte-exact, spontaneous order), `stream`, `reverse`, `load_first` (all other tasks before any copy-paste task), or `all` to sweep the four arms. The worked example is reordered to match. Pure prompt text: arms are exactly paired. |
+| `--example-order` | `load_first` | Order of the two tasks in the worked example's stream: `load_first` (byte-exact) or `passphrase_first`. Control for priming by the example. |
+| `--target-kind` | `nato` | Target task: `nato` (copy 3 NATO words, byte-exact), `digits` (copy 3 two-digit numbers, never equal to a load answer), `trivial_math` (a one-digit addition; the access probe looks for the expression, not the bare integer). Every other RNG draw is unchanged, so target kinds are exactly paired. |
 | `--no-anti-enumeration` | off | Drops the anti-enumeration instruction from the cot template (idea I1; default ON since 2026-07-22). Compliance columns `n_packets_in_cot` / `n_filler_packets_in_cot` / `enumerated_fillers_in_cot` are logged either way, and `backfill_readout_columns` computes them retroactively on old CSVs. |
 | `--answer-budget` | `512` | Stage-2 budget (the `<Final_Answers>` block) under a finite budget. Generous by design — the report channel is never rationed; exhaustion is flagged `output_truncated`. |
 | `--loads` | `trivial semantic_4` | Load-task difficulty. Accepts `trivial`, `semantic_0..4`, `math_0..4` (aliases `easy`/`hard`/`easy_math`/`hard_math`); `none` is legacy-only. |
@@ -146,6 +149,20 @@ All options are visible via `run_experiment.py --help`; the same names exist as 
 | `--n-pres` | `auto` | Fillers before T1. `auto` fills up to 15 total packets; explicit ints decouple lag from T2's absolute position (confound control). |
 | `--n-posts` | `random` | Fillers after T2. `random` draws per trial from `[1, budget−1]`; ints fix it. |
 | `--encoding-baseline` | off | Additionally compute the legacy empty-CoT teacher-forced T2 score (`*_encoding` columns). Control only — blind to the model's reasoning by construction. |
+
+### Order and target controls (2026-10-21, `probe_pilot.py`)
+
+Same flags as above (`--compute-order`, `--example-order`, `--target-kind`), plus `--passphrase-rank {last,random,1..n}`. Every condition column is part of the resume key, so conditions can share one CSV (or use one file per condition — both resume correctly). An existing CSV with an older header is reused only if the run's new columns hold their defaults; otherwise the script asks for a new `--out`. Seeds do not depend on the condition: every condition sees the same stimuli.
+
+Manipulation check, per sample: `proc_rank_per` (rank of the target in the realised processing order: first mention in `<Thinking>` for cot, answer-line order for direct; empty = never processed) and `order_tau_per` / `order_tau_mean` (Kendall tau-b vs the instructed order; for `load_first`, 2f − 1 with f the fraction of other processed tasks handled before the target).
+
+| Question | Flags |
+|---|---|
+| Target first in the stream | `--passphrase-rank 1` |
+| Target first, but math computed first | `--passphrase-rank 1 --compute-order load_first` |
+| Example-priming control | add `--example-order passphrase_first` (fewer seeds) |
+| Numeric passphrase | `--target-kind digits` |
+| Trivial math target | `--target-kind trivial_math` (not with `load_first`; use `reverse`) |
 
 ### Stream geometry
 

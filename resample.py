@@ -34,7 +34,8 @@ import numpy as np
 
 from .model import continue_generate, OllamaBackend
 from .protocol import STOP_THINKING, STOP_ANSWERS
-from .readout import parse_task_report_names, answer_contains, t2_in_cot
+from .readout import (parse_task_report_names, answer_contains, t2_in_cot,
+                      access_cues)
 
 
 # The CoT ends at the answer-block opener <Final_Answers> (reliable, ~99%), not
@@ -165,14 +166,24 @@ def score_full_samples(samples, trial, score_access: bool = True) -> dict:
     ``cot_len_per`` (realised ``<Thinking>`` length in chars, the §6 length axis).
     Returns sums (``s_report``/``s_access``) and the per-sample lists.
     """
-    from .readout import parse_task_report, task_rows, _thinking_region
+    from .readout import (parse_task_report, task_rows, _thinking_region,
+                          access_cues, compute_order_respected,
+                          passphrase_processing_rank)
     name, phrase = trial.t2_task_name, trial.t2_phrase
+    cues = access_cues(trial)
+    cfg = getattr(trial, "config", None)
+    regime = getattr(cfg, "regime", "cot")
+    c_order = getattr(cfg, "compute_order", "none")
     report_bits, access_bits, t1_per, cot_len_per = [], [], [], []
+    proc_rank_per, order_tau_per = [], []
     for text in samples:
         parsed = parse_task_report_names(text, [name])
         resp = parsed["reported"].get(str(name).upper())
         report_bits.append(int(answer_contains(resp, phrase)))
-        access_bits.append(int(t2_in_cot(text, phrase, name)) if score_access else None)
+        access_bits.append(int(t2_in_cot(text, cues, name)) if score_access else None)
+        proc_rank_per.append(passphrase_processing_rank(text, trial, regime))
+        tau = compute_order_respected(text, trial, c_order, regime)
+        order_tau_per.append(None if tau is None else round(tau, 4))
         full = parse_task_report(text, trial)
         rows_t = task_rows(trial, full["reported"])
         load_rows = [r for r in rows_t if r["kind"] == "load"]
@@ -186,6 +197,7 @@ def score_full_samples(samples, trial, score_access: bool = True) -> dict:
         report_bits=report_bits,
         access_bits=(access_bits if score_access else None),
         t1_per=t1_per, cot_len_per=cot_len_per,
+        proc_rank_per=proc_rank_per, order_tau_per=order_tau_per,
         degenerate=(len(set(samples)) == 1 and len(samples) > 1))
 
 
@@ -252,7 +264,7 @@ def nested_fork(model, tok, trial, traj, k_cot: int = 8, k_rep: int = 8,
                             n_workers=n_workers, raise_on_degenerate=False)
         sc = score_report_samples(reps, trial.t2_task_name, trial.t2_phrase)
         out.append(dict(cot_id=j, s=sc["s"], k=sc["k"],
-                        t2_in_this_cot=int(t2_in_cot(cot, trial.t2_phrase,
+                        t2_in_this_cot=int(t2_in_cot(cot, access_cues(trial),
                                                      trial.t2_task_name))))
     return out
 

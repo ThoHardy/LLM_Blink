@@ -18,9 +18,19 @@ Two modes, chosen by ``--resample-full``:
   probe) and after ``<Thinking>`` (access probe). Kept for back-compat / the #14
   corpus; NOT what issue #18 measures (it holds the CoT fixed — pitfall #5).
 
-Resumable & incremental as before: an existing out CSV's (load, regime,
-passphrase_last, seed, base_temp) cells are skipped; each row is flushed at once.
-Seed-major so partial results cover every condition early.
+Resumable & incremental: a cell is identified by ALL its condition columns
+(see KEY_FIELDS: n_tasks, naming, load, regime, passphrase position, compute
+order, example order, target kind, ...), so several conditions can share one
+CSV and each resumes on its own. Rows from CSVs predating a column get that
+column's default. Each row is flushed at once; seed-major so partial results
+cover every condition early. Seeds do not depend on the condition, so every
+condition sees the same stimuli (paired contrasts).
+
+Condition flags (2026-10-21):
+    --passphrase-rank {last,random,1..n}   position of the target among the tasks
+    --compute-order {none,stream,reverse,load_first}   instructed processing order
+    --example-order {load_first,passphrase_first}      worked-example task order
+    --target-kind {nato,digits,trivial_math}           what the target task is
 
 Usage (issue #18 Campaign A, run from the folder CONTAINING LLM_Blink/):
     python3 -B LLM_Blink/probe_pilot.py --model qwen2.5:3b \
@@ -49,7 +59,7 @@ from LLM_Blink.stimuli import TrialConfig, build_trial             # noqa: E402
 from LLM_Blink.protocol import generate_trajectory                 # noqa: E402
 from LLM_Blink.readout import (parse_task_report_names,            # noqa: E402
                                parse_task_report, task_rows,
-                               answer_contains, t2_in_cot)
+                               answer_contains, t2_in_cot, access_cues)
 from LLM_Blink.resample import (fork_samples, score_report_samples,  # noqa: E402
                                 score_access_samples, resample_full,
                                 score_full_samples, DegenerateForkError)
@@ -62,20 +72,26 @@ FIELDS = [
     "realized_report_contains", "realized_t2_in_cot", "t1_correct",
     "report_s", "report_k", "report_degenerate",
     "access_s", "access_k", "access_degenerate",
+    "passphrase_spec", "anti_enumeration", "compute_order", "example_order",
+    "target_kind", "load_engagement",
 ]
 
 # resample-full schema — issue #18 §7.2 (per-trial vectors kept in list columns)
 FIELDS_FULL = [
     "model", "quant_tag", "n_tasks", "naming", "t1_load", "regime",
-    "passphrase_last", "report_order", "load_engagement", "base_temp",
+    "passphrase_last", "passphrase_spec", "anti_enumeration", "compute_order",
+    "example_order", "target_kind", "load_engagement", "base_temp",
     "max_new_tokens", "seed", "t2_phrase", "t2_task_name", "t2_rank",
     "t2_abs_index",
     # both borders, same k samples
     "k", "s_access", "s_report",
     # per-sample vectors (semicolon-joined; the fig-2/fig-6 plumbing)
     "report_bits", "access_bits", "t1_per", "cot_len_per",
+    # processing order per sample: target's rank in the realised order (empty =
+    # never processed) and Kendall tau vs the instructed compute order
+    "proc_rank_per", "order_tau_per",
     # cell-level summaries / covariates
-    "t1_mean", "cot_len_mean",
+    "t1_mean", "cot_len_mean", "order_tau_mean",
     # quality gates (§2.1)
     "n_truncated_samples", "frac_truncated", "any_degenerate",
     # the realised base draw (for calibration / self-consistency)
@@ -91,15 +107,101 @@ def _seed(nt, load, s):
     return 1000 * s + 0 + 7 * len(load) + 13 * (nt or 0)
 
 
+KEY_FIELDS = ("n_tasks", "naming", "t1_load", "regime", "passphrase_spec",
+              "anti_enumeration", "compute_order", "example_order",
+              "target_kind", "load_engagement", "seed", "base_temp")
+COND_DEFAULTS = {"anti_enumeration": "True", "compute_order": "none",
+                 "example_order": "load_first", "target_kind": "nato",
+                 "load_engagement": "solve"}
+
+
+def _cell_key(r):
+    """Resume key from a CSV row or a condition dict; missing/empty columns
+    take their default (old CSVs: passphrase_spec from passphrase_last)."""
+    def g(k):
+        v = r.get(k)
+        return COND_DEFAULTS.get(k, "") if v is None or v == "" else str(v)
+    spec = g("passphrase_spec") or ("last" if g("passphrase_last") in ("True", "")
+                                    else "random")
+    vals = []
+    for k in KEY_FIELDS:
+        if k == "passphrase_spec":
+            vals.append(spec)
+        elif k == "base_temp":
+            vals.append(repr(float(g(k) or 1.0)))
+        else:
+            vals.append(g(k))
+    return tuple(vals)
+
+
 def _done_cells(path):
     done = set()
     if not os.path.exists(path):
         return done
     with open(path, newline="") as f:
         for r in csv.DictReader(f):
-            done.add((r["t1_load"], r["regime"], r["passphrase_last"],
-                      r["seed"], r["base_temp"]))
+            done.add(_cell_key(r))
     return done
+
+
+def _open_writer(out, fields, cond_example):
+    """Append-mode DictWriter. An existing CSV with an older header is reused
+    as-is only if every column it lacks holds its default in this run;
+    otherwise refuse (the condition would be silently lost)."""
+    if not os.path.exists(out):
+        f = open(out, "a", newline="")
+        w = csv.DictWriter(f, fieldnames=fields)
+        w.writeheader(); f.flush()
+        return f, w
+    with open(out, newline="") as fh:
+        header = next(csv.reader(fh), [])
+    missing = [c for c in fields if c not in header]
+    lost = [c for c in missing if c in COND_DEFAULTS
+            and str(cond_example.get(c)) != COND_DEFAULTS[c]]
+    if "passphrase_spec" in missing and cond_example.get("passphrase_spec") != "last":
+        lost.append("passphrase_spec")
+    if lost:
+        raise SystemExit(f"{out} predates the column(s) {lost} and this run sets "
+                         f"them to non-default values: use a new --out file.")
+    f = open(out, "a", newline="")
+    return f, csv.DictWriter(f, fieldnames=header, extrasaction="ignore")
+
+
+def _passphrase_spec(arg):
+    """'last' | 'random' | '<int>' -> (spec string, passphrase_last, passphrase_rank)."""
+    a = str(arg).strip().lower()
+    if a == "last":
+        return "last", True, None
+    if a == "random":
+        return "random", False, None
+    return str(int(a)), True, int(a)
+
+
+def _cond(args, load, regime, seed):
+    return dict(n_tasks=args.n_tasks, naming=args.naming, t1_load=load,
+                regime=regime, passphrase_spec=args.passphrase_spec,
+                anti_enumeration=args.anti_enumeration,
+                compute_order=args.compute_order,
+                example_order=args.example_order,
+                target_kind=args.target_kind,
+                load_engagement=args.load_engagement,
+                seed=seed, base_temp=args.base_temp)
+
+
+def _trial_config(args, load, regime, seed):
+    return TrialConfig(n_tasks=args.n_tasks, naming=args.naming,
+                       t1_load=load, regime=regime,
+                       passphrase_last=args.pp_last,
+                       passphrase_rank=args.pp_rank,
+                       anti_enumeration=args.anti_enumeration,
+                       compute_order=args.compute_order,
+                       example_order=args.example_order,
+                       target_kind=args.target_kind,
+                       load_engagement=args.load_engagement, seed=seed)
+
+
+def _pp_last_logged(args):
+    return args.pp_rank == args.n_tasks if args.pp_rank is not None else args.pp_last
 
 
 def _quant_tag(model_name):
@@ -154,13 +256,9 @@ def run_full(args):
     model, tok = load_model(args.model)
     quant = _quant_tag(args.model) if isinstance(model, OllamaBackend) else ""
     out = args.out
-    os.makedirs(os.path.dirname(out), exist_ok=True)
+    os.makedirs(os.path.dirname(out) or ".", exist_ok=True)
     done = _done_cells(out)
-    new_file = not os.path.exists(out)
-    f = open(out, "a", newline="")
-    w = csv.DictWriter(f, fieldnames=FIELDS_FULL)
-    if new_file:
-        w.writeheader(); f.flush()
+    f, w = _open_writer(out, FIELDS_FULL, _cond(args, "", "", ""))
 
     logs = None
     if args.keep_logs:
@@ -172,7 +270,9 @@ def run_full(args):
              for load in args.loads for regime in args.regimes]
     print(f"[probe_pilot:full] {args.model} (quant={quant!r}): {len(cells)} cells, "
           f"{len(done)} done, K={args.resample_full}, max_new_tokens={args.max_new_tokens}, "
-          f"report_order={args.report_order}, load_engagement={args.load_engagement}",
+          f"passphrase={args.passphrase_spec}, compute_order={args.compute_order}, "
+          f"example_order={args.example_order}, target_kind={args.target_kind}, "
+          f"load_engagement={args.load_engagement}",
           flush=True)
 
     # running per-cell truncation tally for the §2.1 gate
@@ -181,18 +281,11 @@ def run_full(args):
     for load, regime, s in cells:
         eff_load = load if args.n_tasks != 1 else "none"
         seed = _seed(args.n_tasks, eff_load, s)
-        key = (eff_load, regime, str(args.passphrase_last), str(seed), str(args.base_temp))
-        if key in done:
+        cond = _cond(args, eff_load, regime, seed)
+        if _cell_key(cond) in done:
             continue
 
-        cfg = TrialConfig(n_tasks=args.n_tasks, naming=args.naming,
-                          t1_load=eff_load, regime=regime,
-                          passphrase_last=args.passphrase_last,
-                          passphrase_rank=args.passphrase_rank,
-                          anti_enumeration=args.anti_enumeration,
-                          report_order=args.report_order,
-                          load_engagement=args.load_engagement, seed=seed)
-        tr = build_trial(cfg)
+        tr = build_trial(_trial_config(args, eff_load, regime, seed))
 
         # one base draw at base_temp: logs the realised trajectory + covariates
         base = generate_trajectory(model, tok, tr, finite_budget=budget,
@@ -213,11 +306,9 @@ def run_full(args):
 
         keep_raw = (n_run < args.raw_subsample)
         row = dict(
-            model=args.model, quant_tag=quant, n_tasks=args.n_tasks,
-            naming=args.naming, t1_load=eff_load, regime=regime,
-            passphrase_last=args.passphrase_last, report_order=args.report_order,
-            load_engagement=args.load_engagement, base_temp=args.base_temp,
-            max_new_tokens=args.max_new_tokens, seed=seed,
+            cond, model=args.model, quant_tag=quant,
+            passphrase_last=_pp_last_logged(args),
+            max_new_tokens=args.max_new_tokens,
             t2_phrase=tr.t2_phrase, t2_task_name=tr.t2_task_name,
             t2_rank=tr.t2_rank, t2_abs_index=tr.t2_abs_index,
             k=sc["k"], s_access=("" if sc["s_access"] is None else sc["s_access"]),
@@ -225,7 +316,10 @@ def run_full(args):
             report_bits=_join(sc["report_bits"]),
             access_bits=("" if sc["access_bits"] is None else _join(sc["access_bits"])),
             t1_per=_join(sc["t1_per"]), cot_len_per=_join(sc["cot_len_per"]),
+            proc_rank_per=_join(sc["proc_rank_per"]),
+            order_tau_per=_join(sc["order_tau_per"]),
             t1_mean=_mean(sc["t1_per"]), cot_len_mean=_mean(sc["cot_len_per"]),
+            order_tau_mean=_mean(sc["order_tau_per"]),
             n_truncated_samples=n_trunc,
             frac_truncated=round(n_trunc / len(truncs), 4) if truncs else "",
             any_degenerate=int(sc["degenerate"]),
@@ -233,14 +327,15 @@ def run_full(args):
             base_output_truncated=int(bool(base.output_truncated)),
             realized_report_contains=int(_realized_report(
                 base.text, tr.t2_task_name, tr.t2_phrase)),
-            realized_t2_in_cot=(int(t2_in_cot(base.text, tr.t2_phrase, tr.t2_task_name))
+            realized_t2_in_cot=(int(t2_in_cot(base.text, access_cues(tr),
+                                              tr.t2_task_name))
                                 if regime == "cot" else ""),
             raw_output=(base.text if keep_raw else ""),
         )
         w.writerow(row); f.flush()
         if logs is not None:
             logs.write(json.dumps(dict(
-                seed=seed, t1_load=eff_load, regime=regime,
+                cond,
                 t2_phrase=tr.t2_phrase, t2_task_name=tr.t2_task_name,
                 base=base.text, samples=samples, truncs=truncs)) + "\n")
             logs.flush()
@@ -274,13 +369,9 @@ def run_full(args):
 def run_legacy(args):
     model, tok = load_model(args.model)
     out = args.out
-    os.makedirs(os.path.dirname(out), exist_ok=True)
+    os.makedirs(os.path.dirname(out) or ".", exist_ok=True)
     done = _done_cells(out)
-    new_file = not os.path.exists(out)
-    f = open(out, "a", newline="")
-    w = csv.DictWriter(f, fieldnames=FIELDS)
-    if new_file:
-        w.writeheader(); f.flush()
+    f, w = _open_writer(out, FIELDS, _cond(args, "", "", ""))
 
     cells = []
     for s in range(args.n_seeds):
@@ -295,15 +386,11 @@ def run_legacy(args):
     for i, (load, regime, s) in enumerate(cells):
         eff_load = load if args.n_tasks != 1 else "none"
         seed = _seed(args.n_tasks, eff_load, s)
-        key = (eff_load, regime, str(args.passphrase_last), str(seed), str(args.base_temp))
-        if key in done:
+        cond = _cond(args, eff_load, regime, seed)
+        if _cell_key(cond) in done:
             continue
 
-        cfg = TrialConfig(n_tasks=args.n_tasks, naming=args.naming,
-                          t1_load=eff_load, regime=regime,
-                          passphrase_last=args.passphrase_last,
-                          anti_enumeration=args.anti_enumeration, seed=seed)
-        tr = build_trial(cfg)
+        tr = build_trial(_trial_config(args, eff_load, regime, seed))
         traj = generate_trajectory(model, tok, tr, finite_budget=None,
                                    temperature=args.base_temp,
                                    max_new_tokens=args.max_new_tokens)
@@ -311,9 +398,8 @@ def run_legacy(args):
         report_at = "post_cot" if regime == "cot" else "response"
         has_fork = traj.offset(report_at) is not None
         row = dict(
-            model=args.model, n_tasks=args.n_tasks, naming=args.naming,
-            t1_load=eff_load, regime=regime, passphrase_last=args.passphrase_last,
-            base_temp=args.base_temp, probe_k=args.k, seed=seed,
+            cond, model=args.model, passphrase_last=_pp_last_logged(args),
+            probe_k=args.k,
             t2_phrase=tr.t2_phrase, t2_task_name=tr.t2_task_name,
             t2_rank=tr.t2_rank, t2_abs_index=tr.t2_abs_index,
             cot_len_chars=len(traj.text),
@@ -321,7 +407,8 @@ def run_legacy(args):
             has_fork_point=int(has_fork),
             realized_report_contains=int(_realized_report(
                 traj.text, tr.t2_task_name, tr.t2_phrase)),
-            realized_t2_in_cot=int(t2_in_cot(traj.text, tr.t2_phrase, tr.t2_task_name))
+            realized_t2_in_cot=int(t2_in_cot(traj.text, access_cues(tr),
+                                             tr.t2_task_name))
                                 if regime == "cot" else "",
             t1_correct=_t1_correct(traj.text, tr),
             report_s="", report_k="", report_degenerate="",
@@ -348,7 +435,7 @@ def run_legacy(args):
                 dega = False
             except DegenerateForkError as e:
                 accs, dega = e.samples, True
-            sca = score_access_samples(accs, tr.t2_phrase, tr.t2_task_name)
+            sca = score_access_samples(accs, access_cues(tr), tr.t2_task_name)
             row.update(access_s=sca["s"], access_k=sca["k"],
                        access_degenerate=int(dega or sca["degenerate"]))
 
@@ -369,17 +456,26 @@ def main():
     p.add_argument("--regimes", nargs="+", default=["cot", "direct"])
     p.add_argument("--n-tasks", type=int, default=5)
     p.add_argument("--naming", default="non-ordered")
-    p.add_argument("--passphrase-last", dest="passphrase_last",
-                   action="store_true", default=True)
-    p.add_argument("--passphrase-rank", dest="passphrase_rank", type=int,
-                   default=None,
-                   help="issue #18 §5 (Campaign B): fix the passphrase's 1-indexed "
-                        "stream rank (1..n_tasks); overrides --passphrase-last. Use "
-                        "a distinct --out per rank so resume keys don't collide.")
+    p.add_argument("--passphrase-last", dest="passphrase_last_compat",
+                   action="store_true",
+                   help="deprecated no-op (same as --passphrase-rank last)")
+    p.add_argument("--passphrase-rank", dest="passphrase_rank", default="last",
+                   help="target position among the tasks in stream order: 'last' "
+                        "(default), 'random', or a 1-indexed rank 1..n_tasks")
+    p.add_argument("--compute-order", dest="compute_order", default="none",
+                   choices=["none", "stream", "reverse", "load_first"],
+                   help="instructed processing order (acts on <Thinking> and "
+                        "<Final_Answers>); load_first = all other tasks before "
+                        "any copy-paste task")
+    p.add_argument("--example-order", dest="example_order", default="load_first",
+                   choices=["load_first", "passphrase_first"],
+                   help="order of the two tasks in the worked example's stream")
+    p.add_argument("--target-kind", dest="target_kind", default="nato",
+                   choices=["nato", "digits", "trivial_math"],
+                   help="target task: copy 3 NATO words, copy 3 two-digit "
+                        "numbers, or a one-digit addition")
     p.add_argument("--anti-enumeration", dest="anti_enumeration",
                    action="store_true", default=True)
-    p.add_argument("--report-order", dest="report_order", default="none",
-                   choices=["none", "stream", "reverse"])
     p.add_argument("--load-engagement", dest="load_engagement", default="solve",
                    choices=["solve", "ignore"])
     p.add_argument("--n-seeds", type=int, default=150)
@@ -401,6 +497,15 @@ def main():
                    help="keep raw_output in the CSV for the first N trials (§7.2)")
     p.add_argument("--out", required=True)
     args = p.parse_args()
+    args.passphrase_spec, args.pp_last, args.pp_rank = _passphrase_spec(args.passphrase_rank)
+    if args.pp_rank is not None and not 1 <= args.pp_rank <= args.n_tasks:
+        p.error(f"--passphrase-rank {args.pp_rank} out of range [1, {args.n_tasks}]")
+    for load in (args.loads if args.n_tasks > 1 else ["none"]):
+        for regime in args.regimes:
+            try:
+                build_trial(_trial_config(args, load, regime, 0))
+            except ValueError as e:
+                p.error(f"invalid condition ({load}/{regime}): {e}")
 
     if args.resample_full > 0:
         run_full(args)
