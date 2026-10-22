@@ -130,6 +130,10 @@ def main():
              "numbers, or a one-digit addition.",
     )
     parser.add_argument(
+        "--attention-cue", action="store_true",
+        help='Append "Make sure to answer ALL the tasks." to the rules.',
+    )
+    parser.add_argument(
         "--load-engagement", choices=["solve", "ignore"], default="solve",
         help="Design D3 axis: 'solve' (default, byte-exact) or 'ignore' — append "
              "a uniform rule to answer UNKNOWN for any determine/deduce/compute "
@@ -321,6 +325,7 @@ def main():
                        if args.compute_order == "all" else args.compute_order),
         example_order=args.example_order,
         target_kind=args.target_kind,
+        attention_cue=args.attention_cue,
         load_engagement=args.load_engagement,
         lags=tuple(args.lags),
         n_pres=tuple(n_pres),

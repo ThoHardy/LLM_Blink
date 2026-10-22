@@ -6,17 +6,20 @@
 # Usage:  run_conditions_model.sh <ollama-model> <out-slug> [condition ...]
 #   e.g.  run_conditions_model.sh qwen2.5:3b qwen2.5_3b
 #         run_conditions_model.sh qwen2.5:3b qwen2.5_3b rank1 digits
-# Conditions: rank1 rank1_loadfirst digits trivmath   (N_MAIN seeds)
-#             rank1_exPF rank1_loadfirst_exPF          (N_CTRL seeds, example control)
+# Conditions: base cue rank1 rank1_loadfirst loadfirst digits trivmath   (N_MAIN seeds)
+#             rank1_exPF rank1_loadfirst_exPF                             (N_CTRL seeds)
+#   base = the Campaign-A main task (needed when the model has no scale_*.csv yet)
+# Env: N_MAIN (100), N_CTRL (30), THINK=off for thinking-capable models (Qwen3).
 #
 # Resumable: probe_pilot skips completed cells, so re-running continues.
 set -e
 MODEL="$1"; SLUG="$2"; shift 2 || true
 if [[ -z "$MODEL" || -z "$SLUG" ]]; then echo "usage: $0 <model> <slug> [condition ...]"; exit 2; fi
 CONDS=("$@")
-(( ${#CONDS} )) || CONDS=(rank1 rank1_loadfirst digits trivmath rank1_exPF rank1_loadfirst_exPF)
+(( ${#CONDS} )) || CONDS=(base cue rank1 rank1_loadfirst loadfirst digits trivmath rank1_exPF rank1_loadfirst_exPF)
 N_MAIN=${N_MAIN:-100}
 N_CTRL=${N_CTRL:-30}
+THINK=${THINK:-default}
 cd /Users/ulysse/__projects__
 PY=/Users/ulysse/__projects__/LLM_Blink/.venv/bin/python3
 export PATH="/opt/homebrew/bin:$PATH"
@@ -25,6 +28,9 @@ LOADS="trivial math_bench_2 math_bench_4 math_bench_5"
 
 for C in $CONDS; do
   case $C in
+    base)                 FLAGS=(); N=$N_MAIN ;;
+    cue)                  FLAGS=(--attention-cue); N=$N_MAIN ;;
+    loadfirst)            FLAGS=(--compute-order load_first); N=$N_MAIN ;;
     rank1)                FLAGS=(--passphrase-rank 1); N=$N_MAIN ;;
     rank1_loadfirst)      FLAGS=(--passphrase-rank 1 --compute-order load_first); N=$N_MAIN ;;
     digits)               FLAGS=(--target-kind digits); N=$N_MAIN ;;
@@ -40,7 +46,7 @@ for C in $CONDS; do
     --n-tasks 5 --n-seeds $N \
     --resample-full 20 --report-forks 0 --access on \
     --base-temp 1.0 --budget none --max-new-tokens 8192 \
-    --n-workers 16 --keep-logs ${FLAGS[@]} \
+    --n-workers 16 --keep-logs --think $THINK ${FLAGS[@]} \
     --out "$OUT" >> "$R/conditions_${C}_${SLUG}.log" 2>&1
   [ -f "${OUT%.csv}.samples.jsonl" ] && gzip -f "${OUT%.csv}.samples.jsonl"
   echo "===== $C: $MODEL  DONE $(date) ====="

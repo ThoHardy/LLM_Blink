@@ -132,6 +132,7 @@ All options are visible via `run_experiment.py --help`; the same names exist as 
 | `--compute-order` | `none` | Instructed **processing** order, written into the rules so it acts on `<Thinking>` and `<Final_Answers>` alike (replaces the old `--report-order`, 2026-10-21): `none` (byte-exact, spontaneous order), `stream`, `reverse`, `load_first` (all other tasks before any copy-paste task), or `all` to sweep the four arms. The worked example is reordered to match. Pure prompt text: arms are exactly paired. |
 | `--example-order` | `load_first` | Order of the two tasks in the worked example's stream: `load_first` (byte-exact) or `passphrase_first`. Control for priming by the example. |
 | `--target-kind` | `nato` | Target task: `nato` (copy 3 NATO words, byte-exact), `digits` (copy 3 two-digit numbers, never equal to a load answer), `trivial_math` (a one-digit addition; the access probe looks for the expression, not the bare integer). Every other RNG draw is unchanged, so target kinds are exactly paired. |
+| `--attention-cue` | off | Appends the attentional cue "Make sure to answer ALL the tasks." to the rules (2026-10-22). Pure prompt text: paired with the no-cue arm. |
 | `--no-anti-enumeration` | off | Drops the anti-enumeration instruction from the cot template (idea I1; default ON since 2026-07-22). Compliance columns `n_packets_in_cot` / `n_filler_packets_in_cot` / `enumerated_fillers_in_cot` are logged either way, and `backfill_readout_columns` computes them retroactively on old CSVs. |
 | `--answer-budget` | `512` | Stage-2 budget (the `<Final_Answers>` block) under a finite budget. Generous by design — the report channel is never rationed; exhaustion is flagged `output_truncated`. |
 | `--loads` | `trivial semantic_4` | Load-task difficulty. Accepts `trivial`, `semantic_0..4`, `math_0..4` (aliases `easy`/`hard`/`easy_math`/`hard_math`); `none` is legacy-only. |
@@ -163,6 +164,9 @@ Manipulation check, per sample: `proc_rank_per` (rank of the target in the reali
 | Example-priming control | add `--example-order passphrase_first` (fewer seeds) |
 | Numeric passphrase | `--target-kind digits` |
 | Trivial math target | `--target-kind trivial_math` (not with `load_first`; use `reverse`) |
+| Attentional cue | `--attention-cue` |
+
+`probe_pilot.py --think off` (also `THINK=off` for the two shell drivers) disables the native reasoning of thinking-capable models: `think: false` on Ollama, `enable_thinking=False` on HF. **Required for Qwen3**, which otherwise reasons natively in both regimes (on recent Ollama that reasoning is returned outside `content`, so it would silently escape the read-outs).
 
 ### Stream geometry
 

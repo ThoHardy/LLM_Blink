@@ -70,6 +70,9 @@ class OllamaBackend:
             ) from exc
         self.model_name = model_name
         self.approx_logprobs = approx_logprobs
+        # Native reasoning switch for thinking-capable models (Qwen3, ...):
+        # None = server default (Qwen3 thinks!), False = sent as "think": false.
+        self.think: Optional[bool] = None
         self._client = OpenAI(base_url=base_url, api_key="ollama")
         # Native Ollama root (strip the OpenAI-compat "/v1" suffix). The native
         # /api/chat endpoint is what continue_generate uses: unlike the
@@ -97,6 +100,8 @@ class OllamaBackend:
             options["seed"] = int(seed)
         payload = {"model": self.model_name, "messages": messages,
                    "stream": False, "options": options}
+        if self.think is not None:
+            payload["think"] = bool(self.think)
         req = urllib.request.Request(
             self._native_url + "/api/chat",
             data=json.dumps(payload).encode("utf-8"),
@@ -119,6 +124,13 @@ class OllamaBackend:
         ``truncated`` means generation hit the ``max_new_tokens`` budget
         (finish_reason == "length") instead of finishing naturally.
         """
+        if self.think is not None:
+            # the OpenAI-compat path has no think switch: use the native one
+            text, _n, truncated = self.continue_generate(
+                system, user, "", max_new_tokens, temperature, stop_at)
+            if stop_at and text.endswith(stop_at):
+                text = text[: -len(stop_at)]
+            return (text, truncated) if return_truncated else text
         kwargs: dict = dict(
             model=self.model_name,
             messages=_build_messages(system, user),
@@ -402,7 +414,9 @@ def _report_generate_hf(model, tok, system: str, user: str,
         gen_kwargs.update(do_sample=False)
 
     with torch.no_grad():
-        ids = _build_prompt_ids(tok, system, user).to(model.device)
+        ids = _build_prompt_ids(tok, system, user,
+                                enable_thinking=getattr(tok, "blink_enable_thinking", None)
+                                ).to(model.device)
         out = model.generate(ids, **gen_kwargs)
         gen = out[0, ids.shape[1]:]
         text = tok.decode(gen, skip_special_tokens=True)
@@ -469,7 +483,8 @@ def _continue_generate_hf(model, tok, system: str, user: str,
         gen_kwargs.update(do_sample=False)
 
     with torch.no_grad():
-        ids = _build_prompt_ids(tok, system, user)
+        ids = _build_prompt_ids(tok, system, user,
+                                enable_thinking=getattr(tok, "blink_enable_thinking", None))
         if prefilled_assistant:
             pre = tok(prefilled_assistant, add_special_tokens=False,
                       return_tensors="pt").input_ids

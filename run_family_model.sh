@@ -8,6 +8,7 @@
 #   e.g.  run_family_model.sh gemma3:270m gemma3_0.27b
 #
 # Resumable: probe_pilot skips completed cells, so re-running continues.
+# Env: THINK=off for thinking-capable models (Qwen3), else the server default.
 set -e
 MODEL="$1"; SLUG="$2"
 if [[ -z "$MODEL" || -z "$SLUG" ]]; then echo "usage: $0 <model> <slug>"; exit 2; fi
@@ -16,6 +17,7 @@ PY=/Users/ulysse/__projects__/LLM_Blink/.venv/bin/python3
 export PATH="/opt/homebrew/bin:$PATH"
 R=LLM_Blink/results
 LOADS="trivial math_bench_2 math_bench_4 math_bench_5"
+THINK=${THINK:-default}
 
 echo "===== Campaign A ext: $MODEL -> $SLUG  START $(date) ====="
 $PY -B LLM_Blink/probe_pilot.py --model "$MODEL" \
@@ -23,7 +25,7 @@ $PY -B LLM_Blink/probe_pilot.py --model "$MODEL" \
   --n-tasks 5 --n-seeds 100 \
   --resample-full 20 --report-forks 0 --access on \
   --base-temp 1.0 --budget none --max-new-tokens 8192 \
-  --n-workers 16 --keep-logs \
+  --n-workers 16 --keep-logs --think $THINK \
   --out "$R/scale_${SLUG}.csv" >> "$R/campaignA_${SLUG}.log" 2>&1
 
 # compress the transcript (text compresses ~6-10x) so it is committable

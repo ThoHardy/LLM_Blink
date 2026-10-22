@@ -652,6 +652,9 @@ class TrialConfig:
     # (kind, seed): positions, names, load items and fillers stay identical
     # across target kinds, so the contrasts are exactly paired.
     target_kind: str = "nato"
+    # Attentional cue (2026-10-22): when True the rules end with
+    # " Make sure to answer ALL the tasks." Pure prompt text, NO RNG draw.
+    attention_cue: bool = False
     # T1-engagement axis (2026-08-15, issue #14 Step 5 / D3): whether the model
     # is asked to SOLVE the load tasks or IGNORE them.
     #   "solve"  -> today's prompt, byte-exact.
@@ -866,6 +869,7 @@ _COMPUTE_ORDER_SENTENCE = {
     "load_first": " Compute the results of all other tasks before handling any "
                   "copy-paste task.",
 }
+_ATTENTION_CUE = " Make sure to answer ALL the tasks."
 _VALID_EXAMPLE_ORDERS = ("load_first", "passphrase_first")
 _VALID_TARGET_KINDS = ("nato", "digits", "trivial_math")
 
@@ -1155,7 +1159,8 @@ def _build_trial_tasks(cfg: TrialConfig) -> Trial:
 
     rules = (RULES_TASKS
              + (_LOAD_IGNORE_RULE if cfg.load_engagement == "ignore" else "")
-             + _COMPUTE_ORDER_SENTENCE[cfg.compute_order])
+             + _COMPUTE_ORDER_SENTENCE[cfg.compute_order]
+             + (_ATTENTION_CUE if cfg.attention_cue else ""))
     example = _worked_example_tasks(cfg.naming, cfg.regime, cfg.compute_order,
                                     cfg.example_order, cfg.target_kind)
     header = (f"{rules}\n"

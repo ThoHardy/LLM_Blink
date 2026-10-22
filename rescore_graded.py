@@ -86,6 +86,7 @@ def _rebuild(row):
             c_order = _col("compute_order", "none")
             e_order = _col("example_order", "load_first")
             t_kind = _col("target_kind", "nato")
+            a_cue = _col("attention_cue", "False") in ("True", "true", "1")
             spec = _col("passphrase_spec", "")
             if spec.isdigit():
                 pp_last, pp_rank = True, int(spec)
@@ -105,6 +106,7 @@ def _rebuild(row):
                 passphrase_last=pp_last, passphrase_rank=pp_rank,
                 anti_enumeration=anti, compute_order=c_order,
                 example_order=e_order, target_kind=t_kind,
+                attention_cue=a_cue,
                 load_engagement=l_eng,
             ))
         except (ValueError, TypeError):

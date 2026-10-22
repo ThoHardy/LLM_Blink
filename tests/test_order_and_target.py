@@ -176,3 +176,45 @@ def test_resume_key():
         dict(example_order="passphrase_first"), dict(target_kind="digits"),
         dict(target_kind="trivial_math")]}
     assert len(keys) == 6
+
+
+def test_attention_cue():
+    cue = "Make sure to answer ALL the tasks."
+    a, b = build_trial(_cfg()), build_trial(_cfg(attention_cue=True))
+    assert cue not in a.user and cue in b.user
+    assert b.user.split("\nEXAMPLE")[0].endswith(cue)
+    assert a.tasks == b.tasks
+    assert b.user.replace(" " + cue, "", 1) == a.user
+
+
+def test_resume_key_cue_and_think():
+    from LLM_Blink.probe_pilot import _cell_key
+    base = dict(n_tasks=5, naming="non-ordered", t1_load="trivial", regime="cot",
+                passphrase_last="True", seed="7", base_temp="1.0")
+    assert _cell_key(base) == _cell_key(dict(base, attention_cue=False, think="default"))
+    assert len({_cell_key(base), _cell_key(dict(base, attention_cue=True)),
+                _cell_key(dict(base, think="off"))}) == 3
+
+
+def test_ollama_think_payload(monkeypatch):
+    import json
+    from LLM_Blink import model as M
+    pytest.importorskip("openai")
+    m = M.OllamaBackend("qwen3:4b")
+    sent = {}
+
+    class R:
+        def __enter__(self): return self
+        def __exit__(self, *a): return False
+        def read(self): return json.dumps({"message": {"content": "x</Final_Answers>"},
+                                           "done_reason": "stop", "eval_count": 3}).encode()
+
+    def fake_urlopen(req, *a, **k):
+        sent.update(json.loads(req.data.decode()))
+        return R()
+    monkeypatch.setattr(M.urllib.request, "urlopen", fake_urlopen)
+    m.continue_generate("s", "u", "", 10)
+    assert "think" not in sent
+    m.think = False
+    text, trunc = m.generate("s", "u", 10, stop_at="</Final_Answers>", return_truncated=True)
+    assert sent["think"] is False and text == "x" and not trunc

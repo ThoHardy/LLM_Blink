@@ -31,6 +31,8 @@ Condition flags (2026-10-21):
     --compute-order {none,stream,reverse,load_first}   instructed processing order
     --example-order {load_first,passphrase_first}      worked-example task order
     --target-kind {nato,digits,trivial_math}           what the target task is
+    --attention-cue                                    add "Make sure to answer ALL the tasks."
+    --think {default,off}   native reasoning switch (Qwen3 etc.); 'off' = no native thinking
 
 Usage (issue #18 Campaign A, run from the folder CONTAINING LLM_Blink/):
     python3 -B LLM_Blink/probe_pilot.py --model qwen2.5:3b \
@@ -73,14 +75,15 @@ FIELDS = [
     "report_s", "report_k", "report_degenerate",
     "access_s", "access_k", "access_degenerate",
     "passphrase_spec", "anti_enumeration", "compute_order", "example_order",
-    "target_kind", "load_engagement",
+    "target_kind", "load_engagement", "attention_cue", "think",
 ]
 
 # resample-full schema — issue #18 §7.2 (per-trial vectors kept in list columns)
 FIELDS_FULL = [
     "model", "quant_tag", "n_tasks", "naming", "t1_load", "regime",
     "passphrase_last", "passphrase_spec", "anti_enumeration", "compute_order",
-    "example_order", "target_kind", "load_engagement", "base_temp",
+    "example_order", "target_kind", "attention_cue", "think", "load_engagement",
+    "base_temp",
     "max_new_tokens", "seed", "t2_phrase", "t2_task_name", "t2_rank",
     "t2_abs_index",
     # both borders, same k samples
@@ -109,9 +112,11 @@ def _seed(nt, load, s):
 
 KEY_FIELDS = ("n_tasks", "naming", "t1_load", "regime", "passphrase_spec",
               "anti_enumeration", "compute_order", "example_order",
-              "target_kind", "load_engagement", "seed", "base_temp")
+              "target_kind", "attention_cue", "think", "load_engagement",
+              "seed", "base_temp")
 COND_DEFAULTS = {"anti_enumeration": "True", "compute_order": "none",
                  "example_order": "load_first", "target_kind": "nato",
+                 "attention_cue": "False", "think": "default",
                  "load_engagement": "solve"}
 
 
@@ -184,6 +189,7 @@ def _cond(args, load, regime, seed):
                 compute_order=args.compute_order,
                 example_order=args.example_order,
                 target_kind=args.target_kind,
+                attention_cue=args.attention_cue, think=args.think,
                 load_engagement=args.load_engagement,
                 seed=seed, base_temp=args.base_temp)
 
@@ -197,7 +203,18 @@ def _trial_config(args, load, regime, seed):
                        compute_order=args.compute_order,
                        example_order=args.example_order,
                        target_kind=args.target_kind,
+                       attention_cue=args.attention_cue,
                        load_engagement=args.load_engagement, seed=seed)
+
+
+def _load(args):
+    model, tok = load_model(args.model)
+    if args.think == "off":
+        if isinstance(model, OllamaBackend):
+            model.think = False
+        elif tok is not None:
+            tok.blink_enable_thinking = False
+    return model, tok
 
 
 def _pp_last_logged(args):
@@ -253,7 +270,7 @@ def _mean(xs):
 # ---------------------------------------------------------------------------
 
 def run_full(args):
-    model, tok = load_model(args.model)
+    model, tok = _load(args)
     quant = _quant_tag(args.model) if isinstance(model, OllamaBackend) else ""
     out = args.out
     os.makedirs(os.path.dirname(out) or ".", exist_ok=True)
@@ -272,6 +289,7 @@ def run_full(args):
           f"{len(done)} done, K={args.resample_full}, max_new_tokens={args.max_new_tokens}, "
           f"passphrase={args.passphrase_spec}, compute_order={args.compute_order}, "
           f"example_order={args.example_order}, target_kind={args.target_kind}, "
+          f"attention_cue={args.attention_cue}, think={args.think}, "
           f"load_engagement={args.load_engagement}",
           flush=True)
 
@@ -367,7 +385,7 @@ def run_full(args):
 # ---------------------------------------------------------------------------
 
 def run_legacy(args):
-    model, tok = load_model(args.model)
+    model, tok = _load(args)
     out = args.out
     os.makedirs(os.path.dirname(out) or ".", exist_ok=True)
     done = _done_cells(out)
@@ -474,6 +492,12 @@ def main():
                    choices=["nato", "digits", "trivial_math"],
                    help="target task: copy 3 NATO words, copy 3 two-digit "
                         "numbers, or a one-digit addition")
+    p.add_argument("--attention-cue", dest="attention_cue", action="store_true",
+                   help='append "Make sure to answer ALL the tasks." to the rules')
+    p.add_argument("--think", default="default", choices=["default", "off"],
+                   help="native reasoning of thinking-capable models (Qwen3...): "
+                        "'off' sends think=false (Ollama) / enable_thinking=False "
+                        "(HF); 'default' leaves the server default"),
     p.add_argument("--anti-enumeration", dest="anti_enumeration",
                    action="store_true", default=True)
     p.add_argument("--load-engagement", dest="load_engagement", default="solve",
