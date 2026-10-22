@@ -74,11 +74,26 @@ def _rebuild(row):
             anti = (_as_bool(row["anti_enumeration"])
                     if "anti_enumeration" in row.index
                     and pd.notna(row["anti_enumeration"]) else False)
-            # report_order (2026-08-15, Step 4): CSVs predating the column get
-            # "none" -> byte-exact old prompt (same pattern as anti_enumeration).
-            r_order = (str(row["report_order"])
-                       if "report_order" in row.index
-                       and pd.notna(row["report_order"]) else "none")
+            # 2026-10-21 axes: CSVs predating a column get its default
+            # (byte-exact old prompt). A non-'none' report_order (axis removed
+            # 2026-10-21) cannot be rebuilt.
+            def _col(name, default):
+                return (str(row[name]) if name in row.index
+                        and pd.notna(row[name]) and str(row[name]) != ""
+                        else default)
+            if _col("report_order", "none") != "none":
+                return None
+            c_order = _col("compute_order", "none")
+            e_order = _col("example_order", "load_first")
+            t_kind = _col("target_kind", "nato")
+            a_cue = _col("attention_cue", "False") in ("True", "true", "1")
+            spec = _col("passphrase_spec", "")
+            if spec.isdigit():
+                pp_last, pp_rank = True, int(spec)
+            elif spec:
+                pp_last, pp_rank = spec == "last", None
+            else:
+                pp_last, pp_rank = _as_bool(row["passphrase_last"]), None
             # load_engagement (2026-08-15, Step 5): default "solve" for
             # pre-column CSVs -> byte-exact old prompt.
             l_eng = (str(row["load_engagement"])
@@ -88,8 +103,10 @@ def _rebuild(row):
                 t1_load=str(row["t1_load"]), regime=str(row["regime"]),
                 t2_words=int(row["t2_words"]), seed=int(row["seed"]),
                 n_tasks=int(row["n_tasks"]), naming=str(row["naming"]),
-                passphrase_last=_as_bool(row["passphrase_last"]),
-                anti_enumeration=anti, report_order=r_order,
+                passphrase_last=pp_last, passphrase_rank=pp_rank,
+                anti_enumeration=anti, compute_order=c_order,
+                example_order=e_order, target_kind=t_kind,
+                attention_cue=a_cue,
                 load_engagement=l_eng,
             ))
         except (ValueError, TypeError):

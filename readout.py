@@ -81,11 +81,19 @@ def _thinking_region(generated: str) -> str:
     return generated[start:j] if j != -1 else generated[start:]
 
 
-def t2_in_cot(generated: str, t2_phrase: str,
+def access_cues(trial):
+    """Content cues for the access probe: the target's own cues when set (e.g.
+    the expression of a trivial_math target, whose bare integer answer would
+    match any number in a math CoT), else the phrase itself."""
+    return getattr(trial, "t2_access_cues", None) or trial.t2_phrase
+
+
+def t2_in_cot(generated: str, t2_phrase,
               t2_task_name: str | None = None) -> bool:
     """Binary access probe (#14 §3.2): is the passphrase task mentioned or
     processed anywhere inside the model's own <Thinking> block, by name or
     content? Generalises ``t2_echoed_in_cot`` (which was phrase-only).
+    ``t2_phrase`` may be a string or a tuple of alternative content cues.
 
     Accepts either a full trajectory (the <Thinking> span is extracted) or a
     bare CoT continuation (no tags — the whole string is searched). Used both
@@ -96,7 +104,8 @@ def t2_in_cot(generated: str, t2_phrase: str,
     think = _thinking_region(generated)
     span = think if think else generated
     up = span.upper()
-    if t2_phrase and t2_phrase.upper() in up:
+    cues = (t2_phrase,) if isinstance(t2_phrase, str) else tuple(t2_phrase or ())
+    if any(c and str(c).upper() in up for c in cues):
         return True
     if t2_task_name:
         if re.search(r"\b" + re.escape(str(t2_task_name).upper()) + r"\b", up):
@@ -202,27 +211,75 @@ def task_rows(trial_or_tasks, reported: dict) -> list:
     return rows
 
 
-def report_order_respected(generated: str, trial, report_order: str = "none"):
-    """Kendall tau between the EMITTED report order and the INSTRUCTED order
-    (issue #14 Step 4/D4 manipulation check).
+def _mention_pattern(task) -> re.Pattern:
+    """A task is 'mentioned' via 'Task <NAME>', its packet number, or (for
+    non-numeric names) its bare name. Bare numeric names ('ordered' naming)
+    would match any digit in a math CoT, so they need the 'Task' prefix."""
+    name = re.escape(str(task["name"]).upper())
+    alts = [rf"\bTASK\s+{name}\b", rf"\bPACKET\s*0?{int(task['packet'])}\b"]
+    if not str(task["name"]).isdigit():
+        alts.append(rf"\b{name}\b")
+    return re.compile("|".join(alts))
 
-    Emitted order = order the task lines appear in <Final_Answers>. Instructed
-    order = ascending stream rank for "stream" (and for "none", the reference is
-    stream order, i.e. spontaneous compliance), descending for "reverse".
-    Returns tau in [-1, 1] (+1 = fully compliant, -1 = fully anti-compliant), or
-    None when fewer than 2 tasks were reported (tau undefined). Without this a
-    null on D4 is uninterpretable.
-    """
+
+def task_processing_order(generated: str, trial, regime: str = "cot") -> list:
+    """Uppercased task names in the order the model PROCESSED them.
+
+    cot: order of first mention inside <Thinking> (tasks never mentioned are
+    absent). direct, or a cot sample without a <Thinking> block: order of the
+    task lines in <Final_Answers>."""
+    think = _thinking_region(generated) if regime == "cot" else ""
+    if think:
+        up = think.upper()
+        pos = {}
+        for t in trial.tasks:
+            m = _mention_pattern(t).search(up)
+            if m:
+                pos[str(t["name"]).upper()] = m.start()
+        return sorted(pos, key=pos.get)
+    return list(parse_task_report(generated, trial)["reported"].keys())
+
+
+def instructed_order_keys(trial, compute_order: str = "none") -> dict:
+    """name -> sort key of the instructed processing order. 'none' uses stream
+    order (spontaneous compliance); 'load_first' ties all non-copy tasks."""
+    if compute_order == "reverse":
+        return {str(t["name"]).upper(): -t["rank"] for t in trial.tasks}
+    if compute_order == "load_first":
+        return {str(t["name"]).upper(): int(t["kind"] == "passphrase")
+                for t in trial.tasks}
+    return {str(t["name"]).upper(): t["rank"] for t in trial.tasks}
+
+
+def compute_order_respected(generated: str, trial, compute_order: str = "none",
+                            regime: str = "cot"):
+    """Manipulation check for the compute-order axis: Kendall tau-b between
+    the realised processing order (task_processing_order) and the instructed
+    one. +1 = fully compliant, -1 = fully reversed, None if < 2 tasks seen or
+    the instructed keys are all tied among the tasks seen. For 'load_first'
+    (loads mutually unordered) it is 2*f - 1, f = fraction of the other
+    processed tasks handled before the target (None if the target is absent)."""
     from scipy.stats import kendalltau
-    parsed = parse_task_report(generated, trial)
-    emitted = list(parsed["reported"].keys())            # emission order (upper)
-    rank_by_name = {str(t["name"]).upper(): t["rank"] for t in trial.tasks}
-    ranks = [rank_by_name[n] for n in emitted if n in rank_by_name]
-    if len(ranks) < 2:
+    keys = instructed_order_keys(trial, compute_order)
+    seq = [keys[n] for n in task_processing_order(generated, trial, regime)
+           if n in keys]
+    if compute_order == "load_first":
+        if 1 not in seq or len(seq) < 2:
+            return None
+        i = seq.index(1)
+        return 2 * (i / (len(seq) - 1)) - 1
+    if len(seq) < 2 or len(set(seq)) < 2:
         return None
-    target = [-r for r in ranks] if report_order == "reverse" else ranks
-    tau, _ = kendalltau(list(range(len(target))), target)
-    return float(tau)
+    tau, _ = kendalltau(list(range(len(seq))), seq)
+    return None if tau != tau else round(float(tau), 6)
+
+
+def passphrase_processing_rank(generated: str, trial, regime: str = "cot"):
+    """1-based rank of the target task in the realised processing order, or
+    None when it was never processed (the blink itself)."""
+    order = task_processing_order(generated, trial, regime)
+    pp = str(trial.t2_task_name).upper()
+    return order.index(pp) + 1 if pp in order else None
 
 
 def t2_scoring_prefix_tasks(generated: str, task_name: str):

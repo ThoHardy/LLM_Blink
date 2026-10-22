@@ -617,6 +617,12 @@ class TrialConfig:
     n_tasks: int | None = None
     naming: str = "ordered"        # "ordered" (Task 1..n, stream order) | "non-ordered"
     passphrase_last: bool = True   # passphrase = last task; False -> random rank
+    # Fixed passphrase rank (issue #18 §5, Campaign B): 1-indexed position of the
+    # passphrase among the n tasks in stream order (1 = first, n = last). None ->
+    # fall back to passphrase_last (default) or a random rank. When set it takes
+    # precedence over passphrase_last and, like passphrase_last=True, consumes NO
+    # extra RNG draw — so CSVs predating the field stay byte-exact (default None).
+    passphrase_rank: int | None = None
     # Anti-enumeration instruction (2026-07-22, idea I1): when True the cot
     # OUTPUT FORMAT explicitly forbids re-enumerating the stream packet by
     # packet inside <Thinking>. Task-design cot only; no effect on direct or
@@ -624,17 +630,31 @@ class TrialConfig:
     # Default True for new runs; rescore_graded defaults it to False for CSVs
     # predating the column, which reproduces the old prompt byte-exactly.
     anti_enumeration: bool = True
-    # Report-order axis (2026-08-15, issue #14 Step 4 / D4): instructs the
-    # order in which the model must list tasks in <Final_Answers>.
-    #   "none"    -> no ordering instruction (today's prompt, byte-exact);
-    #                measures the model's SPONTANEOUS report order.
-    #   "stream"  -> "...in the order in which they appeared in the stream."
-    #   "reverse" -> "...in reverse order of their appearance in the stream."
-    # Both experimental arms carry a length-matched, syntactically parallel
-    # sentence so the arms differ by ONE word, not by instruction count. Pure
-    # prompt text: NO effect on any RNG draw (7.2.2). rescore_graded defaults it
-    # to "none" for CSVs predating the column (byte-exact old prompt).
-    report_order: str = "none"
+    # Compute-order axis (2026-10-21; replaces the 2026-08-15 report-order
+    # axis): the order in which the model must PROCESS the tasks, so it acts
+    # on the <Thinking> block as well as on <Final_Answers>.
+    #   "none"       -> no ordering instruction (byte-exact default prompt).
+    #   "stream"     -> "...in the order in which they appeared in the stream."
+    #   "reverse"    -> "...in reverse order of their appearance in the stream."
+    #   "load_first" -> every other task before any copy-paste task.
+    # The worked example is reordered to match. Pure prompt text, NO RNG draw.
+    compute_order: str = "none"
+    # Worked-example task order (2026-10-21): "load_first" = load task at
+    # packet 02, copy task at packet 04 (byte-exact default);
+    # "passphrase_first" = the two swapped. Pure prompt text, NO RNG draw.
+    example_order: str = "load_first"
+    # Target content (2026-10-21):
+    #   "nato"         -> three NATO words to copy (byte-exact default).
+    #   "digits"       -> three 2-digit numbers to copy.
+    #   "trivial_math" -> a one-digit addition answered with an integer.
+    # The NATO phrase is ALWAYS drawn from the main RNG (then discarded for the
+    # other kinds), and the replacement comes from a separate RNG seeded by
+    # (kind, seed): positions, names, load items and fillers stay identical
+    # across target kinds, so the contrasts are exactly paired.
+    target_kind: str = "nato"
+    # Attentional cue (2026-10-22): when True the rules end with
+    # " Make sure to answer ALL the tasks." Pure prompt text, NO RNG draw.
+    attention_cue: bool = False
     # T1-engagement axis (2026-08-15, issue #14 Step 5 / D3): whether the model
     # is asked to SOLVE the load tasks or IGNORE them.
     #   "solve"  -> today's prompt, byte-exact.
@@ -668,6 +688,8 @@ class Trial:
                                    # CoT budget forces the block closed
     t2_task_name: str | None = None  # name of the passphrase task (new design)
     t2_rank: int | None = None       # 1-based rank of the passphrase task
+    t2_access_cues: tuple | None = None  # content strings the access probe looks
+                                         # for in the CoT (None -> t2_phrase)
 
 
 SYSTEM = "You are an automated data-extraction system."
@@ -837,14 +859,19 @@ def _build_trial_legacy(cfg: TrialConfig) -> Trial:
 
 _VALID_NAMINGS = ("ordered", "non-ordered")
 
-_VALID_REPORT_ORDERS = ("none", "stream", "reverse")
-# Length-matched, syntactically parallel; differ in one content word
-# ("in the order in which" vs "in reverse order of"). See TrialConfig.report_order.
-_REPORT_ORDER_SENTENCE = {
+_VALID_COMPUTE_ORDERS = ("none", "stream", "reverse", "load_first")
+_COMPUTE_ORDER_SENTENCE = {
     "none": "",
-    "stream": " List the tasks in the order in which they appeared in the stream.",
-    "reverse": " List the tasks in reverse order of their appearance in the stream.",
+    "stream": " Compute the results of the tasks in the order in which they "
+              "appeared in the stream.",
+    "reverse": " Compute the results of the tasks in reverse order of their "
+               "appearance in the stream.",
+    "load_first": " Compute the results of all other tasks before handling any "
+                  "copy-paste task.",
 }
+_ATTENTION_CUE = " Make sure to answer ALL the tasks."
+_VALID_EXAMPLE_ORDERS = ("load_first", "passphrase_first")
+_VALID_TARGET_KINDS = ("nato", "digits", "trivial_math")
 
 # 100 task names: unique, uppercase, disjoint from the NATO alphabet (reserved
 # for passphrases / the mask decoy), from _TRIVIAL_WORDS (trivial-task
@@ -926,43 +953,70 @@ def _sample_load_items(load: str, rng: random.Random, k: int) -> list:
     return [tuple(item) for item in rng.sample(list(bank), k)]
 
 
+_EXAMPLE_LOAD = dict(
+    question="Decide whether SALMON is an ANIMAL or a TOOL. Answer ANIMAL or TOOL.",
+    thought="a salmon is a fish, so the answer is ANIMAL.",
+    answer="ANIMAL", kind="load")
+_EXAMPLE_TARGETS = {
+    "nato": dict(question='Copy-paste these three words: "VICTOR XRAY ROMEO".',
+                 thought="I must copy the three words VICTOR XRAY ROMEO.",
+                 answer="VICTOR XRAY ROMEO", kind="passphrase"),
+    "digits": dict(question='Copy-paste these three numbers: "38 71 25".',
+                   thought="I must copy the three numbers 38 71 25.",
+                   answer="38 71 25", kind="passphrase"),
+    "trivial_math": dict(question="What is 2 + 6? Reply with only the final "
+                                  "integer answer.",
+                         thought="2 + 6 = 8, so the answer is 8.",
+                         answer="8", kind="passphrase"),
+}
+
+
+def _order_tasks(tasks: list, compute_order: str) -> list:
+    """Order (stream-ordered) tasks as the compute_order instruction requires."""
+    if compute_order == "reverse":
+        return tasks[::-1]
+    if compute_order == "load_first":
+        return ([t for t in tasks if t["kind"] != "passphrase"]
+                + [t for t in tasks if t["kind"] == "passphrase"])
+    return list(tasks)
+
+
 def _worked_example_tasks(naming: str, regime: str,
-                          report_order: str = "none") -> str:
+                          compute_order: str = "none",
+                          example_order: str = "load_first",
+                          target_kind: str = "nato") -> str:
     """Fixed worked example for the task-stream template.
 
-    Shows 2 tasks; live test streams draw their own n_tasks, and the reserved
-    example names never appear in TASK_NAME_BANK, so nothing leaks. The
-    example demonstrates the '- Task <NAME>: <result>' line format and (cot)
-    counting the tasks found, without any copyable placeholder text.
-
-    report_order (2026-08-15, Step 4/D4): the <Final_Answers> lines are shown in
-    the instructed order. "none"/"stream" -> stream order (Task n1 then n2);
-    "reverse" -> reverse order (Task n2 then n1). Without a matching example
-    models generally will not comply with "reverse" at all. The <Thinking>
-    reasoning stays in stream order (natural scan) in every arm.
+    Shows 2 tasks (packets 02 and 04); the reserved example names never appear
+    in TASK_NAME_BANK, so nothing leaks. example_order sets which task sits at
+    packet 02; compute_order sets the order in which the example's <Thinking>
+    and <Final_Answers> handle them; target_kind sets the copy/target task.
+    The defaults reproduce the pre-2026-10-21 example byte-exactly.
     """
     n1, n2 = ("1", "2") if naming == "ordered" else _RESERVED_EXAMPLE_NAMES
+    tgt = _EXAMPLE_TARGETS[target_kind]
+    first, second = ((_EXAMPLE_LOAD, tgt) if example_order == "load_first"
+                     else (tgt, _EXAMPLE_LOAD))
+    ex = [dict(first, name=n1, packet="02"), dict(second, name=n2, packet="04")]
     stream = (
         "[Packet 01]: System initialization complete. Weather is clear.\n"
-        f"[Packet 02 - Task {n1}]: Decide whether SALMON is an ANIMAL or a "
-        "TOOL. Answer ANIMAL or TOOL.\n"
+        f"[Packet 02 - Task {n1}]: {first['question']}\n"
         "[Packet 03]: Update 1.0.3 applied to main server.\n"
-        f'[Packet 04 - Task {n2}]: Copy-paste these three words: '
-        '"VICTOR XRAY ROMEO".\n'
+        f"[Packet 04 - Task {n2}]: {second['question']}\n"
         "[Packet 05]: Backup job 17 finished successfully.\n"
         "End of stream."
     )
+    ordered = _order_tasks(ex, compute_order)
     thinking = (
         "<Thinking>\n"
-        f"Packet 02 is Task {n1}: a salmon is a fish, so the answer is ANIMAL. "
-        f"Packet 04 is Task {n2}: I must copy the three words VICTOR XRAY "
-        "ROMEO. I found 2 tasks in this stream.\n"
+        + " ".join(f"Packet {t['packet']} is Task {t['name']}: {t['thought']}"
+                   for t in ordered)
+        + " I found 2 tasks in this stream.\n"
         "</Thinking>\n"
     )
-    ans_lines = [f"- Task {n1}: ANIMAL", f"- Task {n2}: VICTOR XRAY ROMEO"]
-    if report_order == "reverse":
-        ans_lines = ans_lines[::-1]
-    answers = "<Final_Answers>\n" + "\n".join(ans_lines) + "\n</Final_Answers>"
+    answers = ("<Final_Answers>\n"
+               + "\n".join(f"- Task {t['name']}: {t['answer']}" for t in ordered)
+               + "\n</Final_Answers>")
     body = (thinking + answers) if regime == "cot" else answers
     return ("EXAMPLE (illustration only - not part of the real stream):\n"
             "DATA STREAM:\n"
@@ -972,8 +1026,7 @@ def _worked_example_tasks(naming: str, regime: str,
             "Now process the following ACTUAL stream:")
 
 
-def _output_format_tasks(regime: str, anti_enumeration: bool = False,
-                         report_order: str = "none") -> str:
+def _output_format_tasks(regime: str, anti_enumeration: bool = False) -> str:
     """Answer-format spec. Prose instructions, no fill-in-the-blank placeholder
     (CoT-skip fix 1): the only literal-looking line is the per-task line format
     itself, which the worked example shows correctly instantiated.
@@ -981,17 +1034,13 @@ def _output_format_tasks(regime: str, anti_enumeration: bool = False,
     anti_enumeration=True (cot only) appends an explicit prohibition on
     re-enumerating the stream packet by packet inside <Thinking> (idea I1).
     False reproduces the pre-2026-07-22 prompt byte-exactly.
-
-    report_order (2026-08-15, Step 4/D4) appends a length-matched ordering
-    sentence to the <Final_Answers> instruction ("" for "none" -> byte-exact).
     """
-    order = _REPORT_ORDER_SENTENCE[report_order]
     if regime == "direct":
         return (
             "OUTPUT FORMAT:\n"
             "A <Final_Answers> block with EXACTLY one line per task you found "
             "in the stream, each line in the form:\n"
-            f"- Task <NAME>: <result>{order}"
+            "- Task <NAME>: <result>"
         )
     anti = (
         " Do NOT list or summarize the stream packet by packet: skip filler "
@@ -1005,8 +1054,31 @@ def _output_format_tasks(regime: str, anti_enumeration: bool = False,
         f"copy instruction text into it.{anti}\n"
         "Then a <Final_Answers> block with EXACTLY one line per task you "
         "found in the stream, each line in the form:\n"
-        f"- Task <NAME>: <result>{order}"
+        "- Task <NAME>: <result>"
     )
+
+
+def _alt_target(kind: str, seed: int, n_words: int, load_items: list):
+    """(task line, answer, access cues) for a non-NATO target. Separate RNG so
+    the main stream draws are unaffected; never equal to a load answer."""
+    trng = random.Random(f"target-{kind}-{seed}")
+    taken = {str(a).strip().upper() for _, a in load_items}
+    if kind == "digits":
+        num = _NUM_WORDS.get(n_words, str(n_words))
+        while True:
+            nums = [str(x) for x in trng.sample(range(10, 100), n_words)]
+            if not taken.intersection(nums):
+                break
+        phrase = " ".join(nums)
+        return f'Copy-paste these {num} numbers: "{phrase}".', phrase, (phrase,)
+    if kind == "trivial_math":
+        while True:
+            a, b = trng.randint(2, 9), trng.randint(2, 9)
+            if str(a + b) not in taken:
+                break
+        return (f"What is {a} + {b}? Reply with only the final integer answer.",
+                str(a + b), (f"{a} + {b}", f"{a}+{b}"))
+    raise ValueError(f"target_kind={kind!r}; valid: {_VALID_TARGET_KINDS}")
 
 
 def _build_trial_tasks(cfg: TrialConfig) -> Trial:
@@ -1022,9 +1094,21 @@ def _build_trial_tasks(cfg: TrialConfig) -> Trial:
         raise ValueError(f"n_tasks={n} out of range [1, {total}]")
     if cfg.naming not in _VALID_NAMINGS:
         raise ValueError(f"naming={cfg.naming!r}; valid: {_VALID_NAMINGS}")
-    if cfg.report_order not in _VALID_REPORT_ORDERS:
+    if cfg.compute_order not in _VALID_COMPUTE_ORDERS:
         raise ValueError(
-            f"report_order={cfg.report_order!r}; valid: {_VALID_REPORT_ORDERS}")
+            f"compute_order={cfg.compute_order!r}; valid: {_VALID_COMPUTE_ORDERS}")
+    if cfg.example_order not in _VALID_EXAMPLE_ORDERS:
+        raise ValueError(
+            f"example_order={cfg.example_order!r}; valid: {_VALID_EXAMPLE_ORDERS}")
+    if cfg.target_kind not in _VALID_TARGET_KINDS:
+        raise ValueError(
+            f"target_kind={cfg.target_kind!r}; valid: {_VALID_TARGET_KINDS}")
+    if cfg.target_kind == "trivial_math" and cfg.compute_order == "load_first":
+        raise ValueError("compute_order='load_first' defers copy-paste tasks, "
+                         "which a trivial_math target is not; use 'reverse'.")
+    if cfg.target_kind == "trivial_math" and cfg.load_engagement == "ignore":
+        raise ValueError("load_engagement='ignore' would also hit the "
+                         "trivial_math target (it asks to compute).")
     if cfg.load_engagement not in _VALID_LOAD_ENGAGEMENTS:
         raise ValueError(
             f"load_engagement={cfg.load_engagement!r}; "
@@ -1033,17 +1117,30 @@ def _build_trial_tasks(cfg: TrialConfig) -> Trial:
     rng = random.Random(cfg.seed)
     t2 = random_passphrase(rng, cfg.t2_words)
     positions = sorted(rng.sample(range(1, total + 1), n))
-    pp_rank = (n - 1) if cfg.passphrase_last else rng.randrange(n)
+    if cfg.passphrase_rank is not None:
+        if not 1 <= cfg.passphrase_rank <= n:
+            raise ValueError(
+                f"passphrase_rank={cfg.passphrase_rank} out of range [1, {n}]")
+        pp_rank = cfg.passphrase_rank - 1          # 1-indexed -> 0-indexed; NO rng draw
+    elif cfg.passphrase_last:
+        pp_rank = n - 1                            # NO rng draw
+    else:
+        pp_rank = rng.randrange(n)                 # rng draw (random-rank arm)
     if cfg.naming == "non-ordered":
         names = rng.sample(TASK_NAME_BANK, n)
     else:
         names = [str(i + 1) for i in range(n)]
     load_items = _sample_load_items(cfg.t1_load, rng, n - 1)
+    if cfg.target_kind == "nato":
+        t2_line, cues = _passphrase_task_line(t2, cfg.t2_words), None
+    else:
+        t2_line, t2, cues = _alt_target(cfg.target_kind, cfg.seed,
+                                        cfg.t2_words, load_items)
 
     tasks, li = [], iter(load_items)
     for rank, (pos, name) in enumerate(zip(positions, names)):
         if rank == pp_rank:
-            q, a, kind = _passphrase_task_line(t2, cfg.t2_words), t2, "passphrase"
+            q, a, kind = t2_line, t2, "passphrase"
         else:
             (q, a), kind = next(li), "load"
         tasks.append(dict(name=name, kind=kind, packet=pos, rank=rank + 1,
@@ -1060,12 +1157,16 @@ def _build_trial_tasks(cfg: TrialConfig) -> Trial:
     lines.append("End of stream.")   # unnumbered: does not consume a packet slot
     stream = "\n".join(lines)
 
-    rules = RULES_TASKS + (_LOAD_IGNORE_RULE
-                           if cfg.load_engagement == "ignore" else "")
+    rules = (RULES_TASKS
+             + (_LOAD_IGNORE_RULE if cfg.load_engagement == "ignore" else "")
+             + _COMPUTE_ORDER_SENTENCE[cfg.compute_order]
+             + (_ATTENTION_CUE if cfg.attention_cue else ""))
+    example = _worked_example_tasks(cfg.naming, cfg.regime, cfg.compute_order,
+                                    cfg.example_order, cfg.target_kind)
     header = (f"{rules}\n"
-              f"{_worked_example_tasks(cfg.naming, cfg.regime, cfg.report_order)}\n"
+              f"{example}\n"
               f"DATA STREAM:\n{stream}\n"
-              f"{_output_format_tasks(cfg.regime, cfg.anti_enumeration, cfg.report_order)}")
+              f"{_output_format_tasks(cfg.regime, cfg.anti_enumeration)}")
     pp = tasks[pp_rank]
     return Trial(
         system=SYSTEM,
@@ -1081,6 +1182,7 @@ def _build_trial_tasks(cfg: TrialConfig) -> Trial:
         tasks=tasks,
         t2_task_name=pp["name"],
         t2_rank=pp_rank + 1,
+        t2_access_cues=cues,
     )
 
 

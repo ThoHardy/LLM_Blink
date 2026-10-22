@@ -111,12 +111,27 @@ def main():
              "anti-LITM headline, random = rank/lag deconfound.",
     )
     parser.add_argument(
-        "--report-order", choices=["none", "stream", "reverse", "all"],
+        "--compute-order", choices=["none", "stream", "reverse", "load_first", "all"],
         default="none",
-        help="Design D4 axis: order to list tasks in <Final_Answers>. 'none' "
-             "(default, byte-exact/spontaneous), 'stream', 'reverse', or 'all' "
-             "to sweep the three arms (paired: identical stimulus, prompt text "
-             "differs by one sentence).",
+        help="Instructed processing order (acts on <Thinking> and "
+             "<Final_Answers>). 'none' (default, byte-exact/spontaneous), "
+             "'stream', 'reverse', 'load_first' (all other tasks before any "
+             "copy-paste task), or 'all' to sweep the four arms (paired).",
+    )
+    parser.add_argument(
+        "--example-order", choices=["load_first", "passphrase_first"],
+        default="load_first",
+        help="Order of the two tasks in the worked example's stream.",
+    )
+    parser.add_argument(
+        "--target-kind", choices=["nato", "digits", "trivial_math"],
+        default="nato",
+        help="Target task: copy 3 NATO words (default), copy 3 two-digit "
+             "numbers, or a one-digit addition.",
+    )
+    parser.add_argument(
+        "--attention-cue", action="store_true",
+        help='Append "Make sure to answer ALL the tasks." to the rules.',
     )
     parser.add_argument(
         "--load-engagement", choices=["solve", "ignore"], default="solve",
@@ -306,8 +321,11 @@ def main():
         passphrase_last=((True, False) if args.passphrase_rank == "both"
                          else args.passphrase_rank == "last"),
         anti_enumeration=not args.no_anti_enumeration,
-        report_order=(("none", "stream", "reverse") if args.report_order == "all"
-                      else args.report_order),
+        compute_order=(("none", "stream", "reverse", "load_first")
+                       if args.compute_order == "all" else args.compute_order),
+        example_order=args.example_order,
+        target_kind=args.target_kind,
+        attention_cue=args.attention_cue,
         load_engagement=args.load_engagement,
         lags=tuple(args.lags),
         n_pres=tuple(n_pres),

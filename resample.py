@@ -34,7 +34,8 @@ import numpy as np
 
 from .model import continue_generate, OllamaBackend
 from .protocol import STOP_THINKING, STOP_ANSWERS
-from .readout import parse_task_report_names, answer_contains, t2_in_cot
+from .readout import (parse_task_report_names, answer_contains, t2_in_cot,
+                      access_cues)
 
 
 # The CoT ends at the answer-block opener <Final_Answers> (reliable, ~99%), not
@@ -109,9 +110,96 @@ def fork_samples(model, tok, trial, traj, at: str = "post_cot", k: int = 20,
     return samples
 
 
+def resample_full(model, tok, trial, k: int = 20, temperature: float = 1.0,
+                  seed: int = 0, max_new_tokens: int = 4096, n_workers: int = 8):
+    """K COMPLETE regenerations of the assistant turn (issue #18 §2.3 / §4).
+
+    Unlike :func:`fork_samples`, which forks a shared trajectory at a structural
+    point (holding the prefix fixed), this draws k *independent whole* answers
+    from the empty assistant prefix — the fork offset is 0. The whole chain of
+    thought is regenerated every time, so ``s_access`` and ``s_report`` scored on
+    these k samples are the graded, per-trial visibility indices of §2.3, and
+    both borders come from the SAME k trajectories (the figure-6 requirement).
+
+    Returns ``(texts, truncs)``: the k full trajectory strings and their
+    per-sample truncation flags (True = ``max_new_tokens`` spent without EOS /
+    ``</Final_Answers>`` — the §2.1 gate is computed from these). Never raises on
+    degeneracy: at T=1 with distinct seeds identical draws are a real (if rare)
+    outcome to be counted, not an error — the caller logs the flag.
+    """
+    seeds = sample_seeds(seed, k)
+
+    def _one(sd):
+        text, _n, trunc = continue_generate(
+            model, tok, trial.system, trial.user,
+            prefilled_assistant="", max_new_tokens=max_new_tokens,
+            temperature=temperature, stop_at=STOP_ANSWERS, seed=sd)
+        return text, bool(trunc)
+
+    if isinstance(model, OllamaBackend) and n_workers > 1 and k > 1:
+        with ThreadPoolExecutor(max_workers=min(n_workers, k)) as ex:
+            pairs = list(ex.map(_one, seeds))
+    else:
+        pairs = [_one(sd) for sd in seeds]
+    return [p[0] for p in pairs], [p[1] for p in pairs]
+
+
 # ---------------------------------------------------------------------------
 # per-sample scoring -> counts (s, k) for the beta-binomial mixture
 # ---------------------------------------------------------------------------
+
+def score_full_samples(samples, trial, score_access: bool = True) -> dict:
+    """Score k FULL-trajectory samples (from :func:`resample_full`) at both
+    borders, with per-sample covariates — the export the fig-2 violins and the
+    fig-6 histograms need (issue #18 §7.2).
+
+    Both borders are read off the SAME k samples, so ``(access_bits[i],
+    report_bits[i])`` is the per-sample pairing figure 1 decomposes:
+
+      * ``report_bits[i]`` — the passphrase reaches ``<Final_Answers>`` in sample i
+      * ``access_bits[i]`` — the passphrase task is in sample i's ``<Thinking>``
+        (only meaningful for the ``cot`` regime; pass ``score_access=False`` for
+        ``direct``, where there is no CoT and ``t2_in_cot`` would spuriously match
+        the report line — ``s_access`` is then logged None per §2.3).
+
+    Per-sample covariates: ``t1_per`` (load-task accuracy, the fig-2 up-arrow) and
+    ``cot_len_per`` (realised ``<Thinking>`` length in chars, the §6 length axis).
+    Returns sums (``s_report``/``s_access``) and the per-sample lists.
+    """
+    from .readout import (parse_task_report, task_rows, _thinking_region,
+                          access_cues, compute_order_respected,
+                          passphrase_processing_rank)
+    name, phrase = trial.t2_task_name, trial.t2_phrase
+    cues = access_cues(trial)
+    cfg = getattr(trial, "config", None)
+    regime = getattr(cfg, "regime", "cot")
+    c_order = getattr(cfg, "compute_order", "none")
+    report_bits, access_bits, t1_per, cot_len_per = [], [], [], []
+    proc_rank_per, order_tau_per = [], []
+    for text in samples:
+        parsed = parse_task_report_names(text, [name])
+        resp = parsed["reported"].get(str(name).upper())
+        report_bits.append(int(answer_contains(resp, phrase)))
+        access_bits.append(int(t2_in_cot(text, cues, name)) if score_access else None)
+        proc_rank_per.append(passphrase_processing_rank(text, trial, regime))
+        tau = compute_order_respected(text, trial, c_order, regime)
+        order_tau_per.append(None if tau is None else round(tau, 4))
+        full = parse_task_report(text, trial)
+        rows_t = task_rows(trial, full["reported"])
+        load_rows = [r for r in rows_t if r["kind"] == "load"]
+        t1_per.append(round(sum(r["correct"] for r in load_rows) / len(load_rows), 4)
+                      if load_rows else "")
+        cot_len_per.append(len(_thinking_region(text)))
+    return dict(
+        s_report=int(sum(report_bits)),
+        s_access=(int(sum(access_bits)) if score_access else None),
+        k=len(samples),
+        report_bits=report_bits,
+        access_bits=(access_bits if score_access else None),
+        t1_per=t1_per, cot_len_per=cot_len_per,
+        proc_rank_per=proc_rank_per, order_tau_per=order_tau_per,
+        degenerate=(len(set(samples)) == 1 and len(samples) > 1))
+
 
 def score_report_samples(samples, t2_task_name: str, t2_phrase: str) -> dict:
     """report_rate: fraction of sampled reports whose passphrase line contains
@@ -176,7 +264,7 @@ def nested_fork(model, tok, trial, traj, k_cot: int = 8, k_rep: int = 8,
                             n_workers=n_workers, raise_on_degenerate=False)
         sc = score_report_samples(reps, trial.t2_task_name, trial.t2_phrase)
         out.append(dict(cot_id=j, s=sc["s"], k=sc["k"],
-                        t2_in_this_cot=int(t2_in_cot(cot, trial.t2_phrase,
+                        t2_in_this_cot=int(t2_in_cot(cot, access_cues(trial),
                                                      trial.t2_task_name))))
     return out
 
