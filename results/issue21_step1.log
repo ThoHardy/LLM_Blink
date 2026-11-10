@@ -156,3 +156,66 @@ remote:
 ===== rank1: gemma3:4b -> LLM_Blink/results/cond_rank1_gemma3_4b.csv  START mar. 10 nov. 2026 13:49:13 EST =====
 [11-10 13:49:21] rank1 crashed (try 30), resuming in 30s
 [11-10 13:49:51] rank1 GAVE UP after 30 tries
+[11-10 13:49:53] rank1 : committed+pushed
+[11-10 13:49:53] === rank1_loadfirst start ===
+===== rank1_loadfirst: gemma3:4b -> LLM_Blink/results/cond_rank1_loadfirst_gemma3_4b.csv  START mar. 10 nov. 2026 13:49:53 EST =====
+[11-10 13:50:57] rank1_loadfirst crashed (try 1), resuming in 30s
+===== rank1_loadfirst: gemma3:4b -> LLM_Blink/results/cond_rank1_loadfirst_gemma3_4b.csv  START mar. 10 nov. 2026 13:51:27 EST =====
+[11-10 13:52:08] rank1_loadfirst crashed (try 2), resuming in 30s
+===== rank1_loadfirst: gemma3:4b -> LLM_Blink/results/cond_rank1_loadfirst_gemma3_4b.csv  START mar. 10 nov. 2026 13:52:38 EST =====
+[11-10 13:53:21] rank1_loadfirst crashed (try 3), resuming in 30s
+===== rank1_loadfirst: gemma3:4b -> LLM_Blink/results/cond_rank1_loadfirst_gemma3_4b.csv  START mar. 10 nov. 2026 13:53:51 EST =====
+[11-10 13:54:34] rank1_loadfirst crashed (try 4), resuming in 30s
+===== rank1_loadfirst: gemma3:4b -> LLM_Blink/results/cond_rank1_loadfirst_gemma3_4b.csv  START mar. 10 nov. 2026 13:55:04 EST =====
+[11-10 13:55:49] rank1_loadfirst crashed (try 5), resuming in 30s
+===== rank1_loadfirst: gemma3:4b -> LLM_Blink/results/cond_rank1_loadfirst_gemma3_4b.csv  START mar. 10 nov. 2026 13:56:19 EST =====
+[11-10 13:57:03] rank1_loadfirst crashed (try 6), resuming in 30s
+===== rank1_loadfirst: gemma3:4b -> LLM_Blink/results/cond_rank1_loadfirst_gemma3_4b.csv  START mar. 10 nov. 2026 13:57:33 EST =====
+[11-10 13:58:25] rank1_loadfirst crashed (try 7), resuming in 30s
+===== rank1_loadfirst: gemma3:4b -> LLM_Blink/results/cond_rank1_loadfirst_gemma3_4b.csv  START mar. 10 nov. 2026 13:58:55 EST =====
+[11-10 13:59:36] rank1_loadfirst crashed (try 8), resuming in 30s
+===== rank1_loadfirst: gemma3:4b -> LLM_Blink/results/cond_rank1_loadfirst_gemma3_4b.csv  START mar. 10 nov. 2026 14:00:06 EST =====
+[11-10 14:00:49] rank1_loadfirst crashed (try 9), resuming in 30s
+===== rank1_loadfirst: gemma3:4b -> LLM_Blink/results/cond_rank1_loadfirst_gemma3_4b.csv  START mar. 10 nov. 2026 14:01:19 EST =====
+[11-10 14:01:59] rank1_loadfirst crashed (try 10), resuming in 30s
+===== rank1_loadfirst: gemma3:4b -> LLM_Blink/results/cond_rank1_loadfirst_gemma3_4b.csv  START mar. 10 nov. 2026 14:02:29 EST =====
+[11-10 14:03:14] rank1_loadfirst crashed (try 11), resuming in 30s
+===== rank1_loadfirst: gemma3:4b -> LLM_Blink/results/cond_rank1_loadfirst_gemma3_4b.csv  START mar. 10 nov. 2026 14:03:44 EST =====
+[11-10 14:05:15] rank1_loadfirst crashed (try 12), resuming in 30s
+===== rank1_loadfirst: gemma3:4b -> LLM_Blink/results/cond_rank1_loadfirst_gemma3_4b.csv  START mar. 10 nov. 2026 14:05:45 EST =====
+[11-10 14:06:33] rank1_loadfirst crashed (try 13), resuming in 30s
+===== rank1_loadfirst: gemma3:4b -> LLM_Blink/results/cond_rank1_loadfirst_gemma3_4b.csv  START mar. 10 nov. 2026 14:07:03 EST =====
+[11-10 14:07:45] rank1_loadfirst crashed (try 14), resuming in 30s
+===== rank1_loadfirst: gemma3:4b -> LLM_Blink/results/cond_rank1_loadfirst_gemma3_4b.csv  START mar. 10 nov. 2026 14:08:16 EST =====
+[11-10 14:09:02] rank1_loadfirst crashed (try 15), resuming in 30s
+===== rank1_loadfirst: gemma3:4b -> LLM_Blink/results/cond_rank1_loadfirst_gemma3_4b.csv  START mar. 10 nov. 2026 14:09:32 EST =====
+[11-10 14:10:15] rank1_loadfirst crashed (try 16), resuming in 30s
+===== rank1_loadfirst: gemma3:4b -> LLM_Blink/results/cond_rank1_loadfirst_gemma3_4b.csv  START mar. 10 nov. 2026 14:10:45 EST =====
+[11-10 14:11:31] rank1_loadfirst crashed (try 17), resuming in 30s
+===== rank1_loadfirst: gemma3:4b -> LLM_Blink/results/cond_rank1_loadfirst_gemma3_4b.csv  START mar. 10 nov. 2026 14:12:01 EST =====
+[11-10 14:12:41] rank1_loadfirst crashed (try 18), resuming in 30s
+===== rank1_loadfirst: gemma3:4b -> LLM_Blink/results/cond_rank1_loadfirst_gemma3_4b.csv  START mar. 10 nov. 2026 14:13:12 EST =====
+[11-10 14:13:53] rank1_loadfirst crashed (try 19), resuming in 30s
+===== rank1_loadfirst: gemma3:4b -> LLM_Blink/results/cond_rank1_loadfirst_gemma3_4b.csv  START mar. 10 nov. 2026 14:14:23 EST =====
+[11-10 14:15:05] rank1_loadfirst crashed (try 20), resuming in 30s
+===== rank1_loadfirst: gemma3:4b -> LLM_Blink/results/cond_rank1_loadfirst_gemma3_4b.csv  START mar. 10 nov. 2026 14:15:35 EST =====
+[11-10 14:16:15] rank1_loadfirst crashed (try 21), resuming in 30s
+===== rank1_loadfirst: gemma3:4b -> LLM_Blink/results/cond_rank1_loadfirst_gemma3_4b.csv  START mar. 10 nov. 2026 14:16:45 EST =====
+[11-10 14:17:27] rank1_loadfirst crashed (try 22), resuming in 30s
+===== rank1_loadfirst: gemma3:4b -> LLM_Blink/results/cond_rank1_loadfirst_gemma3_4b.csv  START mar. 10 nov. 2026 14:17:57 EST =====
+[11-10 14:18:42] rank1_loadfirst crashed (try 23), resuming in 30s
+===== rank1_loadfirst: gemma3:4b -> LLM_Blink/results/cond_rank1_loadfirst_gemma3_4b.csv  START mar. 10 nov. 2026 14:19:12 EST =====
+[11-10 14:20:00] rank1_loadfirst crashed (try 24), resuming in 30s
+===== rank1_loadfirst: gemma3:4b -> LLM_Blink/results/cond_rank1_loadfirst_gemma3_4b.csv  START mar. 10 nov. 2026 14:20:30 EST =====
+[11-10 14:21:06] rank1_loadfirst crashed (try 25), resuming in 30s
+===== rank1_loadfirst: gemma3:4b -> LLM_Blink/results/cond_rank1_loadfirst_gemma3_4b.csv  START mar. 10 nov. 2026 14:21:36 EST =====
+[11-10 14:22:19] rank1_loadfirst crashed (try 26), resuming in 30s
+===== rank1_loadfirst: gemma3:4b -> LLM_Blink/results/cond_rank1_loadfirst_gemma3_4b.csv  START mar. 10 nov. 2026 14:22:49 EST =====
+[11-10 14:23:27] rank1_loadfirst crashed (try 27), resuming in 30s
+===== rank1_loadfirst: gemma3:4b -> LLM_Blink/results/cond_rank1_loadfirst_gemma3_4b.csv  START mar. 10 nov. 2026 14:23:57 EST =====
+[11-10 14:24:44] rank1_loadfirst crashed (try 28), resuming in 30s
+===== rank1_loadfirst: gemma3:4b -> LLM_Blink/results/cond_rank1_loadfirst_gemma3_4b.csv  START mar. 10 nov. 2026 14:25:14 EST =====
+[11-10 14:25:55] rank1_loadfirst crashed (try 29), resuming in 30s
+===== rank1_loadfirst: gemma3:4b -> LLM_Blink/results/cond_rank1_loadfirst_gemma3_4b.csv  START mar. 10 nov. 2026 14:26:25 EST =====
+[11-10 14:27:09] rank1_loadfirst crashed (try 30), resuming in 30s
+[11-10 14:27:39] rank1_loadfirst GAVE UP after 30 tries
