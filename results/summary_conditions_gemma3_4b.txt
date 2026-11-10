@@ -1,7 +1,7 @@
       condition  n_stimuli  direct   cot  rel_blink  access_cot  t1_cot  order_tau_cot
            base         80   0.962 0.749      0.221       0.701   0.764          0.999
  campaignA_base        400   0.960 0.718      0.252       0.700   0.748            NaN
-            cue         63   0.948 0.765      0.193       0.750   0.750          0.999
+            cue         64   0.948 0.764      0.194       0.750   0.742          0.999
          digits         31   0.897 0.752      0.162       0.711   0.825          0.988
       loadfirst        400   0.980 0.772      0.212       0.751   0.774          0.996
           rank1        118   0.930 0.907      0.024       0.955   0.524          0.986
@@ -11,7 +11,7 @@ rank1_loadfirst         63   0.875 0.871      0.005       0.960   0.573         
 # Truncation gate (cell = condition x load x regime; fail if > 2%)
 base                     worst=0.0125  ok
 campaignA_base           worst=0.0000  ok
-cue                      worst=0.0000  ok
+cue                      worst=0.0031  ok
 digits                   worst=0.0000  ok
 loadfirst                worst=0.0025  ok
 rank1                    worst=0.0034  ok
