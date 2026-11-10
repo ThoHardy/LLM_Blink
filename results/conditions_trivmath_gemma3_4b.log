@@ -1,0 +1,22 @@
+[probe_pilot:full] gemma3:4b (quant='Q4_K_M'): 800 cells, 0 done, K=20, max_new_tokens=8192, passphrase=last, compute_order=none, example_order=load_first, target_kind=trivial_math, attention_cue=False, think=default, load_engagement=solve
+  5 trials, 163s (32.6s/trial) [math_bench_4/cot] cell-trunc=0.0%
+  10 trials, 352s (35.2s/trial) [trivial/direct] cell-trunc=0.0%
+  15 trials, 668s (44.5s/trial) [math_bench_5/cot] cell-trunc=0.0%
+  20 trials, 752s (37.6s/trial) [math_bench_2/direct] cell-trunc=0.0%
+  25 trials, 981s (39.3s/trial) [trivial/cot] cell-trunc=0.0%
+  30 trials, 1169s (39.0s/trial) [math_bench_4/direct] cell-trunc=0.0%
+  35 trials, 1398s (39.9s/trial) [math_bench_2/cot] cell-trunc=0.0%
+  40 trials, 1603s (40.1s/trial) [math_bench_5/direct] cell-trunc=0.0%
+  45 trials, 1812s (40.3s/trial) [math_bench_4/cot] cell-trunc=0.0%
+  50 trials, 1940s (38.8s/trial) [trivial/direct] cell-trunc=0.0%
+  55 trials, 2194s (39.9s/trial) [math_bench_5/cot] cell-trunc=0.0%
+  60 trials, 2303s (38.4s/trial) [math_bench_2/direct] cell-trunc=0.0%
+  65 trials, 2568s (39.5s/trial) [trivial/cot] cell-trunc=0.0%
+  70 trials, 2723s (38.9s/trial) [math_bench_4/direct] cell-trunc=0.0%
+  75 trials, 2958s (39.4s/trial) [math_bench_2/cot] cell-trunc=0.0%
+  80 trials, 3159s (39.5s/trial) [math_bench_5/direct] cell-trunc=0.0%
+  85 trials, 3352s (39.4s/trial) [math_bench_4/cot] cell-trunc=0.0%
+  90 trials, 3503s (38.9s/trial) [trivial/direct] cell-trunc=0.0%
+  95 trials, 3850s (40.5s/trial) [math_bench_5/cot] cell-trunc=0.0%
+  100 trials, 3959s (39.6s/trial) [math_bench_2/direct] cell-trunc=0.0%
+  105 trials, 4174s (39.7s/trial) [trivial/cot] cell-trunc=0.0%

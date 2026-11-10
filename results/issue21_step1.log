@@ -25,3 +25,7 @@ remote:
 [11-10 10:03:23] === digits start ===
 ===== digits: gemma3:4b -> LLM_Blink/results/cond_digits_gemma3_4b.csv  START mar. 10 nov. 2026 10:03:23 EST =====
 [11-10 10:41:33] digits FAILED
+[11-10 10:41:35] digits : committed+pushed
+[11-10 10:41:35] === trivmath start ===
+===== trivmath: gemma3:4b -> LLM_Blink/results/cond_trivmath_gemma3_4b.csv  START mar. 10 nov. 2026 10:41:35 EST =====
+[11-10 11:52:14] trivmath FAILED

@@ -19,12 +19,19 @@ Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>" && git push -q origin r
   say "$1 : committed+pushed"
 }
 
-say "=== drift check: base N=20 ==="
-N_MAIN=20 $REPO/run_conditions_model.sh gemma3:4b gemma3_4b base >> $LOG 2>&1 || say "base FAILED"
-publish base
-for C in cue rank1 loadfirst rank1_loadfirst digits trivmath rank1_exPF rank1_loadfirst_exPF; do
+# Ollama 0.40.12 throws a rare transient HTTP 500 that kills probe_pilot; it is
+# resumable, so relaunch the same condition until it exits cleanly.
+run_cond(){  # $1 = condition, extra env passed through
+  for try in {1..30}; do
+    $REPO/run_conditions_model.sh gemma3:4b gemma3_4b $1 >> $LOG 2>&1 && return 0
+    say "$1 crashed (try $try), resuming in 30s"; sleep 30
+  done
+  say "$1 GAVE UP after 30 tries"; return 1
+}
+# base (drift check) already done 11-09; loadfirst done 11-10
+for C in cue rank1 rank1_loadfirst digits trivmath rank1_exPF rank1_loadfirst_exPF; do
   say "=== $C start ==="
-  $REPO/run_conditions_model.sh gemma3:4b gemma3_4b $C >> $LOG 2>&1 || say "$C FAILED"
+  run_cond $C
   publish $C
 done
 say "=== ALL DONE ==="
