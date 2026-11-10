@@ -84,3 +84,1200 @@ Traceback (most recent call last):
   File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 641, in http_error_default
     raise HTTPError(req.full_url, code, msg, hdrs, fp)
 urllib.error.HTTPError: HTTP Error 500: Internal Server Error
+[probe_pilot:full] gemma3:4b (quant='Q4_K_M'): 800 cells, 235 done, K=20, max_new_tokens=8192, passphrase=1, compute_order=none, example_order=load_first, target_kind=nato, attention_cue=False, think=default, load_engagement=solve
+  5 trials, 180s (36.1s/trial) [math_bench_5/direct] cell-trunc=0.0%
+  10 trials, 345s (34.5s/trial) [math_bench_4/cot] cell-trunc=0.0%
+  15 trials, 452s (30.1s/trial) [trivial/direct] cell-trunc=0.0%
+  20 trials, 818s (40.9s/trial) [math_bench_5/cot] cell-trunc=0.0%
+  25 trials, 932s (37.3s/trial) [math_bench_2/direct] cell-trunc=0.0%
+  30 trials, 1132s (37.7s/trial) [trivial/cot] cell-trunc=0.0%
+  35 trials, 1262s (36.1s/trial) [math_bench_4/direct] cell-trunc=0.0%
+  40 trials, 1417s (35.4s/trial) [math_bench_2/cot] cell-trunc=0.0%
+  45 trials, 1593s (35.4s/trial) [math_bench_5/direct] cell-trunc=0.0%
+  50 trials, 1780s (35.6s/trial) [math_bench_4/cot] cell-trunc=0.0%
+  55 trials, 1997s (36.3s/trial) [trivial/direct] cell-trunc=0.0%
+  60 trials, 2258s (37.6s/trial) [math_bench_5/cot] cell-trunc=0.0%
+  65 trials, 2367s (36.4s/trial) [math_bench_2/direct] cell-trunc=0.0%
+  70 trials, 2477s (35.4s/trial) [trivial/cot] cell-trunc=0.0%
+  75 trials, 2632s (35.1s/trial) [math_bench_4/direct] cell-trunc=0.0%
+  80 trials, 2750s (34.4s/trial) [math_bench_2/cot] cell-trunc=0.0%
+  85 trials, 2949s (34.7s/trial) [math_bench_5/direct] cell-trunc=0.0%
+  90 trials, 3069s (34.1s/trial) [math_bench_4/cot] cell-trunc=0.0%
+  95 trials, 3182s (33.5s/trial) [trivial/direct] cell-trunc=0.0%
+  100 trials, 3340s (33.4s/trial) [math_bench_5/cot] cell-trunc=0.0%
+  105 trials, 3523s (33.6s/trial) [math_bench_2/direct] cell-trunc=0.0%
+  110 trials, 3722s (33.8s/trial) [trivial/cot] cell-trunc=0.0%
+  115 trials, 3891s (33.8s/trial) [math_bench_4/direct] cell-trunc=0.0%
+  120 trials, 4041s (33.7s/trial) [math_bench_2/cot] cell-trunc=0.0%
+  125 trials, 4126s (33.0s/trial) [math_bench_5/direct] cell-trunc=0.3%
+  130 trials, 4250s (32.7s/trial) [math_bench_4/cot] cell-trunc=0.0%
+  135 trials, 4383s (32.5s/trial) [trivial/direct] cell-trunc=0.0%
+Traceback (most recent call last):
+  File "/Users/ulysse/__projects__/LLM_Blink/probe_pilot.py", line 541, in <module>
+    main()
+  File "/Users/ulysse/__projects__/LLM_Blink/probe_pilot.py", line 535, in main
+    run_full(args)
+  File "/Users/ulysse/__projects__/LLM_Blink/probe_pilot.py", line 314, in run_full
+    samples, truncs = resample_full(
+  File "/Users/ulysse/__projects__/LLM_Blink/resample.py", line 141, in resample_full
+    pairs = list(ex.map(_one, seeds))
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/_base.py", line 608, in result_iterator
+    yield fs.pop().result()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/_base.py", line 445, in result
+    return self.__get_result()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/_base.py", line 390, in __get_result
+    raise self._exception
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/thread.py", line 52, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/ulysse/__projects__/LLM_Blink/resample.py", line 133, in _one
+    text, _n, trunc = continue_generate(
+  File "/Users/ulysse/__projects__/LLM_Blink/model.py", line 459, in continue_generate
+    return model.continue_generate(system, user, prefilled_assistant,
+  File "/Users/ulysse/__projects__/LLM_Blink/model.py", line 181, in continue_generate
+    resp = self._native_chat(messages, num_predict=max_new_tokens,
+  File "/Users/ulysse/__projects__/LLM_Blink/model.py", line 109, in _native_chat
+    with urllib.request.urlopen(req) as resp:
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 214, in urlopen
+    return opener.open(url, data, timeout)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 523, in open
+    response = meth(req, response)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 632, in http_response
+    response = self.parent.error(
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 561, in error
+    return self._call_chain(*args)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 494, in _call_chain
+    result = func(*args)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 641, in http_error_default
+    raise HTTPError(req.full_url, code, msg, hdrs, fp)
+urllib.error.HTTPError: HTTP Error 500: Internal Server Error
+[probe_pilot:full] gemma3:4b (quant='Q4_K_M'): 800 cells, 371 done, K=20, max_new_tokens=8192, passphrase=1, compute_order=none, example_order=load_first, target_kind=nato, attention_cue=False, think=default, load_engagement=solve
+Traceback (most recent call last):
+  File "/Users/ulysse/__projects__/LLM_Blink/probe_pilot.py", line 541, in <module>
+    main()
+  File "/Users/ulysse/__projects__/LLM_Blink/probe_pilot.py", line 535, in main
+    run_full(args)
+  File "/Users/ulysse/__projects__/LLM_Blink/probe_pilot.py", line 314, in run_full
+    samples, truncs = resample_full(
+  File "/Users/ulysse/__projects__/LLM_Blink/resample.py", line 141, in resample_full
+    pairs = list(ex.map(_one, seeds))
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/_base.py", line 608, in result_iterator
+    yield fs.pop().result()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/_base.py", line 445, in result
+    return self.__get_result()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/_base.py", line 390, in __get_result
+    raise self._exception
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/thread.py", line 52, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/ulysse/__projects__/LLM_Blink/resample.py", line 133, in _one
+    text, _n, trunc = continue_generate(
+  File "/Users/ulysse/__projects__/LLM_Blink/model.py", line 459, in continue_generate
+    return model.continue_generate(system, user, prefilled_assistant,
+  File "/Users/ulysse/__projects__/LLM_Blink/model.py", line 181, in continue_generate
+    resp = self._native_chat(messages, num_predict=max_new_tokens,
+  File "/Users/ulysse/__projects__/LLM_Blink/model.py", line 109, in _native_chat
+    with urllib.request.urlopen(req) as resp:
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 214, in urlopen
+    return opener.open(url, data, timeout)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 523, in open
+    response = meth(req, response)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 632, in http_response
+    response = self.parent.error(
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 561, in error
+    return self._call_chain(*args)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 494, in _call_chain
+    result = func(*args)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 641, in http_error_default
+    raise HTTPError(req.full_url, code, msg, hdrs, fp)
+urllib.error.HTTPError: HTTP Error 500: Internal Server Error
+[probe_pilot:full] gemma3:4b (quant='Q4_K_M'): 800 cells, 371 done, K=20, max_new_tokens=8192, passphrase=1, compute_order=none, example_order=load_first, target_kind=nato, attention_cue=False, think=default, load_engagement=solve
+Traceback (most recent call last):
+  File "/Users/ulysse/__projects__/LLM_Blink/probe_pilot.py", line 541, in <module>
+    main()
+  File "/Users/ulysse/__projects__/LLM_Blink/probe_pilot.py", line 535, in main
+    run_full(args)
+  File "/Users/ulysse/__projects__/LLM_Blink/probe_pilot.py", line 314, in run_full
+    samples, truncs = resample_full(
+  File "/Users/ulysse/__projects__/LLM_Blink/resample.py", line 141, in resample_full
+    pairs = list(ex.map(_one, seeds))
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/_base.py", line 608, in result_iterator
+    yield fs.pop().result()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/_base.py", line 445, in result
+    return self.__get_result()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/_base.py", line 390, in __get_result
+    raise self._exception
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/thread.py", line 52, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/ulysse/__projects__/LLM_Blink/resample.py", line 133, in _one
+    text, _n, trunc = continue_generate(
+  File "/Users/ulysse/__projects__/LLM_Blink/model.py", line 459, in continue_generate
+    return model.continue_generate(system, user, prefilled_assistant,
+  File "/Users/ulysse/__projects__/LLM_Blink/model.py", line 181, in continue_generate
+    resp = self._native_chat(messages, num_predict=max_new_tokens,
+  File "/Users/ulysse/__projects__/LLM_Blink/model.py", line 109, in _native_chat
+    with urllib.request.urlopen(req) as resp:
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 214, in urlopen
+    return opener.open(url, data, timeout)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 523, in open
+    response = meth(req, response)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 632, in http_response
+    response = self.parent.error(
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 561, in error
+    return self._call_chain(*args)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 494, in _call_chain
+    result = func(*args)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 641, in http_error_default
+    raise HTTPError(req.full_url, code, msg, hdrs, fp)
+urllib.error.HTTPError: HTTP Error 500: Internal Server Error
+[probe_pilot:full] gemma3:4b (quant='Q4_K_M'): 800 cells, 371 done, K=20, max_new_tokens=8192, passphrase=1, compute_order=none, example_order=load_first, target_kind=nato, attention_cue=False, think=default, load_engagement=solve
+Traceback (most recent call last):
+  File "/Users/ulysse/__projects__/LLM_Blink/probe_pilot.py", line 541, in <module>
+    main()
+  File "/Users/ulysse/__projects__/LLM_Blink/probe_pilot.py", line 535, in main
+    run_full(args)
+  File "/Users/ulysse/__projects__/LLM_Blink/probe_pilot.py", line 314, in run_full
+    samples, truncs = resample_full(
+  File "/Users/ulysse/__projects__/LLM_Blink/resample.py", line 141, in resample_full
+    pairs = list(ex.map(_one, seeds))
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/_base.py", line 608, in result_iterator
+    yield fs.pop().result()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/_base.py", line 445, in result
+    return self.__get_result()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/_base.py", line 390, in __get_result
+    raise self._exception
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/thread.py", line 52, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/ulysse/__projects__/LLM_Blink/resample.py", line 133, in _one
+    text, _n, trunc = continue_generate(
+  File "/Users/ulysse/__projects__/LLM_Blink/model.py", line 459, in continue_generate
+    return model.continue_generate(system, user, prefilled_assistant,
+  File "/Users/ulysse/__projects__/LLM_Blink/model.py", line 181, in continue_generate
+    resp = self._native_chat(messages, num_predict=max_new_tokens,
+  File "/Users/ulysse/__projects__/LLM_Blink/model.py", line 109, in _native_chat
+    with urllib.request.urlopen(req) as resp:
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 214, in urlopen
+    return opener.open(url, data, timeout)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 523, in open
+    response = meth(req, response)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 632, in http_response
+    response = self.parent.error(
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 561, in error
+    return self._call_chain(*args)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 494, in _call_chain
+    result = func(*args)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 641, in http_error_default
+    raise HTTPError(req.full_url, code, msg, hdrs, fp)
+urllib.error.HTTPError: HTTP Error 500: Internal Server Error
+[probe_pilot:full] gemma3:4b (quant='Q4_K_M'): 800 cells, 371 done, K=20, max_new_tokens=8192, passphrase=1, compute_order=none, example_order=load_first, target_kind=nato, attention_cue=False, think=default, load_engagement=solve
+Traceback (most recent call last):
+  File "/Users/ulysse/__projects__/LLM_Blink/probe_pilot.py", line 541, in <module>
+    main()
+  File "/Users/ulysse/__projects__/LLM_Blink/probe_pilot.py", line 535, in main
+    run_full(args)
+  File "/Users/ulysse/__projects__/LLM_Blink/probe_pilot.py", line 314, in run_full
+    samples, truncs = resample_full(
+  File "/Users/ulysse/__projects__/LLM_Blink/resample.py", line 141, in resample_full
+    pairs = list(ex.map(_one, seeds))
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/_base.py", line 608, in result_iterator
+    yield fs.pop().result()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/_base.py", line 445, in result
+    return self.__get_result()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/_base.py", line 390, in __get_result
+    raise self._exception
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/thread.py", line 52, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/ulysse/__projects__/LLM_Blink/resample.py", line 133, in _one
+    text, _n, trunc = continue_generate(
+  File "/Users/ulysse/__projects__/LLM_Blink/model.py", line 459, in continue_generate
+    return model.continue_generate(system, user, prefilled_assistant,
+  File "/Users/ulysse/__projects__/LLM_Blink/model.py", line 181, in continue_generate
+    resp = self._native_chat(messages, num_predict=max_new_tokens,
+  File "/Users/ulysse/__projects__/LLM_Blink/model.py", line 109, in _native_chat
+    with urllib.request.urlopen(req) as resp:
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 214, in urlopen
+    return opener.open(url, data, timeout)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 523, in open
+    response = meth(req, response)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 632, in http_response
+    response = self.parent.error(
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 561, in error
+    return self._call_chain(*args)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 494, in _call_chain
+    result = func(*args)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 641, in http_error_default
+    raise HTTPError(req.full_url, code, msg, hdrs, fp)
+urllib.error.HTTPError: HTTP Error 500: Internal Server Error
+[probe_pilot:full] gemma3:4b (quant='Q4_K_M'): 800 cells, 371 done, K=20, max_new_tokens=8192, passphrase=1, compute_order=none, example_order=load_first, target_kind=nato, attention_cue=False, think=default, load_engagement=solve
+Traceback (most recent call last):
+  File "/Users/ulysse/__projects__/LLM_Blink/probe_pilot.py", line 541, in <module>
+    main()
+  File "/Users/ulysse/__projects__/LLM_Blink/probe_pilot.py", line 535, in main
+    run_full(args)
+  File "/Users/ulysse/__projects__/LLM_Blink/probe_pilot.py", line 314, in run_full
+    samples, truncs = resample_full(
+  File "/Users/ulysse/__projects__/LLM_Blink/resample.py", line 141, in resample_full
+    pairs = list(ex.map(_one, seeds))
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/_base.py", line 608, in result_iterator
+    yield fs.pop().result()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/_base.py", line 445, in result
+    return self.__get_result()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/_base.py", line 390, in __get_result
+    raise self._exception
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/thread.py", line 52, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/ulysse/__projects__/LLM_Blink/resample.py", line 133, in _one
+    text, _n, trunc = continue_generate(
+  File "/Users/ulysse/__projects__/LLM_Blink/model.py", line 459, in continue_generate
+    return model.continue_generate(system, user, prefilled_assistant,
+  File "/Users/ulysse/__projects__/LLM_Blink/model.py", line 181, in continue_generate
+    resp = self._native_chat(messages, num_predict=max_new_tokens,
+  File "/Users/ulysse/__projects__/LLM_Blink/model.py", line 109, in _native_chat
+    with urllib.request.urlopen(req) as resp:
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 214, in urlopen
+    return opener.open(url, data, timeout)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 523, in open
+    response = meth(req, response)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 632, in http_response
+    response = self.parent.error(
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 561, in error
+    return self._call_chain(*args)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 494, in _call_chain
+    result = func(*args)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 641, in http_error_default
+    raise HTTPError(req.full_url, code, msg, hdrs, fp)
+urllib.error.HTTPError: HTTP Error 500: Internal Server Error
+[probe_pilot:full] gemma3:4b (quant='Q4_K_M'): 800 cells, 371 done, K=20, max_new_tokens=8192, passphrase=1, compute_order=none, example_order=load_first, target_kind=nato, attention_cue=False, think=default, load_engagement=solve
+Traceback (most recent call last):
+  File "/Users/ulysse/__projects__/LLM_Blink/probe_pilot.py", line 541, in <module>
+    main()
+  File "/Users/ulysse/__projects__/LLM_Blink/probe_pilot.py", line 535, in main
+    run_full(args)
+  File "/Users/ulysse/__projects__/LLM_Blink/probe_pilot.py", line 314, in run_full
+    samples, truncs = resample_full(
+  File "/Users/ulysse/__projects__/LLM_Blink/resample.py", line 141, in resample_full
+    pairs = list(ex.map(_one, seeds))
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/_base.py", line 608, in result_iterator
+    yield fs.pop().result()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/_base.py", line 445, in result
+    return self.__get_result()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/_base.py", line 390, in __get_result
+    raise self._exception
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/thread.py", line 52, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/ulysse/__projects__/LLM_Blink/resample.py", line 133, in _one
+    text, _n, trunc = continue_generate(
+  File "/Users/ulysse/__projects__/LLM_Blink/model.py", line 459, in continue_generate
+    return model.continue_generate(system, user, prefilled_assistant,
+  File "/Users/ulysse/__projects__/LLM_Blink/model.py", line 181, in continue_generate
+    resp = self._native_chat(messages, num_predict=max_new_tokens,
+  File "/Users/ulysse/__projects__/LLM_Blink/model.py", line 109, in _native_chat
+    with urllib.request.urlopen(req) as resp:
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 214, in urlopen
+    return opener.open(url, data, timeout)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 523, in open
+    response = meth(req, response)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 632, in http_response
+    response = self.parent.error(
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 561, in error
+    return self._call_chain(*args)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 494, in _call_chain
+    result = func(*args)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 641, in http_error_default
+    raise HTTPError(req.full_url, code, msg, hdrs, fp)
+urllib.error.HTTPError: HTTP Error 500: Internal Server Error
+[probe_pilot:full] gemma3:4b (quant='Q4_K_M'): 800 cells, 371 done, K=20, max_new_tokens=8192, passphrase=1, compute_order=none, example_order=load_first, target_kind=nato, attention_cue=False, think=default, load_engagement=solve
+Traceback (most recent call last):
+  File "/Users/ulysse/__projects__/LLM_Blink/probe_pilot.py", line 541, in <module>
+    main()
+  File "/Users/ulysse/__projects__/LLM_Blink/probe_pilot.py", line 535, in main
+    run_full(args)
+  File "/Users/ulysse/__projects__/LLM_Blink/probe_pilot.py", line 314, in run_full
+    samples, truncs = resample_full(
+  File "/Users/ulysse/__projects__/LLM_Blink/resample.py", line 141, in resample_full
+    pairs = list(ex.map(_one, seeds))
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/_base.py", line 608, in result_iterator
+    yield fs.pop().result()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/_base.py", line 445, in result
+    return self.__get_result()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/_base.py", line 390, in __get_result
+    raise self._exception
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/thread.py", line 52, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/ulysse/__projects__/LLM_Blink/resample.py", line 133, in _one
+    text, _n, trunc = continue_generate(
+  File "/Users/ulysse/__projects__/LLM_Blink/model.py", line 459, in continue_generate
+    return model.continue_generate(system, user, prefilled_assistant,
+  File "/Users/ulysse/__projects__/LLM_Blink/model.py", line 181, in continue_generate
+    resp = self._native_chat(messages, num_predict=max_new_tokens,
+  File "/Users/ulysse/__projects__/LLM_Blink/model.py", line 109, in _native_chat
+    with urllib.request.urlopen(req) as resp:
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 214, in urlopen
+    return opener.open(url, data, timeout)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 523, in open
+    response = meth(req, response)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 632, in http_response
+    response = self.parent.error(
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 561, in error
+    return self._call_chain(*args)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 494, in _call_chain
+    result = func(*args)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 641, in http_error_default
+    raise HTTPError(req.full_url, code, msg, hdrs, fp)
+urllib.error.HTTPError: HTTP Error 500: Internal Server Error
+[probe_pilot:full] gemma3:4b (quant='Q4_K_M'): 800 cells, 371 done, K=20, max_new_tokens=8192, passphrase=1, compute_order=none, example_order=load_first, target_kind=nato, attention_cue=False, think=default, load_engagement=solve
+Traceback (most recent call last):
+  File "/Users/ulysse/__projects__/LLM_Blink/probe_pilot.py", line 541, in <module>
+    main()
+  File "/Users/ulysse/__projects__/LLM_Blink/probe_pilot.py", line 535, in main
+    run_full(args)
+  File "/Users/ulysse/__projects__/LLM_Blink/probe_pilot.py", line 314, in run_full
+    samples, truncs = resample_full(
+  File "/Users/ulysse/__projects__/LLM_Blink/resample.py", line 141, in resample_full
+    pairs = list(ex.map(_one, seeds))
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/_base.py", line 608, in result_iterator
+    yield fs.pop().result()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/_base.py", line 445, in result
+    return self.__get_result()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/_base.py", line 390, in __get_result
+    raise self._exception
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/thread.py", line 52, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/ulysse/__projects__/LLM_Blink/resample.py", line 133, in _one
+    text, _n, trunc = continue_generate(
+  File "/Users/ulysse/__projects__/LLM_Blink/model.py", line 459, in continue_generate
+    return model.continue_generate(system, user, prefilled_assistant,
+  File "/Users/ulysse/__projects__/LLM_Blink/model.py", line 181, in continue_generate
+    resp = self._native_chat(messages, num_predict=max_new_tokens,
+  File "/Users/ulysse/__projects__/LLM_Blink/model.py", line 109, in _native_chat
+    with urllib.request.urlopen(req) as resp:
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 214, in urlopen
+    return opener.open(url, data, timeout)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 523, in open
+    response = meth(req, response)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 632, in http_response
+    response = self.parent.error(
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 561, in error
+    return self._call_chain(*args)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 494, in _call_chain
+    result = func(*args)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 641, in http_error_default
+    raise HTTPError(req.full_url, code, msg, hdrs, fp)
+urllib.error.HTTPError: HTTP Error 500: Internal Server Error
+[probe_pilot:full] gemma3:4b (quant='Q4_K_M'): 800 cells, 371 done, K=20, max_new_tokens=8192, passphrase=1, compute_order=none, example_order=load_first, target_kind=nato, attention_cue=False, think=default, load_engagement=solve
+Traceback (most recent call last):
+  File "/Users/ulysse/__projects__/LLM_Blink/probe_pilot.py", line 541, in <module>
+    main()
+  File "/Users/ulysse/__projects__/LLM_Blink/probe_pilot.py", line 535, in main
+    run_full(args)
+  File "/Users/ulysse/__projects__/LLM_Blink/probe_pilot.py", line 314, in run_full
+    samples, truncs = resample_full(
+  File "/Users/ulysse/__projects__/LLM_Blink/resample.py", line 141, in resample_full
+    pairs = list(ex.map(_one, seeds))
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/_base.py", line 608, in result_iterator
+    yield fs.pop().result()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/_base.py", line 445, in result
+    return self.__get_result()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/_base.py", line 390, in __get_result
+    raise self._exception
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/thread.py", line 52, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/ulysse/__projects__/LLM_Blink/resample.py", line 133, in _one
+    text, _n, trunc = continue_generate(
+  File "/Users/ulysse/__projects__/LLM_Blink/model.py", line 459, in continue_generate
+    return model.continue_generate(system, user, prefilled_assistant,
+  File "/Users/ulysse/__projects__/LLM_Blink/model.py", line 181, in continue_generate
+    resp = self._native_chat(messages, num_predict=max_new_tokens,
+  File "/Users/ulysse/__projects__/LLM_Blink/model.py", line 109, in _native_chat
+    with urllib.request.urlopen(req) as resp:
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 214, in urlopen
+    return opener.open(url, data, timeout)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 523, in open
+    response = meth(req, response)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 632, in http_response
+    response = self.parent.error(
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 561, in error
+    return self._call_chain(*args)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 494, in _call_chain
+    result = func(*args)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 641, in http_error_default
+    raise HTTPError(req.full_url, code, msg, hdrs, fp)
+urllib.error.HTTPError: HTTP Error 500: Internal Server Error
+[probe_pilot:full] gemma3:4b (quant='Q4_K_M'): 800 cells, 371 done, K=20, max_new_tokens=8192, passphrase=1, compute_order=none, example_order=load_first, target_kind=nato, attention_cue=False, think=default, load_engagement=solve
+Traceback (most recent call last):
+  File "/Users/ulysse/__projects__/LLM_Blink/probe_pilot.py", line 541, in <module>
+    main()
+  File "/Users/ulysse/__projects__/LLM_Blink/probe_pilot.py", line 535, in main
+    run_full(args)
+  File "/Users/ulysse/__projects__/LLM_Blink/probe_pilot.py", line 314, in run_full
+    samples, truncs = resample_full(
+  File "/Users/ulysse/__projects__/LLM_Blink/resample.py", line 141, in resample_full
+    pairs = list(ex.map(_one, seeds))
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/_base.py", line 608, in result_iterator
+    yield fs.pop().result()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/_base.py", line 445, in result
+    return self.__get_result()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/_base.py", line 390, in __get_result
+    raise self._exception
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/thread.py", line 52, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/ulysse/__projects__/LLM_Blink/resample.py", line 133, in _one
+    text, _n, trunc = continue_generate(
+  File "/Users/ulysse/__projects__/LLM_Blink/model.py", line 459, in continue_generate
+    return model.continue_generate(system, user, prefilled_assistant,
+  File "/Users/ulysse/__projects__/LLM_Blink/model.py", line 181, in continue_generate
+    resp = self._native_chat(messages, num_predict=max_new_tokens,
+  File "/Users/ulysse/__projects__/LLM_Blink/model.py", line 109, in _native_chat
+    with urllib.request.urlopen(req) as resp:
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 214, in urlopen
+    return opener.open(url, data, timeout)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 523, in open
+    response = meth(req, response)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 632, in http_response
+    response = self.parent.error(
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 561, in error
+    return self._call_chain(*args)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 494, in _call_chain
+    result = func(*args)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 641, in http_error_default
+    raise HTTPError(req.full_url, code, msg, hdrs, fp)
+urllib.error.HTTPError: HTTP Error 500: Internal Server Error
+[probe_pilot:full] gemma3:4b (quant='Q4_K_M'): 800 cells, 371 done, K=20, max_new_tokens=8192, passphrase=1, compute_order=none, example_order=load_first, target_kind=nato, attention_cue=False, think=default, load_engagement=solve
+Traceback (most recent call last):
+  File "/Users/ulysse/__projects__/LLM_Blink/probe_pilot.py", line 541, in <module>
+    main()
+  File "/Users/ulysse/__projects__/LLM_Blink/probe_pilot.py", line 535, in main
+    run_full(args)
+  File "/Users/ulysse/__projects__/LLM_Blink/probe_pilot.py", line 314, in run_full
+    samples, truncs = resample_full(
+  File "/Users/ulysse/__projects__/LLM_Blink/resample.py", line 141, in resample_full
+    pairs = list(ex.map(_one, seeds))
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/_base.py", line 608, in result_iterator
+    yield fs.pop().result()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/_base.py", line 445, in result
+    return self.__get_result()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/_base.py", line 390, in __get_result
+    raise self._exception
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/thread.py", line 52, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/ulysse/__projects__/LLM_Blink/resample.py", line 133, in _one
+    text, _n, trunc = continue_generate(
+  File "/Users/ulysse/__projects__/LLM_Blink/model.py", line 459, in continue_generate
+    return model.continue_generate(system, user, prefilled_assistant,
+  File "/Users/ulysse/__projects__/LLM_Blink/model.py", line 181, in continue_generate
+    resp = self._native_chat(messages, num_predict=max_new_tokens,
+  File "/Users/ulysse/__projects__/LLM_Blink/model.py", line 109, in _native_chat
+    with urllib.request.urlopen(req) as resp:
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 214, in urlopen
+    return opener.open(url, data, timeout)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 523, in open
+    response = meth(req, response)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 632, in http_response
+    response = self.parent.error(
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 561, in error
+    return self._call_chain(*args)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 494, in _call_chain
+    result = func(*args)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 641, in http_error_default
+    raise HTTPError(req.full_url, code, msg, hdrs, fp)
+urllib.error.HTTPError: HTTP Error 500: Internal Server Error
+[probe_pilot:full] gemma3:4b (quant='Q4_K_M'): 800 cells, 371 done, K=20, max_new_tokens=8192, passphrase=1, compute_order=none, example_order=load_first, target_kind=nato, attention_cue=False, think=default, load_engagement=solve
+Traceback (most recent call last):
+  File "/Users/ulysse/__projects__/LLM_Blink/probe_pilot.py", line 541, in <module>
+    main()
+  File "/Users/ulysse/__projects__/LLM_Blink/probe_pilot.py", line 535, in main
+    run_full(args)
+  File "/Users/ulysse/__projects__/LLM_Blink/probe_pilot.py", line 314, in run_full
+    samples, truncs = resample_full(
+  File "/Users/ulysse/__projects__/LLM_Blink/resample.py", line 141, in resample_full
+    pairs = list(ex.map(_one, seeds))
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/_base.py", line 608, in result_iterator
+    yield fs.pop().result()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/_base.py", line 445, in result
+    return self.__get_result()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/_base.py", line 390, in __get_result
+    raise self._exception
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/thread.py", line 52, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/ulysse/__projects__/LLM_Blink/resample.py", line 133, in _one
+    text, _n, trunc = continue_generate(
+  File "/Users/ulysse/__projects__/LLM_Blink/model.py", line 459, in continue_generate
+    return model.continue_generate(system, user, prefilled_assistant,
+  File "/Users/ulysse/__projects__/LLM_Blink/model.py", line 181, in continue_generate
+    resp = self._native_chat(messages, num_predict=max_new_tokens,
+  File "/Users/ulysse/__projects__/LLM_Blink/model.py", line 109, in _native_chat
+    with urllib.request.urlopen(req) as resp:
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 214, in urlopen
+    return opener.open(url, data, timeout)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 523, in open
+    response = meth(req, response)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 632, in http_response
+    response = self.parent.error(
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 561, in error
+    return self._call_chain(*args)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 494, in _call_chain
+    result = func(*args)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 641, in http_error_default
+    raise HTTPError(req.full_url, code, msg, hdrs, fp)
+urllib.error.HTTPError: HTTP Error 500: Internal Server Error
+[probe_pilot:full] gemma3:4b (quant='Q4_K_M'): 800 cells, 371 done, K=20, max_new_tokens=8192, passphrase=1, compute_order=none, example_order=load_first, target_kind=nato, attention_cue=False, think=default, load_engagement=solve
+Traceback (most recent call last):
+  File "/Users/ulysse/__projects__/LLM_Blink/probe_pilot.py", line 541, in <module>
+    main()
+  File "/Users/ulysse/__projects__/LLM_Blink/probe_pilot.py", line 535, in main
+    run_full(args)
+  File "/Users/ulysse/__projects__/LLM_Blink/probe_pilot.py", line 314, in run_full
+    samples, truncs = resample_full(
+  File "/Users/ulysse/__projects__/LLM_Blink/resample.py", line 141, in resample_full
+    pairs = list(ex.map(_one, seeds))
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/_base.py", line 608, in result_iterator
+    yield fs.pop().result()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/_base.py", line 445, in result
+    return self.__get_result()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/_base.py", line 390, in __get_result
+    raise self._exception
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/thread.py", line 52, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/ulysse/__projects__/LLM_Blink/resample.py", line 133, in _one
+    text, _n, trunc = continue_generate(
+  File "/Users/ulysse/__projects__/LLM_Blink/model.py", line 459, in continue_generate
+    return model.continue_generate(system, user, prefilled_assistant,
+  File "/Users/ulysse/__projects__/LLM_Blink/model.py", line 181, in continue_generate
+    resp = self._native_chat(messages, num_predict=max_new_tokens,
+  File "/Users/ulysse/__projects__/LLM_Blink/model.py", line 109, in _native_chat
+    with urllib.request.urlopen(req) as resp:
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 214, in urlopen
+    return opener.open(url, data, timeout)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 523, in open
+    response = meth(req, response)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 632, in http_response
+    response = self.parent.error(
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 561, in error
+    return self._call_chain(*args)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 494, in _call_chain
+    result = func(*args)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 641, in http_error_default
+    raise HTTPError(req.full_url, code, msg, hdrs, fp)
+urllib.error.HTTPError: HTTP Error 500: Internal Server Error
+[probe_pilot:full] gemma3:4b (quant='Q4_K_M'): 800 cells, 371 done, K=20, max_new_tokens=8192, passphrase=1, compute_order=none, example_order=load_first, target_kind=nato, attention_cue=False, think=default, load_engagement=solve
+Traceback (most recent call last):
+  File "/Users/ulysse/__projects__/LLM_Blink/probe_pilot.py", line 541, in <module>
+    main()
+  File "/Users/ulysse/__projects__/LLM_Blink/probe_pilot.py", line 535, in main
+    run_full(args)
+  File "/Users/ulysse/__projects__/LLM_Blink/probe_pilot.py", line 314, in run_full
+    samples, truncs = resample_full(
+  File "/Users/ulysse/__projects__/LLM_Blink/resample.py", line 141, in resample_full
+    pairs = list(ex.map(_one, seeds))
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/_base.py", line 608, in result_iterator
+    yield fs.pop().result()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/_base.py", line 445, in result
+    return self.__get_result()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/_base.py", line 390, in __get_result
+    raise self._exception
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/thread.py", line 52, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/ulysse/__projects__/LLM_Blink/resample.py", line 133, in _one
+    text, _n, trunc = continue_generate(
+  File "/Users/ulysse/__projects__/LLM_Blink/model.py", line 459, in continue_generate
+    return model.continue_generate(system, user, prefilled_assistant,
+  File "/Users/ulysse/__projects__/LLM_Blink/model.py", line 181, in continue_generate
+    resp = self._native_chat(messages, num_predict=max_new_tokens,
+  File "/Users/ulysse/__projects__/LLM_Blink/model.py", line 109, in _native_chat
+    with urllib.request.urlopen(req) as resp:
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 214, in urlopen
+    return opener.open(url, data, timeout)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 523, in open
+    response = meth(req, response)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 632, in http_response
+    response = self.parent.error(
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 561, in error
+    return self._call_chain(*args)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 494, in _call_chain
+    result = func(*args)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 641, in http_error_default
+    raise HTTPError(req.full_url, code, msg, hdrs, fp)
+urllib.error.HTTPError: HTTP Error 500: Internal Server Error
+[probe_pilot:full] gemma3:4b (quant='Q4_K_M'): 800 cells, 371 done, K=20, max_new_tokens=8192, passphrase=1, compute_order=none, example_order=load_first, target_kind=nato, attention_cue=False, think=default, load_engagement=solve
+Traceback (most recent call last):
+  File "/Users/ulysse/__projects__/LLM_Blink/probe_pilot.py", line 541, in <module>
+    main()
+  File "/Users/ulysse/__projects__/LLM_Blink/probe_pilot.py", line 535, in main
+    run_full(args)
+  File "/Users/ulysse/__projects__/LLM_Blink/probe_pilot.py", line 314, in run_full
+    samples, truncs = resample_full(
+  File "/Users/ulysse/__projects__/LLM_Blink/resample.py", line 141, in resample_full
+    pairs = list(ex.map(_one, seeds))
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/_base.py", line 608, in result_iterator
+    yield fs.pop().result()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/_base.py", line 445, in result
+    return self.__get_result()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/_base.py", line 390, in __get_result
+    raise self._exception
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/thread.py", line 52, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/ulysse/__projects__/LLM_Blink/resample.py", line 133, in _one
+    text, _n, trunc = continue_generate(
+  File "/Users/ulysse/__projects__/LLM_Blink/model.py", line 459, in continue_generate
+    return model.continue_generate(system, user, prefilled_assistant,
+  File "/Users/ulysse/__projects__/LLM_Blink/model.py", line 181, in continue_generate
+    resp = self._native_chat(messages, num_predict=max_new_tokens,
+  File "/Users/ulysse/__projects__/LLM_Blink/model.py", line 109, in _native_chat
+    with urllib.request.urlopen(req) as resp:
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 214, in urlopen
+    return opener.open(url, data, timeout)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 523, in open
+    response = meth(req, response)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 632, in http_response
+    response = self.parent.error(
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 561, in error
+    return self._call_chain(*args)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 494, in _call_chain
+    result = func(*args)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 641, in http_error_default
+    raise HTTPError(req.full_url, code, msg, hdrs, fp)
+urllib.error.HTTPError: HTTP Error 500: Internal Server Error
+[probe_pilot:full] gemma3:4b (quant='Q4_K_M'): 800 cells, 371 done, K=20, max_new_tokens=8192, passphrase=1, compute_order=none, example_order=load_first, target_kind=nato, attention_cue=False, think=default, load_engagement=solve
+Traceback (most recent call last):
+  File "/Users/ulysse/__projects__/LLM_Blink/probe_pilot.py", line 541, in <module>
+    main()
+  File "/Users/ulysse/__projects__/LLM_Blink/probe_pilot.py", line 535, in main
+    run_full(args)
+  File "/Users/ulysse/__projects__/LLM_Blink/probe_pilot.py", line 314, in run_full
+    samples, truncs = resample_full(
+  File "/Users/ulysse/__projects__/LLM_Blink/resample.py", line 141, in resample_full
+    pairs = list(ex.map(_one, seeds))
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/_base.py", line 608, in result_iterator
+    yield fs.pop().result()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/_base.py", line 445, in result
+    return self.__get_result()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/_base.py", line 390, in __get_result
+    raise self._exception
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/thread.py", line 52, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/ulysse/__projects__/LLM_Blink/resample.py", line 133, in _one
+    text, _n, trunc = continue_generate(
+  File "/Users/ulysse/__projects__/LLM_Blink/model.py", line 459, in continue_generate
+    return model.continue_generate(system, user, prefilled_assistant,
+  File "/Users/ulysse/__projects__/LLM_Blink/model.py", line 181, in continue_generate
+    resp = self._native_chat(messages, num_predict=max_new_tokens,
+  File "/Users/ulysse/__projects__/LLM_Blink/model.py", line 109, in _native_chat
+    with urllib.request.urlopen(req) as resp:
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 214, in urlopen
+    return opener.open(url, data, timeout)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 523, in open
+    response = meth(req, response)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 632, in http_response
+    response = self.parent.error(
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 561, in error
+    return self._call_chain(*args)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 494, in _call_chain
+    result = func(*args)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 641, in http_error_default
+    raise HTTPError(req.full_url, code, msg, hdrs, fp)
+urllib.error.HTTPError: HTTP Error 500: Internal Server Error
+[probe_pilot:full] gemma3:4b (quant='Q4_K_M'): 800 cells, 371 done, K=20, max_new_tokens=8192, passphrase=1, compute_order=none, example_order=load_first, target_kind=nato, attention_cue=False, think=default, load_engagement=solve
+Traceback (most recent call last):
+  File "/Users/ulysse/__projects__/LLM_Blink/probe_pilot.py", line 541, in <module>
+    main()
+  File "/Users/ulysse/__projects__/LLM_Blink/probe_pilot.py", line 535, in main
+    run_full(args)
+  File "/Users/ulysse/__projects__/LLM_Blink/probe_pilot.py", line 314, in run_full
+    samples, truncs = resample_full(
+  File "/Users/ulysse/__projects__/LLM_Blink/resample.py", line 141, in resample_full
+    pairs = list(ex.map(_one, seeds))
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/_base.py", line 608, in result_iterator
+    yield fs.pop().result()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/_base.py", line 445, in result
+    return self.__get_result()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/_base.py", line 390, in __get_result
+    raise self._exception
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/thread.py", line 52, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/ulysse/__projects__/LLM_Blink/resample.py", line 133, in _one
+    text, _n, trunc = continue_generate(
+  File "/Users/ulysse/__projects__/LLM_Blink/model.py", line 459, in continue_generate
+    return model.continue_generate(system, user, prefilled_assistant,
+  File "/Users/ulysse/__projects__/LLM_Blink/model.py", line 181, in continue_generate
+    resp = self._native_chat(messages, num_predict=max_new_tokens,
+  File "/Users/ulysse/__projects__/LLM_Blink/model.py", line 109, in _native_chat
+    with urllib.request.urlopen(req) as resp:
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 214, in urlopen
+    return opener.open(url, data, timeout)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 523, in open
+    response = meth(req, response)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 632, in http_response
+    response = self.parent.error(
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 561, in error
+    return self._call_chain(*args)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 494, in _call_chain
+    result = func(*args)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 641, in http_error_default
+    raise HTTPError(req.full_url, code, msg, hdrs, fp)
+urllib.error.HTTPError: HTTP Error 500: Internal Server Error
+[probe_pilot:full] gemma3:4b (quant='Q4_K_M'): 800 cells, 371 done, K=20, max_new_tokens=8192, passphrase=1, compute_order=none, example_order=load_first, target_kind=nato, attention_cue=False, think=default, load_engagement=solve
+Traceback (most recent call last):
+  File "/Users/ulysse/__projects__/LLM_Blink/probe_pilot.py", line 541, in <module>
+    main()
+  File "/Users/ulysse/__projects__/LLM_Blink/probe_pilot.py", line 535, in main
+    run_full(args)
+  File "/Users/ulysse/__projects__/LLM_Blink/probe_pilot.py", line 314, in run_full
+    samples, truncs = resample_full(
+  File "/Users/ulysse/__projects__/LLM_Blink/resample.py", line 141, in resample_full
+    pairs = list(ex.map(_one, seeds))
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/_base.py", line 608, in result_iterator
+    yield fs.pop().result()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/_base.py", line 445, in result
+    return self.__get_result()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/_base.py", line 390, in __get_result
+    raise self._exception
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/thread.py", line 52, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/ulysse/__projects__/LLM_Blink/resample.py", line 133, in _one
+    text, _n, trunc = continue_generate(
+  File "/Users/ulysse/__projects__/LLM_Blink/model.py", line 459, in continue_generate
+    return model.continue_generate(system, user, prefilled_assistant,
+  File "/Users/ulysse/__projects__/LLM_Blink/model.py", line 181, in continue_generate
+    resp = self._native_chat(messages, num_predict=max_new_tokens,
+  File "/Users/ulysse/__projects__/LLM_Blink/model.py", line 109, in _native_chat
+    with urllib.request.urlopen(req) as resp:
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 214, in urlopen
+    return opener.open(url, data, timeout)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 523, in open
+    response = meth(req, response)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 632, in http_response
+    response = self.parent.error(
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 561, in error
+    return self._call_chain(*args)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 494, in _call_chain
+    result = func(*args)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 641, in http_error_default
+    raise HTTPError(req.full_url, code, msg, hdrs, fp)
+urllib.error.HTTPError: HTTP Error 500: Internal Server Error
+[probe_pilot:full] gemma3:4b (quant='Q4_K_M'): 800 cells, 371 done, K=20, max_new_tokens=8192, passphrase=1, compute_order=none, example_order=load_first, target_kind=nato, attention_cue=False, think=default, load_engagement=solve
+Traceback (most recent call last):
+  File "/Users/ulysse/__projects__/LLM_Blink/probe_pilot.py", line 541, in <module>
+    main()
+  File "/Users/ulysse/__projects__/LLM_Blink/probe_pilot.py", line 535, in main
+    run_full(args)
+  File "/Users/ulysse/__projects__/LLM_Blink/probe_pilot.py", line 314, in run_full
+    samples, truncs = resample_full(
+  File "/Users/ulysse/__projects__/LLM_Blink/resample.py", line 141, in resample_full
+    pairs = list(ex.map(_one, seeds))
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/_base.py", line 608, in result_iterator
+    yield fs.pop().result()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/_base.py", line 445, in result
+    return self.__get_result()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/_base.py", line 390, in __get_result
+    raise self._exception
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/thread.py", line 52, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/ulysse/__projects__/LLM_Blink/resample.py", line 133, in _one
+    text, _n, trunc = continue_generate(
+  File "/Users/ulysse/__projects__/LLM_Blink/model.py", line 459, in continue_generate
+    return model.continue_generate(system, user, prefilled_assistant,
+  File "/Users/ulysse/__projects__/LLM_Blink/model.py", line 181, in continue_generate
+    resp = self._native_chat(messages, num_predict=max_new_tokens,
+  File "/Users/ulysse/__projects__/LLM_Blink/model.py", line 109, in _native_chat
+    with urllib.request.urlopen(req) as resp:
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 214, in urlopen
+    return opener.open(url, data, timeout)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 523, in open
+    response = meth(req, response)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 632, in http_response
+    response = self.parent.error(
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 561, in error
+    return self._call_chain(*args)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 494, in _call_chain
+    result = func(*args)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 641, in http_error_default
+    raise HTTPError(req.full_url, code, msg, hdrs, fp)
+urllib.error.HTTPError: HTTP Error 500: Internal Server Error
+[probe_pilot:full] gemma3:4b (quant='Q4_K_M'): 800 cells, 371 done, K=20, max_new_tokens=8192, passphrase=1, compute_order=none, example_order=load_first, target_kind=nato, attention_cue=False, think=default, load_engagement=solve
+Traceback (most recent call last):
+  File "/Users/ulysse/__projects__/LLM_Blink/probe_pilot.py", line 541, in <module>
+    main()
+  File "/Users/ulysse/__projects__/LLM_Blink/probe_pilot.py", line 535, in main
+    run_full(args)
+  File "/Users/ulysse/__projects__/LLM_Blink/probe_pilot.py", line 314, in run_full
+    samples, truncs = resample_full(
+  File "/Users/ulysse/__projects__/LLM_Blink/resample.py", line 141, in resample_full
+    pairs = list(ex.map(_one, seeds))
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/_base.py", line 608, in result_iterator
+    yield fs.pop().result()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/_base.py", line 445, in result
+    return self.__get_result()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/_base.py", line 390, in __get_result
+    raise self._exception
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/thread.py", line 52, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/ulysse/__projects__/LLM_Blink/resample.py", line 133, in _one
+    text, _n, trunc = continue_generate(
+  File "/Users/ulysse/__projects__/LLM_Blink/model.py", line 459, in continue_generate
+    return model.continue_generate(system, user, prefilled_assistant,
+  File "/Users/ulysse/__projects__/LLM_Blink/model.py", line 181, in continue_generate
+    resp = self._native_chat(messages, num_predict=max_new_tokens,
+  File "/Users/ulysse/__projects__/LLM_Blink/model.py", line 109, in _native_chat
+    with urllib.request.urlopen(req) as resp:
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 214, in urlopen
+    return opener.open(url, data, timeout)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 523, in open
+    response = meth(req, response)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 632, in http_response
+    response = self.parent.error(
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 561, in error
+    return self._call_chain(*args)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 494, in _call_chain
+    result = func(*args)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 641, in http_error_default
+    raise HTTPError(req.full_url, code, msg, hdrs, fp)
+urllib.error.HTTPError: HTTP Error 500: Internal Server Error
+[probe_pilot:full] gemma3:4b (quant='Q4_K_M'): 800 cells, 371 done, K=20, max_new_tokens=8192, passphrase=1, compute_order=none, example_order=load_first, target_kind=nato, attention_cue=False, think=default, load_engagement=solve
+Traceback (most recent call last):
+  File "/Users/ulysse/__projects__/LLM_Blink/probe_pilot.py", line 541, in <module>
+    main()
+  File "/Users/ulysse/__projects__/LLM_Blink/probe_pilot.py", line 535, in main
+    run_full(args)
+  File "/Users/ulysse/__projects__/LLM_Blink/probe_pilot.py", line 314, in run_full
+    samples, truncs = resample_full(
+  File "/Users/ulysse/__projects__/LLM_Blink/resample.py", line 141, in resample_full
+    pairs = list(ex.map(_one, seeds))
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/_base.py", line 608, in result_iterator
+    yield fs.pop().result()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/_base.py", line 445, in result
+    return self.__get_result()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/_base.py", line 390, in __get_result
+    raise self._exception
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/thread.py", line 52, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/ulysse/__projects__/LLM_Blink/resample.py", line 133, in _one
+    text, _n, trunc = continue_generate(
+  File "/Users/ulysse/__projects__/LLM_Blink/model.py", line 459, in continue_generate
+    return model.continue_generate(system, user, prefilled_assistant,
+  File "/Users/ulysse/__projects__/LLM_Blink/model.py", line 181, in continue_generate
+    resp = self._native_chat(messages, num_predict=max_new_tokens,
+  File "/Users/ulysse/__projects__/LLM_Blink/model.py", line 109, in _native_chat
+    with urllib.request.urlopen(req) as resp:
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 214, in urlopen
+    return opener.open(url, data, timeout)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 523, in open
+    response = meth(req, response)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 632, in http_response
+    response = self.parent.error(
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 561, in error
+    return self._call_chain(*args)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 494, in _call_chain
+    result = func(*args)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 641, in http_error_default
+    raise HTTPError(req.full_url, code, msg, hdrs, fp)
+urllib.error.HTTPError: HTTP Error 500: Internal Server Error
+[probe_pilot:full] gemma3:4b (quant='Q4_K_M'): 800 cells, 371 done, K=20, max_new_tokens=8192, passphrase=1, compute_order=none, example_order=load_first, target_kind=nato, attention_cue=False, think=default, load_engagement=solve
+Traceback (most recent call last):
+  File "/Users/ulysse/__projects__/LLM_Blink/probe_pilot.py", line 541, in <module>
+    main()
+  File "/Users/ulysse/__projects__/LLM_Blink/probe_pilot.py", line 535, in main
+    run_full(args)
+  File "/Users/ulysse/__projects__/LLM_Blink/probe_pilot.py", line 314, in run_full
+    samples, truncs = resample_full(
+  File "/Users/ulysse/__projects__/LLM_Blink/resample.py", line 141, in resample_full
+    pairs = list(ex.map(_one, seeds))
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/_base.py", line 608, in result_iterator
+    yield fs.pop().result()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/_base.py", line 445, in result
+    return self.__get_result()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/_base.py", line 390, in __get_result
+    raise self._exception
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/thread.py", line 52, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/ulysse/__projects__/LLM_Blink/resample.py", line 133, in _one
+    text, _n, trunc = continue_generate(
+  File "/Users/ulysse/__projects__/LLM_Blink/model.py", line 459, in continue_generate
+    return model.continue_generate(system, user, prefilled_assistant,
+  File "/Users/ulysse/__projects__/LLM_Blink/model.py", line 181, in continue_generate
+    resp = self._native_chat(messages, num_predict=max_new_tokens,
+  File "/Users/ulysse/__projects__/LLM_Blink/model.py", line 109, in _native_chat
+    with urllib.request.urlopen(req) as resp:
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 214, in urlopen
+    return opener.open(url, data, timeout)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 523, in open
+    response = meth(req, response)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 632, in http_response
+    response = self.parent.error(
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 561, in error
+    return self._call_chain(*args)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 494, in _call_chain
+    result = func(*args)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 641, in http_error_default
+    raise HTTPError(req.full_url, code, msg, hdrs, fp)
+urllib.error.HTTPError: HTTP Error 500: Internal Server Error
+[probe_pilot:full] gemma3:4b (quant='Q4_K_M'): 800 cells, 371 done, K=20, max_new_tokens=8192, passphrase=1, compute_order=none, example_order=load_first, target_kind=nato, attention_cue=False, think=default, load_engagement=solve
+Traceback (most recent call last):
+  File "/Users/ulysse/__projects__/LLM_Blink/probe_pilot.py", line 541, in <module>
+    main()
+  File "/Users/ulysse/__projects__/LLM_Blink/probe_pilot.py", line 535, in main
+    run_full(args)
+  File "/Users/ulysse/__projects__/LLM_Blink/probe_pilot.py", line 314, in run_full
+    samples, truncs = resample_full(
+  File "/Users/ulysse/__projects__/LLM_Blink/resample.py", line 141, in resample_full
+    pairs = list(ex.map(_one, seeds))
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/_base.py", line 608, in result_iterator
+    yield fs.pop().result()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/_base.py", line 445, in result
+    return self.__get_result()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/_base.py", line 390, in __get_result
+    raise self._exception
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/thread.py", line 52, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/ulysse/__projects__/LLM_Blink/resample.py", line 133, in _one
+    text, _n, trunc = continue_generate(
+  File "/Users/ulysse/__projects__/LLM_Blink/model.py", line 459, in continue_generate
+    return model.continue_generate(system, user, prefilled_assistant,
+  File "/Users/ulysse/__projects__/LLM_Blink/model.py", line 181, in continue_generate
+    resp = self._native_chat(messages, num_predict=max_new_tokens,
+  File "/Users/ulysse/__projects__/LLM_Blink/model.py", line 109, in _native_chat
+    with urllib.request.urlopen(req) as resp:
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 214, in urlopen
+    return opener.open(url, data, timeout)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 523, in open
+    response = meth(req, response)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 632, in http_response
+    response = self.parent.error(
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 561, in error
+    return self._call_chain(*args)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 494, in _call_chain
+    result = func(*args)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 641, in http_error_default
+    raise HTTPError(req.full_url, code, msg, hdrs, fp)
+urllib.error.HTTPError: HTTP Error 500: Internal Server Error
+[probe_pilot:full] gemma3:4b (quant='Q4_K_M'): 800 cells, 371 done, K=20, max_new_tokens=8192, passphrase=1, compute_order=none, example_order=load_first, target_kind=nato, attention_cue=False, think=default, load_engagement=solve
+Traceback (most recent call last):
+  File "/Users/ulysse/__projects__/LLM_Blink/probe_pilot.py", line 541, in <module>
+    main()
+  File "/Users/ulysse/__projects__/LLM_Blink/probe_pilot.py", line 535, in main
+    run_full(args)
+  File "/Users/ulysse/__projects__/LLM_Blink/probe_pilot.py", line 314, in run_full
+    samples, truncs = resample_full(
+  File "/Users/ulysse/__projects__/LLM_Blink/resample.py", line 141, in resample_full
+    pairs = list(ex.map(_one, seeds))
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/_base.py", line 608, in result_iterator
+    yield fs.pop().result()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/_base.py", line 445, in result
+    return self.__get_result()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/_base.py", line 390, in __get_result
+    raise self._exception
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/thread.py", line 52, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/ulysse/__projects__/LLM_Blink/resample.py", line 133, in _one
+    text, _n, trunc = continue_generate(
+  File "/Users/ulysse/__projects__/LLM_Blink/model.py", line 459, in continue_generate
+    return model.continue_generate(system, user, prefilled_assistant,
+  File "/Users/ulysse/__projects__/LLM_Blink/model.py", line 181, in continue_generate
+    resp = self._native_chat(messages, num_predict=max_new_tokens,
+  File "/Users/ulysse/__projects__/LLM_Blink/model.py", line 109, in _native_chat
+    with urllib.request.urlopen(req) as resp:
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 214, in urlopen
+    return opener.open(url, data, timeout)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 523, in open
+    response = meth(req, response)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 632, in http_response
+    response = self.parent.error(
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 561, in error
+    return self._call_chain(*args)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 494, in _call_chain
+    result = func(*args)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 641, in http_error_default
+    raise HTTPError(req.full_url, code, msg, hdrs, fp)
+urllib.error.HTTPError: HTTP Error 500: Internal Server Error
+[probe_pilot:full] gemma3:4b (quant='Q4_K_M'): 800 cells, 371 done, K=20, max_new_tokens=8192, passphrase=1, compute_order=none, example_order=load_first, target_kind=nato, attention_cue=False, think=default, load_engagement=solve
+Traceback (most recent call last):
+  File "/Users/ulysse/__projects__/LLM_Blink/probe_pilot.py", line 541, in <module>
+    main()
+  File "/Users/ulysse/__projects__/LLM_Blink/probe_pilot.py", line 535, in main
+    run_full(args)
+  File "/Users/ulysse/__projects__/LLM_Blink/probe_pilot.py", line 314, in run_full
+    samples, truncs = resample_full(
+  File "/Users/ulysse/__projects__/LLM_Blink/resample.py", line 141, in resample_full
+    pairs = list(ex.map(_one, seeds))
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/_base.py", line 608, in result_iterator
+    yield fs.pop().result()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/_base.py", line 445, in result
+    return self.__get_result()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/_base.py", line 390, in __get_result
+    raise self._exception
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/thread.py", line 52, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/ulysse/__projects__/LLM_Blink/resample.py", line 133, in _one
+    text, _n, trunc = continue_generate(
+  File "/Users/ulysse/__projects__/LLM_Blink/model.py", line 459, in continue_generate
+    return model.continue_generate(system, user, prefilled_assistant,
+  File "/Users/ulysse/__projects__/LLM_Blink/model.py", line 181, in continue_generate
+    resp = self._native_chat(messages, num_predict=max_new_tokens,
+  File "/Users/ulysse/__projects__/LLM_Blink/model.py", line 109, in _native_chat
+    with urllib.request.urlopen(req) as resp:
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 214, in urlopen
+    return opener.open(url, data, timeout)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 523, in open
+    response = meth(req, response)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 632, in http_response
+    response = self.parent.error(
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 561, in error
+    return self._call_chain(*args)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 494, in _call_chain
+    result = func(*args)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 641, in http_error_default
+    raise HTTPError(req.full_url, code, msg, hdrs, fp)
+urllib.error.HTTPError: HTTP Error 500: Internal Server Error
+[probe_pilot:full] gemma3:4b (quant='Q4_K_M'): 800 cells, 371 done, K=20, max_new_tokens=8192, passphrase=1, compute_order=none, example_order=load_first, target_kind=nato, attention_cue=False, think=default, load_engagement=solve
+Traceback (most recent call last):
+  File "/Users/ulysse/__projects__/LLM_Blink/probe_pilot.py", line 541, in <module>
+    main()
+  File "/Users/ulysse/__projects__/LLM_Blink/probe_pilot.py", line 535, in main
+    run_full(args)
+  File "/Users/ulysse/__projects__/LLM_Blink/probe_pilot.py", line 314, in run_full
+    samples, truncs = resample_full(
+  File "/Users/ulysse/__projects__/LLM_Blink/resample.py", line 141, in resample_full
+    pairs = list(ex.map(_one, seeds))
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/_base.py", line 608, in result_iterator
+    yield fs.pop().result()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/_base.py", line 445, in result
+    return self.__get_result()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/_base.py", line 390, in __get_result
+    raise self._exception
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/thread.py", line 52, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/ulysse/__projects__/LLM_Blink/resample.py", line 133, in _one
+    text, _n, trunc = continue_generate(
+  File "/Users/ulysse/__projects__/LLM_Blink/model.py", line 459, in continue_generate
+    return model.continue_generate(system, user, prefilled_assistant,
+  File "/Users/ulysse/__projects__/LLM_Blink/model.py", line 181, in continue_generate
+    resp = self._native_chat(messages, num_predict=max_new_tokens,
+  File "/Users/ulysse/__projects__/LLM_Blink/model.py", line 109, in _native_chat
+    with urllib.request.urlopen(req) as resp:
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 214, in urlopen
+    return opener.open(url, data, timeout)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 523, in open
+    response = meth(req, response)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 632, in http_response
+    response = self.parent.error(
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 561, in error
+    return self._call_chain(*args)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 494, in _call_chain
+    result = func(*args)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 641, in http_error_default
+    raise HTTPError(req.full_url, code, msg, hdrs, fp)
+urllib.error.HTTPError: HTTP Error 500: Internal Server Error
+[probe_pilot:full] gemma3:4b (quant='Q4_K_M'): 800 cells, 371 done, K=20, max_new_tokens=8192, passphrase=1, compute_order=none, example_order=load_first, target_kind=nato, attention_cue=False, think=default, load_engagement=solve
+Traceback (most recent call last):
+  File "/Users/ulysse/__projects__/LLM_Blink/probe_pilot.py", line 541, in <module>
+    main()
+  File "/Users/ulysse/__projects__/LLM_Blink/probe_pilot.py", line 535, in main
+    run_full(args)
+  File "/Users/ulysse/__projects__/LLM_Blink/probe_pilot.py", line 314, in run_full
+    samples, truncs = resample_full(
+  File "/Users/ulysse/__projects__/LLM_Blink/resample.py", line 141, in resample_full
+    pairs = list(ex.map(_one, seeds))
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/_base.py", line 608, in result_iterator
+    yield fs.pop().result()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/_base.py", line 445, in result
+    return self.__get_result()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/_base.py", line 390, in __get_result
+    raise self._exception
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/thread.py", line 52, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/ulysse/__projects__/LLM_Blink/resample.py", line 133, in _one
+    text, _n, trunc = continue_generate(
+  File "/Users/ulysse/__projects__/LLM_Blink/model.py", line 459, in continue_generate
+    return model.continue_generate(system, user, prefilled_assistant,
+  File "/Users/ulysse/__projects__/LLM_Blink/model.py", line 181, in continue_generate
+    resp = self._native_chat(messages, num_predict=max_new_tokens,
+  File "/Users/ulysse/__projects__/LLM_Blink/model.py", line 109, in _native_chat
+    with urllib.request.urlopen(req) as resp:
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 214, in urlopen
+    return opener.open(url, data, timeout)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 523, in open
+    response = meth(req, response)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 632, in http_response
+    response = self.parent.error(
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 561, in error
+    return self._call_chain(*args)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 494, in _call_chain
+    result = func(*args)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 641, in http_error_default
+    raise HTTPError(req.full_url, code, msg, hdrs, fp)
+urllib.error.HTTPError: HTTP Error 500: Internal Server Error
+[probe_pilot:full] gemma3:4b (quant='Q4_K_M'): 800 cells, 371 done, K=20, max_new_tokens=8192, passphrase=1, compute_order=none, example_order=load_first, target_kind=nato, attention_cue=False, think=default, load_engagement=solve
+Traceback (most recent call last):
+  File "/Users/ulysse/__projects__/LLM_Blink/probe_pilot.py", line 541, in <module>
+    main()
+  File "/Users/ulysse/__projects__/LLM_Blink/probe_pilot.py", line 535, in main
+    run_full(args)
+  File "/Users/ulysse/__projects__/LLM_Blink/probe_pilot.py", line 314, in run_full
+    samples, truncs = resample_full(
+  File "/Users/ulysse/__projects__/LLM_Blink/resample.py", line 141, in resample_full
+    pairs = list(ex.map(_one, seeds))
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/_base.py", line 608, in result_iterator
+    yield fs.pop().result()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/_base.py", line 445, in result
+    return self.__get_result()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/_base.py", line 390, in __get_result
+    raise self._exception
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/thread.py", line 52, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/ulysse/__projects__/LLM_Blink/resample.py", line 133, in _one
+    text, _n, trunc = continue_generate(
+  File "/Users/ulysse/__projects__/LLM_Blink/model.py", line 459, in continue_generate
+    return model.continue_generate(system, user, prefilled_assistant,
+  File "/Users/ulysse/__projects__/LLM_Blink/model.py", line 181, in continue_generate
+    resp = self._native_chat(messages, num_predict=max_new_tokens,
+  File "/Users/ulysse/__projects__/LLM_Blink/model.py", line 109, in _native_chat
+    with urllib.request.urlopen(req) as resp:
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 214, in urlopen
+    return opener.open(url, data, timeout)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 523, in open
+    response = meth(req, response)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 632, in http_response
+    response = self.parent.error(
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 561, in error
+    return self._call_chain(*args)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 494, in _call_chain
+    result = func(*args)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 641, in http_error_default
+    raise HTTPError(req.full_url, code, msg, hdrs, fp)
+urllib.error.HTTPError: HTTP Error 500: Internal Server Error
+[probe_pilot:full] gemma3:4b (quant='Q4_K_M'): 800 cells, 371 done, K=20, max_new_tokens=8192, passphrase=1, compute_order=none, example_order=load_first, target_kind=nato, attention_cue=False, think=default, load_engagement=solve
+Traceback (most recent call last):
+  File "/Users/ulysse/__projects__/LLM_Blink/probe_pilot.py", line 541, in <module>
+    main()
+  File "/Users/ulysse/__projects__/LLM_Blink/probe_pilot.py", line 535, in main
+    run_full(args)
+  File "/Users/ulysse/__projects__/LLM_Blink/probe_pilot.py", line 314, in run_full
+    samples, truncs = resample_full(
+  File "/Users/ulysse/__projects__/LLM_Blink/resample.py", line 141, in resample_full
+    pairs = list(ex.map(_one, seeds))
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/_base.py", line 608, in result_iterator
+    yield fs.pop().result()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/_base.py", line 445, in result
+    return self.__get_result()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/_base.py", line 390, in __get_result
+    raise self._exception
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/thread.py", line 52, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/ulysse/__projects__/LLM_Blink/resample.py", line 133, in _one
+    text, _n, trunc = continue_generate(
+  File "/Users/ulysse/__projects__/LLM_Blink/model.py", line 459, in continue_generate
+    return model.continue_generate(system, user, prefilled_assistant,
+  File "/Users/ulysse/__projects__/LLM_Blink/model.py", line 181, in continue_generate
+    resp = self._native_chat(messages, num_predict=max_new_tokens,
+  File "/Users/ulysse/__projects__/LLM_Blink/model.py", line 109, in _native_chat
+    with urllib.request.urlopen(req) as resp:
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 214, in urlopen
+    return opener.open(url, data, timeout)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 523, in open
+    response = meth(req, response)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 632, in http_response
+    response = self.parent.error(
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 561, in error
+    return self._call_chain(*args)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 494, in _call_chain
+    result = func(*args)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 641, in http_error_default
+    raise HTTPError(req.full_url, code, msg, hdrs, fp)
+urllib.error.HTTPError: HTTP Error 500: Internal Server Error

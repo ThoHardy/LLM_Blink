@@ -93,3 +93,66 @@ remote:
 ===== cue: gemma3:4b -> LLM_Blink/results/cond_cue_gemma3_4b.csv  START mar. 10 nov. 2026 12:16:18 EST =====
 [11-10 12:16:24] cue crashed (try 30), resuming in 30s
 [11-10 12:16:54] cue GAVE UP after 30 tries
+[11-10 12:16:57] cue : committed+pushed
+[11-10 12:16:57] === rank1 start ===
+===== rank1: gemma3:4b -> LLM_Blink/results/cond_rank1_gemma3_4b.csv  START mar. 10 nov. 2026 12:16:57 EST =====
+[11-10 13:31:00] rank1 crashed (try 1), resuming in 30s
+===== rank1: gemma3:4b -> LLM_Blink/results/cond_rank1_gemma3_4b.csv  START mar. 10 nov. 2026 13:31:31 EST =====
+[11-10 13:31:38] rank1 crashed (try 2), resuming in 30s
+===== rank1: gemma3:4b -> LLM_Blink/results/cond_rank1_gemma3_4b.csv  START mar. 10 nov. 2026 13:32:08 EST =====
+[11-10 13:32:16] rank1 crashed (try 3), resuming in 30s
+===== rank1: gemma3:4b -> LLM_Blink/results/cond_rank1_gemma3_4b.csv  START mar. 10 nov. 2026 13:32:46 EST =====
+[11-10 13:32:54] rank1 crashed (try 4), resuming in 30s
+===== rank1: gemma3:4b -> LLM_Blink/results/cond_rank1_gemma3_4b.csv  START mar. 10 nov. 2026 13:33:24 EST =====
+[11-10 13:33:32] rank1 crashed (try 5), resuming in 30s
+===== rank1: gemma3:4b -> LLM_Blink/results/cond_rank1_gemma3_4b.csv  START mar. 10 nov. 2026 13:34:02 EST =====
+[11-10 13:34:10] rank1 crashed (try 6), resuming in 30s
+===== rank1: gemma3:4b -> LLM_Blink/results/cond_rank1_gemma3_4b.csv  START mar. 10 nov. 2026 13:34:40 EST =====
+[11-10 13:34:48] rank1 crashed (try 7), resuming in 30s
+===== rank1: gemma3:4b -> LLM_Blink/results/cond_rank1_gemma3_4b.csv  START mar. 10 nov. 2026 13:35:18 EST =====
+[11-10 13:35:25] rank1 crashed (try 8), resuming in 30s
+===== rank1: gemma3:4b -> LLM_Blink/results/cond_rank1_gemma3_4b.csv  START mar. 10 nov. 2026 13:35:55 EST =====
+[11-10 13:36:03] rank1 crashed (try 9), resuming in 30s
+===== rank1: gemma3:4b -> LLM_Blink/results/cond_rank1_gemma3_4b.csv  START mar. 10 nov. 2026 13:36:33 EST =====
+[11-10 13:36:41] rank1 crashed (try 10), resuming in 30s
+===== rank1: gemma3:4b -> LLM_Blink/results/cond_rank1_gemma3_4b.csv  START mar. 10 nov. 2026 13:37:11 EST =====
+[11-10 13:37:18] rank1 crashed (try 11), resuming in 30s
+===== rank1: gemma3:4b -> LLM_Blink/results/cond_rank1_gemma3_4b.csv  START mar. 10 nov. 2026 13:37:48 EST =====
+[11-10 13:37:57] rank1 crashed (try 12), resuming in 30s
+===== rank1: gemma3:4b -> LLM_Blink/results/cond_rank1_gemma3_4b.csv  START mar. 10 nov. 2026 13:38:27 EST =====
+[11-10 13:38:35] rank1 crashed (try 13), resuming in 30s
+===== rank1: gemma3:4b -> LLM_Blink/results/cond_rank1_gemma3_4b.csv  START mar. 10 nov. 2026 13:39:05 EST =====
+[11-10 13:39:13] rank1 crashed (try 14), resuming in 30s
+===== rank1: gemma3:4b -> LLM_Blink/results/cond_rank1_gemma3_4b.csv  START mar. 10 nov. 2026 13:39:43 EST =====
+[11-10 13:39:51] rank1 crashed (try 15), resuming in 30s
+===== rank1: gemma3:4b -> LLM_Blink/results/cond_rank1_gemma3_4b.csv  START mar. 10 nov. 2026 13:40:21 EST =====
+[11-10 13:40:30] rank1 crashed (try 16), resuming in 30s
+===== rank1: gemma3:4b -> LLM_Blink/results/cond_rank1_gemma3_4b.csv  START mar. 10 nov. 2026 13:41:00 EST =====
+[11-10 13:41:09] rank1 crashed (try 17), resuming in 30s
+===== rank1: gemma3:4b -> LLM_Blink/results/cond_rank1_gemma3_4b.csv  START mar. 10 nov. 2026 13:41:39 EST =====
+[11-10 13:41:45] rank1 crashed (try 18), resuming in 30s
+===== rank1: gemma3:4b -> LLM_Blink/results/cond_rank1_gemma3_4b.csv  START mar. 10 nov. 2026 13:42:15 EST =====
+[11-10 13:42:23] rank1 crashed (try 19), resuming in 30s
+===== rank1: gemma3:4b -> LLM_Blink/results/cond_rank1_gemma3_4b.csv  START mar. 10 nov. 2026 13:42:53 EST =====
+[11-10 13:43:01] rank1 crashed (try 20), resuming in 30s
+===== rank1: gemma3:4b -> LLM_Blink/results/cond_rank1_gemma3_4b.csv  START mar. 10 nov. 2026 13:43:31 EST =====
+[11-10 13:43:38] rank1 crashed (try 21), resuming in 30s
+===== rank1: gemma3:4b -> LLM_Blink/results/cond_rank1_gemma3_4b.csv  START mar. 10 nov. 2026 13:44:08 EST =====
+[11-10 13:44:16] rank1 crashed (try 22), resuming in 30s
+===== rank1: gemma3:4b -> LLM_Blink/results/cond_rank1_gemma3_4b.csv  START mar. 10 nov. 2026 13:44:46 EST =====
+[11-10 13:44:55] rank1 crashed (try 23), resuming in 30s
+===== rank1: gemma3:4b -> LLM_Blink/results/cond_rank1_gemma3_4b.csv  START mar. 10 nov. 2026 13:45:25 EST =====
+[11-10 13:45:33] rank1 crashed (try 24), resuming in 30s
+===== rank1: gemma3:4b -> LLM_Blink/results/cond_rank1_gemma3_4b.csv  START mar. 10 nov. 2026 13:46:03 EST =====
+[11-10 13:46:12] rank1 crashed (try 25), resuming in 30s
+===== rank1: gemma3:4b -> LLM_Blink/results/cond_rank1_gemma3_4b.csv  START mar. 10 nov. 2026 13:46:42 EST =====
+[11-10 13:46:50] rank1 crashed (try 26), resuming in 30s
+===== rank1: gemma3:4b -> LLM_Blink/results/cond_rank1_gemma3_4b.csv  START mar. 10 nov. 2026 13:47:20 EST =====
+[11-10 13:47:28] rank1 crashed (try 27), resuming in 30s
+===== rank1: gemma3:4b -> LLM_Blink/results/cond_rank1_gemma3_4b.csv  START mar. 10 nov. 2026 13:47:58 EST =====
+[11-10 13:48:05] rank1 crashed (try 28), resuming in 30s
+===== rank1: gemma3:4b -> LLM_Blink/results/cond_rank1_gemma3_4b.csv  START mar. 10 nov. 2026 13:48:36 EST =====
+[11-10 13:48:43] rank1 crashed (try 29), resuming in 30s
+===== rank1: gemma3:4b -> LLM_Blink/results/cond_rank1_gemma3_4b.csv  START mar. 10 nov. 2026 13:49:13 EST =====
+[11-10 13:49:21] rank1 crashed (try 30), resuming in 30s
+[11-10 13:49:51] rank1 GAVE UP after 30 tries
