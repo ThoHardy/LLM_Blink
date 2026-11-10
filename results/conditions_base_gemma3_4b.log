@@ -1,0 +1,44 @@
+[probe_pilot:full] gemma3:4b (quant='Q4_K_M'): 160 cells, 0 done, K=20, max_new_tokens=8192, passphrase=last, compute_order=none, example_order=load_first, target_kind=nato, attention_cue=False, think=default, load_engagement=solve
+  5 trials, 155s (30.9s/trial) [math_bench_4/cot] cell-trunc=0.0%
+  10 trials, 311s (31.1s/trial) [trivial/direct] cell-trunc=0.0%
+  15 trials, 585s (39.0s/trial) [math_bench_5/cot] cell-trunc=0.0%
+  20 trials, 681s (34.1s/trial) [math_bench_2/direct] cell-trunc=0.0%
+  25 trials, 912s (36.5s/trial) [trivial/cot] cell-trunc=0.0%
+  30 trials, 1101s (36.7s/trial) [math_bench_4/direct] cell-trunc=0.0%
+  35 trials, 1280s (36.6s/trial) [math_bench_2/cot] cell-trunc=0.0%
+  40 trials, 1514s (37.8s/trial) [math_bench_5/direct] cell-trunc=0.0%
+  45 trials, 1685s (37.4s/trial) [math_bench_4/cot] cell-trunc=0.0%
+  50 trials, 1809s (36.2s/trial) [trivial/direct] cell-trunc=0.0%
+  55 trials, 2048s (37.2s/trial) [math_bench_5/cot] cell-trunc=0.0%
+  60 trials, 2155s (35.9s/trial) [math_bench_2/direct] cell-trunc=0.0%
+  65 trials, 2416s (37.2s/trial) [trivial/cot] cell-trunc=0.0%
+  70 trials, 2556s (36.5s/trial) [math_bench_4/direct] cell-trunc=0.0%
+  75 trials, 2807s (37.4s/trial) [math_bench_2/cot] cell-trunc=0.0%
+  80 trials, 3040s (38.0s/trial) [math_bench_5/direct] cell-trunc=0.0%
+  85 trials, 3218s (37.9s/trial) [math_bench_4/cot] cell-trunc=0.0%
+  90 trials, 3365s (37.4s/trial) [trivial/direct] cell-trunc=0.0%
+  95 trials, 3709s (39.0s/trial) [math_bench_5/cot] cell-trunc=0.0%
+  100 trials, 3822s (38.2s/trial) [math_bench_2/direct] cell-trunc=0.0%
+  105 trials, 4023s (38.3s/trial) [trivial/cot] cell-trunc=0.0%
+  110 trials, 4254s (38.7s/trial) [math_bench_4/direct] cell-trunc=0.0%
+  115 trials, 4463s (38.8s/trial) [math_bench_2/cot] cell-trunc=0.0%
+  120 trials, 4679s (39.0s/trial) [math_bench_5/direct] cell-trunc=0.0%
+  125 trials, 4877s (39.0s/trial) [math_bench_4/cot] cell-trunc=0.0%
+  130 trials, 5085s (39.1s/trial) [trivial/direct] cell-trunc=0.0%
+  135 trials, 5416s (40.1s/trial) [math_bench_5/cot] cell-trunc=0.0%
+  140 trials, 5531s (39.5s/trial) [math_bench_2/direct] cell-trunc=0.0%
+  145 trials, 5717s (39.4s/trial) [trivial/cot] cell-trunc=0.0%
+  150 trials, 6093s (40.6s/trial) [math_bench_4/direct] cell-trunc=0.0%
+  155 trials, 6266s (40.4s/trial) [math_bench_2/cot] cell-trunc=0.0%
+  160 trials, 6559s (41.0s/trial) [math_bench_5/direct] cell-trunc=0.0%
+
+[probe_pilot:full] per-cell truncation (>2% = FAILED cell, re-run bigger):
+    math_bench_2     cot     trunc= 0.00% (n_samples=400)
+    math_bench_2     direct  trunc= 0.00% (n_samples=400)
+    math_bench_4     cot     trunc= 1.25% (n_samples=400)
+    math_bench_4     direct  trunc= 0.00% (n_samples=400)
+    math_bench_5     cot     trunc= 0.00% (n_samples=400)
+    math_bench_5     direct  trunc= 0.00% (n_samples=400)
+    trivial          cot     trunc= 0.00% (n_samples=400)
+    trivial          direct  trunc= 0.00% (n_samples=400)
+[probe_pilot:full] done: 160 new trials in 6559s; worst-cell truncation 1.25%
