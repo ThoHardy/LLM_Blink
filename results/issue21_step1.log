@@ -1,3 +1,11 @@
 [11-09 18:01:45] === drift check: base N=20 ===
 ===== base: gemma3:4b -> LLM_Blink/results/cond_base_gemma3_4b.csv  START lun.  9 nov. 2026 18:01:45 EST =====
 ===== base: gemma3:4b  DONE lun.  9 nov. 2026 19:51:05 EST =====
+remote: 
+remote: Create a pull request for 'results/issue-21-step1' on GitHub by visiting:        
+remote:      https://github.com/ThoHardy/LLM_Blink/pull/new/results/issue-21-step1        
+remote: 
+[11-09 19:51:08] base : committed+pushed
+[11-09 19:51:08] === cue start ===
+===== cue: gemma3:4b -> LLM_Blink/results/cond_cue_gemma3_4b.csv  START lun.  9 nov. 2026 19:51:08 EST =====
+[11-09 21:20:10] cue FAILED

@@ -1,0 +1,64 @@
+[probe_pilot:full] gemma3:4b (quant='Q4_K_M'): 800 cells, 0 done, K=20, max_new_tokens=8192, passphrase=last, compute_order=none, example_order=load_first, target_kind=nato, attention_cue=True, think=default, load_engagement=solve
+  5 trials, 171s (34.2s/trial) [math_bench_4/cot] cell-trunc=0.0%
+  10 trials, 352s (35.2s/trial) [trivial/direct] cell-trunc=0.0%
+  15 trials, 619s (41.2s/trial) [math_bench_5/cot] cell-trunc=0.0%
+  20 trials, 722s (36.1s/trial) [math_bench_2/direct] cell-trunc=0.0%
+  25 trials, 965s (38.6s/trial) [trivial/cot] cell-trunc=0.0%
+  30 trials, 1150s (38.3s/trial) [math_bench_4/direct] cell-trunc=0.0%
+  35 trials, 1366s (39.0s/trial) [math_bench_2/cot] cell-trunc=0.0%
+  40 trials, 1608s (40.2s/trial) [math_bench_5/direct] cell-trunc=0.0%
+  45 trials, 1782s (39.6s/trial) [math_bench_4/cot] cell-trunc=0.0%
+  50 trials, 1895s (37.9s/trial) [trivial/direct] cell-trunc=0.0%
+  55 trials, 2144s (39.0s/trial) [math_bench_5/cot] cell-trunc=0.0%
+  60 trials, 2261s (37.7s/trial) [math_bench_2/direct] cell-trunc=0.0%
+  65 trials, 2603s (40.0s/trial) [trivial/cot] cell-trunc=0.0%
+  70 trials, 2748s (39.3s/trial) [math_bench_4/direct] cell-trunc=0.0%
+  75 trials, 2995s (39.9s/trial) [math_bench_2/cot] cell-trunc=0.0%
+  80 trials, 3220s (40.3s/trial) [math_bench_5/direct] cell-trunc=0.0%
+  85 trials, 3393s (39.9s/trial) [math_bench_4/cot] cell-trunc=0.0%
+  90 trials, 3549s (39.4s/trial) [trivial/direct] cell-trunc=0.0%
+  95 trials, 3890s (40.9s/trial) [math_bench_5/cot] cell-trunc=0.0%
+  100 trials, 4015s (40.2s/trial) [math_bench_2/direct] cell-trunc=0.0%
+  105 trials, 4245s (40.4s/trial) [trivial/cot] cell-trunc=0.0%
+  110 trials, 4474s (40.7s/trial) [math_bench_4/direct] cell-trunc=0.0%
+  115 trials, 4716s (41.0s/trial) [math_bench_2/cot] cell-trunc=0.0%
+  120 trials, 4972s (41.4s/trial) [math_bench_5/direct] cell-trunc=0.0%
+  125 trials, 5168s (41.3s/trial) [math_bench_4/cot] cell-trunc=0.0%
+Traceback (most recent call last):
+  File "/Users/ulysse/__projects__/LLM_Blink/probe_pilot.py", line 541, in <module>
+    main()
+  File "/Users/ulysse/__projects__/LLM_Blink/probe_pilot.py", line 535, in main
+    run_full(args)
+  File "/Users/ulysse/__projects__/LLM_Blink/probe_pilot.py", line 314, in run_full
+    samples, truncs = resample_full(
+  File "/Users/ulysse/__projects__/LLM_Blink/resample.py", line 141, in resample_full
+    pairs = list(ex.map(_one, seeds))
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/_base.py", line 608, in result_iterator
+    yield fs.pop().result()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/_base.py", line 445, in result
+    return self.__get_result()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/_base.py", line 390, in __get_result
+    raise self._exception
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/thread.py", line 52, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/ulysse/__projects__/LLM_Blink/resample.py", line 133, in _one
+    text, _n, trunc = continue_generate(
+  File "/Users/ulysse/__projects__/LLM_Blink/model.py", line 459, in continue_generate
+    return model.continue_generate(system, user, prefilled_assistant,
+  File "/Users/ulysse/__projects__/LLM_Blink/model.py", line 181, in continue_generate
+    resp = self._native_chat(messages, num_predict=max_new_tokens,
+  File "/Users/ulysse/__projects__/LLM_Blink/model.py", line 109, in _native_chat
+    with urllib.request.urlopen(req) as resp:
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 214, in urlopen
+    return opener.open(url, data, timeout)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 523, in open
+    response = meth(req, response)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 632, in http_response
+    response = self.parent.error(
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 561, in error
+    return self._call_chain(*args)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 494, in _call_chain
+    result = func(*args)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 641, in http_error_default
+    raise HTTPError(req.full_url, code, msg, hdrs, fp)
+urllib.error.HTTPError: HTTP Error 500: Internal Server Error
