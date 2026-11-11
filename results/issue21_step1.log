@@ -289,3 +289,7 @@ remote:
 [11-10 21:48:58] === trivmath start ===
 ===== trivmath: gemma3:4b -> LLM_Blink/results/cond_trivmath_gemma3_4b.csv  START mar. 10 nov. 2026 21:48:58 EST =====
 ===== trivmath: gemma3:4b  DONE mar. 10 nov. 2026 22:29:35 EST =====
+[11-10 22:29:38] trivmath : committed+pushed
+[11-10 22:29:38] === cue start ===
+===== cue: gemma3:4b -> LLM_Blink/results/cond_cue_gemma3_4b.csv  START mar. 10 nov. 2026 22:29:38 EST =====
+===== cue: gemma3:4b  DONE mer. 11 nov. 2026 10:44:48 EST =====
