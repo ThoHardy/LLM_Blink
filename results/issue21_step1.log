@@ -293,3 +293,7 @@ remote:
 [11-10 22:29:38] === cue start ===
 ===== cue: gemma3:4b -> LLM_Blink/results/cond_cue_gemma3_4b.csv  START mar. 10 nov. 2026 22:29:38 EST =====
 ===== cue: gemma3:4b  DONE mer. 11 nov. 2026 10:44:48 EST =====
+[11-11 10:44:53] cue : committed+pushed
+[11-11 10:44:53] === rank1 start ===
+===== rank1: gemma3:4b -> LLM_Blink/results/cond_rank1_gemma3_4b.csv  START mer. 11 nov. 2026 10:44:53 EST =====
+===== rank1: gemma3:4b  DONE mer. 11 nov. 2026 14:29:27 EST =====

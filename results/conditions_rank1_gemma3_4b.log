@@ -1281,3 +1281,103 @@ Traceback (most recent call last):
   File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 641, in http_error_default
     raise HTTPError(req.full_url, code, msg, hdrs, fp)
 urllib.error.HTTPError: HTTP Error 500: Internal Server Error
+[probe_pilot:full] gemma3:4b (quant='Q4_K_M'): 800 cells, 371 done, K=20, max_new_tokens=8192, passphrase=1, compute_order=none, example_order=load_first, target_kind=nato, attention_cue=False, think=default, load_engagement=solve
+[ollama repeat-abort -> truncated] seed=1554329300
+[ollama repeat-abort -> truncated] seed=1344379802
+  5 trials, 247s (49.4s/trial) [math_bench_5/direct] cell-trunc=0.0%
+  10 trials, 462s (46.2s/trial) [math_bench_4/cot] cell-trunc=0.0%
+  15 trials, 572s (38.2s/trial) [trivial/direct] cell-trunc=0.0%
+  20 trials, 891s (44.6s/trial) [math_bench_5/cot] cell-trunc=0.0%
+  25 trials, 1132s (45.3s/trial) [math_bench_2/direct] cell-trunc=2.5%
+  30 trials, 1324s (44.1s/trial) [trivial/cot] cell-trunc=0.0%
+  35 trials, 1567s (44.8s/trial) [math_bench_4/direct] cell-trunc=0.0%
+  40 trials, 1712s (42.8s/trial) [math_bench_2/cot] cell-trunc=0.0%
+  45 trials, 1982s (44.1s/trial) [math_bench_5/direct] cell-trunc=0.0%
+  50 trials, 2166s (43.3s/trial) [math_bench_4/cot] cell-trunc=0.0%
+  55 trials, 2343s (42.6s/trial) [trivial/direct] cell-trunc=0.0%
+  60 trials, 2478s (41.3s/trial) [math_bench_5/cot] cell-trunc=0.0%
+  65 trials, 2571s (39.5s/trial) [math_bench_2/direct] cell-trunc=1.7%
+  70 trials, 2746s (39.2s/trial) [trivial/cot] cell-trunc=0.0%
+  75 trials, 2975s (39.7s/trial) [math_bench_4/direct] cell-trunc=0.0%
+  80 trials, 3087s (38.6s/trial) [math_bench_2/cot] cell-trunc=0.5%
+  85 trials, 3192s (37.5s/trial) [math_bench_5/direct] cell-trunc=0.0%
+  90 trials, 3376s (37.5s/trial) [math_bench_4/cot] cell-trunc=0.0%
+  95 trials, 3658s (38.5s/trial) [trivial/direct] cell-trunc=0.0%
+  100 trials, 3819s (38.2s/trial) [math_bench_5/cot] cell-trunc=0.8%
+  105 trials, 3902s (37.2s/trial) [math_bench_2/direct] cell-trunc=1.1%
+  110 trials, 4062s (36.9s/trial) [trivial/cot] cell-trunc=0.0%
+  115 trials, 4194s (36.5s/trial) [math_bench_4/direct] cell-trunc=0.0%
+  120 trials, 4381s (36.5s/trial) [math_bench_2/cot] cell-trunc=0.3%
+  125 trials, 4571s (36.6s/trial) [math_bench_5/direct] cell-trunc=0.0%
+  130 trials, 4699s (36.1s/trial) [math_bench_4/cot] cell-trunc=0.0%
+  135 trials, 4851s (35.9s/trial) [trivial/direct] cell-trunc=0.0%
+  140 trials, 5012s (35.8s/trial) [math_bench_5/cot] cell-trunc=0.6%
+  145 trials, 5153s (35.5s/trial) [math_bench_2/direct] cell-trunc=0.8%
+  150 trials, 5351s (35.7s/trial) [trivial/cot] cell-trunc=0.0%
+  155 trials, 5440s (35.1s/trial) [math_bench_4/direct] cell-trunc=0.0%
+  160 trials, 5570s (34.8s/trial) [math_bench_2/cot] cell-trunc=0.2%
+  165 trials, 5771s (35.0s/trial) [math_bench_5/direct] cell-trunc=0.0%
+  170 trials, 5897s (34.7s/trial) [math_bench_4/cot] cell-trunc=0.0%
+  175 trials, 5997s (34.3s/trial) [trivial/direct] cell-trunc=0.0%
+  180 trials, 6149s (34.2s/trial) [math_bench_5/cot] cell-trunc=0.4%
+  185 trials, 6265s (33.9s/trial) [math_bench_2/direct] cell-trunc=0.6%
+  190 trials, 6426s (33.8s/trial) [trivial/cot] cell-trunc=0.0%
+  195 trials, 6562s (33.7s/trial) [math_bench_4/direct] cell-trunc=0.0%
+  200 trials, 6718s (33.6s/trial) [math_bench_2/cot] cell-trunc=0.2%
+  205 trials, 6823s (33.3s/trial) [math_bench_5/direct] cell-trunc=0.0%
+  210 trials, 6944s (33.1s/trial) [math_bench_4/cot] cell-trunc=0.0%
+  215 trials, 7110s (33.1s/trial) [trivial/direct] cell-trunc=0.0%
+  220 trials, 7323s (33.3s/trial) [math_bench_5/cot] cell-trunc=0.4%
+  225 trials, 7436s (33.1s/trial) [math_bench_2/direct] cell-trunc=0.5%
+  230 trials, 7592s (33.0s/trial) [trivial/cot] cell-trunc=0.0%
+  235 trials, 7707s (32.8s/trial) [math_bench_4/direct] cell-trunc=0.0%
+  240 trials, 7837s (32.7s/trial) [math_bench_2/cot] cell-trunc=0.2%
+  245 trials, 7964s (32.5s/trial) [math_bench_5/direct] cell-trunc=0.0%
+  250 trials, 8101s (32.4s/trial) [math_bench_4/cot] cell-trunc=0.0%
+  255 trials, 8186s (32.1s/trial) [trivial/direct] cell-trunc=0.0%
+  260 trials, 8417s (32.4s/trial) [math_bench_5/cot] cell-trunc=0.3%
+  265 trials, 8525s (32.2s/trial) [math_bench_2/direct] cell-trunc=0.4%
+  270 trials, 8647s (32.0s/trial) [trivial/cot] cell-trunc=0.0%
+  275 trials, 8778s (31.9s/trial) [math_bench_4/direct] cell-trunc=0.0%
+  280 trials, 8896s (31.8s/trial) [math_bench_2/cot] cell-trunc=0.1%
+  285 trials, 9159s (32.1s/trial) [math_bench_5/direct] cell-trunc=0.0%
+  290 trials, 9280s (32.0s/trial) [math_bench_4/cot] cell-trunc=0.0%
+  295 trials, 9384s (31.8s/trial) [trivial/direct] cell-trunc=0.0%
+  300 trials, 9544s (31.8s/trial) [math_bench_5/cot] cell-trunc=0.3%
+  305 trials, 9652s (31.6s/trial) [math_bench_2/direct] cell-trunc=0.4%
+  310 trials, 9850s (31.8s/trial) [trivial/cot] cell-trunc=0.0%
+  315 trials, 9984s (31.7s/trial) [math_bench_4/direct] cell-trunc=0.0%
+  320 trials, 10122s (31.6s/trial) [math_bench_2/cot] cell-trunc=0.1%
+  325 trials, 10372s (31.9s/trial) [math_bench_5/direct] cell-trunc=0.0%
+  330 trials, 10510s (31.8s/trial) [math_bench_4/cot] cell-trunc=0.0%
+  335 trials, 10600s (31.6s/trial) [trivial/direct] cell-trunc=0.0%
+  340 trials, 10771s (31.7s/trial) [math_bench_5/cot] cell-trunc=0.2%
+  345 trials, 10863s (31.5s/trial) [math_bench_2/direct] cell-trunc=0.3%
+  350 trials, 11014s (31.5s/trial) [trivial/cot] cell-trunc=0.0%
+  355 trials, 11141s (31.4s/trial) [math_bench_4/direct] cell-trunc=0.0%
+[ollama repeat-abort -> truncated] seed=595200045
+  360 trials, 11277s (31.3s/trial) [math_bench_2/cot] cell-trunc=0.1%
+  365 trials, 11417s (31.3s/trial) [math_bench_5/direct] cell-trunc=0.0%
+  370 trials, 11551s (31.2s/trial) [math_bench_4/cot] cell-trunc=0.0%
+  375 trials, 11654s (31.1s/trial) [trivial/direct] cell-trunc=0.0%
+  380 trials, 11864s (31.2s/trial) [math_bench_5/cot] cell-trunc=0.3%
+  385 trials, 11957s (31.1s/trial) [math_bench_2/direct] cell-trunc=0.3%
+  390 trials, 12099s (31.0s/trial) [trivial/cot] cell-trunc=0.0%
+  395 trials, 12211s (30.9s/trial) [math_bench_4/direct] cell-trunc=0.0%
+  400 trials, 12459s (31.1s/trial) [math_bench_2/cot] cell-trunc=0.1%
+  405 trials, 12631s (31.2s/trial) [math_bench_5/direct] cell-trunc=0.0%
+  410 trials, 12857s (31.4s/trial) [math_bench_4/cot] cell-trunc=0.0%
+  415 trials, 12996s (31.3s/trial) [trivial/direct] cell-trunc=0.0%
+  420 trials, 13223s (31.5s/trial) [math_bench_5/cot] cell-trunc=0.3%
+  425 trials, 13303s (31.3s/trial) [math_bench_2/direct] cell-trunc=0.3%
+
+[probe_pilot:full] per-cell truncation (>2% = FAILED cell, re-run bigger):
+    math_bench_2     cot     trunc= 0.09% (n_samples=1060)
+    math_bench_2     direct  trunc= 0.28% (n_samples=1080)
+    math_bench_4     cot     trunc= 0.00% (n_samples=1080)
+    math_bench_4     direct  trunc= 0.00% (n_samples=1080)
+    math_bench_5     cot     trunc= 0.28% (n_samples=1080)
+    math_bench_5     direct  trunc= 0.00% (n_samples=1080)
+    trivial          cot     trunc= 0.00% (n_samples=1060)
+    trivial          direct  trunc= 0.00% (n_samples=1060)
+[probe_pilot:full] done: 429 new trials in 13472s; worst-cell truncation 0.28%
