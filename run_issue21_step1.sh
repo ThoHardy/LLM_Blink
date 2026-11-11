@@ -12,7 +12,7 @@ publish(){
   $PY -B $R/issue21_step1_summary.py > $R/summary_conditions_gemma3_4b.txt 2>&1
   ( cd $REPO && git add results/cond_*_gemma3_4b.csv results/cond_*_gemma3_4b.samples.jsonl.gz \
       results/conditions_*_gemma3_4b.log results/summary_conditions_gemma3_4b.* results/issue21_step1.log \
-      results/issue21_step1_summary.py run_issue21_step1.sh 2>/dev/null
+      results/issue21_step1_summary.py run_issue21_step1.sh model.py 2>/dev/null
     git commit -q -m "#21 Step 1: gemma3:4b condition $1 done + summary
 
 Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>" && git push -q origin results/issue-21-step1 ) >> $LOG 2>&1
@@ -28,8 +28,9 @@ run_cond(){  # $1 = condition, extra env passed through
   done
   say "$1 GAVE UP after 30 tries"; return 1
 }
-# base (drift check) already done 11-09; loadfirst done 11-10
-for C in cue rank1 rank1_loadfirst digits trivmath rank1_exPF rank1_loadfirst_exPF; do
+# base (drift check) done 11-09; loadfirst done 11-10. 11-10 evening: model.py now
+# maps Ollama's "token repeat limit" abort to a truncated sample (was a hard 500).
+for C in trivmath cue rank1 rank1_loadfirst digits rank1_exPF rank1_loadfirst_exPF; do
   say "=== $C start ==="
   run_cond $C
   publish $C

@@ -282,3 +282,10 @@ remote:
 ===== digits: gemma3:4b -> LLM_Blink/results/cond_digits_gemma3_4b.csv  START mar. 10 nov. 2026 14:44:52 EST =====
 [11-10 14:44:57] digits crashed (try 30), resuming in 30s
 [11-10 14:45:27] digits GAVE UP after 30 tries
+[11-10 14:45:29] digits : committed+pushed
+[11-10 14:45:29] === trivmath start ===
+===== trivmath: gemma3:4b -> LLM_Blink/results/cond_trivmath_gemma3_4b.csv  START mar. 10 nov. 2026 14:45:29 EST =====
+[11-10 21:48:58] --- relaunch with repeat-abort fix ---
+[11-10 21:48:58] === trivmath start ===
+===== trivmath: gemma3:4b -> LLM_Blink/results/cond_trivmath_gemma3_4b.csv  START mar. 10 nov. 2026 21:48:58 EST =====
+===== trivmath: gemma3:4b  DONE mar. 10 nov. 2026 22:29:35 EST =====

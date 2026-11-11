@@ -6,7 +6,7 @@
       loadfirst        400   0.980 0.772      0.212       0.751   0.774          0.996
           rank1        186   0.944 0.903      0.042       0.955   0.518          0.990
 rank1_loadfirst         63   0.875 0.871      0.005       0.960   0.573         -0.992
-       trivmath         53   0.996 0.864      0.133       0.934   0.773          0.996
+       trivmath        400   0.997 0.891      0.106       0.944   0.722          0.976
 
 # Truncation gate (cell = condition x load x regime; fail if > 2%)
 base                     worst=0.0125  ok
@@ -16,7 +16,7 @@ digits                   worst=0.0000  ok
 loadfirst                worst=0.0025  ok
 rank1                    worst=0.0022  ok
 rank1_loadfirst          worst=0.0000  ok
-trivmath                 worst=0.0000  ok
+trivmath                 worst=0.0015  ok
 
 # Drift check: cond_base vs scale on the same seeds (per load x regime)
                       n  report_old  report_new  access_old  access_new  t1_old  t1_new

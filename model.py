@@ -28,6 +28,7 @@ import json
 import math
 import warnings
 import urllib.request
+import urllib.error
 from typing import Optional
 
 # NOTE: torch / transformers are imported lazily inside the HuggingFace code
@@ -106,8 +107,29 @@ class OllamaBackend:
             self._native_url + "/api/chat",
             data=json.dumps(payload).encode("utf-8"),
             headers={"Content-Type": "application/json"})
-        with urllib.request.urlopen(req) as resp:
-            return json.loads(resp.read().decode("utf-8"))
+        try:
+            with urllib.request.urlopen(req) as resp:
+                return json.loads(resp.read().decode("utf-8"))
+        except urllib.error.HTTPError as e:  # surface Ollama's error body
+            import sys
+            body = e.read().decode("utf-8", "replace")[:2000]
+            # Recent Ollama aborts a sample stuck in a token-repetition loop
+            # with HTTP 500 instead of letting it run to num_predict. That is a
+            # degenerate, never-finishing sample: record it as TRUNCATED (empty
+            # text, done_reason "length") so it counts in the truncation gate
+            # rather than crashing the run or being silently dropped (#21).
+            if e.code == 500 and "token repeat limit" in body:
+                print(f"[ollama repeat-abort -> truncated] seed={seed}",
+                      file=sys.stderr, flush=True)
+                return {"message": {"role": "assistant", "content": ""},
+                        "done_reason": "length", "eval_count": num_predict,
+                        "repeat_abort": True}
+            print(f"[ollama HTTP {e.code}] {body} | seed={seed} "
+                  f"num_predict={num_predict} n_msgs={len(messages)} "
+                  f"last_role={messages[-1].get('role')} "
+                  f"last_len={len(messages[-1].get('content', ''))}",
+                  file=sys.stderr, flush=True)
+            raise
 
     # -- generation ------------------------------------------------------------
 
@@ -139,7 +161,19 @@ class OllamaBackend:
         )
         if stop_at:
             kwargs["stop"] = [stop_at]
-        resp = self._client.chat.completions.create(**kwargs)
+        import openai
+        try:
+            # no client-side retry: a retry would silently REPLACE an aborted
+            # (unseeded) sample with a fresh one; a crash is resumed instead.
+            resp = self._client.with_options(max_retries=0).chat.completions.create(**kwargs)
+        except openai.InternalServerError as e:
+            # same repeat-loop abort as in _native_chat -> truncated sample (#21)
+            if "token repeat limit" in str(e):
+                import sys
+                print("[ollama repeat-abort -> truncated] (base generation)",
+                      file=sys.stderr, flush=True)
+                return ("", True) if return_truncated else ""
+            raise
         text = resp.choices[0].message.content or ""
         if not return_truncated:
             return text
