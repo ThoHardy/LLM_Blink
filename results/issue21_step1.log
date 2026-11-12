@@ -297,3 +297,7 @@ remote:
 [11-11 10:44:53] === rank1 start ===
 ===== rank1: gemma3:4b -> LLM_Blink/results/cond_rank1_gemma3_4b.csv  START mer. 11 nov. 2026 10:44:53 EST =====
 ===== rank1: gemma3:4b  DONE mer. 11 nov. 2026 14:29:27 EST =====
+[11-11 14:29:30] rank1 : committed+pushed
+[11-11 14:29:30] === rank1_loadfirst start ===
+===== rank1_loadfirst: gemma3:4b -> LLM_Blink/results/cond_rank1_loadfirst_gemma3_4b.csv  START mer. 11 nov. 2026 14:29:30 EST =====
+===== rank1_loadfirst: gemma3:4b  DONE mer. 11 nov. 2026 21:04:25 EST =====
