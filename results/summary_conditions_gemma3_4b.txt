@@ -2,7 +2,7 @@
            base         80   0.962 0.749      0.221       0.701   0.764          0.999
  campaignA_base        400   0.960 0.718      0.252       0.700   0.748            NaN
             cue        400   0.971 0.772      0.205       0.775   0.729          0.997
-         digits         31   0.897 0.752      0.162       0.711   0.825          0.988
+         digits        400   0.966 0.754      0.220       0.722   0.759          0.994
       loadfirst        400   0.980 0.772      0.212       0.751   0.774          0.996
           rank1        400   0.970 0.931      0.040       0.972   0.506          0.994
 rank1_loadfirst        400   0.912 0.875      0.041       0.949   0.564         -0.972
@@ -12,7 +12,7 @@ rank1_loadfirst        400   0.912 0.875      0.041       0.949   0.564         
 base                     worst=0.0125  ok
 campaignA_base           worst=0.0000  ok
 cue                      worst=0.0040  ok
-digits                   worst=0.0000  ok
+digits                   worst=0.0030  ok
 loadfirst                worst=0.0025  ok
 rank1                    worst=0.0020  ok
 rank1_loadfirst          worst=0.0045  ok
