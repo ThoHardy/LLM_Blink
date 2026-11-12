@@ -5,6 +5,7 @@
          digits        400   0.966 0.754      0.220       0.722   0.759          0.994
       loadfirst        400   0.980 0.772      0.212       0.751   0.774          0.996
           rank1        400   0.970 0.931      0.040       0.972   0.506          0.994
+     rank1_exPF        120   0.937 0.945     -0.009       0.995   0.517          0.997
 rank1_loadfirst        400   0.912 0.875      0.041       0.949   0.564         -0.972
        trivmath        400   0.997 0.891      0.106       0.944   0.722          0.976
 
@@ -15,6 +16,7 @@ cue                      worst=0.0040  ok
 digits                   worst=0.0030  ok
 loadfirst                worst=0.0025  ok
 rank1                    worst=0.0020  ok
+rank1_exPF               worst=0.0067  ok
 rank1_loadfirst          worst=0.0045  ok
 trivmath                 worst=0.0015  ok
 
