@@ -309,3 +309,7 @@ remote:
 [11-12 05:27:20] === rank1_exPF start ===
 ===== rank1_exPF: gemma3:4b -> LLM_Blink/results/cond_rank1_exPF_gemma3_4b.csv  START jeu. 12 nov. 2026 05:27:20 EST =====
 ===== rank1_exPF: gemma3:4b  DONE jeu. 12 nov. 2026 07:30:22 EST =====
+[11-12 07:30:24] rank1_exPF : committed+pushed
+[11-12 07:30:24] === rank1_loadfirst_exPF start ===
+===== rank1_loadfirst_exPF: gemma3:4b -> LLM_Blink/results/cond_rank1_loadfirst_exPF_gemma3_4b.csv  START jeu. 12 nov. 2026 07:30:24 EST =====
+===== rank1_loadfirst_exPF: gemma3:4b  DONE jeu. 12 nov. 2026 09:59:19 EST =====
