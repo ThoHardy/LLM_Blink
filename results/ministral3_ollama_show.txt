@@ -1,0 +1,72 @@
+===== ministral-3:3b-instruct-2512-q4_K_M
+ministral-3:3b-instruct-2512-q4_K_M      f04aa1c738f6    3.0 GB    46 hours ago    
+  Model
+    architecture        mistral3     
+    parameters          3.8B         
+    context length      262144       
+    embedding length    3072         
+    quantization        Q4_K_M       
+    parser              ministral    
+    template source     parser       
+
+  Capabilities
+    completion    
+    vision        
+    tools         
+
+  Parameters
+    temperature    0.15    
+
+  License
+    Apache License               
+    Version 2.0, January 2004    
+    ...                          
+
+===== ministral-3:8b-instruct-2512-q4_K_M
+ministral-3:8b-instruct-2512-q4_K_M      1922accd5827    6.0 GB    46 hours ago    
+  Model
+    architecture        mistral3     
+    parameters          8.9B         
+    context length      262144       
+    embedding length    4096         
+    quantization        Q4_K_M       
+    parser              ministral    
+    template source     parser       
+
+  Capabilities
+    completion    
+    vision        
+    tools         
+
+  Parameters
+    temperature    0.15    
+
+  License
+    Apache License               
+    Version 2.0, January 2004    
+    ...                          
+
+===== ministral-3:14b-instruct-2512-q4_K_M
+ministral-3:14b-instruct-2512-q4_K_M     4760c35aeb9d    9.1 GB    46 hours ago    
+  Model
+    architecture        mistral3     
+    parameters          13.9B        
+    context length      262144       
+    embedding length    5120         
+    quantization        Q4_K_M       
+    parser              ministral    
+    template source     parser       
+
+  Capabilities
+    completion    
+    vision        
+    tools         
+
+  Parameters
+    temperature    0.15    
+
+  License
+    Apache License               
+    Version 2.0, January 2004    
+    ...                          
+

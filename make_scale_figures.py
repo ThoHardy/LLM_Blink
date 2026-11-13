@@ -34,13 +34,14 @@ from LLM_Blink.mixture import overdispersion_z                     # noqa: E402
 
 LOAD_ORDER = ["trivial", "math_bench_2", "math_bench_4", "math_bench_5"]
 FAM_COLORS = {"qwen2.5": "#4C78A8", "gemma2": "#E45756", "gemma3": "#54A24B",
-              "llama3.1": "#B279A2", "mistral": "#EECA3B"}
+              "llama3.1": "#B279A2", "mistral": "#EECA3B",
+              "ministral-3": "#F58518"}
 FLOOR_REPORT = 0.80        # §4: direct report rate < 0.8 -> floor-compressed
 
 
 def parse_model(path):
     b = os.path.basename(path).replace("scale_", "").replace(".csv", "")
-    m = re.match(r"([a-z0-9.]+?)_([0-9.]+)b$", b)
+    m = re.match(r"([a-z0-9.-]+?)_([0-9.]+)b$", b)
     if m:
         fam, size = m.group(1), float(m.group(2))
         return f"{fam}:{size:g}b", fam, size
