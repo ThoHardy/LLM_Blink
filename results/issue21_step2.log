@@ -6,3 +6,11 @@ Switched to a new branch 'results/issue-21-step2'
 [11-12 10:02:26] === ministral-3:3b-instruct-2512-q4_K_M -> ministral-3_3b start ===
 ===== Campaign A ext: ministral-3:3b-instruct-2512-q4_K_M -> ministral-3_3b  START jeu. 12 nov. 2026 10:02:27 EST =====
 ===== Campaign A ext: ministral-3:3b-instruct-2512-q4_K_M -> ministral-3_3b  DONE ven. 13 nov. 2026 00:53:50 EST =====
+remote: 
+remote: Create a pull request for 'results/issue-21-step2' on GitHub by visiting:        
+remote:      https://github.com/ThoHardy/LLM_Blink/pull/new/results/issue-21-step2        
+remote: 
+[11-13 00:53:56] ministral-3_3b : committed+pushed
+[11-13 00:53:56] === ministral-3:8b-instruct-2512-q4_K_M -> ministral-3_8b start ===
+===== Campaign A ext: ministral-3:8b-instruct-2512-q4_K_M -> ministral-3_8b  START ven. 13 nov. 2026 00:53:56 EST =====
+===== Campaign A ext: ministral-3:8b-instruct-2512-q4_K_M -> ministral-3_8b  DONE ven. 13 nov. 2026 18:07:43 EST =====
