@@ -1,0 +1,378 @@
+[probe_pilot:full] ministral-3:14b-instruct-2512-q4_K_M (quant='Q4_K_M'): 800 cells, 0 done, K=20, max_new_tokens=8192, passphrase=last, compute_order=none, example_order=load_first, target_kind=nato, attention_cue=False, think=default, load_engagement=solve
+  5 trials, 411s (82.2s/trial) [math_bench_4/cot] cell-trunc=0.0%
+  10 trials, 957s (95.7s/trial) [trivial/direct] cell-trunc=0.0%
+  15 trials, 1677s (111.8s/trial) [math_bench_5/cot] cell-trunc=0.0%
+  20 trials, 1904s (95.2s/trial) [math_bench_2/direct] cell-trunc=0.0%
+  25 trials, 2526s (101.0s/trial) [trivial/cot] cell-trunc=0.0%
+  30 trials, 3025s (100.8s/trial) [math_bench_4/direct] cell-trunc=0.0%
+  35 trials, 3903s (111.5s/trial) [math_bench_2/cot] cell-trunc=0.0%
+  40 trials, 4502s (112.5s/trial) [math_bench_5/direct] cell-trunc=0.0%
+  45 trials, 4946s (109.9s/trial) [math_bench_4/cot] cell-trunc=0.0%
+  50 trials, 5263s (105.3s/trial) [trivial/direct] cell-trunc=0.0%
+  55 trials, 5976s (108.6s/trial) [math_bench_5/cot] cell-trunc=0.7%
+  60 trials, 6212s (103.5s/trial) [math_bench_2/direct] cell-trunc=0.0%
+  65 trials, 6947s (106.9s/trial) [trivial/cot] cell-trunc=0.0%
+  70 trials, 7354s (105.1s/trial) [math_bench_4/direct] cell-trunc=0.0%
+  75 trials, 8144s (108.6s/trial) [math_bench_2/cot] cell-trunc=0.0%
+  80 trials, 8837s (110.5s/trial) [math_bench_5/direct] cell-trunc=0.0%
+  85 trials, 9224s (108.5s/trial) [math_bench_4/cot] cell-trunc=0.0%
+  90 trials, 9885s (109.8s/trial) [trivial/direct] cell-trunc=0.0%
+  95 trials, 10767s (113.3s/trial) [math_bench_5/cot] cell-trunc=0.4%
+  100 trials, 11032s (110.3s/trial) [math_bench_2/direct] cell-trunc=0.0%
+  105 trials, 11761s (112.0s/trial) [trivial/cot] cell-trunc=0.0%
+  110 trials, 12232s (111.2s/trial) [math_bench_4/direct] cell-trunc=0.0%
+  115 trials, 12770s (111.0s/trial) [math_bench_2/cot] cell-trunc=0.0%
+  120 trials, 13367s (111.4s/trial) [math_bench_5/direct] cell-trunc=0.0%
+  125 trials, 13671s (109.4s/trial) [math_bench_4/cot] cell-trunc=0.0%
+  130 trials, 14542s (111.9s/trial) [trivial/direct] cell-trunc=0.0%
+  135 trials, 15378s (113.9s/trial) [math_bench_5/cot] cell-trunc=0.3%
+  140 trials, 15642s (111.7s/trial) [math_bench_2/direct] cell-trunc=0.0%
+  145 trials, 16187s (111.6s/trial) [trivial/cot] cell-trunc=0.0%
+  150 trials, 16558s (110.4s/trial) [math_bench_4/direct] cell-trunc=0.0%
+  155 trials, 17000s (109.7s/trial) [math_bench_2/cot] cell-trunc=0.0%
+  160 trials, 18412s (115.1s/trial) [math_bench_5/direct] cell-trunc=0.0%
+  165 trials, 18768s (113.7s/trial) [math_bench_4/cot] cell-trunc=0.0%
+  170 trials, 19638s (115.5s/trial) [trivial/direct] cell-trunc=0.0%
+  175 trials, 20673s (118.1s/trial) [math_bench_5/cot] cell-trunc=0.2%
+  180 trials, 20958s (116.4s/trial) [math_bench_2/direct] cell-trunc=0.0%
+  185 trials, 21522s (116.3s/trial) [trivial/cot] cell-trunc=0.0%
+  190 trials, 22321s (117.5s/trial) [math_bench_4/direct] cell-trunc=0.0%
+  195 trials, 22988s (117.9s/trial) [math_bench_2/cot] cell-trunc=0.0%
+  200 trials, 23870s (119.3s/trial) [math_bench_5/direct] cell-trunc=0.0%
+  205 trials, 24226s (118.2s/trial) [math_bench_4/cot] cell-trunc=0.0%
+  210 trials, 24575s (117.0s/trial) [trivial/direct] cell-trunc=0.0%
+  215 trials, 25400s (118.1s/trial) [math_bench_5/cot] cell-trunc=0.2%
+  220 trials, 25716s (116.9s/trial) [math_bench_2/direct] cell-trunc=0.0%
+  225 trials, 26370s (117.2s/trial) [trivial/cot] cell-trunc=0.0%
+  230 trials, 26723s (116.2s/trial) [math_bench_4/direct] cell-trunc=0.0%
+  235 trials, 27279s (116.1s/trial) [math_bench_2/cot] cell-trunc=0.0%
+  240 trials, 28146s (117.3s/trial) [math_bench_5/direct] cell-trunc=0.0%
+  245 trials, 28679s (117.1s/trial) [math_bench_4/cot] cell-trunc=0.0%
+  250 trials, 29543s (118.2s/trial) [trivial/direct] cell-trunc=0.0%
+  255 trials, 30245s (118.6s/trial) [math_bench_5/cot] cell-trunc=0.2%
+  260 trials, 30527s (117.4s/trial) [math_bench_2/direct] cell-trunc=0.0%
+  265 trials, 31191s (117.7s/trial) [trivial/cot] cell-trunc=0.0%
+  270 trials, 31655s (117.2s/trial) [math_bench_4/direct] cell-trunc=0.0%
+  275 trials, 32127s (116.8s/trial) [math_bench_2/cot] cell-trunc=0.0%
+  280 trials, 33035s (118.0s/trial) [math_bench_5/direct] cell-trunc=0.0%
+  285 trials, 33614s (117.9s/trial) [math_bench_4/cot] cell-trunc=0.0%
+  290 trials, 34204s (117.9s/trial) [trivial/direct] cell-trunc=0.0%
+  295 trials, 35095s (119.0s/trial) [math_bench_5/cot] cell-trunc=0.1%
+  300 trials, 35354s (117.8s/trial) [math_bench_2/direct] cell-trunc=0.0%
+  305 trials, 36074s (118.3s/trial) [trivial/cot] cell-trunc=0.0%
+  310 trials, 36372s (117.3s/trial) [math_bench_4/direct] cell-trunc=0.0%
+  315 trials, 36855s (117.0s/trial) [math_bench_2/cot] cell-trunc=0.0%
+  320 trials, 37800s (118.1s/trial) [math_bench_5/direct] cell-trunc=0.0%
+  325 trials, 38170s (117.4s/trial) [math_bench_4/cot] cell-trunc=0.0%
+  330 trials, 38767s (117.5s/trial) [trivial/direct] cell-trunc=0.0%
+  335 trials, 39299s (117.3s/trial) [math_bench_5/cot] cell-trunc=0.1%
+  340 trials, 39559s (116.4s/trial) [math_bench_2/direct] cell-trunc=0.0%
+  345 trials, 40369s (117.0s/trial) [trivial/cot] cell-trunc=0.0%
+  350 trials, 40773s (116.5s/trial) [math_bench_4/direct] cell-trunc=0.0%
+  355 trials, 41532s (117.0s/trial) [math_bench_2/cot] cell-trunc=0.0%
+  360 trials, 42412s (117.8s/trial) [math_bench_5/direct] cell-trunc=0.0%
+  365 trials, 42883s (117.5s/trial) [math_bench_4/cot] cell-trunc=0.0%
+  370 trials, 43267s (116.9s/trial) [trivial/direct] cell-trunc=0.0%
+  375 trials, 43930s (117.1s/trial) [math_bench_5/cot] cell-trunc=0.1%
+  380 trials, 44199s (116.3s/trial) [math_bench_2/direct] cell-trunc=0.0%
+  385 trials, 44819s (116.4s/trial) [trivial/cot] cell-trunc=0.0%
+  390 trials, 45424s (116.5s/trial) [math_bench_4/direct] cell-trunc=0.0%
+  395 trials, 45909s (116.2s/trial) [math_bench_2/cot] cell-trunc=0.0%
+  400 trials, 46669s (116.7s/trial) [math_bench_5/direct] cell-trunc=0.0%
+  405 trials, 47143s (116.4s/trial) [math_bench_4/cot] cell-trunc=0.0%
+  410 trials, 47593s (116.1s/trial) [trivial/direct] cell-trunc=0.0%
+  415 trials, 48311s (116.4s/trial) [math_bench_5/cot] cell-trunc=0.1%
+  420 trials, 48574s (115.7s/trial) [math_bench_2/direct] cell-trunc=0.0%
+  425 trials, 49429s (116.3s/trial) [trivial/cot] cell-trunc=0.0%
+  430 trials, 50304s (117.0s/trial) [math_bench_4/direct] cell-trunc=0.0%
+  435 trials, 50698s (116.5s/trial) [math_bench_2/cot] cell-trunc=0.0%
+  440 trials, 51284s (116.6s/trial) [math_bench_5/direct] cell-trunc=0.0%
+  445 trials, 51823s (116.5s/trial) [math_bench_4/cot] cell-trunc=0.0%
+  450 trials, 52426s (116.5s/trial) [trivial/direct] cell-trunc=0.0%
+  455 trials, 53116s (116.7s/trial) [math_bench_5/cot] cell-trunc=0.1%
+  460 trials, 53388s (116.1s/trial) [math_bench_2/direct] cell-trunc=0.0%
+  465 trials, 54228s (116.6s/trial) [trivial/cot] cell-trunc=0.0%
+  470 trials, 54565s (116.1s/trial) [math_bench_4/direct] cell-trunc=0.0%
+  475 trials, 55343s (116.5s/trial) [math_bench_2/cot] cell-trunc=0.0%
+  480 trials, 56125s (116.9s/trial) [math_bench_5/direct] cell-trunc=0.0%
+  485 trials, 56492s (116.5s/trial) [math_bench_4/cot] cell-trunc=0.0%
+  490 trials, 56938s (116.2s/trial) [trivial/direct] cell-trunc=0.0%
+  495 trials, 57677s (116.5s/trial) [math_bench_5/cot] cell-trunc=0.1%
+  500 trials, 57928s (115.9s/trial) [math_bench_2/direct] cell-trunc=0.0%
+  505 trials, 58381s (115.6s/trial) [trivial/cot] cell-trunc=0.0%
+  510 trials, 58929s (115.5s/trial) [math_bench_4/direct] cell-trunc=0.0%
+  515 trials, 59698s (115.9s/trial) [math_bench_2/cot] cell-trunc=0.0%
+  520 trials, 60244s (115.9s/trial) [math_bench_5/direct] cell-trunc=0.0%
+  525 trials, 60636s (115.5s/trial) [math_bench_4/cot] cell-trunc=0.0%
+  530 trials, 61361s (115.8s/trial) [trivial/direct] cell-trunc=0.0%
+  535 trials, 62186s (116.2s/trial) [math_bench_5/cot] cell-trunc=0.1%
+  540 trials, 62466s (115.7s/trial) [math_bench_2/direct] cell-trunc=0.0%
+  545 trials, 63407s (116.3s/trial) [trivial/cot] cell-trunc=0.0%
+  550 trials, 63862s (116.1s/trial) [math_bench_4/direct] cell-trunc=0.0%
+  555 trials, 64495s (116.2s/trial) [math_bench_2/cot] cell-trunc=0.0%
+  560 trials, 64996s (116.1s/trial) [math_bench_5/direct] cell-trunc=0.0%
+  565 trials, 65728s (116.3s/trial) [math_bench_4/cot] cell-trunc=0.0%
+  570 trials, 66076s (115.9s/trial) [trivial/direct] cell-trunc=0.0%
+  575 trials, 67024s (116.6s/trial) [math_bench_5/cot] cell-trunc=0.1%
+  580 trials, 67285s (116.0s/trial) [math_bench_2/direct] cell-trunc=0.0%
+  585 trials, 67762s (115.8s/trial) [trivial/cot] cell-trunc=0.0%
+  590 trials, 68198s (115.6s/trial) [math_bench_4/direct] cell-trunc=0.0%
+  595 trials, 68928s (115.8s/trial) [math_bench_2/cot] cell-trunc=0.0%
+  600 trials, 69480s (115.8s/trial) [math_bench_5/direct] cell-trunc=0.0%
+  605 trials, 69968s (115.6s/trial) [math_bench_4/cot] cell-trunc=0.0%
+  610 trials, 71007s (116.4s/trial) [trivial/direct] cell-trunc=0.0%
+  615 trials, 72100s (117.2s/trial) [math_bench_5/cot] cell-trunc=0.1%
+  620 trials, 72380s (116.7s/trial) [math_bench_2/direct] cell-trunc=0.0%
+  625 trials, 73263s (117.2s/trial) [trivial/cot] cell-trunc=0.0%
+  630 trials, 73581s (116.8s/trial) [math_bench_4/direct] cell-trunc=0.0%
+  635 trials, 74132s (116.7s/trial) [math_bench_2/cot] cell-trunc=0.0%
+  640 trials, 74578s (116.5s/trial) [math_bench_5/direct] cell-trunc=0.0%
+  645 trials, 74946s (116.2s/trial) [math_bench_4/cot] cell-trunc=0.0%
+  650 trials, 75322s (115.9s/trial) [trivial/direct] cell-trunc=0.0%
+  655 trials, 76037s (116.1s/trial) [math_bench_5/cot] cell-trunc=0.1%
+  660 trials, 76305s (115.6s/trial) [math_bench_2/direct] cell-trunc=0.0%
+  665 trials, 76887s (115.6s/trial) [trivial/cot] cell-trunc=0.0%
+  670 trials, 77308s (115.4s/trial) [math_bench_4/direct] cell-trunc=0.0%
+  675 trials, 78077s (115.7s/trial) [math_bench_2/cot] cell-trunc=0.0%
+  680 trials, 78692s (115.7s/trial) [math_bench_5/direct] cell-trunc=0.0%
+  685 trials, 79086s (115.5s/trial) [math_bench_4/cot] cell-trunc=0.0%
+  690 trials, 79479s (115.2s/trial) [trivial/direct] cell-trunc=0.0%
+  695 trials, 80115s (115.3s/trial) [math_bench_5/cot] cell-trunc=0.1%
+  700 trials, 80373s (114.8s/trial) [math_bench_2/direct] cell-trunc=0.0%
+  705 trials, 81030s (114.9s/trial) [trivial/cot] cell-trunc=0.0%
+  710 trials, 81439s (114.7s/trial) [math_bench_4/direct] cell-trunc=0.0%
+  715 trials, 82364s (115.2s/trial) [math_bench_2/cot] cell-trunc=0.0%
+  720 trials, 82970s (115.2s/trial) [math_bench_5/direct] cell-trunc=0.0%
+  725 trials, 83336s (114.9s/trial) [math_bench_4/cot] cell-trunc=0.0%
+  730 trials, 84146s (115.3s/trial) [trivial/direct] cell-trunc=0.0%
+  735 trials, 85006s (115.7s/trial) [math_bench_5/cot] cell-trunc=0.1%
+  740 trials, 85240s (115.2s/trial) [math_bench_2/direct] cell-trunc=0.0%
+  745 trials, 86181s (115.7s/trial) [trivial/cot] cell-trunc=0.0%
+  750 trials, 86569s (115.4s/trial) [math_bench_4/direct] cell-trunc=0.0%
+  755 trials, 87021s (115.3s/trial) [math_bench_2/cot] cell-trunc=0.0%
+  760 trials, 88205s (116.1s/trial) [math_bench_5/direct] cell-trunc=0.0%
+  765 trials, 88556s (115.8s/trial) [math_bench_4/cot] cell-trunc=0.0%
+  770 trials, 88935s (115.5s/trial) [trivial/direct] cell-trunc=0.0%
+  775 trials, 89922s (116.0s/trial) [math_bench_5/cot] cell-trunc=0.1%
+  780 trials, 90165s (115.6s/trial) [math_bench_2/direct] cell-trunc=0.0%
+  785 trials, 91302s (116.3s/trial) [trivial/cot] cell-trunc=0.0%
+  790 trials, 91661s (116.0s/trial) [math_bench_4/direct] cell-trunc=0.0%
+  795 trials, 92015s (115.7s/trial) [math_bench_2/cot] cell-trunc=0.0%
+  800 trials, 92697s (115.9s/trial) [math_bench_5/direct] cell-trunc=0.0%
+
+[probe_pilot:full] per-cell truncation (>2% = FAILED cell, re-run bigger):
+    math_bench_2     cot     trunc= 0.00% (n_samples=2000)
+    math_bench_2     direct  trunc= 0.00% (n_samples=2000)
+    math_bench_4     cot     trunc= 0.00% (n_samples=2000)
+    math_bench_4     direct  trunc= 0.00% (n_samples=2000)
+    math_bench_5     cot     trunc= 0.10% (n_samples=2000)
+    math_bench_5     direct  trunc= 0.00% (n_samples=2000)
+    trivial          cot     trunc= 0.00% (n_samples=2000)
+    trivial          direct  trunc= 0.00% (n_samples=2000)
+[probe_pilot:full] done: 800 new trials in 92697s; worst-cell truncation 0.10%
+## §2.1 truncation gate (a cell > 2% is FAILED — re-run bigger)
+
+[gemma3:0.27b]  quant=Q8_0
+    trivial          cot     trunc= 0.40% (trials=100)
+    trivial          direct  trunc= 0.00% (trials=100)
+    math_bench_2     cot     trunc= 0.15% (trials=100)
+    math_bench_2     direct  trunc= 0.00% (trials=100)
+    math_bench_4     cot     trunc= 0.20% (trials=100)
+    math_bench_4     direct  trunc= 0.00% (trials=100)
+    math_bench_5     cot     trunc= 0.10% (trials=100)
+    math_bench_5     direct  trunc= 0.00% (trials=100)
+[gemma3:12b]  quant=Q4_K_M
+    trivial          cot     trunc= 0.00% (trials=100)
+    trivial          direct  trunc= 0.00% (trials=100)
+    math_bench_2     cot     trunc= 0.00% (trials=100)
+    math_bench_2     direct  trunc= 0.00% (trials=100)
+    math_bench_4     cot     trunc= 0.00% (trials=100)
+    math_bench_4     direct  trunc= 0.00% (trials=100)
+    math_bench_5     cot     trunc= 0.00% (trials=100)
+    math_bench_5     direct  trunc= 0.00% (trials=100)
+[gemma3:1b]  quant=Q4_K_M
+    trivial          cot     trunc= 0.00% (trials=100)
+    trivial          direct  trunc= 0.00% (trials=100)
+    math_bench_2     cot     trunc= 0.05% (trials=100)
+    math_bench_2     direct  trunc= 0.00% (trials=100)
+    math_bench_4     cot     trunc= 0.05% (trials=100)
+    math_bench_4     direct  trunc= 0.00% (trials=100)
+    math_bench_5     cot     trunc= 0.05% (trials=100)
+    math_bench_5     direct  trunc= 0.00% (trials=100)
+[gemma3:27b]  quant=Q4_K_M
+    trivial          cot     trunc= 0.00% (trials=100)
+    trivial          direct  trunc= 0.00% (trials=100)
+    math_bench_2     cot     trunc= 0.00% (trials=100)
+    math_bench_2     direct  trunc= 0.00% (trials=100)
+    math_bench_4     cot     trunc= 0.00% (trials=100)
+    math_bench_4     direct  trunc= 0.00% (trials=100)
+    math_bench_5     cot     trunc= 0.00% (trials=100)
+    math_bench_5     direct  trunc= 0.00% (trials=100)
+[gemma3:4b]  quant=Q4_K_M
+    trivial          cot     trunc= 0.00% (trials=100)
+    trivial          direct  trunc= 0.00% (trials=100)
+    math_bench_2     cot     trunc= 0.00% (trials=100)
+    math_bench_2     direct  trunc= 0.00% (trials=100)
+    math_bench_4     cot     trunc= 0.00% (trials=100)
+    math_bench_4     direct  trunc= 0.00% (trials=100)
+    math_bench_5     cot     trunc= 0.00% (trials=100)
+    math_bench_5     direct  trunc= 0.00% (trials=100)
+[ministral-3:14b]  quant=Q4_K_M
+    trivial          cot     trunc= 0.00% (trials=100)
+    trivial          direct  trunc= 0.00% (trials=100)
+    math_bench_2     cot     trunc= 0.00% (trials=100)
+    math_bench_2     direct  trunc= 0.00% (trials=100)
+    math_bench_4     cot     trunc= 0.00% (trials=100)
+    math_bench_4     direct  trunc= 0.00% (trials=100)
+    math_bench_5     cot     trunc= 0.10% (trials=100)
+    math_bench_5     direct  trunc= 0.00% (trials=100)
+[ministral-3:3b]  quant=Q4_K_M
+    trivial          cot     trunc= 0.00% (trials=100)
+    trivial          direct  trunc= 0.00% (trials=100)
+    math_bench_2     cot     trunc= 0.00% (trials=100)
+    math_bench_2     direct  trunc= 0.00% (trials=100)
+    math_bench_4     cot     trunc= 0.50% (trials=100)
+    math_bench_4     direct  trunc= 0.00% (trials=100)
+    math_bench_5     cot     trunc= 5.15% (trials=100)  <-- FAILED
+    math_bench_5     direct  trunc= 0.00% (trials=100)
+[ministral-3:8b]  quant=Q4_K_M
+    trivial          cot     trunc= 0.00% (trials=100)
+    trivial          direct  trunc= 0.00% (trials=100)
+    math_bench_2     cot     trunc= 0.00% (trials=100)
+    math_bench_2     direct  trunc= 0.00% (trials=100)
+    math_bench_4     cot     trunc= 0.00% (trials=100)
+    math_bench_4     direct  trunc= 0.00% (trials=100)
+    math_bench_5     cot     trunc= 0.65% (trials=100)
+    math_bench_5     direct  trunc= 0.00% (trials=100)
+[mistral:7b]  quant=Q4_K_M
+    trivial          cot     trunc= 0.00% (trials=100)
+    trivial          direct  trunc= 0.00% (trials=100)
+    math_bench_2     cot     trunc= 0.00% (trials=100)
+    math_bench_2     direct  trunc= 0.00% (trials=100)
+    math_bench_4     cot     trunc= 0.00% (trials=100)
+    math_bench_4     direct  trunc= 0.00% (trials=100)
+    math_bench_5     cot     trunc= 0.00% (trials=100)
+    math_bench_5     direct  trunc= 0.05% (trials=100)
+[qwen2.5:0.5b]  quant=Q4_K_M
+    trivial          cot     trunc= 0.10% (trials=100)
+    trivial          direct  trunc= 0.05% (trials=100)
+    math_bench_2     cot     trunc= 0.60% (trials=100)
+    math_bench_2     direct  trunc= 0.10% (trials=100)
+    math_bench_4     cot     trunc= 1.15% (trials=100)
+    math_bench_4     direct  trunc= 0.20% (trials=100)
+    math_bench_5     cot     trunc= 0.95% (trials=100)
+    math_bench_5     direct  trunc= 0.60% (trials=100)
+[qwen2.5:1.5b]  quant=Q4_K_M
+    trivial          cot     trunc= 0.00% (trials=100)
+    trivial          direct  trunc= 0.00% (trials=100)
+    math_bench_2     cot     trunc= 0.10% (trials=100)
+    math_bench_2     direct  trunc= 0.05% (trials=100)
+    math_bench_4     cot     trunc= 0.00% (trials=100)
+    math_bench_4     direct  trunc= 0.00% (trials=100)
+    math_bench_5     cot     trunc= 0.00% (trials=100)
+    math_bench_5     direct  trunc= 0.00% (trials=100)
+[qwen2.5:14b]  quant=Q4_K_M
+    trivial          cot     trunc= 0.00% (trials=100)
+    trivial          direct  trunc= 0.00% (trials=100)
+    math_bench_2     cot     trunc= 0.00% (trials=100)
+    math_bench_2     direct  trunc= 0.00% (trials=100)
+    math_bench_4     cot     trunc= 0.00% (trials=100)
+    math_bench_4     direct  trunc= 0.00% (trials=100)
+    math_bench_5     cot     trunc= 0.00% (trials=100)
+    math_bench_5     direct  trunc= 0.00% (trials=100)
+[qwen2.5:32b]  quant=Q4_K_M
+    trivial          cot     trunc= 0.00% (trials=100)
+    trivial          direct  trunc= 0.00% (trials=100)
+    math_bench_2     cot     trunc= 0.00% (trials=100)
+    math_bench_2     direct  trunc= 0.00% (trials=100)
+    math_bench_4     cot     trunc= 0.00% (trials=100)
+    math_bench_4     direct  trunc= 0.00% (trials=100)
+    math_bench_5     cot     trunc= 0.00% (trials=100)
+    math_bench_5     direct  trunc= 0.00% (trials=100)
+[qwen2.5:3b]  quant=Q4_K_M
+    trivial          cot     trunc= 0.00% (trials=100)
+    trivial          direct  trunc= 0.00% (trials=100)
+    math_bench_2     cot     trunc= 0.05% (trials=100)
+    math_bench_2     direct  trunc= 0.00% (trials=100)
+    math_bench_4     cot     trunc= 0.10% (trials=100)
+    math_bench_4     direct  trunc= 0.00% (trials=100)
+    math_bench_5     cot     trunc= 0.05% (trials=100)
+    math_bench_5     direct  trunc= 0.00% (trials=100)
+[qwen2.5:7b]  quant=Q4_K_M
+    trivial          cot     trunc= 0.00% (trials=100)
+    trivial          direct  trunc= 0.00% (trials=100)
+    math_bench_2     cot     trunc= 0.00% (trials=100)
+    math_bench_2     direct  trunc= 0.00% (trials=100)
+    math_bench_4     cot     trunc= 0.00% (trials=100)
+    math_bench_4     direct  trunc= 0.00% (trials=100)
+    math_bench_5     cot     trunc= 0.00% (trials=100)
+    math_bench_5     direct  trunc= 0.00% (trials=100)
+
+worst cell truncation across all models: 5.15%
+
+
+## per model x load (report rates, blink, access)
+
+          model      family  params_b         load  n_direct  n_cot  report_direct  report_cot   blink  access_cot  report_direct_lo  report_direct_hi  report_cot_lo  report_cot_hi  floor
+   gemma3:0.27b      gemma3      0.27      trivial       100    100         0.0120      0.1685 -0.1565      0.1920          0.007000          0.017500       0.146500       0.189500      1
+   gemma3:0.27b      gemma3      0.27 math_bench_2       100    100         0.0030      0.0670 -0.0640      0.1110          0.000500          0.006000       0.052000       0.083000      1
+   gemma3:0.27b      gemma3      0.27 math_bench_4       100    100         0.0090      0.0770 -0.0680      0.1260          0.004500          0.014500       0.060500       0.096000      1
+   gemma3:0.27b      gemma3      0.27 math_bench_5       100    100         0.0030      0.0650 -0.0620      0.1000          0.000000          0.007500       0.048500       0.082500      1
+   qwen2.5:0.5b     qwen2.5      0.50      trivial       100    100         0.4270      0.1050  0.3220      0.1835          0.395487          0.460000       0.090000       0.121000      1
+   qwen2.5:0.5b     qwen2.5      0.50 math_bench_2       100    100         0.3385      0.0885  0.2500      0.3115          0.307000          0.372012       0.074500       0.104000      1
+   qwen2.5:0.5b     qwen2.5      0.50 math_bench_4       100    100         0.2810      0.0750  0.2060      0.3170          0.253000          0.308000       0.064000       0.086500      1
+   qwen2.5:0.5b     qwen2.5      0.50 math_bench_5       100    100         0.2750      0.0655  0.2095      0.3035          0.244500          0.303512       0.054487       0.078000      1
+      gemma3:1b      gemma3      1.00      trivial       100    100         0.1930      0.1770  0.0160      0.3695          0.164500          0.225500       0.154988       0.199500      1
+      gemma3:1b      gemma3      1.00 math_bench_2       100    100         0.0450      0.1515 -0.1065      0.3830          0.029000          0.062000       0.134487       0.169500      1
+      gemma3:1b      gemma3      1.00 math_bench_4       100    100         0.0455      0.1475 -0.1020      0.3975          0.026500          0.068500       0.128500       0.166012      1
+      gemma3:1b      gemma3      1.00 math_bench_5       100    100         0.0545      0.1670 -0.1125      0.3840          0.034500          0.078000       0.145487       0.191000      1
+   qwen2.5:1.5b     qwen2.5      1.50      trivial       100    100         0.4895      0.5130 -0.0235      0.6105          0.436988          0.539000       0.486500       0.539013      1
+   qwen2.5:1.5b     qwen2.5      1.50 math_bench_2       100    100         0.4395      0.3255  0.1140      0.5565          0.384500          0.495000       0.300000       0.351500      1
+   qwen2.5:1.5b     qwen2.5      1.50 math_bench_4       100    100         0.4090      0.2730  0.1360      0.5400          0.354000          0.464012       0.247500       0.300012      1
+   qwen2.5:1.5b     qwen2.5      1.50 math_bench_5       100    100         0.3930      0.2735  0.1195      0.5355          0.343488          0.444012       0.248000       0.300012      1
+ ministral-3:3b ministral-3      3.00      trivial       100    100         0.9985      0.9960  0.0025      0.9965          0.995500          1.000000       0.993000       0.998500      0
+ ministral-3:3b ministral-3      3.00 math_bench_2       100    100         0.9800      0.9905 -0.0105      0.9815          0.963500          0.993000       0.984000       0.996000      0
+ ministral-3:3b ministral-3      3.00 math_bench_4       100    100         0.9870      0.9855  0.0015      0.9735          0.976500          0.995500       0.980000       0.991000      0
+ ministral-3:3b ministral-3      3.00 math_bench_5       100    100         0.9795      0.9315  0.0480      0.9210          0.967000          0.990013       0.905987       0.953000      0
+     qwen2.5:3b     qwen2.5      3.00      trivial       100    100         0.9805      0.8820  0.0985      0.8770          0.966500          0.993000       0.850987       0.910500      0
+     qwen2.5:3b     qwen2.5      3.00 math_bench_2       100    100         0.9065      0.6520  0.2545      0.6345          0.857488          0.949500       0.606500       0.696000      0
+     qwen2.5:3b     qwen2.5      3.00 math_bench_4       100    100         0.8830      0.6250  0.2580      0.6230          0.829500          0.930500       0.581500       0.669500      0
+     qwen2.5:3b     qwen2.5      3.00 math_bench_5       100    100         0.9095      0.5470  0.3625      0.5865          0.866988          0.948000       0.505000       0.589013      0
+      gemma3:4b      gemma3      4.00      trivial       100    100         0.9725      0.9695  0.0030      0.9740          0.941500          0.996000       0.948500       0.986000      0
+      gemma3:4b      gemma3      4.00 math_bench_2       100    100         0.9865      0.7035  0.2830      0.6975          0.969487          0.998000       0.645500       0.755012      0
+      gemma3:4b      gemma3      4.00 math_bench_4       100    100         0.9615      0.6395  0.3220      0.6090          0.932500          0.986500       0.593500       0.689513      0
+      gemma3:4b      gemma3      4.00 math_bench_5       100    100         0.9185      0.5590  0.3595      0.5190          0.867988          0.960000       0.510987       0.608013      0
+     mistral:7b     mistral      7.00      trivial       100    100         0.9895      0.8610  0.1285      0.8650          0.984500          0.994000       0.833000       0.885513      0
+     mistral:7b     mistral      7.00 math_bench_2       100    100         0.9055      0.5790  0.3265      0.6105          0.867000          0.938500       0.539000       0.620013      0
+     mistral:7b     mistral      7.00 math_bench_4       100    100         0.8760      0.5845  0.2915      0.6265          0.839488          0.908000       0.547475       0.622000      0
+     mistral:7b     mistral      7.00 math_bench_5       100    100         0.8385      0.5470  0.2915      0.5895          0.791000          0.880500       0.506988       0.583512      0
+     qwen2.5:7b     qwen2.5      7.00      trivial       100    100         0.9990      0.9780  0.0210      0.9890          0.997000          1.000000       0.966000       0.987500      0
+     qwen2.5:7b     qwen2.5      7.00 math_bench_2       100    100         0.9945      0.7725  0.2220      0.7705          0.984500          1.000000       0.722488       0.821525      0
+     qwen2.5:7b     qwen2.5      7.00 math_bench_4       100    100         0.9980      0.7565  0.2415      0.7795          0.994500          1.000000       0.709500       0.803012      0
+     qwen2.5:7b     qwen2.5      7.00 math_bench_5       100    100         0.9935      0.7230  0.2705      0.7940          0.984500          1.000000       0.676500       0.765513      0
+ ministral-3:8b ministral-3      8.00      trivial       100    100         1.0000      1.0000  0.0000      1.0000          1.000000          1.000000       1.000000       1.000000      0
+ ministral-3:8b ministral-3      8.00 math_bench_2       100    100         1.0000      0.9975  0.0025      0.9675          1.000000          1.000000       0.994500       0.999500      0
+ ministral-3:8b ministral-3      8.00 math_bench_4       100    100         1.0000      0.9980  0.0020      0.9570          1.000000          1.000000       0.995500       1.000000      0
+ ministral-3:8b ministral-3      8.00 math_bench_5       100    100         0.9995      0.9885  0.0110      0.9400          0.998500          1.000000       0.981500       0.994000      0
+     gemma3:12b      gemma3     12.00      trivial       100    100         1.0000      0.9995  0.0005      0.9995          1.000000          1.000000       0.998500       1.000000      0
+     gemma3:12b      gemma3     12.00 math_bench_2       100    100         0.9960      0.9855  0.0105      0.9935          0.988000          1.000000       0.980000       0.991000      0
+     gemma3:12b      gemma3     12.00 math_bench_4       100    100         0.9975      0.9910  0.0065      0.9945          0.992500          1.000000       0.986500       0.995000      0
+     gemma3:12b      gemma3     12.00 math_bench_5       100    100         0.9970      0.9730  0.0240      0.9585          0.991000          1.000000       0.963000       0.982000      0
+ministral-3:14b ministral-3     14.00      trivial       100    100         1.0000      1.0000  0.0000      0.9995          1.000000          1.000000       1.000000       1.000000      0
+ministral-3:14b ministral-3     14.00 math_bench_2       100    100         1.0000      1.0000  0.0000      1.0000          1.000000          1.000000       1.000000       1.000000      0
+ministral-3:14b ministral-3     14.00 math_bench_4       100    100         1.0000      0.9995  0.0005      1.0000          1.000000          1.000000       0.998500       1.000000      0
+ministral-3:14b ministral-3     14.00 math_bench_5       100    100         1.0000      0.9990  0.0010      0.9990          1.000000          1.000000       0.997500       1.000000      0
+    qwen2.5:14b     qwen2.5     14.00      trivial       100    100         0.9995      0.9920  0.0075      0.9915          0.998500          1.000000       0.986000       0.997000      0
+    qwen2.5:14b     qwen2.5     14.00 math_bench_2       100    100         1.0000      0.9990  0.0010      0.9935          1.000000          1.000000       0.997500       1.000000      0
+    qwen2.5:14b     qwen2.5     14.00 math_bench_4       100    100         0.9910      0.9955 -0.0045      0.9920          0.973500          1.000000       0.991000       0.999000      0
+    qwen2.5:14b     qwen2.5     14.00 math_bench_5       100    100         0.9920      0.9940 -0.0020      0.9915          0.976000          1.000000       0.990500       0.997500      0
+     gemma3:27b      gemma3     27.00      trivial       100    100         1.0000      1.0000  0.0000      1.0000          1.000000          1.000000       1.000000       1.000000      0
+     gemma3:27b      gemma3     27.00 math_bench_2       100    100         1.0000      0.9995  0.0005      1.0000          1.000000          1.000000       0.998500       1.000000      0
+     gemma3:27b      gemma3     27.00 math_bench_4       100    100         1.0000      0.9945  0.0055      1.0000          1.000000          1.000000       0.983500       1.000000      0
+     gemma3:27b      gemma3     27.00 math_bench_5       100    100         1.0000      0.9890  0.0110      0.9955          1.000000          1.000000       0.973000       0.998500      0
+    qwen2.5:32b     qwen2.5     32.00      trivial       100    100         1.0000      1.0000  0.0000      0.9995          1.000000          1.000000       1.000000       1.000000      0
+    qwen2.5:32b     qwen2.5     32.00 math_bench_2       100    100         1.0000      1.0000  0.0000      1.0000          1.000000          1.000000       1.000000       1.000000      0
+    qwen2.5:32b     qwen2.5     32.00 math_bench_4       100    100         1.0000      0.9980  0.0020      1.0000          1.000000          1.000000       0.996000       0.999500      0
+    qwen2.5:32b     qwen2.5     32.00 math_bench_5       100    100         1.0000      0.9995  0.0005      1.0000          1.000000          1.000000       0.998500       1.000000      0
+
+figures written to LLM_Blink/results/  (15 models)
